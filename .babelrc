@@ -1,0 +1,25 @@
+{
+    "plugins": [
+        [
+            "module-resolver", {
+                "cwd": "babelrc",
+                "root": ["./src"],
+                "extensions": [
+                    ".js",
+                    ".ios.js",
+                    ".android.js"
+                ],
+                "alias": {
+                    "assets": "./src/assets",
+                    "components": "./src/components",
+                    "navigation": "./src/navigation",
+                    "screens": "./src/screens",
+                    "services": "./src/services",
+                    "utils": "./src/utils",
+                    "store": "./src/store",
+                    "@rna": "./src/vendor/react-native-arsenal/lib"
+                }
+            }
+        ]
+    ]
+}
