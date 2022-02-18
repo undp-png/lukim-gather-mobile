@@ -1,14 +1,12 @@
 {
     "plugins": [
+        ["module:react-native-dotenv"],
         [
-            "module-resolver", {
+            "module-resolver",
+            {
                 "cwd": "babelrc",
                 "root": ["./src"],
-                "extensions": [
-                    ".js",
-                    ".ios.js",
-                    ".android.js"
-                ],
+                "extensions": [".js", ".ios.js", ".android.js"],
                 "alias": {
                     "assets": "./src/assets",
                     "components": "./src/components",

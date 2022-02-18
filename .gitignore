@@ -58,5 +58,8 @@ buck-out/
 # CocoaPods
 /ios/Pods/
 
+# Env
+.env
+
 # React Native Arsenal
 src/vendor
