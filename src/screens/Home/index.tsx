@@ -1,10 +1,12 @@
 import React from 'react';
-import {Text, View} from 'react-native';
+import {View} from 'react-native';
+
+import Map from 'components/Map';
 
 const Home = () => {
     return (
         <View>
-            <Text style>Home Screen</Text>
+            <Map />
         </View>
     );
 };

@@ -1,0 +1,31 @@
+import React from 'react';
+import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
+
+import TabBar from 'components/TabBar';
+
+import Menu from 'screens/Menu';
+import Home from 'screens/Home';
+
+import COLORS from 'utils/colors';
+
+import styles from './styles';
+
+const Tab = createBottomTabNavigator();
+
+export default function TabNavigator() {
+    return (
+        <Tab.Navigator
+            screenOptions={{headerShown: false}}
+            tabBar={tabBarProps => (
+                <TabBar
+                    {...tabBarProps}
+                    activeColor={COLORS.black}
+                    inActiveColor={COLORS.grey}
+                    style={styles.tabBar}
+                />
+            )}>
+            <Tab.Screen name="Home" component={Home} />
+            <Tab.Screen name="Menu" component={Menu} />
+        </Tab.Navigator>
+    );
+}

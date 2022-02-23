@@ -20,7 +20,7 @@ class Api {
         return data;
     }
 
-    async post(url, body, options) {
+    async post(url, body) {
         const {error, data, response} = await request(url, {
             method: 'POST',
             headers: {
@@ -38,7 +38,7 @@ class Api {
         return data;
     }
 
-    async patch(url, body, options) {
+    async patch(url, body) {
         const {error, data, response} = await request(url, {
             method: 'PATCH',
             headers: {
