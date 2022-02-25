@@ -29,6 +29,16 @@ allprojects {
             // Android JSC is installed from npm
             url("$rootDir/../node_modules/jsc-android/dist")
         }
+        maven {
+            url 'https://api.mapbox.com/downloads/v2/releases/maven'
+            authentication {
+                basic(BasicAuthentication)
+            }
+            credentials {
+              username = "mapbox"
+              password = project.properties['MAPBOX_DOWNLOADS_TOKEN'] ?: ""
+            }
+        }
         mavenCentral {
             // We don't want to fetch react-native from Maven Central as there are
             // older versions over there.
