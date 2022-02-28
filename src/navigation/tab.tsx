@@ -6,6 +6,8 @@ import TabBar from 'components/TabBar';
 import Menu from 'screens/Menu';
 import Home from 'screens/Home';
 
+import BackButton from 'components/BackButton';
+
 import COLORS from 'utils/colors';
 
 import styles from './styles';
@@ -25,7 +27,27 @@ export default function TabNavigator() {
                 />
             )}>
             <Tab.Screen name="Home" component={Home} />
-            <Tab.Screen name="Menu" component={Menu} />
+            <Tab.Screen
+                name="Menu"
+                component={Menu}
+                options={{
+                    headerLeft: () => <BackButton />,
+                    headerShown: true,
+                    headerTitleAlign: 'center',
+                    headerTitleStyle: {
+                        fontFamily: 'Inter-SemiBold',
+                        color: COLORS.tertiary,
+                        fontSize: 18,
+                        lineHeight: 21.78,
+                    },
+                    headerStyle: {
+                        backgroundColor: COLORS.white,
+                        shadowColor: 'transparent',
+                        borderBottomColor: '#cfd5dc',
+                        borderBottomWidth: 1,
+                    },
+                }}
+            />
         </Tab.Navigator>
     );
 }

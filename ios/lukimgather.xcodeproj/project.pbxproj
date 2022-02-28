@@ -12,8 +12,11 @@
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
 		243C15825B01E7697BDCEC45 /* libPods-lukimgather.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 1FA315DA5F08F0EBCD2A5451 /* libPods-lukimgather.a */; };
+		5525EC6791D14253B296CD4B /* Inter-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 1D31323E29794A06B3D3F605 /* Inter-Medium.ttf */; };
 		5A3C09523BC814C7993BF16E /* libPods-lukimgather-lukimgatherTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4ED566A97F9B3D2A13C9013E /* libPods-lukimgather-lukimgatherTests.a */; };
+		810311D9CEEF4100948ACA94 /* Inter-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A35BE9BE164E4BBBA99DAD01 /* Inter-Regular.ttf */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
+		DA9099200376486B8FD446D7 /* Inter-SemiBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = EF8F24F1435B4447825FF945 /* Inter-SemiBold.ttf */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -36,13 +39,16 @@
 		13B07FB51A68108700A75B9A /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = lukimgather/Images.xcassets; sourceTree = "<group>"; };
 		13B07FB61A68108700A75B9A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = lukimgather/Info.plist; sourceTree = "<group>"; };
 		13B07FB71A68108700A75B9A /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = lukimgather/main.m; sourceTree = "<group>"; };
+		1D31323E29794A06B3D3F605 /* Inter-Medium.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = "Inter-Medium.ttf"; path = "../src/assets/fonts/Inter-Medium.ttf"; sourceTree = "<group>"; };
 		1FA315DA5F08F0EBCD2A5451 /* libPods-lukimgather.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-lukimgather.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		21F5F7F96F48BCBE5A7872C7 /* Pods-lukimgather.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-lukimgather.debug.xcconfig"; path = "Target Support Files/Pods-lukimgather/Pods-lukimgather.debug.xcconfig"; sourceTree = "<group>"; };
 		4ED566A97F9B3D2A13C9013E /* libPods-lukimgather-lukimgatherTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-lukimgather-lukimgatherTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = lukimgather/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		9DD6EFF70E95F57DFFA4299D /* Pods-lukimgather-lukimgatherTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-lukimgather-lukimgatherTests.debug.xcconfig"; path = "Target Support Files/Pods-lukimgather-lukimgatherTests/Pods-lukimgather-lukimgatherTests.debug.xcconfig"; sourceTree = "<group>"; };
+		A35BE9BE164E4BBBA99DAD01 /* Inter-Regular.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = "Inter-Regular.ttf"; path = "../src/assets/fonts/Inter-Regular.ttf"; sourceTree = "<group>"; };
 		CA9EDCAA304B0C440DEDCA95 /* Pods-lukimgather-lukimgatherTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-lukimgather-lukimgatherTests.release.xcconfig"; path = "Target Support Files/Pods-lukimgather-lukimgatherTests/Pods-lukimgather-lukimgatherTests.release.xcconfig"; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
+		EF8F24F1435B4447825FF945 /* Inter-SemiBold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = "Inter-SemiBold.ttf"; path = "../src/assets/fonts/Inter-SemiBold.ttf"; sourceTree = "<group>"; };
 		F0E2ED2F30AF31BDA659642A /* Pods-lukimgather.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-lukimgather.release.xcconfig"; path = "Target Support Files/Pods-lukimgather/Pods-lukimgather.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -134,6 +140,7 @@
 				83CBBA001A601CBA00E9B192 /* Products */,
 				2D16E6871FA4F8E400B85C8A /* Frameworks */,
 				025C46606356B45C11E56950 /* Pods */,
+				9FA22957A29645988EDA9EA4 /* Resources */,
 			);
 			indentWidth = 2;
 			sourceTree = "<group>";
@@ -147,6 +154,17 @@
 				00E356EE1AD99517003FC87E /* lukimgatherTests.xctest */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		9FA22957A29645988EDA9EA4 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				1D31323E29794A06B3D3F605 /* Inter-Medium.ttf */,
+				A35BE9BE164E4BBBA99DAD01 /* Inter-Regular.ttf */,
+				EF8F24F1435B4447825FF945 /* Inter-SemiBold.ttf */,
+			);
+			name = Resources;
+			path = "";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -245,6 +263,9 @@
 			files = (
 				81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
+				5525EC6791D14253B296CD4B /* Inter-Medium.ttf in Resources */,
+				810311D9CEEF4100948ACA94 /* Inter-Regular.ttf in Resources */,
+				DA9099200376486B8FD446D7 /* Inter-SemiBold.ttf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -42,6 +42,11 @@ const TabBar = ({
                         state.index ===
                             state.routes.findIndex(rt => rt.name === 'Home'),
                 ],
+                [
+                    styles.containerHidden,
+                    state.index ===
+                        state.routes.findIndex(rt => rt.name === 'Menu'),
+                ],
             )}>
             {state.routes.map((route, index) => {
                 let iconName;
