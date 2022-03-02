@@ -6,8 +6,6 @@ export default StyleSheet.create({
     container: {
         height: '100%',
         backgroundColor: COLORS.white,
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
+        padding: 20,
     },
 });

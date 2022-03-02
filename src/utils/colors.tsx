@@ -6,6 +6,7 @@ const COLORS = {
     backgroundLight: 'rgb(227, 227, 227)',
     backgroundGradient: ['#050505', '#202020'],
     accent: 'rgb(234,99,25)',
+    border: '#CFD5DC',
 
     /* Neutral Colors */
     dark: 'rgb(38,38,38)',
@@ -14,6 +15,10 @@ const COLORS = {
     grey: 'rgb(186, 186, 186)',
     greyAlt: 'rgb(103,103,103)',
     greyTrans: 'rgba(255,255,255,0.13)',
+
+    /* Text color */
+    greyText: '#70747E',
+    inputText: '#888C94',
 
     /** Primary and Secondary colors **/
     primary: '#102E51',
