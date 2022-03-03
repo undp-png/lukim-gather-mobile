@@ -9,5 +9,6 @@ export default StyleSheet.create({
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
+        padding: 20,
     },
 });
