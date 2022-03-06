@@ -6,6 +6,7 @@ import {Icon} from 'react-native-eva-icons';
 
 import Text from 'components/Text';
 import MenuItem from 'components/MenuItem';
+import {_} from 'services/i18n';
 
 import styles from './styles';
 
@@ -52,18 +53,18 @@ const Menu = () => {
                     </View>
                 </TouchableOpacity>
                 <View style={styles.menuWrapper}>
-                    <MenuItem title="Settings" linkTo="Settings" />
-                    <MenuItem title="About Lukim Gather" linkTo="About" />
-                    <MenuItem title="Feedbacks" linkTo="Feedbacks" />
-                    <MenuItem title="Help" linkTo="Help" />
+                    <MenuItem title={_('Settings')} linkTo="Settings" />
+                    <MenuItem title={_('About Lukim Gather')} linkTo="About" />
+                    <MenuItem title={_('Feedbacks')} linkTo="Feedbacks" />
+                    <MenuItem title={_('Help')} linkTo="Help" />
                     <TouchableOpacity
                         onPress={onPressLogout}
                         style={styles.menuItem}>
-                        <Text style={styles.menuTitle} title="Log out" />
+                        <Text style={styles.menuTitle} title={_('Log out')} />
                     </TouchableOpacity>
                 </View>
             </View>
-            <Text style={styles.appVersion} title="Version 0.1" />
+            <Text style={styles.appVersion} title={_('Version 0.1')} />
         </View>
     );
 };

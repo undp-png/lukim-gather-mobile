@@ -1,0 +1,207 @@
+msgid ""
+msgstr ""
+"Content-Type: text/plain; charset=utf-8\n"
+"POT-Creation-Date: Fri Mar 11 2022 13:38:57 GMT+0545 (Nepal Time)\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: src/screens/About/index.tsx:12
+#: src/screens/Menu/index.tsx:57
+msgid "About Lukim Gather"
+msgstr ""
+
+#: src/screens/AccountSettings/index.tsx:13
+msgid "Email"
+msgstr ""
+
+#: src/screens/AccountSettings/index.tsx:15
+#: src/screens/Login/index.tsx:19
+#: src/screens/SignUp/index.tsx:31
+msgid "Password"
+msgstr ""
+
+#: src/screens/AccountSettings/index.tsx:16
+msgid "Change password"
+msgstr ""
+
+#: src/screens/AddOrganization/index.tsx:14
+#: src/screens/EditProfile/index.tsx:45
+msgid "Organization name"
+msgstr ""
+
+#: src/screens/AddOrganization/index.tsx:15
+msgid "Enter Organization name"
+msgstr ""
+
+#: src/screens/AddOrganization/index.tsx:18
+msgid "Continue"
+msgstr ""
+
+#: src/screens/ChangePassword/index.tsx:26
+msgid "Current password"
+msgstr ""
+
+#: src/screens/ChangePassword/index.tsx:27
+msgid "Enter current password"
+msgstr ""
+
+#: src/screens/ChangePassword/index.tsx:32
+#: src/screens/Login/index.tsx:26
+msgid "Forgot your password?"
+msgstr ""
+
+#: src/screens/ChangePassword/index.tsx:37
+#: src/screens/CreateNewPassword/index.tsx:14
+msgid "New password"
+msgstr ""
+
+#: src/screens/ChangePassword/index.tsx:38
+#: src/screens/CreateNewPassword/index.tsx:15
+msgid "Enter new password"
+msgstr ""
+
+#: src/screens/ChangePassword/index.tsx:41
+#: src/screens/CreateNewPassword/index.tsx:19
+msgid "Confirm new password"
+msgstr ""
+
+#: src/screens/ChangePassword/index.tsx:42
+msgid "Re-enter new password"
+msgstr ""
+
+#: src/screens/CreateNewPassword/index.tsx:20
+msgid "Re-enter password"
+msgstr ""
+
+#: src/screens/CreateNewPassword/index.tsx:24
+msgid "Reset Password"
+msgstr ""
+
+#: src/screens/EditProfile/index.tsx:41
+msgid "Change photo"
+msgstr ""
+
+#: src/screens/EditProfile/index.tsx:44
+msgid "Name"
+msgstr ""
+
+#: src/screens/Feedbacks/index.tsx:20
+msgid "Issue type"
+msgstr ""
+
+#: src/screens/Feedbacks/index.tsx:21
+msgid "Select the issue"
+msgstr ""
+
+#: src/screens/Feedbacks/index.tsx:24
+msgid "Explain the issue"
+msgstr ""
+
+#: src/screens/Feedbacks/index.tsx:29
+msgid "Submit"
+msgstr ""
+
+#: src/screens/ForgotPassword/index.tsx:19
+#: src/screens/Login/index.tsx:15
+#: src/screens/SignUp/index.tsx:15
+msgid "Email or Phone"
+msgstr ""
+
+#: src/screens/ForgotPassword/index.tsx:23
+msgid "Send Code"
+msgstr ""
+
+#: src/screens/ForgotPassword/index.tsx:28
+#: src/screens/Login/index.tsx:36
+msgid "Don't have an account?"
+msgstr ""
+
+#: src/screens/Help/index.tsx:11
+#: src/screens/Menu/index.tsx:59
+msgid "Help"
+msgstr ""
+
+#: src/screens/Login/index.tsx:20
+#: src/screens/SignUp/index.tsx:32
+msgid "Enter password"
+msgstr ""
+
+#: src/screens/Login/index.tsx:31
+msgid "Login"
+msgstr ""
+
+#: src/screens/Menu/index.tsx:56
+msgid "Settings"
+msgstr ""
+
+#: src/screens/Menu/index.tsx:58
+msgid "Feedbacks"
+msgstr ""
+
+#: src/screens/Menu/index.tsx:63
+msgid "Log out"
+msgstr ""
+
+#: src/screens/Menu/index.tsx:67
+msgid "Version 0.1"
+msgstr ""
+
+#: src/screens/Settings/index.tsx:13
+msgid "Account"
+msgstr ""
+
+#: src/screens/Settings/index.tsx:14
+msgid "Language"
+msgstr ""
+
+#: src/screens/Settings/index.tsx:14
+msgid "English"
+msgstr ""
+
+#: src/screens/Settings/index.tsx:15
+msgid "Synchronization"
+msgstr ""
+
+#: src/screens/Settings/index.tsx:15
+msgid "Automatic"
+msgstr ""
+
+#: src/screens/SignUp/index.tsx:20
+msgid "First name"
+msgstr ""
+
+#: src/screens/SignUp/index.tsx:21
+msgid "Enter first name"
+msgstr ""
+
+#: src/screens/SignUp/index.tsx:25
+msgid "Surname"
+msgstr ""
+
+#: src/screens/SignUp/index.tsx:26
+msgid "Enter surname"
+msgstr ""
+
+#: src/screens/SignUp/index.tsx:37
+msgid "By continuing you agree to our"
+msgstr ""
+
+#: src/screens/SignUp/index.tsx:41
+msgid "Terms of services"
+msgstr ""
+
+#: src/screens/SignUp/index.tsx:45
+msgid "and"
+msgstr ""
+
+#: src/screens/SignUp/index.tsx:49
+msgid "Privacy policy."
+msgstr ""
+
+#: src/screens/SignUp/index.tsx:54
+msgid "Create an account"
+msgstr ""
+
+#: src/screens/SignUp/index.tsx:59
+msgid "Already have an account?"
+msgstr ""

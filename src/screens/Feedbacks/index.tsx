@@ -5,6 +5,7 @@ import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import Button from 'components/Button';
 import TextInput from 'components/TextInput';
 import PickerSelect from 'components/PickerSelect';
+import {_} from 'services/i18n';
 
 import issueList from 'services/data/issue.json';
 
@@ -16,16 +17,16 @@ const Feedbacks = () => {
             <KeyboardAwareScrollView>
                 <PickerSelect
                     data={issueList}
-                    label="Issue type"
-                    placeholder="Select the issue"
+                    label={_('Issue type')}
+                    placeholder={_('Select the issue')}
                 />
                 <TextInput
-                    label="Explain the issue"
+                    label={_('Explain the issue')}
                     multiline
                     numberOfLines={5}
                     textAlignVertical="top"
                 />
-                <Button title="Submit" />
+                <Button title={_('Submit')} />
             </KeyboardAwareScrollView>
         </View>
     );

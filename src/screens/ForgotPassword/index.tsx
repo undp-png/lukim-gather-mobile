@@ -3,6 +3,8 @@ import {SafeAreaView, Text} from 'react-native';
 
 import InputField from 'components/InputField';
 import AuthButton from 'components/AuthButton';
+import {Localize} from '@rna/components/I18n';
+import {_} from 'services/i18n';
 
 import styles from './styles';
 
@@ -14,15 +16,17 @@ const ForgotPassword = () => {
                 account
             </Text>
             <InputField
-                title="Email or Phone"
+                title={_('Email or Phone')}
                 placeholder="johndoe@example.com"
             />
             <AuthButton
-                title="Send Code"
+                title={_('Send Code')}
                 style={styles.button}
                 onPress={() => {}}
             />
-            <Text style={styles.text}>Don't have an account?</Text>
+            <Text style={styles.text}>
+                <Localize>Don't have an account?</Localize>
+            </Text>
         </SafeAreaView>
     );
 };
