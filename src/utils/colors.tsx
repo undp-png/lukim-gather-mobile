@@ -25,6 +25,7 @@ const COLORS = {
     primaryAlt: '#708297',
     primaryLight: '#9FABB9',
     primaryLightAlt: '#E7EAEE',
+    primaryBlue: '#284362',
     secondary: '#6DE68C',
     secondaryAlt: '#99EDAF',
     secondaryLight: '#C5F5D1',
