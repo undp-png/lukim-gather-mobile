@@ -5,11 +5,12 @@ import TabNavigator from './tab';
 
 import Settings from 'screens/Settings';
 import AccountSettings from 'screens/AccountSettings';
+import ChangePassword from 'screens/ChangePassword';
 import About from 'screens/About';
 import Feedbacks from 'screens/Feedbacks';
 import Help from 'screens/Help';
 
-import BackButton from 'components/BackButton';
+import {BackButton, CloseButton} from 'components/HeaderButton';
 
 import COLORS from 'utils/colors';
 
@@ -51,6 +52,15 @@ const AppNavigator = () => {
                 component={AccountSettings}
                 options={{
                     headerTitle: 'Account Settings',
+                }}
+            />
+            <Stack.Screen
+                name="ChangePassword"
+                component={ChangePassword}
+                options={{
+                    headerLeft: () => <CloseButton />,
+                    headerTitle: 'Change Password',
+                    presentation: 'modal',
                 }}
             />
             <Stack.Screen name="About" component={About} />

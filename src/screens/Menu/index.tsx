@@ -26,8 +26,14 @@ const Menu = () => {
                     />
                     <View style={styles.userTextInfo}>
                         <View style={styles.textWrapper}>
-                            <Text style={styles.userName}>Alexander Doe</Text>
-                            <Text style={styles.userOrg}>ABC Organization</Text>
+                            <Text
+                                style={styles.userName}
+                                title="Alexander Doe"
+                            />
+                            <Text
+                                style={styles.userOrg}
+                                title="ABC Organization"
+                            />
                         </View>
                         <Icon
                             name="arrow-ios-forward-outline"
@@ -45,11 +51,11 @@ const Menu = () => {
                     <TouchableOpacity
                         onPress={onPressLogout}
                         style={styles.menuItem}>
-                        <Text style={styles.menuTitle}>Log out</Text>
+                        <Text style={styles.menuTitle} title="Log out" />
                     </TouchableOpacity>
                 </View>
             </View>
-            <Text style={styles.appVersion}>Version 0.1</Text>
+            <Text style={styles.appVersion} title="Version 0.1" />
         </View>
     );
 };
