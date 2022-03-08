@@ -10,7 +10,11 @@ const AccountSettings = () => {
         <View style={styles.container}>
             <View style={styles.menuWrapper}>
                 <MenuItem title="Email" label="example@mail.com" />
-                <MenuItem title="Password" label="Change password" />
+                <MenuItem
+                    title="Password"
+                    label="Change password"
+                    linkTo="ChangePassword"
+                />
             </View>
         </View>
     );
