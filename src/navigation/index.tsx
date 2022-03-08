@@ -4,6 +4,7 @@ import {createStackNavigator} from '@react-navigation/stack';
 import TabNavigator from './tab';
 
 import Settings from 'screens/Settings';
+import AccountSettings from 'screens/AccountSettings';
 import About from 'screens/About';
 import Feedbacks from 'screens/Feedbacks';
 import Help from 'screens/Help';
@@ -45,6 +46,13 @@ const AppNavigator = () => {
                 component={TabNavigator}
             />
             <Stack.Screen name="Settings" component={Settings} />
+            <Stack.Screen
+                name="AccountSettings"
+                component={AccountSettings}
+                options={{
+                    headerTitle: 'Account Settings',
+                }}
+            />
             <Stack.Screen name="About" component={About} />
             <Stack.Screen name="Feedbacks" component={Feedbacks} />
             <Stack.Screen name="Help" component={Help} />
