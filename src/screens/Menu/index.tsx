@@ -1,5 +1,6 @@
 import React, {useCallback} from 'react';
 import {View, Image} from 'react-native';
+import {useNavigation} from '@react-navigation/native';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import {Icon} from 'react-native-eva-icons';
 
@@ -9,6 +10,11 @@ import MenuItem from 'components/MenuItem';
 import styles from './styles';
 
 const Menu = () => {
+    const navigation = useNavigation();
+    const onProfilePress = useCallback(
+        () => navigation.navigate('EditProfile'),
+        [navigation],
+    );
     const onPressLogout = useCallback(async () => {
         try {
             // todo logout
@@ -19,7 +25,9 @@ const Menu = () => {
     return (
         <View style={styles.container}>
             <View>
-                <View style={styles.userInfoWrapper}>
+                <TouchableOpacity
+                    onPress={onProfilePress}
+                    style={styles.userInfoWrapper}>
                     <Image
                         source={require('assets/images/user-placeholder.png')}
                         style={styles.userImage}
@@ -42,7 +50,7 @@ const Menu = () => {
                             fill={'#9fa3a9'}
                         />
                     </View>
-                </View>
+                </TouchableOpacity>
                 <View style={styles.menuWrapper}>
                     <MenuItem title="Settings" linkTo="Settings" />
                     <MenuItem title="About Lukim Gather" linkTo="About" />

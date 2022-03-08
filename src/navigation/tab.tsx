@@ -6,7 +6,7 @@ import TabBar from 'components/TabBar';
 import Menu from 'screens/Menu';
 import Home from 'screens/Home';
 
-import BackButton from 'components/BackButton';
+import {BackButton} from 'components/HeaderButton';
 
 import COLORS from 'utils/colors';
 
