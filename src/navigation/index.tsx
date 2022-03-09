@@ -6,6 +6,7 @@ import TabNavigator from './tab';
 import Settings from 'screens/Settings';
 import AccountSettings from 'screens/AccountSettings';
 import ChangePassword from 'screens/ChangePassword';
+import EditProfile from 'screens/EditProfile';
 import About from 'screens/About';
 import Feedbacks from 'screens/Feedbacks';
 import Help from 'screens/Help';
@@ -60,6 +61,15 @@ const AppNavigator = () => {
                 options={{
                     headerLeft: () => <CloseButton />,
                     headerTitle: 'Change Password',
+                    presentation: 'modal',
+                }}
+            />
+            <Stack.Screen
+                name="EditProfile"
+                component={EditProfile}
+                options={{
+                    headerLeft: () => <CloseButton />,
+                    headerTitle: 'Edit Profile',
                     presentation: 'modal',
                 }}
             />
