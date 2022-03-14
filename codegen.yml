@@ -1,0 +1,10 @@
+overwrite: true
+schema:
+    - ${BASE_URL}
+documents:
+    - 'src/**/**/*.tsx'
+generates:
+    ./src/generated/types.tsx:
+        plugins:
+            - 'typescript'
+            - 'typescript-operations'

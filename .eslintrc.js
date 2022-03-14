@@ -15,6 +15,7 @@ module.exports = {
                     services: './src/services',
                     utils: './src/utils',
                     store: './src/store',
+                    '@generated': './src/generated',
                     '@rna': './src/vendor/react-native-arsenal/lib',
                 },
             },

@@ -63,3 +63,6 @@ buck-out/
 
 # React Native Arsenal
 src/vendor
+
+# Graphql
+src/generated/
