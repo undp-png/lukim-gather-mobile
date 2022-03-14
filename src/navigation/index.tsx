@@ -17,6 +17,14 @@ import COLORS from 'utils/colors';
 
 type StackParamList = {
     Home: undefined;
+    Feed: undefined;
+    Settings: undefined;
+    AccountSettings: undefined;
+    ChangePassword: undefined;
+    EditProfile: undefined;
+    About: undefined;
+    Feedbacks: undefined;
+    Help: undefined;
 };
 
 const Stack = createStackNavigator<StackParamList>();

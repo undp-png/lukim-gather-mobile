@@ -1,8 +1,15 @@
-import {StyleSheet} from 'react-native';
+import {StyleSheet, Dimensions} from 'react-native';
+
+const {width} = Dimensions.get('window');
 
 import COLORS from 'utils/colors';
 
 export default StyleSheet.create({
+    safeArea: {
+        position: 'absolute',
+        bottom: 0,
+        width,
+    },
     container: {
         position: 'absolute',
         bottom: 0,
@@ -10,10 +17,6 @@ export default StyleSheet.create({
         right: 0,
         flexDirection: 'row',
         alignItems: 'center',
-        zIndex: 1,
-        paddingTop: 8,
-        borderColor: COLORS.white,
-        borderTopWidth: 1,
     },
     containerHidden: {
         display: 'none',
@@ -23,9 +26,17 @@ export default StyleSheet.create({
         alignItems: 'center',
     },
     title: {
-        fontFamily: 'OpenSauceOne-Regular',
         color: COLORS.white,
         fontSize: 10,
         marginTop: 6,
+    },
+    plusButton: {
+        height: width / 6.5,
+        width: width / 6.5,
+        borderRadius: width / 13,
+        bottom: 35,
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: COLORS.primary,
     },
 });

@@ -5,6 +5,7 @@ import TabBar from 'components/TabBar';
 
 import Menu from 'screens/Menu';
 import Home from 'screens/Home';
+import Survey from 'screens/Survey';
 
 import {BackButton} from 'components/HeaderButton';
 
@@ -27,6 +28,7 @@ export default function TabNavigator() {
                 />
             )}>
             <Tab.Screen name="Home" component={Home} />
+            <Tab.Screen name="Survey" component={Survey} />
             <Tab.Screen
                 name="Menu"
                 component={Menu}
