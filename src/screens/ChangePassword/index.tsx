@@ -7,6 +7,7 @@ import {useNavigation} from '@react-navigation/native';
 import Text from 'components/Text';
 import TextInput from 'components/TextInput';
 import {SaveButton} from 'components/HeaderButton';
+import {_} from 'services/i18n';
 
 import styles from './styles';
 
@@ -22,23 +23,23 @@ const ChangePassword = () => {
             <KeyboardAwareScrollView>
                 <View>
                     <TextInput
-                        label="Current password"
-                        placeholder="Enter current password"
+                        label={_('Current password')}
+                        placeholder={_('Enter current password')}
                     />
                     <TouchableOpacity style={styles.forgotPassword}>
                         <Text
                             style={styles.forgotTitle}
-                            title="Forgot your password?"
+                            title={_('Forgot your password?')}
                         />
                     </TouchableOpacity>
                 </View>
                 <TextInput
-                    label="New password"
-                    placeholder="Enter new password"
+                    label={_('New password')}
+                    placeholder={_('Enter new password')}
                 />
                 <TextInput
-                    label="Confirm new password"
-                    placeholder="Re-enter new password"
+                    label={_('Confirm new password')}
+                    placeholder={_('Re-enter new password')}
                 />
             </KeyboardAwareScrollView>
         </View>

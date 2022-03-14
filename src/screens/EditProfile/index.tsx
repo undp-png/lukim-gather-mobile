@@ -8,6 +8,7 @@ import {Icon} from 'react-native-eva-icons';
 import Text from 'components/Text';
 import TextInput from 'components/TextInput';
 import {SaveButton} from 'components/HeaderButton';
+import {_} from 'services/i18n';
 
 import styles from './styles';
 
@@ -35,10 +36,13 @@ const EditProfile = () => {
                         source={require('assets/images/user-placeholder.png')}
                         style={styles.userImage}
                     />
-                    <Text style={styles.changeTitle} title="Change photo" />
+                    <Text
+                        style={styles.changeTitle}
+                        title={_('Change photo')}
+                    />
                 </TouchableOpacity>
-                <TextInput label="Name" />
-                <TextInput label="Organization name" />
+                <TextInput label={_('Name')} />
+                <TextInput label={_('Organization name')} />
             </KeyboardAwareScrollView>
         </View>
     );
