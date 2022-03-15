@@ -8,6 +8,8 @@ import Text from 'components/Text';
 import MenuItem from 'components/MenuItem';
 import {_} from 'services/i18n';
 
+import {dispatchLogout} from 'services/dispatch';
+
 import styles from './styles';
 
 const Menu = () => {
@@ -18,7 +20,7 @@ const Menu = () => {
     );
     const onPressLogout = useCallback(async () => {
         try {
-            // todo logout
+            dispatchLogout();
         } catch (error) {
             console.log(error);
         }

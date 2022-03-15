@@ -21,11 +21,13 @@ export default StyleSheet.create({
     button: {
         marginTop: 32,
     },
-    text: {
-        color: COLORS.primary,
+    signUp: {
         marginTop: 'auto',
         marginBottom: 40,
-        textAlign: 'center',
+        alignItems: 'center',
+    },
+    text: {
+        color: COLORS.primary,
         fontSize: 14,
         fontWeight: '400',
         fontFamily: 'Inter-Regular',

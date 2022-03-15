@@ -7,11 +7,20 @@ interface Props {
     title: string;
     style?: object;
     onPress(): void;
+    [key: string]: any;
 }
 
-const AuthButton: React.FC<Props> = ({title, style, onPress}) => {
+const AuthButton: React.FC<Props> = ({
+    title,
+    style,
+    onPress,
+    ...buttonProps
+}) => {
     return (
-        <TouchableOpacity onPress={onPress} style={[styles.button, style]}>
+        <TouchableOpacity
+            onPress={onPress}
+            style={[styles.button, style]}
+            {...buttonProps}>
             <Text style={styles.buttonTitle}>{title}</Text>
         </TouchableOpacity>
     );
