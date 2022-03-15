@@ -19,7 +19,17 @@ const ForwardIcon = () => {
     );
 };
 
-const MenuItem = ({title, linkTo, onPress, label}) => {
+const MenuItem = ({
+    title,
+    linkTo,
+    onPress,
+    label,
+}: {
+    title: string;
+    linkTo: any;
+    onPress(): void;
+    label: string;
+}) => {
     const navigation = useNavigation();
     const onPressMenu = useCallback(
         () => navigation.navigate(linkTo),
