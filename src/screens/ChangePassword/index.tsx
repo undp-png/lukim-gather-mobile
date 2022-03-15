@@ -5,7 +5,7 @@ import {TouchableOpacity} from 'react-native-gesture-handler';
 import {useNavigation} from '@react-navigation/native';
 
 import Text from 'components/Text';
-import TextInput from 'components/TextInput';
+import InputField from 'components/InputField';
 import {SaveButton} from 'components/HeaderButton';
 import {_} from 'services/i18n';
 
@@ -22,8 +22,8 @@ const ChangePassword = () => {
         <View style={styles.container}>
             <KeyboardAwareScrollView>
                 <View>
-                    <TextInput
-                        label={_('Current password')}
+                    <InputField
+                        title={_('Current password')}
                         placeholder={_('Enter current password')}
                     />
                     <TouchableOpacity style={styles.forgotPassword}>
@@ -33,12 +33,12 @@ const ChangePassword = () => {
                         />
                     </TouchableOpacity>
                 </View>
-                <TextInput
-                    label={_('New password')}
+                <InputField
+                    title={_('New password')}
                     placeholder={_('Enter new password')}
                 />
-                <TextInput
-                    label={_('Confirm new password')}
+                <InputField
+                    title={_('Confirm new password')}
                     placeholder={_('Re-enter new password')}
                 />
             </KeyboardAwareScrollView>
