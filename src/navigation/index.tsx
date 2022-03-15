@@ -10,6 +10,8 @@ import EditProfile from 'screens/EditProfile';
 import About from 'screens/About';
 import Feedbacks from 'screens/Feedbacks';
 import Help from 'screens/Help';
+import SearchSurvey from 'screens/SearchSurvey';
+import SurveyList from 'screens/SurveyList';
 
 import {BackButton, CloseButton} from 'components/HeaderButton';
 
@@ -84,6 +86,14 @@ const AppNavigator = () => {
             <Stack.Screen name="About" component={About} />
             <Stack.Screen name="Feedbacks" component={Feedbacks} />
             <Stack.Screen name="Help" component={Help} />
+            <Stack.Screen name="SearchSurvey" component={SearchSurvey} />
+            <Stack.Screen
+                name="SurveyList"
+                component={SurveyList}
+                options={{
+                    headerTitle: 'Surveys',
+                }}
+            />
         </Stack.Navigator>
     );
 };

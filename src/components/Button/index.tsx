@@ -7,7 +7,16 @@ import cs from '@rna/utils/cs';
 
 import styles from './styles';
 
-const _Button = ({style, title, dark = false, ...buttonProps}) => {
+const _Button = ({
+    style,
+    title,
+    dark = false,
+    ...buttonProps
+}: {
+    style: object;
+    title: string;
+    dark: boolean;
+}) => {
     return (
         <Button
             style={cs(styles.button, [styles.buttonDark, dark], style)}
