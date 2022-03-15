@@ -11,7 +11,6 @@ import About from 'screens/About';
 import Feedbacks from 'screens/Feedbacks';
 import Help from 'screens/Help';
 import SearchSurvey from 'screens/SearchSurvey';
-import SurveyList from 'screens/SurveyList';
 
 import {BackButton, CloseButton} from 'components/HeaderButton';
 
@@ -27,6 +26,7 @@ type StackParamList = {
     About: undefined;
     Feedbacks: undefined;
     Help: undefined;
+    SearchSurvey: undefined;
 };
 
 const Stack = createStackNavigator<StackParamList>();
@@ -87,13 +87,6 @@ const AppNavigator = () => {
             <Stack.Screen name="Feedbacks" component={Feedbacks} />
             <Stack.Screen name="Help" component={Help} />
             <Stack.Screen name="SearchSurvey" component={SearchSurvey} />
-            <Stack.Screen
-                name="SurveyList"
-                component={SurveyList}
-                options={{
-                    headerTitle: 'Surveys',
-                }}
-            />
         </Stack.Navigator>
     );
 };
