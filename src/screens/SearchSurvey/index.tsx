@@ -46,8 +46,8 @@ const SearchSurvey = () => {
                 <View style={styles.searchWrapper}>
                     <Icon
                         name="search-outline"
-                        height={23}
-                        width={23}
+                        height={20}
+                        width={20}
                         fill={'#888C94'}
                     />
                     <TextInput
@@ -59,9 +59,9 @@ const SearchSurvey = () => {
                         <TouchableOpacity onPress={onClearSearch}>
                             <Icon
                                 name="close-circle"
-                                height={23}
-                                width={23}
-                                fill={'#0D4979'}
+                                height={20}
+                                width={20}
+                                fill={'#888C94'}
                             />
                         </TouchableOpacity>
                     )}

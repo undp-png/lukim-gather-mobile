@@ -4,11 +4,7 @@ import COLORS from 'utils/colors';
 
 export default StyleSheet.create({
     page: {
-        justifyContent: 'center',
-        alignItems: 'center',
         backgroundColor: COLORS.background,
-        height: '100%',
-        width: '100%',
     },
     container: {
         height: '100%',
@@ -17,5 +13,23 @@ export default StyleSheet.create({
     },
     map: {
         flex: 1,
+    },
+    locationBar: {
+        position: 'absolute',
+        bottom: 100,
+        right: 20,
+        zIndex: 5,
+    },
+    locationWrapper: {
+        backgroundColor: '#fff',
+        height: 35,
+        width: 35,
+        borderRadius: 20,
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    locationIcon: {
+        height: 20,
+        width: 20,
     },
 });

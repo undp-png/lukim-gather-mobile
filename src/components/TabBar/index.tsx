@@ -141,7 +141,7 @@ const TabBar = ({
                         case 'Menu':
                             iconName = getIconName('grid', isFocused);
                             break;
-                        case 'Survey':
+                        case 'Surveys':
                             iconName = getIconName('plus', isFocused);
                             break;
                         default:
@@ -179,7 +179,7 @@ const TabBar = ({
                             onLongPress={onLongPress}
                             style={styles.tabBar}
                             key={route.key}>
-                            {route.name === 'Survey' ? (
+                            {route.name === 'Surveys' ? (
                                 <View style={styles.plusButton}>
                                     <Icon
                                         name={iconName}

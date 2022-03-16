@@ -1,5 +1,6 @@
 import React from 'react';
-import {View} from 'react-native';
+import {View, Image} from 'react-native';
+import {TouchableOpacity} from 'react-native-gesture-handler';
 import MapboxGL from '@react-native-mapbox-gl/maps';
 
 import HomeHeader from 'components/HomeHeader';
@@ -16,6 +17,14 @@ const Map = () => {
             <HomeHeader />
             <View style={styles.container}>
                 <MapboxGL.MapView style={styles.map} />
+            </View>
+            <View style={styles.locationBar}>
+                <TouchableOpacity style={styles.locationWrapper}>
+                    <Image
+                        source={require('assets/images/locate.png')}
+                        style={styles.locationIcon}
+                    />
+                </TouchableOpacity>
             </View>
         </View>
     );

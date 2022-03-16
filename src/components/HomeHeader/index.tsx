@@ -15,7 +15,7 @@ const HomeHeader = () => {
         [navigation],
     );
     const onListPress = useCallback(
-        () => navigation.navigate('SurveyList'),
+        () => navigation.navigate('Surveys'),
         [navigation],
     );
     return (
@@ -23,16 +23,16 @@ const HomeHeader = () => {
             <TouchableOpacity onPress={onSearchPress} style={styles.searchBar}>
                 <Icon
                     name="search-outline"
-                    height={23}
-                    width={23}
+                    height={22}
+                    width={22}
                     fill={'#888C94'}
                 />
             </TouchableOpacity>
             <TouchableOpacity onPress={onListPress} style={styles.menuBar}>
                 <Icon
                     name="list-outline"
-                    height={23}
-                    width={23}
+                    height={22}
+                    width={22}
                     fill={'#0D4979'}
                 />
                 <Text style={styles.title} title="List" />
