@@ -25,6 +25,12 @@ const mockUserInfo = {
     },
 };
 
+jest.mock('react-native-permissions', () => ({
+    request: jest.fn(),
+    PERMISSIONS: {},
+    RESULTS: {},
+}));
+
 jest.mock('react-native-keyboard-aware-scroll-view', () => {
     const KeyboardAwareScrollView = ({children}) => children;
     return {KeyboardAwareScrollView};
