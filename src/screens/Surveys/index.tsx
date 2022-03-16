@@ -49,9 +49,7 @@ const Surveys = () => {
         });
     }, [navigation, onMapPress, onSearchPress]);
     const renderItem = useCallback(
-        ({item}: {item: object}) => (
-            <SurveyItem item={item} onPress={() => {}} />
-        ),
+        ({item}: {item: object}) => <SurveyItem item={item} />,
         [],
     );
     return (

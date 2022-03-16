@@ -37,7 +37,7 @@ export const CloseButton = () => {
     );
 };
 
-export const SaveButton = ({onSavePress}) => {
+export const SaveButton = ({onSavePress}: {onSavePress(): void}) => {
     return (
         <TouchableOpacity onPress={onSavePress} style={styles.saveIcon}>
             <Icon
@@ -45,6 +45,19 @@ export const SaveButton = ({onSavePress}) => {
                 height={20}
                 width={20}
                 fill={'#6DE58C'}
+            />
+        </TouchableOpacity>
+    );
+};
+
+export const OptionIcon = ({onOptionPress}: {onOptionPress(): void}) => {
+    return (
+        <TouchableOpacity onPress={onOptionPress} style={styles.saveIcon}>
+            <Icon
+                name="more-horizontal-outline"
+                height={20}
+                width={20}
+                fill={'#000'}
             />
         </TouchableOpacity>
     );
