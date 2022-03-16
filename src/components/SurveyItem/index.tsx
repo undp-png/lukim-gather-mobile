@@ -1,14 +1,20 @@
-import React from 'react';
+import React, {useCallback} from 'react';
 import {View, Image} from 'react-native';
 import {TouchableOpacity} from 'react-native-gesture-handler';
+import {useNavigation} from '@react-navigation/native';
 
 import Text from 'components/Text';
 
 import styles from './styles';
 
-const SurveyItem = ({item, onPress}: {item: object; onPress(): void}) => {
+const SurveyItem = ({item}: {item: object}) => {
+    const navigation = useNavigation();
+    const onPressItem = useCallback(
+        () => navigation.navigate('SurveyItem', {item}),
+        [item, navigation],
+    );
     return (
-        <TouchableOpacity onPress={onPress} style={styles.item}>
+        <TouchableOpacity onPress={onPressItem} style={styles.item}>
             <View>
                 <Text style={styles.title} title={item.title} />
                 <View style={styles.category}>
