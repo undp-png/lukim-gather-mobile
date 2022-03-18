@@ -12,6 +12,7 @@ import Feedbacks from 'screens/Feedbacks';
 import Help from 'screens/Help';
 import SearchSurvey from 'screens/SearchSurvey';
 import SurveyItem from 'screens/SurveyItem';
+import ChooseCategory from 'screens/ChooseCategory';
 
 import {BackButton, CloseButton} from 'components/HeaderButton';
 
@@ -29,6 +30,7 @@ type StackParamList = {
     Help: undefined;
     SearchSurvey: undefined;
     SurveyItem: undefined;
+    ChooseCategory: undefined;
 };
 
 const Stack = createStackNavigator<StackParamList>();
@@ -89,7 +91,6 @@ const AppNavigator = () => {
             <Stack.Screen name="Feedbacks" component={Feedbacks} />
             <Stack.Screen name="Help" component={Help} />
             <Stack.Screen name="SearchSurvey" component={SearchSurvey} />
-
             <Stack.Screen
                 name="SurveyItem"
                 component={SurveyItem}
@@ -97,6 +98,13 @@ const AppNavigator = () => {
                     headerLeft: () => <CloseButton />,
                     headerTitle: 'Public Entries',
                     presentation: 'modal',
+                }}
+            />
+            <Stack.Screen
+                name="ChooseCategory"
+                component={ChooseCategory}
+                options={{
+                    headerTitle: 'Choose a category',
                 }}
             />
         </Stack.Navigator>

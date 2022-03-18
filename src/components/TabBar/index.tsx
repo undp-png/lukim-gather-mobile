@@ -167,6 +167,10 @@ const TabBar = ({
                         });
                     };
 
+                    const onPlusPress = () => {
+                        navigation.navigate('ChooseCategory');
+                    };
+
                     return (
                         <TouchableOpacity
                             accessibilityRole="button"
@@ -175,7 +179,9 @@ const TabBar = ({
                                 options.tabBarAccessibilityLabel
                             }
                             testID={options.tabBarTestID}
-                            onPress={onPress}
+                            onPress={
+                                route.name === 'Surveys' ? onPlusPress : onPress
+                            }
                             onLongPress={onLongPress}
                             style={styles.tabBar}
                             key={route.key}>

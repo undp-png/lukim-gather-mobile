@@ -7,7 +7,7 @@ const {width} = Dimensions.get('window');
 export default StyleSheet.create({
     container: {
         borderTopWidth: 10,
-        borderTopColor: '#fff',
+        borderTopColor: COLORS.white,
         height: '100%',
         backgroundColor: '#E7ECF2',
         padding: 20,
@@ -34,7 +34,7 @@ export default StyleSheet.create({
         fontSize: 16,
         lineHeight: 19.36,
         fontFamily: 'Inter-Medium',
-        color: '#101828',
+        color: COLORS.tertiary,
         marginBottom: 8,
     },
     category: {
@@ -51,7 +51,7 @@ export default StyleSheet.create({
         fontSize: 14,
         lineHeight: 20,
         fontFamily: 'Inter-Regular',
-        color: '#284362',
+        color: COLORS.primaryBlue,
     },
     rightData: {
         justifyContent: 'flex-end',
@@ -60,11 +60,11 @@ export default StyleSheet.create({
         fontSize: 12,
         lineHeight: 16,
         fontFamily: 'Inter-Regular',
-        color: '#888C94',
+        color: COLORS.inputText,
     },
     tabWrapper: {
         flexDirection: 'row',
-        backgroundColor: '#CFD5DC',
+        backgroundColor: COLORS.border,
         padding: 2,
         borderRadius: 8,
         marginBottom: 20,
@@ -82,7 +82,7 @@ export default StyleSheet.create({
         fontSize: 14,
         lineHeight: 20,
         fontFamily: 'Inter-Medium',
-        color: '#101828',
+        color: COLORS.tertiary,
         textAlign: 'center',
     },
 });

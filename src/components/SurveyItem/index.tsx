@@ -7,7 +7,18 @@ import Text from 'components/Text';
 
 import styles from './styles';
 
-const SurveyItem = ({item}: {item: object}) => {
+const SurveyItem = ({
+    item,
+    onPress,
+}: {
+    item: {
+        title: string;
+        icon: string;
+        category: {title: string};
+        created?: string;
+    };
+    onPress(): void;
+}) => {
     const navigation = useNavigation();
     const onPressItem = useCallback(
         () => navigation.navigate('SurveyItem', {item}),
