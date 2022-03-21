@@ -1,9 +1,16 @@
 import 'react-native-gesture-handler';
+import 'cross-fetch/polyfill';
 
 import React, {useMemo} from 'react';
 import {StatusBar} from 'react-native';
 import {NavigationContainer} from '@react-navigation/native';
-import {ApolloClient, InMemoryCache, ApolloProvider} from '@apollo/client';
+import {
+    ApolloClient,
+    createHttpLink,
+    InMemoryCache,
+    ApolloProvider,
+} from '@apollo/client';
+import {setContext} from '@apollo/client/link/context';
 import {Provider} from 'react-redux';
 import {PersistGate} from 'redux-persist/integration/react';
 import {BASE_URL} from '@env';
@@ -20,8 +27,24 @@ import COLORS from 'utils/colors';
 
 import 'services/bootstrap';
 
-const client = new ApolloClient({
+const httpLink = createHttpLink({
     uri: BASE_URL,
+});
+
+const authLink = setContext((_, {headers}) => {
+    const {
+        auth: {token},
+    } = store.getState();
+    return {
+        headers: {
+            ...headers,
+            authorization: token ? `Bearer ${token}` : '',
+        },
+    };
+});
+
+const client = new ApolloClient({
+    link: authLink.concat(httpLink),
     cache: new InMemoryCache(),
 });
 

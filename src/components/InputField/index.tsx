@@ -6,17 +6,21 @@ import COLORS from 'utils/colors';
 import styles from './styles';
 
 interface Props {
+    input: string;
     title: string;
     password?: boolean;
     placeholder?: string;
     containerStyle?: object;
+    [key: string]: any;
 }
 
 const InputField: React.FC<Props> = ({
+    input,
     title,
     password = false,
     containerStyle,
     placeholder,
+    ...otherProps
 }) => {
     const [focused, setFocused] = useState(false);
     const [hideText, setHideText] = useState(false);
@@ -46,6 +50,7 @@ const InputField: React.FC<Props> = ({
                 <TextInput
                     onBlur={onBlur}
                     onFocus={onFocus}
+                    value={input}
                     style={[
                         styles.input,
                         {
@@ -61,6 +66,7 @@ const InputField: React.FC<Props> = ({
                     secureTextEntry={hideText ? true : false}
                     placeholderTextColor={COLORS.greyText}
                     placeholder={placeholder}
+                    {...otherProps}
                 />
                 {password && (
                     <View style={styles.iconWrapper}>
