@@ -13,11 +13,14 @@ export default StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'center',
-        height: 45,
+        height: 49,
         paddingHorizontal: 40,
     },
     buttonDark: {
         backgroundColor: '#284362',
+    },
+    buttonLight: {
+        backgroundColor: COLORS.border,
     },
     buttonText: {
         color: COLORS.primary,
