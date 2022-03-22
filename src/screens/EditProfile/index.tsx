@@ -6,7 +6,7 @@ import {useNavigation} from '@react-navigation/native';
 import {Icon} from 'react-native-eva-icons';
 
 import Text from 'components/Text';
-import TextInput from 'components/TextInput';
+import InputField from 'components/InputField';
 import {SaveButton} from 'components/HeaderButton';
 import {_} from 'services/i18n';
 
@@ -41,8 +41,8 @@ const EditProfile = () => {
                         title={_('Change photo')}
                     />
                 </TouchableOpacity>
-                <TextInput label={_('Name')} />
-                <TextInput label={_('Organization name')} />
+                <InputField title={_('Name')} />
+                <InputField title={_('Organization name')} />
             </KeyboardAwareScrollView>
         </View>
     );

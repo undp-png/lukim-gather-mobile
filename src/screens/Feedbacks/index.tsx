@@ -3,7 +3,7 @@ import {View} from 'react-native';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 
 import Button from 'components/Button';
-import TextInput from 'components/TextInput';
+import InputField from 'components/InputField';
 import PickerSelect from 'components/PickerSelect';
 import {_} from 'services/i18n';
 
@@ -20,9 +20,9 @@ const Feedbacks = () => {
                     label={_('Issue type')}
                     placeholder={_('Select the issue')}
                 />
-                <TextInput
-                    label={_('Explain the issue')}
-                    multiline
+                <InputField
+                    title={_('Explain the issue')}
+                    multiline={true}
                     numberOfLines={5}
                     textAlignVertical="top"
                 />

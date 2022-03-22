@@ -20,7 +20,7 @@ const InputField: React.FC<Props> = ({
     password = false,
     containerStyle,
     placeholder,
-    ...otherProps
+    ...inputProps
 }) => {
     const [focused, setFocused] = useState(false);
     const [hideText, setHideText] = useState(false);
@@ -66,7 +66,7 @@ const InputField: React.FC<Props> = ({
                     secureTextEntry={hideText ? true : false}
                     placeholderTextColor={COLORS.greyText}
                     placeholder={placeholder}
-                    {...otherProps}
+                    {...inputProps}
                 />
                 {password && (
                     <View style={styles.iconWrapper}>
