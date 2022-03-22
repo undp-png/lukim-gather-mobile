@@ -2,7 +2,7 @@ import React from 'react';
 import {SafeAreaView} from 'react-native';
 
 import InputField from 'components/InputField';
-import AuthButton from 'components/AuthButton';
+import Button from 'components/Button';
 import {_} from 'services/i18n';
 
 import styles from './styles';
@@ -14,7 +14,7 @@ const AddOrganization = () => {
                 title={_('Organization name')}
                 placeholder={_('Enter Organization name')}
             />
-            <AuthButton
+            <Button
                 title={_('Continue')}
                 style={styles.button}
                 onPress={() => {}}

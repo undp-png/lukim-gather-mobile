@@ -2,7 +2,7 @@ import React from 'react';
 import {SafeAreaView} from 'react-native';
 
 import InputField from 'components/InputField';
-import AuthButton from 'components/AuthButton';
+import Button from 'components/Button';
 import {_} from 'services/i18n';
 
 import styles from './styles';
@@ -20,7 +20,7 @@ const CreateNewPassword = () => {
                 placeholder={_('Re-enter password')}
                 password
             />
-            <AuthButton
+            <Button
                 title={_('Reset Password')}
                 style={styles.button}
                 onPress={() => {}}

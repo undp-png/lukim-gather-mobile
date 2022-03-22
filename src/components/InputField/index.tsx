@@ -6,7 +6,7 @@ import COLORS from 'utils/colors';
 import styles from './styles';
 
 interface Props {
-    input: string;
+    input?: string;
     title: string;
     password?: boolean;
     placeholder?: string;
