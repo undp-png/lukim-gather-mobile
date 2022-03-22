@@ -6,6 +6,8 @@ import Toast from 'react-native-simple-toast';
 
 import InputField from 'components/InputField';
 import Button from 'components/Button';
+import {ModalLoader} from 'components/Loader';
+
 import {Localize} from '@rna/components/I18n';
 import {TokenAuthMutation, TokenAuthMutationVariables} from '@generated/types';
 
@@ -19,8 +21,6 @@ const LOGIN = gql`
     mutation TokenAuth($username: String!, $password: String!) {
         tokenAuth(username: $username, password: $password) {
             token
-            refreshToken
-            user
         }
     }
 `;
@@ -38,6 +38,7 @@ const Login = () => {
         onCompleted: ({tokenAuth}) => {
             const {token, refreshToken, user} = tokenAuth;
             dispatchLogin(token, refreshToken, user);
+            Toast.show('Successfully Logged In !!');
         },
         onError: err => {
             Toast.show(getErrorMessage(err), Toast.LONG, [
@@ -61,6 +62,7 @@ const Login = () => {
 
     return (
         <SafeAreaView style={styles.container}>
+            <ModalLoader loading={loading} />
             <InputField
                 title={_('Email or Phone')}
                 input={username}
