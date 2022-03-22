@@ -2,7 +2,7 @@ import React from 'react';
 import {SafeAreaView, Text, TouchableOpacity, View} from 'react-native';
 
 import InputField from 'components/InputField';
-import AuthButton from 'components/AuthButton';
+import Button from 'components/Button';
 import {Localize} from '@rna/components/I18n';
 import {_} from 'services/i18n';
 
@@ -50,7 +50,7 @@ const SignUp = () => {
                     </Text>
                 </TouchableOpacity>
             </View>
-            <AuthButton
+            <Button
                 title={_('Create an account')}
                 style={styles.button}
                 onPress={() => {}}

@@ -5,7 +5,7 @@ import {useNavigation} from '@react-navigation/native';
 import Toast from 'react-native-simple-toast';
 
 import InputField from 'components/InputField';
-import AuthButton from 'components/AuthButton';
+import Button from 'components/Button';
 import {Localize} from '@rna/components/I18n';
 import {TokenAuthMutation, TokenAuthMutationVariables} from '@generated/types';
 
@@ -81,7 +81,7 @@ const Login = () => {
                     </Text>
                 </TouchableOpacity>
             </View>
-            <AuthButton
+            <Button
                 title={_('Login')}
                 disabled={!username || !password}
                 style={styles.button}
