@@ -10,6 +10,7 @@
         "test": "jest",
         "generated": "graphql-codegen --config codegen.yml --require dotenv/config",
         "generate:messages": "react-gettext-parser --config translation.config.js --output src/lang/locale_tpi.po 'src/**/{*.js,*.jsx,*.ts,*.tsx}' '!src/vendor'",
+        "generate:apk": "mkdir -p android/app/src/main/assets && react-native bundle --platform android --dev false --entry-file index.js --bundle-output android/app/src/main/assets/index.android.bundle --assets-dest android/app/src/main/res/ && cd android && ./gradlew assembleDebug && cd ..",
         "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
         "prepare": "husky install"
     },
@@ -33,6 +34,7 @@
         "react-native-gesture-handler": "^2.2.0",
         "react-native-keyboard-aware-scroll-view": "^0.9.5",
         "react-native-mmkv": "^2.1.0",
+        "react-native-modal": "^13.0.1",
         "react-native-safe-area-context": "^3.3.2",
         "react-native-screens": "^3.11.1",
         "react-native-simple-toast": "^1.1.3",

@@ -7,6 +7,8 @@ import ForgotPassword from 'screens/ForgotPassword';
 import VerifyEmail from 'screens/VerifyEmail';
 import ChangePassword from 'screens/ChangePassword';
 
+import {BackButton} from 'components/HeaderButton';
+
 import COLORS from 'utils/colors';
 
 type AuthStackParamList = {
@@ -24,14 +26,37 @@ export default function AuthNavigator(props) {
         <Stack.Navigator
             initialRoutename="Login"
             screenOptions={{
-                headerTransparent: true,
-                headerTitle: false,
-                headerTintColor: COLORS.lightAlt,
-                headerShown: false,
+                headerLeft: () => <BackButton />,
+                headerShown: true,
+                headerTitleAlign: 'center',
+                headerTitleStyle: {
+                    fontFamily: 'Inter-SemiBold',
+                    color: COLORS.tertiary,
+                    fontSize: 18,
+                    lineHeight: 21.78,
+                },
+                headerStyle: {
+                    backgroundColor: COLORS.white,
+                    shadowColor: 'transparent',
+                    borderBottomColor: '#cfd5dc',
+                    borderBottomWidth: 1,
+                },
             }}>
-            <Stack.Screen name="Login" component={Login} />
-            <Stack.Screen name="SignUp" component={SignUp} />
-            <Stack.Screen name="ForgotPassword" component={ForgotPassword} />
+            <Stack.Screen
+                name="Login"
+                component={Login}
+                options={{headerTitle: 'Log in'}}
+            />
+            <Stack.Screen
+                name="SignUp"
+                component={SignUp}
+                options={{headerTitle: 'Create an account'}}
+            />
+            <Stack.Screen
+                name="ForgotPassword"
+                component={ForgotPassword}
+                options={{headerTitle: 'Forgot password?'}}
+            />
             <Stack.Screen name="VerifyEmail" component={VerifyEmail} />
             <Stack.Screen name="ChangePassword" component={ChangePassword} />
         </Stack.Navigator>

@@ -119,7 +119,11 @@ const AppNavigator = () => {
                     />
                 </>
             ) : (
-                <Stack.Screen name="Auth" component={AuthNavigator} />
+                <Stack.Screen
+                    name="Auth"
+                    component={AuthNavigator}
+                    options={{headerShown: false}}
+                />
             )}
         </Stack.Navigator>
     );
