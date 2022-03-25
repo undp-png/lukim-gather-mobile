@@ -14,9 +14,8 @@ export default StyleSheet.create({
     },
     info: {
         fontSize: 16,
-        fontWeight: '500',
         fontFamily: 'Inter-Medium',
-        color: COLORS.primaryBlue,
+        color: COLORS.blueText,
     },
     button: {
         marginTop: 32,
@@ -27,9 +26,8 @@ export default StyleSheet.create({
         alignItems: 'center',
     },
     text: {
-        color: COLORS.primary,
+        color: COLORS.blueTextAlt,
         fontSize: 14,
-        fontWeight: '400',
         fontFamily: 'Inter-Regular',
     },
 });

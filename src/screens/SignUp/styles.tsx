@@ -27,28 +27,25 @@ export default StyleSheet.create({
     },
     info: {
         fontSize: 14,
-        fontWeight: '400',
         lineHeight: 20,
         marginRight: 5,
         fontFamily: 'Inter-Regular',
-        color: COLORS.tertiaryAlt,
+        color: COLORS.greyText,
     },
     infoPressable: {
         fontSize: 14,
-        fontWeight: '600',
         paddingRight: 5,
         fontFamily: 'Inter-SemiBold',
-        color: COLORS.primaryBlue,
+        color: COLORS.blueText,
     },
     button: {
         marginTop: 20,
     },
     text: {
-        color: COLORS.primary,
+        color: COLORS.blueTextAlt,
         marginTop: 30,
         textAlign: 'center',
         fontSize: 14,
-        fontWeight: '400',
         fontFamily: 'Inter-Regular',
     },
 });

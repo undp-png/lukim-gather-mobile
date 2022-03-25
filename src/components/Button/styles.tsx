@@ -23,7 +23,7 @@ export default StyleSheet.create({
         backgroundColor: COLORS.border,
     },
     buttonText: {
-        color: COLORS.primary,
+        color: COLORS.white,
         fontSize: 16,
         lineHeight: 19.63,
         fontFamily: 'Inter-Medium',

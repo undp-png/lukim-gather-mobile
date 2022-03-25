@@ -8,8 +8,7 @@ export default StyleSheet.create({
     },
     title: {
         fontSize: 16,
-        fontWeight: '500',
-        fontFamily: 'Inter-Regular',
+        fontFamily: 'Inter-Medium',
         color: COLORS.inputText,
     },
     inputContainer: {

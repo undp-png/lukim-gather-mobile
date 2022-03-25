@@ -35,6 +35,6 @@ export default StyleSheet.create({
         fontSize: 14,
         fontFamily: 'Inter-Medium',
         lineHeight: 20,
-        color: COLORS.primaryBlue,
+        color: COLORS.blueText,
     },
 });

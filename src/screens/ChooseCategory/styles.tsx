@@ -35,7 +35,7 @@ export default StyleSheet.create({
         fontSize: 16,
         fontFamily: 'Inter-Medium',
         lineHeight: 19.36,
-        color: COLORS.primary,
+        color: COLORS.greyTextDark,
     },
     subCategoryList: {
         marginHorizontal: 10,
@@ -64,9 +64,9 @@ export default StyleSheet.create({
     categoryName: {
         marginTop: 5,
         fontSize: 14,
-        fontFamily: 'Inter-Regualr',
-        lineHeight: 20,
-        color: COLORS.primaryBlue,
+        fontFamily: 'Inter-SemiBold',
+        lineHeight: 16.94,
+        color: COLORS.greyTextDark,
         textAlign: 'center',
     },
 });

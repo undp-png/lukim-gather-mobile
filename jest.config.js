@@ -10,6 +10,9 @@ module.exports = {
             '|@react-navigation' +
             '|react-native-gesture-handler' +
             '|@react-native-mapbox-gl' +
+            '|react-native-reanimated' +
+            '|react-native-modal' +
+            '|react-native-animatable' +
             ')/)',
     ],
     testPathIgnorePatterns: ['src/vendor', 'node_modules'],
