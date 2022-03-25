@@ -7,10 +7,6 @@ export default StyleSheet.create({
         backgroundColor: COLORS.white,
         minHeight: 70,
     },
-    headerTitle: {
-        color: COLORS.light,
-        fontSize: 18,
-    },
     header: {
         backgroundColor: COLORS.background,
     },

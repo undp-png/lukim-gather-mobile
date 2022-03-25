@@ -28,46 +28,6 @@ export default StyleSheet.create({
         width: width - 136,
         fontFamily: 'Inter-Medium',
     },
-    item: {
-        backgroundColor: COLORS.white,
-        borderRadius: 8,
-        padding: 12,
-        marginBottom: 8,
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-    },
-    title: {
-        fontSize: 16,
-        lineHeight: 19.36,
-        fontFamily: 'Inter-Medium',
-        color: COLORS.tertiary,
-        marginBottom: 8,
-    },
-    category: {
-        flexDirection: 'row',
-        alignItems: 'center',
-    },
-    categoryIcon: {
-        height: 18,
-        width: 18,
-        resizeMode: 'contain',
-        marginRight: 5,
-    },
-    field: {
-        fontSize: 14,
-        lineHeight: 20,
-        fontFamily: 'Inter-Regular',
-        color: COLORS.primaryBlue,
-    },
-    rightData: {
-        justifyContent: 'flex-end',
-    },
-    date: {
-        fontSize: 12,
-        lineHeight: 16,
-        fontFamily: 'Inter-Regular',
-        color: COLORS.inputText,
-    },
     tabWrapper: {
         flexDirection: 'row',
         backgroundColor: COLORS.border,

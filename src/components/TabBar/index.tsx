@@ -189,7 +189,7 @@ const TabBar = ({
                                 <View style={styles.plusButton}>
                                     <Icon
                                         name={iconName}
-                                        fill={COLORS.secondary}
+                                        fill={COLORS.white}
                                         height={25}
                                         width={25}
                                     />

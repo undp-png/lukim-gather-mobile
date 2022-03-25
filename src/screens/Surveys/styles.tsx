@@ -36,6 +36,6 @@ export default StyleSheet.create({
         fontSize: 12,
         lineHeight: 16,
         fontFamily: 'Inter-Regular',
-        color: COLORS.tertiaryAlt,
+        color: COLORS.greyText,
     },
 });

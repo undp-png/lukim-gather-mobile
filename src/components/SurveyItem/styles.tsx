@@ -51,7 +51,7 @@ export default StyleSheet.create({
         fontSize: 14,
         lineHeight: 20,
         fontFamily: 'Inter-Regular',
-        color: COLORS.primaryBlue,
+        color: COLORS.blueText,
     },
     rightData: {
         justifyContent: 'flex-end',

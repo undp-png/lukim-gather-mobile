@@ -19,7 +19,7 @@ export default StyleSheet.create({
         marginTop: 32,
     },
     text: {
-        color: COLORS.primary,
+        color: COLORS.blueTextAlt,
         marginTop: 'auto',
         marginBottom: 40,
         textAlign: 'center',

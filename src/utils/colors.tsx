@@ -8,32 +8,20 @@ const COLORS = {
     accent: 'rgb(234,99,25)',
     border: '#CFD5DC',
 
-    /* Neutral Colors */
-    dark: 'rgb(38,38,38)',
-    light: 'rgb(221,221,221)',
-    lightAlt: 'rgb(214,214,214)',
-    grey: 'rgb(186, 186, 186)',
-    greyAlt: 'rgb(103,103,103)',
-    greyTrans: 'rgba(255,255,255,0.13)',
-
     /* Text color */
-    greyText: '#70747E',
+    blueText: '#196297',
+    blueTextAlt: '#00518B',
+    greyText: '#585D69',
+    greyTextDark: '#282F3E',
     inputText: '#888C94',
 
     /** Primary and Secondary colors **/
-    primary: '#102E51',
-    primaryAlt: '#708297',
-    primaryLight: '#9FABB9',
-    primaryLightAlt: '#E7EAEE',
-    primaryBlue: '#284362',
-    secondary: '#6DE68C',
-    secondaryAlt: '#99EDAF',
-    secondaryLight: '#C5F5D1',
-    secondaryLightAlt: '#F0FCF4',
+    primary: '#6AA12A',
+    primaryAlt: '#6697B9',
+    primaryLight: '#99B9D1',
+    primaryLightAlt: '#E6EEF3',
+    secondary: '#6AA12A',
     tertiary: '#101828',
-    tertiaryAlt: '#585D69',
-    tertiaryLight: '#9FA3A9',
-    tertiaryLightAlt: '#E7E8EA',
 
     /* Alert Colors */
     error: '#F04438',

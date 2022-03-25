@@ -30,8 +30,8 @@ export default function TabNavigator() {
             tabBar={tabBarProps => (
                 <TabBar
                     {...tabBarProps}
-                    activeColor={COLORS.black}
-                    inActiveColor={COLORS.grey}
+                    activeColor={COLORS.blueTextAlt}
+                    inActiveColor={COLORS.primaryLight}
                     style={styles.tabBar}
                 />
             )}>

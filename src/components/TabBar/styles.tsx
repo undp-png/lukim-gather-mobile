@@ -37,6 +37,6 @@ export default StyleSheet.create({
         bottom: 35,
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: COLORS.primary,
+        backgroundColor: COLORS.blueTextAlt,
     },
 });
