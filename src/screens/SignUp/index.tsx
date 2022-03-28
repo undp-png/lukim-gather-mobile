@@ -1,33 +1,86 @@
-import React from 'react';
+import React, {useCallback, useState} from 'react';
+import {useMutation, gql} from '@apollo/client';
 import {SafeAreaView, Text, TouchableOpacity, View} from 'react-native';
+import Toast from 'react-native-simple-toast';
+import {useNavigation} from '@react-navigation/native';
 
 import InputField from 'components/InputField';
 import Button from 'components/Button';
+import {ModalLoader} from 'components/Loader';
+
 import {Localize} from '@rna/components/I18n';
 import {_} from 'services/i18n';
+import {getErrorMessage} from 'utils/error';
 
 import styles from './styles';
 
+const SIGNUP = gql`
+    mutation RegisterUser($data: RegisterUserInput!) {
+        registerUser(data: $data) {
+            ok
+            errors
+        }
+    }
+`;
+
 const SignUp = () => {
+    const [firstName, setFirstName] = useState<string>('');
+    const [lastName, setLastName] = useState<string>('');
+    const [email, setEmail] = useState<string>('');
+    const [password, setPassword] = useState<string>('');
+
+    const navigation = useNavigation();
+    const [signup, {loading, error}] = useMutation(SIGNUP, {
+        onCompleted: () => {
+            Toast.show('Your account has been successfully created !!');
+            navigation.navigate('Login');
+        },
+        onError: err => {
+            Toast.show(getErrorMessage(err), Toast.LONG, [
+                'RCTModalHostViewController',
+            ]);
+            console.log(err);
+        },
+    });
+
+    const handleSignUp = useCallback(async () => {
+        await signup({
+            variables: {
+                data: {
+                    firstName,
+                    lastName,
+                    email,
+                    password,
+                    rePassword: password,
+                    username: email,
+                },
+            },
+        });
+    }, [email, firstName, lastName, password, signup]);
     return (
         <SafeAreaView style={styles.container}>
+            <ModalLoader loading={loading} />
             <InputField
+                onChangeText={setEmail}
                 title={_('Email or Phone')}
                 placeholder="johndoe@example.com"
             />
             <View style={styles.name}>
                 <InputField
+                    onChangeText={setFirstName}
                     title={_('First name')}
                     placeholder={_('Enter first name')}
                     containerStyle={styles.fullName}
                 />
                 <InputField
+                    onChangeText={setLastName}
                     title={_('Surname')}
                     placeholder={_('Enter surname')}
                     containerStyle={styles.surName}
                 />
             </View>
             <InputField
+                onChangeText={setPassword}
                 title={_('Password')}
                 placeholder={_('Enter password')}
                 password
@@ -53,7 +106,7 @@ const SignUp = () => {
             <Button
                 title={_('Create an account')}
                 style={styles.button}
-                onPress={() => {}}
+                onPress={handleSignUp}
             />
             <Text style={styles.text}>
                 <Localize>Already have an account?</Localize>

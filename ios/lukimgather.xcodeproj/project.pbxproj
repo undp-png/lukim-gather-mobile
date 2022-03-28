@@ -16,8 +16,8 @@
 		5A3C09523BC814C7993BF16E /* libPods-lukimgather-lukimgatherTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4ED566A97F9B3D2A13C9013E /* libPods-lukimgather-lukimgatherTests.a */; };
 		810311D9CEEF4100948ACA94 /* Inter-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A35BE9BE164E4BBBA99DAD01 /* Inter-Regular.ttf */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
-		DA9099200376486B8FD446D7 /* Inter-SemiBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = EF8F24F1435B4447825FF945 /* Inter-SemiBold.ttf */; };
 		C5B46158FB614240A2EB44E2 /* Gilroy-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 51C216958C19427092BC79F1 /* Gilroy-Bold.ttf */; };
+		DA9099200376486B8FD446D7 /* Inter-SemiBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = EF8F24F1435B4447825FF945 /* Inter-SemiBold.ttf */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -44,6 +44,7 @@
 		1FA315DA5F08F0EBCD2A5451 /* libPods-lukimgather.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-lukimgather.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		21F5F7F96F48BCBE5A7872C7 /* Pods-lukimgather.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-lukimgather.debug.xcconfig"; path = "Target Support Files/Pods-lukimgather/Pods-lukimgather.debug.xcconfig"; sourceTree = "<group>"; };
 		4ED566A97F9B3D2A13C9013E /* libPods-lukimgather-lukimgatherTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-lukimgather-lukimgatherTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		51C216958C19427092BC79F1 /* Gilroy-Bold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = "Gilroy-Bold.ttf"; path = "../src/assets/fonts/Gilroy-Bold.ttf"; sourceTree = "<group>"; };
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = lukimgather/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		9DD6EFF70E95F57DFFA4299D /* Pods-lukimgather-lukimgatherTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-lukimgather-lukimgatherTests.debug.xcconfig"; path = "Target Support Files/Pods-lukimgather-lukimgatherTests/Pods-lukimgather-lukimgatherTests.debug.xcconfig"; sourceTree = "<group>"; };
 		A35BE9BE164E4BBBA99DAD01 /* Inter-Regular.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = "Inter-Regular.ttf"; path = "../src/assets/fonts/Inter-Regular.ttf"; sourceTree = "<group>"; };
@@ -51,7 +52,6 @@
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 		EF8F24F1435B4447825FF945 /* Inter-SemiBold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = "Inter-SemiBold.ttf"; path = "../src/assets/fonts/Inter-SemiBold.ttf"; sourceTree = "<group>"; };
 		F0E2ED2F30AF31BDA659642A /* Pods-lukimgather.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-lukimgather.release.xcconfig"; path = "Target Support Files/Pods-lukimgather/Pods-lukimgather.release.xcconfig"; sourceTree = "<group>"; };
-		51C216958C19427092BC79F1 /* Gilroy-Bold.ttf */ = {isa = PBXFileReference; name = "Gilroy-Bold.ttf"; path = "../src/assets/fonts/Gilroy-Bold.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */

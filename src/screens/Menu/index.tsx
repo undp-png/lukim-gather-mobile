@@ -11,8 +11,10 @@ import {_} from 'services/i18n';
 import {dispatchLogout} from 'services/dispatch';
 
 import styles from './styles';
+import {useSelector} from 'react-redux';
 
 const Menu = () => {
+    const {user} = useSelector(state => state.auth);
     const navigation = useNavigation();
     const onProfilePress = useCallback(
         () => navigation.navigate('EditProfile'),
@@ -39,7 +41,11 @@ const Menu = () => {
                         <View style={styles.textWrapper}>
                             <Text
                                 style={styles.userName}
-                                title="Alexander Doe"
+                                title={
+                                    `${user?.firstName}` +
+                                    `${' '}` +
+                                    `${user?.lastName}`
+                                }
                             />
                             <Text
                                 style={styles.userOrg}
