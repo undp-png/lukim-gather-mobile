@@ -373,6 +373,15 @@ PODS:
     - React-Core
   - RNGestureHandler (2.2.0):
     - React-Core
+  - RNImageCropPicker (0.37.3):
+    - React-Core
+    - React-RCTImage
+    - RNImageCropPicker/QBImagePickerController (= 0.37.3)
+    - TOCropViewController
+  - RNImageCropPicker/QBImagePickerController (0.37.3):
+    - React-Core
+    - React-RCTImage
+    - TOCropViewController
   - RNPermissions (3.3.1):
     - React-Core
   - RNScreens (3.11.1):
@@ -381,6 +390,7 @@ PODS:
   - RNSVG (12.1.1):
     - React
   - Toast (4.0.0)
+  - TOCropViewController (2.6.1)
   - Yoga (1.14.0)
   - YogaKit (1.18.1):
     - Yoga (~> 1.14)
@@ -447,6 +457,7 @@ DEPENDENCIES:
   - "RNCMaskedView (from `../node_modules/@react-native-masked-view/masked-view`)"
   - "RNCPicker (from `../node_modules/@react-native-picker/picker`)"
   - RNGestureHandler (from `../node_modules/react-native-gesture-handler`)
+  - RNImageCropPicker (from `../node_modules/react-native-image-crop-picker`)
   - RNPermissions (from `../node_modules/react-native-permissions`)
   - RNScreens (from `../node_modules/react-native-screens`)
   - RNSVG (from `../node_modules/react-native-svg`)
@@ -472,6 +483,7 @@ SPEC REPOS:
     - MMKVCore
     - OpenSSL-Universal
     - Toast
+    - TOCropViewController
     - YogaKit
 
 EXTERNAL SOURCES:
@@ -549,6 +561,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/@react-native-picker/picker"
   RNGestureHandler:
     :path: "../node_modules/react-native-gesture-handler"
+  RNImageCropPicker:
+    :path: "../node_modules/react-native-image-crop-picker"
   RNPermissions:
     :path: "../node_modules/react-native-permissions"
   RNScreens:
@@ -613,10 +627,12 @@ SPEC CHECKSUMS:
   RNCMaskedView: c298b644a10c0c142055b3ae24d83879ecb13ccd
   RNCPicker: f6c760d4b314585ff35165d8640d7917ae30afb1
   RNGestureHandler: bf572f552ea324acd5b5464b8d30755b2d8c1de6
+  RNImageCropPicker: 44e2807bc410741f35d4c45b6586aedfe3da39d2
   RNPermissions: 34d678157c800b25b22a488e4d8babb57456e796
   RNScreens: 4d83613b50b74ed277026375dc0810893b0c347f
   RNSVG: 551acb6562324b1d52a4e0758f7ca0ec234e278f
   Toast: 91b396c56ee72a5790816f40d3a94dd357abc196
+  TOCropViewController: edfd4f25713d56905ad1e0b9f5be3fbe0f59c863
   Yoga: 5cbf25add73edb290e1067017690f7ebf56c5468
   YogaKit: f782866e155069a2cca2517aafea43200b01fd5a
 

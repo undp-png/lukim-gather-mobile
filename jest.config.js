@@ -10,6 +10,7 @@ module.exports = {
             '|@react-navigation' +
             '|react-native-gesture-handler' +
             '|@react-native-mapbox-gl' +
+            '|react-native-image-crop-picker' +
             '|react-native-reanimated' +
             '|react-native-modal' +
             '|react-native-animatable' +
