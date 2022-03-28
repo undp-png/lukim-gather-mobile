@@ -16,7 +16,7 @@ export default StyleSheet.create({
     },
     locationBar: {
         position: 'absolute',
-        bottom: 100,
+        bottom: 105,
         right: 20,
         zIndex: 5,
     },
