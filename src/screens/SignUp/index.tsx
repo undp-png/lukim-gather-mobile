@@ -58,59 +58,61 @@ const SignUp = () => {
         });
     }, [email, firstName, lastName, password, signup]);
     return (
-        <SafeAreaView style={styles.container}>
-            <ModalLoader loading={loading} />
-            <InputField
-                onChangeText={setEmail}
-                title={_('Email or Phone')}
-                placeholder="johndoe@example.com"
-            />
-            <View style={styles.name}>
+        <SafeAreaView>
+            <View style={styles.container}>
+                <ModalLoader loading={loading} />
                 <InputField
-                    onChangeText={setFirstName}
-                    title={_('First name')}
-                    placeholder={_('Enter first name')}
-                    containerStyle={styles.fullName}
+                    onChangeText={setEmail}
+                    title={_('Email or Phone')}
+                    placeholder="johndoe@example.com"
                 />
+                <View style={styles.name}>
+                    <InputField
+                        onChangeText={setFirstName}
+                        title={_('First name')}
+                        placeholder={_('Enter first name')}
+                        containerStyle={styles.fullName}
+                    />
+                    <InputField
+                        onChangeText={setLastName}
+                        title={_('Surname')}
+                        placeholder={_('Enter surname')}
+                        containerStyle={styles.surName}
+                    />
+                </View>
                 <InputField
-                    onChangeText={setLastName}
-                    title={_('Surname')}
-                    placeholder={_('Enter surname')}
-                    containerStyle={styles.surName}
+                    onChangeText={setPassword}
+                    title={_('Password')}
+                    placeholder={_('Enter password')}
+                    password
                 />
-            </View>
-            <InputField
-                onChangeText={setPassword}
-                title={_('Password')}
-                placeholder={_('Enter password')}
-                password
-            />
-            <View style={styles.infoWrapper}>
-                <Text style={styles.info}>
-                    <Localize>By continuing you agree to our</Localize>
-                </Text>
-                <TouchableOpacity>
-                    <Text style={styles.infoPressable}>
-                        <Localize>Terms of services</Localize>
+                <View style={styles.infoWrapper}>
+                    <Text style={styles.info}>
+                        <Localize>By continuing you agree to our</Localize>
                     </Text>
-                </TouchableOpacity>
-                <Text style={styles.info}>
-                    <Localize>and</Localize>
-                </Text>
-                <TouchableOpacity>
-                    <Text style={styles.infoPressable}>
-                        <Localize>Privacy policy.</Localize>
+                    <TouchableOpacity>
+                        <Text style={styles.infoPressable}>
+                            <Localize>Terms of services</Localize>
+                        </Text>
+                    </TouchableOpacity>
+                    <Text style={styles.info}>
+                        <Localize>and</Localize>
                     </Text>
-                </TouchableOpacity>
+                    <TouchableOpacity>
+                        <Text style={styles.infoPressable}>
+                            <Localize>Privacy policy.</Localize>
+                        </Text>
+                    </TouchableOpacity>
+                </View>
+                <Button
+                    title={_('Create an account')}
+                    style={styles.button}
+                    onPress={handleSignUp}
+                />
+                <Text style={styles.text}>
+                    <Localize>Already have an account?</Localize>
+                </Text>
             </View>
-            <Button
-                title={_('Create an account')}
-                style={styles.button}
-                onPress={handleSignUp}
-            />
-            <Text style={styles.text}>
-                <Localize>Already have an account?</Localize>
-            </Text>
         </SafeAreaView>
     );
 };
