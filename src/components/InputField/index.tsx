@@ -2,23 +2,29 @@ import React, {useCallback, useEffect, useState} from 'react';
 import {View, Text, TextInput} from 'react-native';
 import {Icon} from 'react-native-eva-icons';
 
+import cs from '@rna/utils/cs';
+
 import COLORS from 'utils/colors';
 import styles from './styles';
 
 interface Props {
     input?: string;
     title: string;
+    titleDark?: boolean;
     password?: boolean;
     placeholder?: string;
     containerStyle?: object;
+    inputStyle?: object;
     [key: string]: any;
 }
 
 const InputField: React.FC<Props> = ({
     input,
     title,
+    titleDark = false,
     password = false,
     containerStyle,
+    inputStyle,
     placeholder,
     ...inputProps
 }) => {
@@ -45,26 +51,24 @@ const InputField: React.FC<Props> = ({
 
     return (
         <View style={[styles.container, containerStyle]}>
-            <Text style={styles.title}>{title}</Text>
+            <Text style={cs(styles.title, [styles.titleDark, titleDark])}>
+                {title}
+            </Text>
             <View style={styles.inputContainer}>
                 <TextInput
                     onBlur={onBlur}
                     onFocus={onFocus}
                     value={input}
-                    style={[
+                    style={cs(
                         styles.input,
-                        {
-                            borderColor: focused
-                                ? COLORS.primaryAlt
-                                : COLORS.border,
-                        },
-                        // eslint-disable-next-line react-native/no-inline-styles
-                        {
-                            paddingRight: password ? 44 : 12,
-                        },
-                    ]}
+                        [styles.focused, focused],
+                        [styles.password, password],
+                        inputStyle,
+                    )}
                     secureTextEntry={hideText ? true : false}
-                    placeholderTextColor={COLORS.greyText}
+                    placeholderTextColor={
+                        !titleDark ? COLORS.greyText : COLORS.inputText
+                    }
                     placeholder={placeholder}
                     {...inputProps}
                 />

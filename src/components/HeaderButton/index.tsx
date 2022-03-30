@@ -44,7 +44,7 @@ export const SaveButton = ({onSavePress}: {onSavePress(): void}) => {
                 name="checkmark-circle-2"
                 height={20}
                 width={20}
-                fill={'#6DE58C'}
+                fill={'#6AA12A'}
             />
         </TouchableOpacity>
     );

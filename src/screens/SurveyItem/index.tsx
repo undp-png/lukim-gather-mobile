@@ -18,9 +18,9 @@ const Header = ({title}: {title: string}) => {
     );
 };
 
-const Photos = ({photos}: {photos: string}) => {
+const Photos = ({photos}: {photos: {image: string}[]}) => {
     const renderItem = useCallback(
-        ({item}: {item: object; image: string}) => (
+        ({item}: {item: {image: string}}) => (
             <Image
                 source={
                     {uri: item.image} ||

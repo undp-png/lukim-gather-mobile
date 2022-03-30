@@ -1,6 +1,8 @@
 import React, {useCallback, useState, useRef} from 'react';
+import {useNavigation} from '@react-navigation/native';
 import {Image, View} from 'react-native';
 import {FlatList, TouchableOpacity} from 'react-native-gesture-handler';
+
 import Text from 'components/Text';
 
 import cs from '@rna/utils/cs';
@@ -11,10 +13,15 @@ import styles from './styles';
 
 const keyExtractor = (item: {id: any}) => item.id;
 
-const Category = ({category}: {category: any}) => {
+const Category = ({category, navigation}: {category: any; navigation: any}) => {
+    const handleCategoryPress = useCallback(() => {
+        navigation.navigate('CreateSurvey');
+    }, [navigation]);
     const renderSubCategory = useCallback(
         ({item}: {item: {icon: string; name: string; id: number}}) => (
-            <TouchableOpacity style={styles.subCategory}>
+            <TouchableOpacity
+                onPress={handleCategoryPress}
+                style={styles.subCategory}>
                 <View style={styles.iconWrapper}>
                     <Image
                         source={
@@ -27,7 +34,7 @@ const Category = ({category}: {category: any}) => {
                 <Text style={styles.categoryName} title={item.name} />
             </TouchableOpacity>
         ),
-        [],
+        [handleCategoryPress],
     );
     return (
         <View>
@@ -48,6 +55,8 @@ const Category = ({category}: {category: any}) => {
 
 const ChooseCategory = () => {
     const categoryListRef = useRef<any>();
+    const navigation = useNavigation();
+
     const [activeCategory, setActiveCategory] = useState<number>(
         surveyCategory[0].id,
     );
@@ -75,8 +84,10 @@ const ChooseCategory = () => {
     );
 
     const renderCategory = useCallback(
-        ({item}: {item: object}) => <Category category={item} />,
-        [],
+        ({item}: {item: object}) => (
+            <Category category={item} navigation={navigation} />
+        ),
+        [navigation],
     );
 
     return (

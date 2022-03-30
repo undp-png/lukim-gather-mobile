@@ -11,6 +11,9 @@ export default StyleSheet.create({
         fontFamily: 'Inter-Medium',
         color: COLORS.inputText,
     },
+    titleDark: {
+        color: COLORS.greyText,
+    },
     inputContainer: {
         position: 'relative',
     },
@@ -18,17 +21,23 @@ export default StyleSheet.create({
         height: 56,
         marginTop: 8,
         paddingLeft: 12,
+        paddingRight: 12,
         fontSize: 16,
-        fontWeight: '400',
         fontFamily: 'Inter-Regular',
         color: COLORS.tertiary,
         borderWidth: 1,
         borderRadius: 8,
-        borderColor: COLORS.primaryAlt,
+        borderColor: COLORS.border,
     },
     iconWrapper: {
         position: 'absolute',
         right: 12,
         top: '40%',
+    },
+    focused: {
+        borderColor: COLORS.primaryAlt,
+    },
+    password: {
+        paddingRight: 44,
     },
 });

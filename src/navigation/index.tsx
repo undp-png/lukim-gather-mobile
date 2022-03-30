@@ -15,6 +15,7 @@ import Help from 'screens/Help';
 import SearchSurvey from 'screens/SearchSurvey';
 import SurveyItem from 'screens/SurveyItem';
 import ChooseCategory from 'screens/ChooseCategory';
+import CreateSurvey from 'screens/CreateSurvey';
 
 import {BackButton, CloseButton} from 'components/HeaderButton';
 
@@ -22,6 +23,7 @@ import COLORS from 'utils/colors';
 
 type StackParamList = {
     Auth: undefined;
+    CreateSurvey: undefined;
     Home: undefined;
     Feed: undefined;
     Settings: undefined;
@@ -97,6 +99,15 @@ const AppNavigator = () => {
                     <Stack.Screen name="About" component={About} />
                     <Stack.Screen name="Feedbacks" component={Feedbacks} />
                     <Stack.Screen name="Help" component={Help} />
+                    <Stack.Screen
+                        name="CreateSurvey"
+                        component={CreateSurvey}
+                        options={{
+                            headerLeft: () => <CloseButton />,
+                            headerTitle: 'Details',
+                            presentation: 'modal',
+                        }}
+                    />
                     <Stack.Screen
                         name="SearchSurvey"
                         component={SearchSurvey}
