@@ -1,5 +1,5 @@
 import React, {useCallback, useState} from 'react';
-import {useQuery, useMutation, gql} from '@apollo/client';
+import {useMutation, gql} from '@apollo/client';
 import {SafeAreaView, Text, TouchableOpacity, View} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import Toast from 'react-native-simple-toast';
@@ -21,6 +21,12 @@ const LOGIN = gql`
     mutation TokenAuth($username: String!, $password: String!) {
         tokenAuth(username: $username, password: $password) {
             token
+            refreshToken
+            user {
+                firstName
+                lastName
+                email
+            }
         }
     }
 `;

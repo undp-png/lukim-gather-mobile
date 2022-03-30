@@ -13,6 +13,7 @@ import {
 import {setContext} from '@apollo/client/link/context';
 import {Provider} from 'react-redux';
 import {PersistGate} from 'redux-persist/integration/react';
+
 import {BASE_URL} from '@env';
 
 import AppNavigator from 'navigation';
