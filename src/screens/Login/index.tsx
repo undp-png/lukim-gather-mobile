@@ -67,40 +67,42 @@ const Login = () => {
     }, [navigation]);
 
     return (
-        <SafeAreaView style={styles.container}>
-            <ModalLoader loading={loading} />
-            <InputField
-                title={_('Email or Phone')}
-                input={username}
-                onChangeText={setUsername}
-                placeholder={_('Enter email or phone')}
-            />
-            <InputField
-                title={_('Password')}
-                input={password}
-                onChangeText={setPassword}
-                placeholder={_('Enter password')}
-                password
-            />
-            <View style={styles.infoWrapper}>
-                <TouchableOpacity onPress={handleForgotPassword}>
-                    <Text style={styles.info}>
-                        <Localize>Forgot your password?</Localize>
-                    </Text>
-                </TouchableOpacity>
-            </View>
-            <Button
-                title={_('Login')}
-                disabled={!username || !password}
-                style={styles.button}
-                onPress={handleLogin}
-            />
-            <View style={styles.signUp}>
-                <TouchableOpacity onPress={handleSignUp}>
-                    <Text style={styles.text}>
-                        <Localize>Don't have an account?</Localize>
-                    </Text>
-                </TouchableOpacity>
+        <SafeAreaView>
+            <View style={styles.container}>
+                <ModalLoader loading={loading} />
+                <InputField
+                    title={_('Email or Phone')}
+                    input={username}
+                    onChangeText={setUsername}
+                    placeholder={_('Enter email or phone')}
+                />
+                <InputField
+                    title={_('Password')}
+                    input={password}
+                    onChangeText={setPassword}
+                    placeholder={_('Enter password')}
+                    password
+                />
+                <View style={styles.infoWrapper}>
+                    <TouchableOpacity onPress={handleForgotPassword}>
+                        <Text style={styles.info}>
+                            <Localize>Forgot your password?</Localize>
+                        </Text>
+                    </TouchableOpacity>
+                </View>
+                <Button
+                    title={_('Login')}
+                    disabled={!username || !password}
+                    style={styles.button}
+                    onPress={handleLogin}
+                />
+                <View style={styles.signUp}>
+                    <TouchableOpacity onPress={handleSignUp}>
+                        <Text style={styles.text}>
+                            <Localize>Don't have an account?</Localize>
+                        </Text>
+                    </TouchableOpacity>
+                </View>
             </View>
         </SafeAreaView>
     );
