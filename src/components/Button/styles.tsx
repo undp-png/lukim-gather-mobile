@@ -31,4 +31,7 @@ export default StyleSheet.create({
     textDark: {
         color: COLORS.secondary,
     },
+    textLight: {
+        color: COLORS.primary,
+    },
 });

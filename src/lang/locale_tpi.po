@@ -1,12 +1,12 @@
 msgid ""
 msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
-"POT-Creation-Date: Fri Mar 11 2022 13:38:57 GMT+0545 (Nepal Time)\n"
+"POT-Creation-Date: Fri Apr 01 2022 10:04:46 GMT+0545 (Nepal Time)\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #: src/screens/About/index.tsx:12
-#: src/screens/Menu/index.tsx:57
+#: src/screens/Menu/index.tsx:65
 msgid "About Lukim Gather"
 msgstr ""
 
@@ -15,8 +15,8 @@ msgid "Email"
 msgstr ""
 
 #: src/screens/AccountSettings/index.tsx:15
-#: src/screens/Login/index.tsx:19
-#: src/screens/SignUp/index.tsx:31
+#: src/screens/Login/index.tsx:80
+#: src/screens/SignUp/index.tsx:85
 msgid "Password"
 msgstr ""
 
@@ -46,7 +46,7 @@ msgid "Enter current password"
 msgstr ""
 
 #: src/screens/ChangePassword/index.tsx:32
-#: src/screens/Login/index.tsx:26
+#: src/screens/Login/index.tsx:89
 msgid "Forgot your password?"
 msgstr ""
 
@@ -101,49 +101,66 @@ msgstr ""
 msgid "Submit"
 msgstr ""
 
-#: src/screens/ForgotPassword/index.tsx:19
-#: src/screens/Login/index.tsx:15
-#: src/screens/SignUp/index.tsx:15
+#: src/screens/ForgotPassword/index.tsx:20
+#: src/screens/Login/index.tsx:74
+#: src/screens/SignUp/index.tsx:66
 msgid "Email or Phone"
 msgstr ""
 
-#: src/screens/ForgotPassword/index.tsx:23
+#: src/screens/ForgotPassword/index.tsx:24
 msgid "Send Code"
 msgstr ""
 
-#: src/screens/ForgotPassword/index.tsx:28
-#: src/screens/Login/index.tsx:36
+#: src/screens/ForgotPassword/index.tsx:29
+#: src/screens/Login/index.tsx:102
 msgid "Don't have an account?"
 msgstr ""
 
 #: src/screens/Help/index.tsx:11
-#: src/screens/Menu/index.tsx:59
+#: src/screens/Menu/index.tsx:67
 msgid "Help"
 msgstr ""
 
-#: src/screens/Login/index.tsx:20
-#: src/screens/SignUp/index.tsx:32
+#: src/screens/Login/index.tsx:77
+msgid "Enter email or phone"
+msgstr ""
+
+#: src/screens/Login/index.tsx:83
+#: src/screens/SignUp/index.tsx:86
 msgid "Enter password"
 msgstr ""
 
-#: src/screens/Login/index.tsx:31
+#: src/screens/Login/index.tsx:94
+#: src/screens/OnBoarding/index.tsx:113
 msgid "Login"
 msgstr ""
 
-#: src/screens/Menu/index.tsx:56
+#: src/screens/Menu/index.tsx:64
 msgid "Settings"
 msgstr ""
 
-#: src/screens/Menu/index.tsx:58
+#: src/screens/Menu/index.tsx:66
 msgid "Feedbacks"
 msgstr ""
 
-#: src/screens/Menu/index.tsx:63
+#: src/screens/Menu/index.tsx:71
 msgid "Log out"
 msgstr ""
 
-#: src/screens/Menu/index.tsx:67
+#: src/screens/Menu/index.tsx:75
 msgid "Version 0.1"
+msgstr ""
+
+#: src/screens/OnBoarding/index.tsx:87
+msgid "Lukim"
+msgstr ""
+
+#: src/screens/OnBoarding/index.tsx:90
+msgid "Gather"
+msgstr ""
+
+#: src/screens/OnBoarding/index.tsx:119
+msgid "Get Started"
 msgstr ""
 
 #: src/screens/Settings/index.tsx:13
@@ -166,42 +183,42 @@ msgstr ""
 msgid "Automatic"
 msgstr ""
 
-#: src/screens/SignUp/index.tsx:20
+#: src/screens/SignUp/index.tsx:72
 msgid "First name"
 msgstr ""
 
-#: src/screens/SignUp/index.tsx:21
+#: src/screens/SignUp/index.tsx:73
 msgid "Enter first name"
 msgstr ""
 
-#: src/screens/SignUp/index.tsx:25
+#: src/screens/SignUp/index.tsx:78
 msgid "Surname"
 msgstr ""
 
-#: src/screens/SignUp/index.tsx:26
+#: src/screens/SignUp/index.tsx:79
 msgid "Enter surname"
 msgstr ""
 
-#: src/screens/SignUp/index.tsx:37
+#: src/screens/SignUp/index.tsx:91
 msgid "By continuing you agree to our"
 msgstr ""
 
-#: src/screens/SignUp/index.tsx:41
+#: src/screens/SignUp/index.tsx:95
 msgid "Terms of services"
 msgstr ""
 
-#: src/screens/SignUp/index.tsx:45
+#: src/screens/SignUp/index.tsx:99
 msgid "and"
 msgstr ""
 
-#: src/screens/SignUp/index.tsx:49
+#: src/screens/SignUp/index.tsx:103
 msgid "Privacy policy."
 msgstr ""
 
-#: src/screens/SignUp/index.tsx:54
+#: src/screens/SignUp/index.tsx:108
 msgid "Create an account"
 msgstr ""
 
-#: src/screens/SignUp/index.tsx:59
+#: src/screens/SignUp/index.tsx:113
 msgid "Already have an account?"
 msgstr ""

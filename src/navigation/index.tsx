@@ -5,37 +5,37 @@ import {useSelector} from 'react-redux';
 import AuthNavigator from './auth';
 import TabNavigator from './tab';
 
-import Settings from 'screens/Settings';
+import About from 'screens/About';
 import AccountSettings from 'screens/AccountSettings';
 import ChangePassword from 'screens/ChangePassword';
+import ChooseCategory from 'screens/ChooseCategory';
+import CreateSurvey from 'screens/CreateSurvey';
 import EditProfile from 'screens/EditProfile';
-import About from 'screens/About';
 import Feedbacks from 'screens/Feedbacks';
 import Help from 'screens/Help';
 import SearchSurvey from 'screens/SearchSurvey';
+import Settings from 'screens/Settings';
 import SurveyItem from 'screens/SurveyItem';
-import ChooseCategory from 'screens/ChooseCategory';
-import CreateSurvey from 'screens/CreateSurvey';
 
 import {BackButton, CloseButton} from 'components/HeaderButton';
 
 import COLORS from 'utils/colors';
 
 type StackParamList = {
-    Auth: undefined;
-    CreateSurvey: undefined;
-    Home: undefined;
-    Feed: undefined;
-    Settings: undefined;
-    AccountSettings: undefined;
-    ChangePassword: undefined;
-    EditProfile: undefined;
     About: undefined;
+    AccountSettings: undefined;
+    Auth: undefined;
+    ChangePassword: undefined;
+    ChooseCategory: undefined;
+    CreateSurvey: undefined;
+    EditProfile: undefined;
+    Feed: undefined;
     Feedbacks: undefined;
+    Home: undefined;
+    Settings: undefined;
     Help: undefined;
     SearchSurvey: undefined;
     SurveyItem: undefined;
-    ChooseCategory: undefined;
 };
 
 const Stack = createStackNavigator<StackParamList>();
