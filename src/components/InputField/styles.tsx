@@ -29,6 +29,11 @@ export default StyleSheet.create({
         borderRadius: 8,
         borderColor: COLORS.border,
     },
+    searchIconWrapper: {
+        position: 'absolute',
+        left: 12,
+        top: '35%',
+    },
     iconWrapper: {
         position: 'absolute',
         right: 12,
@@ -39,5 +44,10 @@ export default StyleSheet.create({
     },
     password: {
         paddingRight: 44,
+    },
+    search: {
+        paddingLeft: 44,
+        height: 40,
+        paddingVertical: 8,
     },
 });

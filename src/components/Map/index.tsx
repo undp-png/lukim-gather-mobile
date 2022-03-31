@@ -1,9 +1,12 @@
 import React, {useCallback, useState, useRef} from 'react';
-import {View, Image} from 'react-native';
+import {View, Image, Text} from 'react-native';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import MapboxGL from '@react-native-mapbox-gl/maps';
 
+import cs from '@rna/utils/cs';
+
 import HomeHeader from 'components/HomeHeader';
+import MarkerIcon from 'components/MarkerIcon';
 
 import {MAPBOX_ACCESS_TOKEN} from '@env';
 import {checkLocation} from 'utils/location';
@@ -12,7 +15,17 @@ import styles from './styles';
 
 MapboxGL.setAccessToken(MAPBOX_ACCESS_TOKEN);
 
-const Map = () => {
+interface Props {
+    hideHeader?: boolean;
+    showMarker?: boolean;
+    locationBarStyle?: object;
+}
+
+const Map: React.FC<Props> = ({
+    hideHeader = false,
+    showMarker = false,
+    locationBarStyle,
+}) => {
     const locationRef = useRef(null);
     const [currentLocation, setCurrentLocation] = useState([
         147.17972, -9.44314,
@@ -35,7 +48,7 @@ const Map = () => {
     }, []);
     return (
         <View style={styles.page}>
-            <HomeHeader />
+            {!hideHeader && <HomeHeader />}
             <View style={styles.container}>
                 <MapboxGL.MapView
                     style={styles.map}
@@ -52,9 +65,22 @@ const Map = () => {
                         showUserLocation={true}
                         ref={locationRef}
                     />
+                    {showMarker && (
+                        <MapboxGL.PointAnnotation
+                            id="marker"
+                            coordinate={currentLocation}>
+                            <View style={styles.markerContainer}>
+                                <MarkerIcon />
+                                <View style={styles.markerLine} />
+                                <View style={styles.markerDotOuter}>
+                                    <View style={styles.markerDotInner} />
+                                </View>
+                            </View>
+                        </MapboxGL.PointAnnotation>
+                    )}
                 </MapboxGL.MapView>
             </View>
-            <View style={styles.locationBar}>
+            <View style={cs(styles.locationBar, locationBarStyle)}>
                 <TouchableOpacity
                     style={styles.locationWrapper}
                     onPress={handlePress}>

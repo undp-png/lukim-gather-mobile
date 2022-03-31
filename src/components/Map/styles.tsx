@@ -21,7 +21,7 @@ export default StyleSheet.create({
         zIndex: 5,
     },
     locationWrapper: {
-        backgroundColor: '#fff',
+        backgroundColor: COLORS.white,
         height: 35,
         width: 35,
         borderRadius: 20,
@@ -31,5 +31,30 @@ export default StyleSheet.create({
     locationIcon: {
         height: 20,
         width: 20,
+    },
+
+    markerContainer: {
+        alignItems: 'center',
+        width: 45,
+        backgroundColor: 'transparent',
+    },
+    markerLine: {
+        height: 12,
+        width: 2,
+        backgroundColor: COLORS.blueTextAlt,
+    },
+    markerDotOuter: {
+        width: 25,
+        height: 25,
+        borderRadius: 25,
+        alignItems: 'center',
+        justifyContent: 'center',
+        backgroundColor: COLORS.white,
+    },
+    markerDotInner: {
+        width: 14,
+        height: 14,
+        borderRadius: 14,
+        backgroundColor: COLORS.blueTextAlt,
     },
 });
