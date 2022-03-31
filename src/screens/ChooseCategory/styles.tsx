@@ -13,10 +13,12 @@ export default StyleSheet.create({
         padding: 20,
     },
     menu: {
+        height: 38,
         marginRight: 25,
     },
     menuTitle: {
         fontSize: 24,
+        lineHeight: 30,
         fontFamily: 'Inter-SemiBold',
         color: COLORS.primaryLight,
     },

@@ -9,7 +9,6 @@ import styles from './styles';
 
 const SurveyItem = ({
     item,
-    onPress,
 }: {
     item: {
         title: string;
@@ -17,9 +16,8 @@ const SurveyItem = ({
         category: {title: string};
         created?: string;
     };
-    onPress(): void;
 }) => {
-    const navigation = useNavigation();
+    const navigation = useNavigation<any>();
     const onPressItem = useCallback(
         () => navigation.navigate('SurveyItem', {item}),
         [item, navigation],
@@ -36,7 +34,7 @@ const SurveyItem = ({
                         }
                         style={styles.categoryIcon}
                     />
-                    <Text style={styles.field} title={item.category.title} />
+                    <Text style={styles.field} title={item?.category?.title} />
                 </View>
             </View>
             <View style={styles.rightData}>
