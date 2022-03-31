@@ -15,16 +15,13 @@ export default StyleSheet.create({
     menu: {
         marginRight: 25,
     },
-    activeMenu: {
-        color: 'red',
-    },
     menuTitle: {
         fontSize: 24,
         fontFamily: 'Inter-SemiBold',
         color: COLORS.primaryLight,
     },
     menuTitleActive: {
-        color: COLORS.primary,
+        color: COLORS.blueTextAlt,
     },
     header: {
         paddingHorizontal: 20,
@@ -57,11 +54,12 @@ export default StyleSheet.create({
         alignItems: 'center',
     },
     categoryIcon: {
-        height: 45,
-        width: 45,
+        height: 60,
+        width: 60,
         resizeMode: 'contain',
     },
     categoryName: {
+        width: (width - 50) / 3,
         marginTop: 5,
         fontSize: 14,
         fontFamily: 'Inter-SemiBold',

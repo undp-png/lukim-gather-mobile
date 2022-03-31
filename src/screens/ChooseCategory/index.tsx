@@ -7,7 +7,7 @@ import Text from 'components/Text';
 
 import cs from '@rna/utils/cs';
 
-import surveyCategory from 'services/data/surveyCategory.json';
+import surveyCategory from 'services/data/surveyCategory';
 
 import styles from './styles';
 
