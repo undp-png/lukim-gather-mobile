@@ -1,4 +1,4 @@
-import React, {useCallback, useRef, useState} from 'react';
+import React, {useCallback, useEffect, useRef, useState} from 'react';
 import {
     Animated,
     FlatList,
@@ -6,16 +6,36 @@ import {
     Pressable,
     ScrollView,
     View,
+    Platform,
 } from 'react-native';
+import {useSelector} from 'react-redux';
+import {useMutation, gql} from '@apollo/client';
+import {ReactNativeFile} from 'apollo-upload-client';
+import {useNavigation, useRoute} from '@react-navigation/native';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import {Image as ImageObj} from 'react-native-image-crop-picker';
 import {Icon} from 'react-native-eva-icons';
-
-import cs from '@rna/utils/cs';
+import Toast from 'react-native-simple-toast';
 
 import Text from 'components/Text';
 import InputField from 'components/InputField';
 import ImagePicker from 'components/ImagePicker';
+import {SaveButton} from 'components/HeaderButton';
+import {SurveyConfirmBox} from 'components/SurveyConfirmationBox';
+import {ModalLoader} from 'components/Loader';
+
+import cs from '@rna/utils/cs';
+import {Localize} from '@rna/components/I18n';
+import {_} from 'services/i18n';
+
+import {
+    CreateSurveyMutation,
+    CreateSurveyMutationVariables,
+    UploadMediaMutation,
+    UploadMediaMutationVariables,
+} from '@generated/types';
+
+import {getErrorMessage} from 'utils/error';
 
 import styles from './styles';
 
@@ -35,6 +55,29 @@ interface PhotosProps {
     photos: {path: string}[];
     handleRemoveImage(index: number): void;
 }
+
+const CREATE_SURVEY = gql`
+    mutation CreateSurvey($input: LocalEnviromentalSurveyInput!) {
+        createSurvey(data: $input) {
+            errors
+            ok
+            result {
+                id
+            }
+        }
+    }
+`;
+
+const UPLOAD_IMAGE = gql`
+    mutation UploadMedia($title: String!, $type: String!, $media: Upload) {
+        uploadMedia(title: $title, type: $type, media: $media) {
+            ok
+            result {
+                id
+            }
+        }
+    }
+`;
 
 const Feel: React.FC<FeelProps> = ({feel, activeFeel, onPress}) => {
     const handlePress = useCallback(() => {
@@ -120,19 +163,93 @@ const Photos: React.FC<PhotosProps> = ({photos, handleRemoveImage}) => {
 };
 
 const CreateSurvey = () => {
-    const [name, setName] = useState<string>('');
+    const route = useRoute<any>();
+    const navigation = useNavigation<any>();
+    const {location} = useSelector(state => state.survey);
+
+    const [title, setTitle] = useState<string>('');
     const [activeFeel, setActiveFeel] = useState<string>('');
     const [images, setImages] = useState<ImageObj[]>([]);
+    const [description, setDescription] = useState<string>('');
+    const [category, setCategory] = useState<number>(
+        route.params?.categoryItem.id,
+    );
+    const [attachment, setAttachment] = useState<any>([]);
+    const [confirmPublish, setConfirmPublish] = useState<boolean>(false);
+    const [coordinates, setCoordinates] = useState(null);
+
     const iconFlex = useRef(new Animated.Value(1)).current;
     const imgFlex = useRef(new Animated.Value(0)).current;
+
+    const [createSurvey, {loading, error}] = useMutation<
+        CreateSurveyMutation,
+        CreateSurveyMutationVariables
+    >(CREATE_SURVEY, {
+        onCompleted: () => {
+            Toast.show('Survey Created Sucessfully !');
+            navigation.navigate('Feed');
+        },
+        onError: err => {
+            Toast.show(getErrorMessage(err), Toast.LONG, [
+                'RCTModalHostViewController',
+            ]);
+            console.log(err);
+        },
+    });
+
+    const handlePublish = useCallback(async () => {
+        await createSurvey({
+            variables: {
+                input: {
+                    title: title,
+                    description: description,
+                    categoryId: category,
+                    sentiment: activeFeel,
+                    attachment: attachment,
+                    location: location.point
+                        ? {type: 'Point', coordinates: location?.point}
+                        : null,
+                    boundary: location.polygon
+                        ? {
+                              type: 'MultiPolygon',
+                              coordinates: [[location?.polygon]],
+                          }
+                        : null,
+                },
+            },
+        });
+    }, [
+        createSurvey,
+        title,
+        description,
+        category,
+        activeFeel,
+        attachment,
+        location,
+    ]);
+
+    const [uploadFile] = useMutation<
+        UploadMediaMutation,
+        UploadMediaMutationVariables
+    >(UPLOAD_IMAGE, {
+        onCompleted: res => {
+            setAttachment([res?.uploadMedia.result.id, ...attachment]);
+        },
+        onError: err => {
+            Toast.show(getErrorMessage(err), Toast.LONG, [
+                'RCTModalHostViewController',
+            ]);
+            console.log(err);
+        },
+    });
 
     const handleFeel = useCallback(feel => {
         setActiveFeel(feel);
     }, []);
 
     const handleImages = useCallback(
-        image => {
-            setImages([image, ...images]);
+        async response => {
+            setImages([response, ...images]);
             if (images.length === 1) {
                 Animated.timing(iconFlex, {
                     toValue: 0.2,
@@ -147,8 +264,30 @@ const CreateSurvey = () => {
                     useNativeDriver: false,
                 }).start();
             }
+            const image = {
+                name: response.path.substring(
+                    response.path.lastIndexOf('/') + 1,
+                ),
+                type: response.mime,
+                uri:
+                    Platform.OS === 'ios'
+                        ? response.path.replace('file://', '')
+                        : response.path,
+            };
+            const media = new ReactNativeFile({
+                uri: image.uri,
+                name: image.name,
+                type: image.type,
+            });
+            await uploadFile({
+                variables: {
+                    media: media,
+                    title: `survey-${Date.now()}`,
+                    type: 'image',
+                },
+            });
         },
-        [iconFlex, images, imgFlex],
+        [iconFlex, images, imgFlex, uploadFile],
     );
 
     const handleRemoveImage = useCallback(
@@ -173,17 +312,50 @@ const CreateSurvey = () => {
         [iconFlex, images, imgFlex],
     );
 
+    const handleChangeLocation = useCallback(() => {
+        navigation.navigate('ChangeLocation');
+        setCoordinates(location);
+    }, [navigation, location]);
+
+    const handleConfirmToggle = useCallback(() => {
+        if (title) {
+            setConfirmPublish(!confirmPublish);
+        }
+    }, [title, confirmPublish]);
+
+    const handleCancel = useCallback(() => {
+        setConfirmPublish(!confirmPublish);
+    }, [confirmPublish]);
+
+    useEffect(() => {
+        navigation.setOptions({
+            headerRight: () => <SaveButton onSavePress={handleConfirmToggle} />,
+        });
+    }, [navigation, handleConfirmToggle]);
+
     return (
         <ScrollView
             style={styles.container}
             showsVerticalScrollIndicator={false}>
             <View style={styles.categoryCont}>
+                <SurveyConfirmBox
+                    isOpen={confirmPublish}
+                    onCancel={handleCancel}
+                    onSubmit={handlePublish}
+                />
+                <ModalLoader loading={loading} />
                 <View style={styles.category}>
                     <Image
-                        source={require('assets/images/category-placeholder.png')}
+                        source={
+                            route.params.categoryItem.icon ||
+                            require('assets/images/category-placeholder.png')
+                        }
                         style={styles.categoryIcon}
                     />
-                    <Text style={styles.field} title="Trees" />
+                    <Text
+                        style={styles.field}
+                        title={route.params.categoryItem.name}
+                    />
                 </View>
                 <TouchableOpacity>
                     <Text style={styles.change} title="Change" />
@@ -192,9 +364,9 @@ const CreateSurvey = () => {
             <InputField
                 title="Name"
                 titleDark
-                input={name}
-                onChangeText={setName}
-                placeholder="2022 PNG Trees Study"
+                onChangeText={setTitle}
+                value={title}
+                placeholder="Enter survey name"
             />
             <Text style={styles.title} title="Add Images" />
             <View style={styles.addImages}>
@@ -213,9 +385,18 @@ const CreateSurvey = () => {
             <View style={styles.locationCont}>
                 <View style={styles.locationWrapper}>
                     <Icon name="pin" height={20} width={20} fill={'#80A8C5'} />
-                    <Text style={styles.countyName} title="ABC County" />
+                    <Text
+                        style={styles.countyName}
+                        title={
+                            coordinates
+                                ? coordinates?.polygon
+                                    ? 'Polygon'
+                                    : `${coordinates?.point}`
+                                : 'Choose the location'
+                        }
+                    />
                 </View>
-                <TouchableOpacity>
+                <TouchableOpacity onPress={handleChangeLocation}>
                     <Text style={styles.change} title="Change" />
                 </TouchableOpacity>
             </View>
@@ -234,6 +415,8 @@ const CreateSurvey = () => {
                 multiline
                 textAlignVertical="top"
                 inputStyle={styles.textarea}
+                onChangeText={setDescription}
+                value={description}
                 placeholder="What’s happening here?"
             />
         </ScrollView>

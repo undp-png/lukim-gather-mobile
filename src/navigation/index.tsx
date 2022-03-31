@@ -8,6 +8,7 @@ import TabNavigator from './tab';
 import About from 'screens/About';
 import AccountSettings from 'screens/AccountSettings';
 import ChangePassword from 'screens/ChangePassword';
+import ChangeLocation from 'screens/ChangeLocation';
 import ChooseCategory from 'screens/ChooseCategory';
 import CreateSurvey from 'screens/CreateSurvey';
 import EditProfile from 'screens/EditProfile';
@@ -26,6 +27,7 @@ export type StackParamList = {
     AccountSettings: undefined;
     Auth: undefined;
     ChangePassword: undefined;
+    ChangeLocation: undefined;
     ChooseCategory: undefined;
     CreateSurvey: undefined;
     EditProfile: undefined;
@@ -103,6 +105,15 @@ const AppNavigator = () => {
                 options={{
                     headerLeft: () => <CloseButton />,
                     headerTitle: 'Details',
+                    presentation: 'modal',
+                }}
+            />
+            <Stack.Screen
+                name="ChangeLocation"
+                component={ChangeLocation}
+                options={{
+                    headerLeft: () => <CloseButton />,
+                    headerTitle: 'Change Location',
                     presentation: 'modal',
                 }}
             />

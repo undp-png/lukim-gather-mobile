@@ -1,11 +1,18 @@
-import React, {useState, useCallback} from 'react';
+import React, {useState, useCallback, useEffect} from 'react';
 import {FlatList, SafeAreaView, View} from 'react-native';
+import {useNavigation} from '@react-navigation/native';
 
 import InputField from 'components/InputField';
-import RadioInput from 'components/RadioInput';
 import Map from 'components/Map';
+import RadioInput from 'components/RadioInput';
+import {SaveButton} from 'components/HeaderButton';
+
+import {store} from 'store';
+import {setLocation} from 'store/slices/survey';
 
 import styles from './styles';
+
+const {dispatch} = store;
 
 const Labels = [
     {id: 1, label: 'Use my current location'},
@@ -16,7 +23,40 @@ const Labels = [
 const keyExtractor = (item: {label: string}) => item.label;
 
 const ChangeLocation = () => {
-    const [selectedMethod, setSelectedMethod] = useState('');
+    const navigation = useNavigation();
+
+    const [selectedMethod, setSelectedMethod] = useState<string>('');
+    const [selectedCoordinate, setSelectedCoordinate] = useState<
+        number[] | number[][]
+    >([]);
+
+    const handleSubmit = useCallback(() => {
+        if (selectedMethod) {
+            if (selectedMethod !== 'Draw polygon') {
+                dispatch(
+                    setLocation({
+                        point: selectedCoordinate,
+                        polygon: null,
+                    }),
+                );
+            } else {
+                dispatch(
+                    setLocation({
+                        point: null,
+                        polygon: [...selectedCoordinate, selectedCoordinate[0]],
+                    }),
+                );
+            }
+        }
+        navigation.goBack();
+    }, [navigation, selectedCoordinate, selectedMethod]);
+
+    useEffect(() => {
+        navigation.setOptions({
+            headerRight: () => <SaveButton onSavePress={handleSubmit} />,
+        });
+    });
+
     const handleSelectedMethod = useCallback(
         (label: string) => {
             if (selectedMethod === label) {
@@ -41,10 +81,24 @@ const ChangeLocation = () => {
         [handleSelectedMethod, selectedMethod],
     );
 
+    const handleLocationPick = useCallback(coordinate => {
+        setSelectedCoordinate(coordinate);
+    }, []);
+
     return (
         <SafeAreaView style={styles.container}>
             <View>
-                <InputField searchInput placeholder="ABC County" />
+                <InputField
+                    placeholder="Place"
+                    value={`${
+                        selectedMethod === 'Draw polygon'
+                            ? 'Boundary area'
+                            : selectedMethod
+                            ? selectedCoordinate
+                            : ''
+                    }`}
+                    editable={false}
+                />
                 <FlatList
                     data={Labels}
                     renderItem={renderItem}
@@ -56,6 +110,8 @@ const ChangeLocation = () => {
                     hideHeader
                     showMarker={selectedMethod === 'Set on a map'}
                     locationBarStyle={styles.locationBar}
+                    onLocationPick={handleLocationPick}
+                    pickLocation={selectedMethod}
                 />
             </View>
         </SafeAreaView>
