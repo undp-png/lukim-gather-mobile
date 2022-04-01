@@ -32,7 +32,11 @@ const _Button: React.FC<Props> = ({
             pressableStyle={styles.buttonContent}
             {...buttonProps}>
             <Text
-                style={cs(styles.buttonText, [styles.textDark, dark])}
+                style={cs(
+                    styles.buttonText,
+                    [styles.textDark, dark],
+                    [styles.textLight, light],
+                )}
                 title={title}
             />
         </Button>

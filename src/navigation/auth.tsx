@@ -6,6 +6,7 @@ import SignUp from 'screens/SignUp';
 import ForgotPassword from 'screens/ForgotPassword';
 import VerifyEmail from 'screens/VerifyEmail';
 import ChangePassword from 'screens/ChangePassword';
+import OnBoarding from 'screens/OnBoarding';
 
 import {BackButton} from 'components/HeaderButton';
 
@@ -13,6 +14,7 @@ import COLORS from 'utils/colors';
 
 type AuthStackParamList = {
     Login: undefined;
+    OnBoarding: undefined;
     SignUp: undefined;
     ForgotPassword: undefined;
     VerifyEmail: undefined;
@@ -24,7 +26,7 @@ const Stack = createStackNavigator<AuthStackParamList>();
 export default function AuthNavigator(props) {
     return (
         <Stack.Navigator
-            initialRoutename="Login"
+            initialRoutename="OnBoarding"
             screenOptions={{
                 headerLeft: () => <BackButton />,
                 headerShown: true,
@@ -42,6 +44,11 @@ export default function AuthNavigator(props) {
                     borderBottomWidth: 1,
                 },
             }}>
+            <Stack.Screen
+                name="OnBoarding"
+                component={OnBoarding}
+                options={{headerShown: false}}
+            />
             <Stack.Screen
                 name="Login"
                 component={Login}

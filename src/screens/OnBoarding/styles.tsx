@@ -16,13 +16,17 @@ export default StyleSheet.create({
         backgroundColor: '#000000c0',
     },
     titleWrapper: {
+        display: 'flex',
+        flexDirection: 'row',
+        justifyContent: 'center',
+        alignItems: 'center',
         marginTop: 75,
     },
     title: {
-        fontSize: 32,
+        fontSize: 24,
         fontFamily: 'Gilroy-Bold',
-        color: '#6DE58C',
-        textAlign: 'center',
+        color: COLORS.white,
+        marginLeft: 10,
     },
     flatListWrapper: {
         flex: 1,

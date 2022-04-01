@@ -1,4 +1,6 @@
 import React, {useCallback, useRef} from 'react';
+import {Image} from 'react-native';
+import {useNavigation} from '@react-navigation/native';
 import {
     Animated,
     FlatList,
@@ -12,15 +14,26 @@ import {
 import Button from 'components/Button';
 import content from 'services/data/onBoarding.json';
 
-import waterfall from 'assets/images/waterfall.webp';
+import {Localize} from '@rna/components/I18n';
+import {_} from 'services/i18n';
 
+import waterfall from 'assets/images/waterfall.webp';
 import styles from './styles';
 
 const keyExtractor = (item: {title: string}) => item.title;
 
 const OnBoarding = () => {
+    const navigation = useNavigation();
     const {width} = useWindowDimensions();
     const scrollX = useRef(new Animated.Value(0)).current;
+
+    const handleLogin = useCallback(() => {
+        navigation.navigate('Login');
+    }, [navigation]);
+
+    const handleGetStarted = useCallback(() => {
+        navigation.navigate('SignUp');
+    }, [navigation]);
 
     const Pagination = useCallback(() => {
         return (
@@ -68,7 +81,15 @@ const OnBoarding = () => {
                 style={styles.backgroundImage}>
                 <View style={styles.contentContainer}>
                     <View style={styles.titleWrapper}>
-                        <Text style={styles.title}>Lukim Gather</Text>
+                        <Image source={require('assets/icons/logo.png')} />
+                        <View>
+                            <Text style={styles.title}>
+                                <Localize>Lukim</Localize>
+                            </Text>
+                            <Text style={styles.title}>
+                                <Localize>Gather</Localize>
+                            </Text>
+                        </View>
                     </View>
                     <View style={styles.flatListWrapper}>
                         <FlatList
@@ -88,8 +109,17 @@ const OnBoarding = () => {
                     </View>
                     <Pagination />
                     <View style={styles.buttonsWrapper}>
-                        <Button title="Login" style={styles.login} light />
-                        <Button title="Get Started" style={styles.getStarted} />
+                        <Button
+                            title={_('Login')}
+                            onPress={handleLogin}
+                            style={styles.login}
+                            light
+                        />
+                        <Button
+                            title={_('Get Started')}
+                            onPress={handleGetStarted}
+                            style={styles.getStarted}
+                        />
                     </View>
                 </View>
             </ImageBackground>
