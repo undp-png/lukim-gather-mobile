@@ -9,9 +9,10 @@ import styles from './styles';
 
 interface Props {
     input?: string;
-    title: string;
+    title?: string;
     titleDark?: boolean;
     password?: boolean;
+    searchInput?: boolean;
     placeholder?: string;
     containerStyle?: object;
     inputStyle?: object;
@@ -23,6 +24,7 @@ const InputField: React.FC<Props> = ({
     title,
     titleDark = false,
     password = false,
+    searchInput = false,
     containerStyle,
     inputStyle,
     placeholder,
@@ -55,6 +57,16 @@ const InputField: React.FC<Props> = ({
                 {title}
             </Text>
             <View style={styles.inputContainer}>
+                {searchInput && (
+                    <View style={styles.searchIconWrapper}>
+                        <Icon
+                            fill="#888C94"
+                            name="search"
+                            height={20}
+                            width={20}
+                        />
+                    </View>
+                )}
                 <TextInput
                     onBlur={onBlur}
                     onFocus={onFocus}
@@ -63,6 +75,7 @@ const InputField: React.FC<Props> = ({
                         styles.input,
                         [styles.focused, focused],
                         [styles.password, password],
+                        [styles.search, searchInput],
                         inputStyle,
                     )}
                     secureTextEntry={hideText ? true : false}
