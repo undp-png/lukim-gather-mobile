@@ -17,4 +17,7 @@ export default StyleSheet.create({
         justifyContent: 'flex-end',
         margin: 0,
     },
+    icon: {
+        marginHorizontal: 10,
+    },
 });

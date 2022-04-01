@@ -55,6 +55,7 @@ const _ImagePicker: React.FC<Props> = ({onChange}) => {
                     height={40}
                     width={40}
                     fill={'#99B9D1'}
+                    style={styles.icon}
                 />
             </TouchableOpacity>
             <Modal

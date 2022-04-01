@@ -1,5 +1,12 @@
-import React, {useCallback, useState} from 'react';
-import {FlatList, Image, Pressable, ScrollView, View} from 'react-native';
+import React, {useCallback, useRef, useState} from 'react';
+import {
+    Animated,
+    FlatList,
+    Image,
+    Pressable,
+    ScrollView,
+    View,
+} from 'react-native';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import {Image as ImageObj} from 'react-native-image-crop-picker';
 import {Icon} from 'react-native-eva-icons';
@@ -82,18 +89,28 @@ const Photo: React.FC<PhotoProps> = ({item, index, onCloseIconPress}) => {
 };
 
 const Photos: React.FC<PhotosProps> = ({photos, handleRemoveImage}) => {
+    const listRef = useRef<FlatList>(null);
+    const handleCloseIcon = useCallback(
+        (index: number) => {
+            handleRemoveImage(index);
+            listRef.current?.scrollToIndex({animated: true, index: 0});
+        },
+        [handleRemoveImage],
+    );
+
     const renderItem = useCallback(
         ({item, index}: {item: {path: string}; index: number}) => (
             <Photo
                 item={item}
                 index={index}
-                onCloseIconPress={handleRemoveImage}
+                onCloseIconPress={handleCloseIcon}
             />
         ),
-        [handleRemoveImage],
+        [handleCloseIcon],
     );
     return (
         <FlatList
+            ref={listRef}
             data={photos}
             renderItem={renderItem}
             horizontal
@@ -106,6 +123,8 @@ const CreateSurvey = () => {
     const [name, setName] = useState<string>('');
     const [activeFeel, setActiveFeel] = useState<string>('');
     const [images, setImages] = useState<ImageObj[]>([]);
+    const iconFlex = useRef(new Animated.Value(1)).current;
+    const imgFlex = useRef(new Animated.Value(0)).current;
 
     const handleFeel = useCallback(feel => {
         setActiveFeel(feel);
@@ -114,16 +133,44 @@ const CreateSurvey = () => {
     const handleImages = useCallback(
         image => {
             setImages([image, ...images]);
+            if (images.length === 1) {
+                Animated.timing(iconFlex, {
+                    toValue: 0.2,
+                    duration: 300,
+                    useNativeDriver: false,
+                }).start();
+            }
+            if (images.length === 0) {
+                Animated.timing(imgFlex, {
+                    toValue: 1,
+                    duration: 300,
+                    useNativeDriver: false,
+                }).start();
+            }
         },
-        [images],
+        [iconFlex, images, imgFlex],
     );
 
     const handleRemoveImage = useCallback(
         index => {
             const NewImages = images.filter((_, i) => i !== index);
             setImages(NewImages);
+            if (NewImages.length === 1) {
+                Animated.timing(iconFlex, {
+                    toValue: 1,
+                    duration: 500,
+                    useNativeDriver: false,
+                }).start();
+            }
+            if (NewImages.length === 0) {
+                Animated.timing(imgFlex, {
+                    toValue: 0,
+                    duration: 500,
+                    useNativeDriver: false,
+                }).start();
+            }
         },
-        [images],
+        [iconFlex, images, imgFlex],
     );
 
     return (
@@ -151,15 +198,16 @@ const CreateSurvey = () => {
             />
             <Text style={styles.title} title="Add Images" />
             <View style={styles.addImages}>
-                <View style={styles.photosWrapper}>
+                <Animated.View style={cs({flex: imgFlex})}>
                     <Photos
                         photos={images}
                         handleRemoveImage={handleRemoveImage}
                     />
-                </View>
-                <View style={styles.imgPickerWrapper}>
+                </Animated.View>
+                <Animated.View
+                    style={cs(styles.imgPickerWrapper, {flex: iconFlex})}>
                     <ImagePicker onChange={handleImages} />
-                </View>
+                </Animated.View>
             </View>
             <Text style={styles.title} title="Location" />
             <View style={styles.locationCont}>
