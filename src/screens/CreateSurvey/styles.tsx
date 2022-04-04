@@ -28,13 +28,13 @@ export default StyleSheet.create({
         fontSize: 24,
         lineHeight: 29.05,
         fontFamily: 'Inter-SemiBold',
-        color: '#00518B',
+        color: COLORS.blueTextAlt,
     },
     change: {
         fontSize: 14,
         lineHeight: 20,
         fontFamily: 'Inter-Regular',
-        color: '#00518B',
+        color: COLORS.blueTextAlt,
     },
     title: {
         fontSize: 16,
@@ -45,20 +45,12 @@ export default StyleSheet.create({
         color: '#70747E',
     },
     addImages: {
-        postition: 'relative',
         height: 122,
-    },
-    photosWrapper: {
-        paddingRight: '50%',
+        flexDirection: 'row',
     },
     imgPickerWrapper: {
-        position: 'absolute',
-        left: '50%',
-        backgroundColor: 'transparent',
-        width: '100%',
         height: '100%',
         justifyContent: 'center',
-        paddingLeft: 20,
     },
     locationCont: {
         flexDirection: 'row',
@@ -75,7 +67,7 @@ export default StyleSheet.create({
         marginRight: 14,
     },
     countyName: {
-        color: '#101828',
+        color: COLORS.tertiary,
         marginLeft: 14,
         fontSize: 16,
         fontFamily: 'Inter-Regular',
@@ -100,7 +92,7 @@ export default StyleSheet.create({
     },
     activeFeel: {
         backgroundColor: '#F0F3F6',
-        borderColor: '#6AA12A',
+        borderColor: COLORS.primary,
     },
     checked: {
         position: 'absolute',
