@@ -1,21 +1,23 @@
-import React, {useCallback} from 'react';
+import React, {useCallback, useState} from 'react';
 import {View, Image} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import {Icon} from 'react-native-eva-icons';
+import {useSelector} from 'react-redux';
 
 import Button from 'components/Button';
 import Text from 'components/Text';
 import MenuItem from 'components/MenuItem';
+import {ConfirmBox} from 'components/ConfirmationBox';
 import {_} from 'services/i18n';
 
 import {dispatchLogout} from 'services/dispatch';
 
 import styles from './styles';
-import {useSelector} from 'react-redux';
 
 const Menu = () => {
     const {isAuthenticated, user} = useSelector(state => state.auth);
+    const [openConfirmLogout, setOpenConfirmLogout] = useState(false);
     const navigation = useNavigation();
     const onProfilePress = useCallback(
         () => navigation.navigate('EditProfile'),
@@ -30,8 +32,27 @@ const Menu = () => {
         dispatchLogout();
     }, []);
 
+    const handlePressLogout = useCallback(async () => {
+        try {
+            dispatchLogout();
+            setOpenConfirmLogout(false);
+        } catch (error) {
+            console.log(error);
+        }
+    }, []);
+
+    const handleToggleLogout = useCallback(
+        () => setOpenConfirmLogout(!openConfirmLogout),
+        [openConfirmLogout],
+    );
+
     return (
         <View style={styles.container}>
+            <ConfirmBox
+                isOpen={openConfirmLogout}
+                onCancel={handleToggleLogout}
+                onLogout={handlePressLogout}
+            />
             <View>
                 {isAuthenticated ? (
                     <TouchableOpacity
@@ -84,7 +105,7 @@ const Menu = () => {
                     <MenuItem title={_('Help')} linkTo="Help" />
                     {isAuthenticated && (
                         <TouchableOpacity
-                            onPress={onPressLogout}
+                            onPress={handleToggleLogout}
                             style={styles.menuItem}>
                             <Text
                                 style={styles.menuTitle}

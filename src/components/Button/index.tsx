@@ -12,6 +12,7 @@ interface Props extends PressableProps {
     title: string;
     dark?: boolean;
     light?: boolean;
+    lightGreen?: boolean;
 }
 
 const _Button: React.FC<Props> = ({
@@ -19,6 +20,7 @@ const _Button: React.FC<Props> = ({
     title,
     dark = false,
     light = false,
+    lightGreen = false,
     ...buttonProps
 }) => {
     return (
@@ -27,6 +29,7 @@ const _Button: React.FC<Props> = ({
                 styles.button,
                 [styles.buttonDark, dark],
                 [styles.buttonLight, light],
+                [styles.buttonLightGreen, lightGreen],
                 style,
             )}
             pressableStyle={styles.buttonContent}

@@ -4,7 +4,6 @@ import {
     Animated,
     FlatList,
     ImageBackground,
-    SafeAreaView,
     Text,
     useWindowDimensions,
     View,
@@ -83,7 +82,7 @@ const OnBoarding = () => {
     );
 
     return (
-        <SafeAreaView style={styles.container}>
+        <View style={styles.container}>
             <ImageBackground
                 source={waterfall}
                 resizeMode="cover"
@@ -147,7 +146,7 @@ const OnBoarding = () => {
                     )}
                 </View>
             </ImageBackground>
-        </SafeAreaView>
+        </View>
     );
 };
 

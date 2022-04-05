@@ -14,13 +14,16 @@ export default StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
         height: 49,
-        paddingHorizontal: 40,
+        paddingHorizontal: 20,
     },
     buttonDark: {
         backgroundColor: '#284362',
     },
     buttonLight: {
         backgroundColor: COLORS.border,
+    },
+    buttonLightGreen: {
+        backgroundColor: '#F0F6EA',
     },
     buttonText: {
         color: COLORS.white,
