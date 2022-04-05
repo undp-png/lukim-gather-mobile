@@ -4,6 +4,8 @@
 
 import 'react-native';
 import React from 'react';
+import mockRNCNetInfo from '@react-native-community/netinfo/jest/netinfo-mock.js';
+
 import App from '../App';
 
 // Note: test renderer must be required after react-native.
@@ -25,6 +27,8 @@ const mockUserInfo = {
     },
 };
 
+jest.mock('@react-native-community/netinfo', () => mockRNCNetInfo);
+
 jest.mock('react-native-permissions', () => ({
     request: jest.fn(),
     PERMISSIONS: {},
@@ -34,6 +38,12 @@ jest.mock('react-native-permissions', () => ({
 jest.mock('react-native-keyboard-aware-scroll-view', () => {
     const KeyboardAwareScrollView = ({children}) => children;
     return {KeyboardAwareScrollView};
+});
+
+jest.mock('react-native-image-crop-picker', () => {
+    return {
+        openPicker: jest.fn().mockImplementation(() => Promise.resolve()),
+    };
 });
 
 jest.mock('react-native-mmkv', () => {

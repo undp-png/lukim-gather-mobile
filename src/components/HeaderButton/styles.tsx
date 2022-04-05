@@ -2,7 +2,11 @@ import {StyleSheet} from 'react-native';
 
 export default StyleSheet.create({
     closeIcon: {
-        marginLeft: 20,
+        paddingHorizontal: 20,
+        height: '100%',
+        display: 'flex',
+        flexDirection: 'row',
+        alignItems: 'center',
     },
     saveIcon: {
         marginRight: 20,
