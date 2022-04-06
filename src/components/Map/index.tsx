@@ -41,11 +41,40 @@ const Map: React.FC<Props> = ({
     const netInfo = useNetInfo();
 
     const [isOffline, setIsOffline] = useState(true);
+
+    const manageOffline = useCallback(
+        async packName => {
+            try {
+                const offlinePack = await MapboxGL.offlineManager.getPack(
+                    packName,
+                );
+                if (!offlinePack) {
+                    if (netInfo.isInternetReachable) {
+                        setIsOffline(false);
+                        await MapboxGL.offlineManager.createPack({
+                            name: packName,
+                            styleURL: 'mapbox://styles/mapbox/streets-v11',
+                            minZoom: 14,
+                            maxZoom: 20,
+                            bounds: [
+                                [156.4715, -1.5917],
+                                [140.7927, -12.1031],
+                            ],
+                        });
+                    }
+                } else {
+                    setIsOffline(false);
+                }
+            } catch (error) {
+                console.log(error);
+            }
+        },
+        [netInfo],
+    );
+
     useEffect(() => {
-        if (netInfo.isInternetReachable) {
-            setIsOffline(false);
-        }
-    }, [netInfo]);
+        manageOffline('png_14_20');
+    }, [manageOffline]);
 
     const locationRef = useRef<locationRefType | null>();
 

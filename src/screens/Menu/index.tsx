@@ -4,6 +4,7 @@ import {useNavigation} from '@react-navigation/native';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import {Icon} from 'react-native-eva-icons';
 
+import Button from 'components/Button';
 import Text from 'components/Text';
 import MenuItem from 'components/MenuItem';
 import {_} from 'services/i18n';
@@ -14,62 +15,83 @@ import styles from './styles';
 import {useSelector} from 'react-redux';
 
 const Menu = () => {
-    const {user} = useSelector(state => state.auth);
+    const {isAuthenticated, user} = useSelector(state => state.auth);
     const navigation = useNavigation();
     const onProfilePress = useCallback(
         () => navigation.navigate('EditProfile'),
         [navigation],
     );
-    const onPressLogout = useCallback(async () => {
-        try {
-            dispatchLogout();
-        } catch (error) {
-            console.log(error);
-        }
+
+    const handleLoginPress = useCallback(() => {
+        navigation.navigate('Auth', {screen: 'Login'});
+    }, [navigation]);
+
+    const onPressLogout = useCallback(() => {
+        dispatchLogout();
     }, []);
+
     return (
         <View style={styles.container}>
             <View>
-                <TouchableOpacity
-                    onPress={onProfilePress}
-                    style={styles.userInfoWrapper}>
-                    <Image
-                        source={require('assets/images/user-placeholder.png')}
-                        style={styles.userImage}
-                    />
-                    <View style={styles.userTextInfo}>
-                        <View style={styles.textWrapper}>
-                            <Text
-                                style={styles.userName}
-                                title={
-                                    `${user?.firstName}` +
-                                    `${' '}` +
-                                    `${user?.lastName}`
-                                }
-                            />
-                            <Text
-                                style={styles.userOrg}
-                                title="ABC Organization"
+                {isAuthenticated ? (
+                    <TouchableOpacity
+                        onPress={onProfilePress}
+                        style={styles.userInfoWrapper}>
+                        <Image
+                            source={require('assets/images/user-placeholder.png')}
+                            style={styles.userImage}
+                        />
+                        <View style={styles.userTextInfo}>
+                            <View style={styles.textWrapper}>
+                                <Text
+                                    style={styles.userName}
+                                    title={
+                                        `${user?.firstName}` +
+                                        `${' '}` +
+                                        `${user?.lastName}`
+                                    }
+                                />
+                                <Text
+                                    style={styles.userOrg}
+                                    title="ABC Organization"
+                                />
+                            </View>
+                            <Icon
+                                name="arrow-ios-forward-outline"
+                                height={18}
+                                width={18}
+                                fill={'#9fa3a9'}
                             />
                         </View>
-                        <Icon
-                            name="arrow-ios-forward-outline"
-                            height={18}
-                            width={18}
-                            fill={'#9fa3a9'}
+                    </TouchableOpacity>
+                ) : (
+                    <View style={styles.userInfoWrapper}>
+                        <Image
+                            source={require('assets/images/user-placeholder.png')}
+                            style={styles.userImage}
+                        />
+                        <Button
+                            style={styles.loginButton}
+                            title={_('Log in / Sign up')}
+                            onPress={handleLoginPress}
                         />
                     </View>
-                </TouchableOpacity>
+                )}
                 <View style={styles.menuWrapper}>
                     <MenuItem title={_('Settings')} linkTo="Settings" />
                     <MenuItem title={_('About Lukim Gather')} linkTo="About" />
                     <MenuItem title={_('Feedbacks')} linkTo="Feedbacks" />
                     <MenuItem title={_('Help')} linkTo="Help" />
-                    <TouchableOpacity
-                        onPress={onPressLogout}
-                        style={styles.menuItem}>
-                        <Text style={styles.menuTitle} title={_('Log out')} />
-                    </TouchableOpacity>
+                    {isAuthenticated && (
+                        <TouchableOpacity
+                            onPress={onPressLogout}
+                            style={styles.menuItem}>
+                            <Text
+                                style={styles.menuTitle}
+                                title={_('Log out')}
+                            />
+                        </TouchableOpacity>
+                    )}
                 </View>
             </View>
             <Text style={styles.appVersion} title={_('Version 0.1')} />

@@ -69,8 +69,19 @@ export default StyleSheet.create({
     buttonsWrapper: {
         flexDirection: 'row',
         justifyContent: 'space-around',
-        marginBottom: 50,
         marginTop: 70,
+    },
+    bottomSpacer: {
+        marginBottom: 50,
+    },
+    link: {
+        alignSelf: 'center',
+        display: 'flex',
+        marginTop: 16,
+        textAlign: 'center',
+    },
+    linkText: {
+        fontFamily: 'Inter-SemiBold',
     },
     login: {
         width: '45%',

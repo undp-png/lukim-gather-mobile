@@ -8,11 +8,11 @@ import cs from '@rna/utils/cs';
 
 import styles from './styles';
 
-const _PickerSelect = ({label, ...pickerProps}) => {
+const _PickerSelect = ({label, containerStyle, ...pickerProps}) => {
     return (
         <>
             <Text style={cs(styles.label)} title={label} />
-            <View style={styles.pickerWrapper}>
+            <View style={cs(styles.pickerWrapper, containerStyle)}>
                 <PickerSelect
                     style={styles.picker}
                     color="#888C94"

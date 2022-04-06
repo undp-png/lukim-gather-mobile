@@ -16,6 +16,7 @@ const Feedbacks = () => {
         <View style={styles.container}>
             <KeyboardAwareScrollView>
                 <PickerSelect
+                    containerStyle={styles.picker}
                     data={issueList}
                     label={_('Issue type')}
                     placeholder={_('Select the issue')}
@@ -26,7 +27,7 @@ const Feedbacks = () => {
                     numberOfLines={5}
                     textAlignVertical="top"
                 />
-                <Button title={_('Submit')} />
+                <Button style={styles.button} title={_('Submit')} />
             </KeyboardAwareScrollView>
         </View>
     );

@@ -8,4 +8,10 @@ export default StyleSheet.create({
         backgroundColor: COLORS.white,
         padding: 20,
     },
+    picker: {
+        marginBottom: 2,
+    },
+    button: {
+        marginTop: 32,
+    },
 });

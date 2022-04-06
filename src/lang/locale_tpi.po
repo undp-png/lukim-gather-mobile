@@ -1,12 +1,12 @@
 msgid ""
 msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
-"POT-Creation-Date: Fri Apr 01 2022 10:04:46 GMT+0545 (Nepal Time)\n"
+"POT-Creation-Date: Thu Apr 07 2022 11:15:01 GMT+0545 (Nepal Time)\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #: src/screens/About/index.tsx:12
-#: src/screens/Menu/index.tsx:65
+#: src/screens/Menu/index.tsx:82
 msgid "About Lukim Gather"
 msgstr ""
 
@@ -15,7 +15,7 @@ msgid "Email"
 msgstr ""
 
 #: src/screens/AccountSettings/index.tsx:15
-#: src/screens/Login/index.tsx:80
+#: src/screens/Login/index.tsx:81
 #: src/screens/SignUp/index.tsx:85
 msgid "Password"
 msgstr ""
@@ -46,7 +46,7 @@ msgid "Enter current password"
 msgstr ""
 
 #: src/screens/ChangePassword/index.tsx:32
-#: src/screens/Login/index.tsx:89
+#: src/screens/Login/index.tsx:90
 msgid "Forgot your password?"
 msgstr ""
 
@@ -85,24 +85,24 @@ msgstr ""
 msgid "Name"
 msgstr ""
 
-#: src/screens/Feedbacks/index.tsx:20
+#: src/screens/Feedbacks/index.tsx:21
 msgid "Issue type"
 msgstr ""
 
-#: src/screens/Feedbacks/index.tsx:21
+#: src/screens/Feedbacks/index.tsx:22
 msgid "Select the issue"
 msgstr ""
 
-#: src/screens/Feedbacks/index.tsx:24
+#: src/screens/Feedbacks/index.tsx:25
 msgid "Explain the issue"
 msgstr ""
 
-#: src/screens/Feedbacks/index.tsx:29
+#: src/screens/Feedbacks/index.tsx:30
 msgid "Submit"
 msgstr ""
 
 #: src/screens/ForgotPassword/index.tsx:20
-#: src/screens/Login/index.tsx:74
+#: src/screens/Login/index.tsx:75
 #: src/screens/SignUp/index.tsx:66
 msgid "Email or Phone"
 msgstr ""
@@ -112,74 +112,82 @@ msgid "Send Code"
 msgstr ""
 
 #: src/screens/ForgotPassword/index.tsx:29
-#: src/screens/Login/index.tsx:102
+#: src/screens/Login/index.tsx:103
 msgid "Don't have an account?"
 msgstr ""
 
 #: src/screens/Help/index.tsx:11
-#: src/screens/Menu/index.tsx:67
+#: src/screens/Menu/index.tsx:84
 msgid "Help"
 msgstr ""
 
-#: src/screens/Login/index.tsx:77
+#: src/screens/Login/index.tsx:78
 msgid "Enter email or phone"
 msgstr ""
 
-#: src/screens/Login/index.tsx:83
+#: src/screens/Login/index.tsx:84
 #: src/screens/SignUp/index.tsx:86
 msgid "Enter password"
 msgstr ""
 
-#: src/screens/Login/index.tsx:94
-#: src/screens/OnBoarding/index.tsx:113
+#: src/screens/Login/index.tsx:95
+#: src/screens/OnBoarding/index.tsx:126
 msgid "Login"
 msgstr ""
 
-#: src/screens/Menu/index.tsx:64
+#: src/screens/Menu/index.tsx:75
+msgid "Log in / Sign up"
+msgstr ""
+
+#: src/screens/Menu/index.tsx:81
 msgid "Settings"
 msgstr ""
 
-#: src/screens/Menu/index.tsx:66
+#: src/screens/Menu/index.tsx:83
 msgid "Feedbacks"
 msgstr ""
 
-#: src/screens/Menu/index.tsx:71
+#: src/screens/Menu/index.tsx:91
 msgid "Log out"
 msgstr ""
 
-#: src/screens/Menu/index.tsx:75
+#: src/screens/Menu/index.tsx:97
 msgid "Version 0.1"
 msgstr ""
 
-#: src/screens/OnBoarding/index.tsx:87
+#: src/screens/OnBoarding/index.tsx:96
 msgid "Lukim"
 msgstr ""
 
-#: src/screens/OnBoarding/index.tsx:90
+#: src/screens/OnBoarding/index.tsx:99
 msgid "Gather"
 msgstr ""
 
-#: src/screens/OnBoarding/index.tsx:119
+#: src/screens/OnBoarding/index.tsx:132
 msgid "Get Started"
 msgstr ""
 
-#: src/screens/Settings/index.tsx:13
+#: src/screens/OnBoarding/index.tsx:143
+msgid "Continue as Guest"
+msgstr ""
+
+#: src/screens/Settings/index.tsx:17
 msgid "Account"
 msgstr ""
 
-#: src/screens/Settings/index.tsx:14
+#: src/screens/Settings/index.tsx:19
 msgid "Language"
 msgstr ""
 
-#: src/screens/Settings/index.tsx:14
+#: src/screens/Settings/index.tsx:19
 msgid "English"
 msgstr ""
 
-#: src/screens/Settings/index.tsx:15
+#: src/screens/Settings/index.tsx:22
 msgid "Synchronization"
 msgstr ""
 
-#: src/screens/Settings/index.tsx:15
+#: src/screens/Settings/index.tsx:23
 msgid "Automatic"
 msgstr ""
 
