@@ -18,6 +18,7 @@
         "@apollo/client": "^3.5.10",
         "@apollo/react-hooks": "^4.0.0",
         "@react-native-community/hooks": "^2.8.1",
+        "@react-native-community/netinfo": "^8.2.0",
         "@react-native-mapbox-gl/maps": "^8.5.0",
         "@react-native-masked-view/masked-view": "^0.2.6",
         "@react-native-picker/picker": "^2.3.1",

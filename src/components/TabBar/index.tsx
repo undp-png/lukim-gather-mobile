@@ -91,7 +91,7 @@ const TabBar = ({
                     state.routes.findIndex(rt => rt.name === 'Menu'),
             ])}>
             <>
-                <Svg height={height} width={width}>
+                <Svg height={height / 2} width={width}>
                     <Defs>
                         <SVGLinearGradient
                             id="shadowBlock"
