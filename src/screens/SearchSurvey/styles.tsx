@@ -27,6 +27,7 @@ export default StyleSheet.create({
         height: 40,
         width: width - 136,
         fontFamily: 'Inter-Medium',
+        color: COLORS.inputText,
     },
     tabWrapper: {
         flexDirection: 'row',

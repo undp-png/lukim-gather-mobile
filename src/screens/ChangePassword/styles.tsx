@@ -10,8 +10,7 @@ export default StyleSheet.create({
     },
     forgotPassword: {
         alignSelf: 'flex-end',
-        marginTop: -15,
-        marginBottom: 20,
+        marginTop: 12,
     },
     forgotTitle: {
         fontSize: 16,

@@ -1,7 +1,7 @@
-export interface AuthState {
+export default interface AuthState {
     isAuthenticated: boolean;
-    user: string[];
-    token: string | null;
-    refreshToken: string | null;
-    idToken: string | null;
+    user?: object;
+    token?: string | null;
+    refreshToken?: string | null;
+    idToken?: string | null;
 }
