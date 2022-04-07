@@ -122,9 +122,12 @@ const TabBar = ({
                         </SVGLinearGradient>
                     </Defs>
                 </Svg>
-                <Svg height={height} width={width}>
-                    <Path d={`${tabBarPath}`} fill={COLORS.white} />
-                </Svg>
+                {state.index !==
+                    state.routes.findIndex(rt => rt.name === 'Menu') && (
+                    <Svg height={height} width={width}>
+                        <Path d={`${tabBarPath}`} fill={COLORS.white} />
+                    </Svg>
+                )}
             </>
             <View style={styles.container}>
                 {state.routes.map((route, index) => {

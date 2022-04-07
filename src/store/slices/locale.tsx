@@ -12,13 +12,13 @@ const localeSlice = createSlice({
     name: 'locale',
     initialState,
     reducers: {
-        setCurrentLanguage: (state, {payload}: PayloadAction<LocaleState>) => {
+        setCurrentLanguage: (state, {payload}: PayloadAction<string>) => {
             state.currentLanguage = payload;
         },
-        setTranslations: (state, {payload}: PayloadAction<LocaleState>) => {
+        setTranslations: (state, {payload}: PayloadAction<object>) => {
             state.translations = payload;
         },
-        setLanguages: (state, {payload}: PayloadAction<LocaleState>) => {
+        setLanguages: (state, {payload}: PayloadAction<string[]>) => {
             state.languages = payload;
         },
     },

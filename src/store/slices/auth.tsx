@@ -13,16 +13,16 @@ const authSlice = createSlice({
         setLogin: state => {
             state.isAuthenticated = true;
         },
-        setUser: (state, {payload}: PayloadAction<AuthState>) => {
+        setUser: (state, {payload}: PayloadAction<object>) => {
             state.user = payload;
         },
-        setToken: (state, {payload}: PayloadAction<AuthState>) => {
+        setToken: (state, {payload}: PayloadAction<string>) => {
             state.token = payload;
         },
-        setRefreshToken: (state, {payload}: PayloadAction<AuthState>) => {
+        setRefreshToken: (state, {payload}: PayloadAction<string>) => {
             state.refreshToken = payload;
         },
-        setIdToken: (state, {payload}: PayloadAction<AuthState>) => {
+        setIdToken: (state, {payload}: PayloadAction<string>) => {
             state.idToken = payload;
         },
         setLogout: () => initialState,

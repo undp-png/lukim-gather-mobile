@@ -108,7 +108,8 @@ const Map: React.FC<Props> = ({
                 <MapboxGL.MapView
                     style={styles.map}
                     onRegionDidChange={onRegionDidChange}
-                    styleJSON={isOffline ? mapViewStyles : ''}>
+                    styleJSON={isOffline ? mapViewStyles : ''}
+                    compassViewMargins={{x: 30, y: 150}}>
                     <MapboxGL.Camera
                         defaultSettings={{
                             centerCoordinate: currentLocation,
