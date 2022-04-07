@@ -34,10 +34,6 @@ export const ModalLoader: React.FC<LoaderProps> = ({
     loading,
     color = COLORS.secondary,
 }) => {
-    if (!loading) {
-        return null;
-    }
-
     return (
         <Modal
             animationInTiming={150}
