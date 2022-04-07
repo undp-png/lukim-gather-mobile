@@ -18,6 +18,6 @@ export const dispatchLogin = async (accessToken, refreshToken, user) => {
     dispatch(setLogin());
 };
 
-export const dispatchLogout = async () => {
+export const dispatchLogout = () => {
     dispatch(setLogout());
 };

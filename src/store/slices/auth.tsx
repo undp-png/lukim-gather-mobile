@@ -25,9 +25,7 @@ const authSlice = createSlice({
         setIdToken: (state, {payload}: PayloadAction<AuthState>) => {
             state.idToken = payload;
         },
-        setLogout: state => {
-            state.isAuthenticated = false;
-        },
+        setLogout: () => initialState,
     },
 });
 

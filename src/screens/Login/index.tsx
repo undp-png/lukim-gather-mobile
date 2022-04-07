@@ -56,7 +56,8 @@ const Login = () => {
 
     const handleLogin = useCallback(async () => {
         await login({variables: {username, password}});
-    }, [username, password, login]);
+        navigation.navigate('Feed');
+    }, [username, password, login, navigation]);
 
     const handleForgotPassword = useCallback(() => {
         navigation.navigate('ForgotPassword');

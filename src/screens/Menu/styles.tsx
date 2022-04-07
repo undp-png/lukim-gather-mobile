@@ -9,6 +9,10 @@ export default StyleSheet.create({
         display: 'flex',
         justifyContent: 'space-between',
     },
+    loginButton: {
+        alignSelf: 'center',
+        marginLeft: 'auto',
+    },
     userInfoWrapper: {
         padding: 20,
         display: 'flex',

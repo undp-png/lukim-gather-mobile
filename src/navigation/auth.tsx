@@ -12,7 +12,7 @@ import {BackButton} from 'components/HeaderButton';
 
 import COLORS from 'utils/colors';
 
-type AuthStackParamList = {
+export type AuthStackParamList = {
     Login: undefined;
     OnBoarding: undefined;
     SignUp: undefined;

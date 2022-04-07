@@ -1,5 +1,4 @@
 import React, {useCallback, useRef} from 'react';
-import {Image} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import {
     Animated,
@@ -9,13 +8,17 @@ import {
     Text,
     useWindowDimensions,
     View,
+    Image,
+    TouchableOpacity,
 } from 'react-native';
+import {useNetInfo} from '@react-native-community/netinfo';
 
 import Button from 'components/Button';
 import content from 'services/data/onBoarding.json';
 
 import {Localize} from '@rna/components/I18n';
 import {_} from 'services/i18n';
+import cs from '@rna/utils/cs';
 
 import waterfall from 'assets/images/waterfall.webp';
 import styles from './styles';
@@ -35,10 +38,16 @@ const OnBoarding = () => {
         navigation.navigate('SignUp');
     }, [navigation]);
 
+    const netInfo = useNetInfo();
+
+    const handleGuestPress = useCallback(() => {
+        navigation.navigate('Feed');
+    }, [navigation]);
+
     const Pagination = useCallback(() => {
         return (
             <View style={styles.dotsWrapper}>
-                {content.map((_, i) => {
+                {content.map((placeholder, i) => {
                     const inputRange = [
                         (i - 1) * width,
                         i * width,
@@ -108,7 +117,11 @@ const OnBoarding = () => {
                         />
                     </View>
                     <Pagination />
-                    <View style={styles.buttonsWrapper}>
+                    <View
+                        style={cs(styles.buttonsWrapper, [
+                            styles.bottomSpacer,
+                            netInfo.isInternetReachable,
+                        ])}>
                         <Button
                             title={_('Login')}
                             onPress={handleLogin}
@@ -121,6 +134,17 @@ const OnBoarding = () => {
                             style={styles.getStarted}
                         />
                     </View>
+                    {!netInfo.isInternetReachable && (
+                        <View style={styles.bottomSpacer}>
+                            <TouchableOpacity
+                                style={styles.link}
+                                onPress={handleGuestPress}>
+                                <Text style={styles.linkText}>
+                                    <Localize>Continue as Guest</Localize>
+                                </Text>
+                            </TouchableOpacity>
+                        </View>
+                    )}
                 </View>
             </ImageBackground>
         </SafeAreaView>

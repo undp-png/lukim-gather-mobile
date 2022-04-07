@@ -21,7 +21,7 @@ import {BackButton, CloseButton} from 'components/HeaderButton';
 
 import COLORS from 'utils/colors';
 
-type StackParamList = {
+export type StackParamList = {
     About: undefined;
     AccountSettings: undefined;
     Auth: undefined;
@@ -63,79 +63,71 @@ const AppNavigator = () => {
                     borderBottomWidth: 1,
                 },
             }}>
-            {isAuthenticated ? (
-                <>
-                    <Stack.Screen
-                        options={{headerShown: false}}
-                        name="Feed"
-                        component={TabNavigator}
-                    />
-                    <Stack.Screen name="Settings" component={Settings} />
-                    <Stack.Screen
-                        name="AccountSettings"
-                        component={AccountSettings}
-                        options={{
-                            headerTitle: 'Account Settings',
-                        }}
-                    />
-                    <Stack.Screen
-                        name="ChangePassword"
-                        component={ChangePassword}
-                        options={{
-                            headerLeft: () => <CloseButton />,
-                            headerTitle: 'Change Password',
-                            presentation: 'modal',
-                        }}
-                    />
-                    <Stack.Screen
-                        name="EditProfile"
-                        component={EditProfile}
-                        options={{
-                            headerLeft: () => <CloseButton />,
-                            headerTitle: 'Edit Profile',
-                            presentation: 'modal',
-                        }}
-                    />
-                    <Stack.Screen name="About" component={About} />
-                    <Stack.Screen name="Feedbacks" component={Feedbacks} />
-                    <Stack.Screen name="Help" component={Help} />
-                    <Stack.Screen
-                        name="CreateSurvey"
-                        component={CreateSurvey}
-                        options={{
-                            headerLeft: () => <CloseButton />,
-                            headerTitle: 'Details',
-                            presentation: 'modal',
-                        }}
-                    />
-                    <Stack.Screen
-                        name="SearchSurvey"
-                        component={SearchSurvey}
-                    />
-                    <Stack.Screen
-                        name="SurveyItem"
-                        component={SurveyItem}
-                        options={{
-                            headerLeft: () => <CloseButton />,
-                            headerTitle: 'Public Entries',
-                            presentation: 'modal',
-                        }}
-                    />
-                    <Stack.Screen
-                        name="ChooseCategory"
-                        component={ChooseCategory}
-                        options={{
-                            headerTitle: 'Choose a category',
-                        }}
-                    />
-                </>
-            ) : (
-                <Stack.Screen
-                    name="Auth"
-                    component={AuthNavigator}
-                    options={{headerShown: false}}
-                />
-            )}
+            <Stack.Screen
+                options={{headerShown: false}}
+                name="Feed"
+                component={TabNavigator}
+            />
+            <Stack.Screen name="Settings" component={Settings} />
+            <Stack.Screen
+                name="AccountSettings"
+                component={AccountSettings}
+                options={{
+                    headerTitle: 'Account Settings',
+                }}
+            />
+            <Stack.Screen
+                name="ChangePassword"
+                component={ChangePassword}
+                options={{
+                    headerLeft: () => <CloseButton />,
+                    headerTitle: 'Change Password',
+                    presentation: 'modal',
+                }}
+            />
+            <Stack.Screen
+                name="EditProfile"
+                component={EditProfile}
+                options={{
+                    headerLeft: () => <CloseButton />,
+                    headerTitle: 'Edit Profile',
+                    presentation: 'modal',
+                }}
+            />
+            <Stack.Screen name="About" component={About} />
+            <Stack.Screen name="Feedbacks" component={Feedbacks} />
+            <Stack.Screen name="Help" component={Help} />
+            <Stack.Screen
+                name="CreateSurvey"
+                component={CreateSurvey}
+                options={{
+                    headerLeft: () => <CloseButton />,
+                    headerTitle: 'Details',
+                    presentation: 'modal',
+                }}
+            />
+            <Stack.Screen name="SearchSurvey" component={SearchSurvey} />
+            <Stack.Screen
+                name="SurveyItem"
+                component={SurveyItem}
+                options={{
+                    headerLeft: () => <CloseButton />,
+                    headerTitle: 'Public Entries',
+                    presentation: 'modal',
+                }}
+            />
+            <Stack.Screen
+                name="ChooseCategory"
+                component={ChooseCategory}
+                options={{
+                    headerTitle: 'Choose a category',
+                }}
+            />
+            <Stack.Screen
+                name="Auth"
+                component={AuthNavigator}
+                options={{headerShown: false}}
+            />
         </Stack.Navigator>
     );
 };
