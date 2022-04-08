@@ -1,5 +1,6 @@
 import React, {useState, useCallback, useEffect, useMemo} from 'react';
 import {View, TextInput} from 'react-native';
+import {gql, useQuery} from '@apollo/client';
 import {useNavigation} from '@react-navigation/native';
 import {FlatList, TouchableOpacity} from 'react-native-gesture-handler';
 import {Icon} from 'react-native-eva-icons';
@@ -9,9 +10,25 @@ import Text from 'components/Text';
 
 import cs from '@rna/utils/cs';
 
-import surveys from 'services/data/surveys.json';
-
 import styles from './styles';
+
+const GET_SURVEY = gql`
+    query GetEnviromentalSurveys {
+        enviromentalSurveys {
+            id
+            title
+            description
+            sentiment
+            attachment {
+                media
+            }
+            category {
+                id
+                title
+            }
+        }
+    }
+`;
 
 const TabItem = ({
     onPress,
@@ -40,6 +57,9 @@ const SearchSurvey = () => {
     const navigation = useNavigation();
     const onClearSearch = useCallback(() => setSearchQuery(''), []);
     const handleSearchChange = useCallback(text => setSearchQuery(text), []);
+
+    const {loading, error, data} = useQuery(GET_SURVEY);
+
     useEffect(() => {
         navigation.setOptions({
             headerTitle: () => (
@@ -79,10 +99,10 @@ const SearchSurvey = () => {
     );
     const searchedSurveys = useMemo(
         () =>
-            surveys.filter(el =>
+            data?.enviromentalSurveys.filter(el =>
                 `${el.title}`.toLowerCase().includes(searchQuery.toLowerCase()),
             ),
-        [searchQuery],
+        [searchQuery, data],
     );
 
     const selectedData = useMemo(
