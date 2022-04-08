@@ -16,7 +16,13 @@ export default StyleSheet.create({
     },
     locationBar: {
         position: 'absolute',
-        bottom: 105,
+        bottom: 100,
+        right: 20,
+        zIndex: 5,
+    },
+    drawPolygon: {
+        position: 'absolute',
+        top: 10,
         right: 20,
         zIndex: 5,
     },
@@ -27,12 +33,12 @@ export default StyleSheet.create({
         borderRadius: 20,
         justifyContent: 'center',
         alignItems: 'center',
+        marginBottom: 10,
     },
-    locationIcon: {
+    icon: {
         height: 20,
         width: 20,
     },
-
     markerContainer: {
         alignItems: 'center',
         width: 45,
@@ -56,5 +62,15 @@ export default StyleSheet.create({
         height: 14,
         borderRadius: 14,
         backgroundColor: COLORS.blueTextAlt,
+    },
+    polygonFill: {
+        fillOpacity: 0.7,
+        fillAntialias: true,
+        fillColor: 'rgba(64, 88, 116, 0.31)',
+        fillOutlineColor: COLORS.blueText,
+    },
+    pointCircle: {
+        circleRadius: 10,
+        circleColor: COLORS.white,
     },
 });

@@ -14,13 +14,18 @@ import styles from './styles';
 const keyExtractor = (item: {id: any}) => item.id;
 
 const Category = ({category, navigation}: {category: any; navigation: any}) => {
-    const handleCategoryPress = useCallback(() => {
-        navigation.navigate('CreateSurvey');
-    }, [navigation]);
+    const handleCategoryPress = useCallback(
+        categoryItem => {
+            navigation.navigate('CreateSurvey', {
+                categoryItem,
+            });
+        },
+        [navigation],
+    );
     const renderSubCategory = useCallback(
         ({item}: {item: {icon: string; name: string; id: number}}) => (
             <TouchableOpacity
-                onPress={handleCategoryPress}
+                onPress={() => handleCategoryPress(item)}
                 style={styles.subCategory}>
                 <View style={styles.iconWrapper}>
                     <Image

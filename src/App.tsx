@@ -4,15 +4,11 @@ import 'cross-fetch/polyfill';
 import React, {useMemo} from 'react';
 import {StatusBar} from 'react-native';
 import {NavigationContainer} from '@react-navigation/native';
-import {
-    ApolloClient,
-    createHttpLink,
-    InMemoryCache,
-    ApolloProvider,
-} from '@apollo/client';
+import {ApolloClient, InMemoryCache, ApolloProvider} from '@apollo/client';
 import {setContext} from '@apollo/client/link/context';
 import {Provider} from 'react-redux';
 import {PersistGate} from 'redux-persist/integration/react';
+import {createUploadLink} from 'apollo-upload-client';
 
 import {BASE_URL} from '@env';
 
@@ -28,7 +24,7 @@ import COLORS from 'utils/colors';
 
 import 'services/bootstrap';
 
-const httpLink = createHttpLink({
+const httpLink = createUploadLink({
     uri: BASE_URL,
 });
 

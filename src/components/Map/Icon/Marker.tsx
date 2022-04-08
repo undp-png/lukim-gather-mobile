@@ -1,7 +1,7 @@
 import React from 'react';
 import Svg, {Path, Rect} from 'react-native-svg';
 
-const MarkerIcon = () => {
+export default () => {
     return (
         <Svg width="44" height="44" viewBox="0 0 44 44" fill="none">
             <Rect x="1" y="1" width="42" height="42" rx="21" fill="#196297" />
@@ -25,5 +25,3 @@ const MarkerIcon = () => {
         </Svg>
     );
 };
-
-export default MarkerIcon;
