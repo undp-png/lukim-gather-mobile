@@ -5,6 +5,9 @@ import {useNavigation} from '@react-navigation/native';
 
 import Text from 'components/Text';
 
+import SurveyCategory from 'services/data/surveyCategory';
+import useCategoryIcon from 'hooks/useCategoryIcon';
+
 import styles from './styles';
 
 const SurveyItem = ({
@@ -20,6 +23,10 @@ const SurveyItem = ({
     onPress(): void;
 }) => {
     const navigation = useNavigation();
+    const [categoryIcon] = useCategoryIcon(
+        SurveyCategory,
+        Number(item?.category?.id),
+    );
     const onPressItem = useCallback(
         () => navigation.navigate('SurveyItem', {item}),
         [item, navigation],
@@ -31,12 +38,12 @@ const SurveyItem = ({
                 <View style={styles.category}>
                     <Image
                         source={
-                            item.icon ||
+                            categoryIcon ||
                             require('assets/images/category-placeholder.png')
                         }
                         style={styles.categoryIcon}
                     />
-                    <Text style={styles.field} title={item.category.title} />
+                    <Text style={styles.field} title={item?.category?.title} />
                 </View>
             </View>
             <View style={styles.rightData}>

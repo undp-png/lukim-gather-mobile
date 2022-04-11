@@ -6,8 +6,10 @@ import {useNavigation, useRoute} from '@react-navigation/native';
 import Text from 'components/Text';
 import {OptionIcon} from 'components/HeaderButton';
 
+import useCategoryIcon from 'hooks/useCategoryIcon';
 import {_} from 'services/i18n';
 
+import SurveyCategory from 'services/data/surveyCategory';
 import styles from './styles';
 
 const Header = ({title}: {title: string}) => {
@@ -23,7 +25,7 @@ const Photos = ({photos}: {photos: {image: string}[]}) => {
         ({item}: {item: {image: string}}) => (
             <Image
                 source={
-                    {uri: item.image} ||
+                    {uri: item.media} ||
                     require('assets/images/category-placeholder.png')
                 }
                 style={styles.surveyImage}
@@ -43,14 +45,18 @@ const Photos = ({photos}: {photos: {image: string}[]}) => {
 
 const SurveyItem = () => {
     const route = useRoute();
-    const item = {title: '2020 PNG Trees Study', icon: ''};
     const navigation = useNavigation();
+
+    const surveyData = route?.params?.item;
+    const [categoryIcon] = useCategoryIcon(
+        SurveyCategory,
+        Number(surveyData?.category?.id),
+    );
     useEffect(() => {
         navigation.setOptions({
             headerRight: () => <OptionIcon onOptionPress={() => {}} />,
         });
     });
-    const surveyData = route?.params?.item;
     return (
         <ScrollView
             style={styles.container}
@@ -58,32 +64,38 @@ const SurveyItem = () => {
             <View style={styles.category}>
                 <Image
                     source={
-                        item.icon ||
+                        categoryIcon ||
                         require('assets/images/category-placeholder.png')
                     }
                     style={styles.categoryIcon}
                 />
-                <Text style={styles.field} title={surveyData.category.title} />
+                <Text
+                    style={styles.field}
+                    title={surveyData?.category?.title}
+                />
             </View>
             <Header title="Name" />
             <View style={styles.content}>
-                <Text style={styles.name} title={surveyData.title} />
+                <Text style={styles.name} title={surveyData?.title} />
             </View>
             <Header title="Photos" />
             <View style={styles.photosWrapper}>
-                <Photos photos={surveyData?.images} />
+                <Photos photos={surveyData?.attachment} />
             </View>
             <Header title="Feels" />
             <View style={styles.content}>
                 <View style={styles.feeelWrapper}>
-                    <Text style={styles.feelIcon} title={surveyData.feel} />
+                    <Text
+                        style={styles.feelIcon}
+                        title={surveyData?.sentiment}
+                    />
                 </View>
             </View>
             <Header title="Description" />
             <View style={styles.content}>
                 <Text
                     style={styles.description}
-                    title={surveyData.description}
+                    title={surveyData?.description}
                 />
             </View>
         </ScrollView>

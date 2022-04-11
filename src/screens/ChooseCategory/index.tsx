@@ -49,7 +49,7 @@ const Category = ({category, navigation}: {category: any; navigation: any}) => {
             <FlatList
                 style={styles.subCategoryList}
                 numColumns={3}
-                data={category.sub_category}
+                data={category?.childs}
                 renderItem={renderSubCategory}
                 showsVerticalScrollIndicator={false}
                 keyExtractor={keyExtractor}

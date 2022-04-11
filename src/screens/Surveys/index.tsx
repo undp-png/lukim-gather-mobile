@@ -1,4 +1,5 @@
-import React, {useEffect, useCallback} from 'react';
+import React, {useEffect, useCallback, useState} from 'react';
+import {gql, useQuery} from '@apollo/client';
 import {View} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import {FlatList, TouchableOpacity} from 'react-native-gesture-handler';
@@ -7,13 +8,33 @@ import {Icon} from 'react-native-eva-icons';
 import Text from 'components/Text';
 
 import SurveyItem from 'components/SurveyItem';
-
-import surveys from 'services/data/surveys.json';
+import {ModalLoader} from 'components/Loader';
 
 import styles from './styles';
 
+const GET_SURVEY = gql`
+    query GetEnviromentalSurveys {
+        enviromentalSurveys {
+            id
+            title
+            description
+            sentiment
+            attachment {
+                media
+            }
+            category {
+                id
+                title
+            }
+        }
+    }
+`;
+
 const Surveys = () => {
     const navigation = useNavigation();
+
+    const {loading, error, data} = useQuery(GET_SURVEY);
+
     const onSearchPress = useCallback(
         () => navigation.navigate('SearchSurvey'),
         [navigation],
@@ -22,6 +43,7 @@ const Surveys = () => {
         () => navigation.navigate('Home'),
         [navigation],
     );
+
     useEffect(() => {
         navigation.setOptions({
             headerLeft: () => (
@@ -48,18 +70,23 @@ const Surveys = () => {
             },
         });
     }, [navigation, onMapPress, onSearchPress]);
+
     const renderItem = useCallback(
         ({item}: {item: object}) => <SurveyItem item={item} />,
         [],
     );
+
     return (
         <View style={styles.container}>
-            <FlatList
-                data={surveys}
-                renderItem={renderItem}
-                showsVerticalScrollIndicator={false}
-                keyExtractor={item => item.id}
-            />
+            <ModalLoader loading={loading} />
+            {data && (
+                <FlatList
+                    data={data?.enviromentalSurveys}
+                    renderItem={renderItem}
+                    showsVerticalScrollIndicator={false}
+                    keyExtractor={item => item.id}
+                />
+            )}
         </View>
     );
 };
