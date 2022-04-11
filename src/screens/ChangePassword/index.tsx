@@ -1,28 +1,74 @@
-import React, {useEffect} from 'react';
+import React, {useState, useCallback, useEffect} from 'react';
 import {View} from 'react-native';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import {useNavigation} from '@react-navigation/native';
+import {useMutation, gql} from '@apollo/client';
+import Toast from 'react-native-simple-toast';
 
+import {ModalLoader} from 'components/Loader';
 import Text from 'components/Text';
 import InputField from 'components/InputField';
 import {SaveButton} from 'components/HeaderButton';
 import {_} from 'services/i18n';
+import {getErrorMessage} from 'utils/error';
+import {dispatchLogout} from 'services/dispatch';
 
 import styles from './styles';
 
+const CHANGE_PASSWORD = gql`
+    mutation ChangePassword($data: ChangePasswordInput!) {
+        changePassword(data: $data) {
+            ok
+        }
+    }
+`;
+
 const ChangePassword = () => {
     const navigation = useNavigation();
+    const [password, setPassword] = useState<string>('');
+    const [newPassword, setNewPassword] = useState<string>('');
+    const [rePassword, setRePassword] = useState<string>('');
+
+    const [change_password, {loading}] = useMutation(CHANGE_PASSWORD, {
+        onCompleted: () => {
+            Toast.show('Password has been successfully changed !!', Toast.LONG);
+            dispatchLogout();
+        },
+        onError: err => {
+            Toast.show(getErrorMessage(err), Toast.LONG, [
+                'RCTModalHostViewController',
+            ]);
+            console.log(err);
+        },
+    });
+
+    const handleChangePassword = useCallback(async () => {
+        await change_password({
+            variables: {
+                data: {
+                    password,
+                    newPassword,
+                    rePassword,
+                },
+            },
+        });
+    }, [change_password, newPassword, password, rePassword]);
+
     useEffect(() => {
         navigation.setOptions({
-            headerRight: () => <SaveButton />,
+            headerRight: () => (
+                <SaveButton onSavePress={handleChangePassword} />
+            ),
         });
-    });
+    }, [handleChangePassword, navigation]);
     return (
         <View style={styles.container}>
+            <ModalLoader loading={loading} />
             <KeyboardAwareScrollView>
                 <View>
                     <InputField
+                        onChangeText={setPassword}
                         title={_('Current password')}
                         placeholder={_('Enter current password')}
                     />
@@ -34,10 +80,12 @@ const ChangePassword = () => {
                     </TouchableOpacity>
                 </View>
                 <InputField
+                    onChangeText={setNewPassword}
                     title={_('New password')}
                     placeholder={_('Enter new password')}
                 />
                 <InputField
+                    onChangeText={setRePassword}
                     title={_('Confirm new password')}
                     placeholder={_('Re-enter new password')}
                 />

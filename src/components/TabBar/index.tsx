@@ -1,11 +1,5 @@
 import React from 'react';
-import {
-    View,
-    SafeAreaView,
-    Dimensions,
-    TouchableOpacity,
-    Text,
-} from 'react-native';
+import {View, Dimensions, TouchableOpacity, Text} from 'react-native';
 import {Icon} from 'react-native-eva-icons';
 import Svg, {
     Defs,
@@ -84,7 +78,7 @@ const TabBar = ({
     inActiveColor,
 }) => {
     return (
-        <SafeAreaView
+        <View
             style={cs(styles.safeArea, [
                 styles.containerHidden,
                 state.index ===
@@ -223,7 +217,7 @@ const TabBar = ({
                     );
                 })}
             </View>
-        </SafeAreaView>
+        </View>
     );
 };
 
