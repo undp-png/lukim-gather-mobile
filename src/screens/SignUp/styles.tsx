@@ -41,9 +41,11 @@ export default StyleSheet.create({
     button: {
         marginTop: 20,
     },
+    login: {
+        marginTop: 30,
+    },
     text: {
         color: COLORS.blueTextAlt,
-        marginTop: 30,
         textAlign: 'center',
         fontSize: 14,
         fontFamily: 'Inter-Regular',

@@ -57,23 +57,31 @@ const SignUp = () => {
             },
         });
     }, [email, firstName, lastName, password, signup]);
+
+    const handleGoLogin = useCallback(() => {
+        navigation.navigate('Login');
+    }, [navigation]);
+
     return (
         <SafeAreaView>
             <View style={styles.container}>
                 <ModalLoader loading={loading} />
                 <InputField
+                    input={email}
                     onChangeText={setEmail}
                     title={_('Email or Phone')}
                     placeholder="johndoe@example.com"
                 />
                 <View style={styles.name}>
                     <InputField
+                        input={firstName}
                         onChangeText={setFirstName}
                         title={_('First name')}
                         placeholder={_('Enter first name')}
                         containerStyle={styles.fullName}
                     />
                     <InputField
+                        input={lastName}
                         onChangeText={setLastName}
                         title={_('Surname')}
                         placeholder={_('Enter surname')}
@@ -84,7 +92,7 @@ const SignUp = () => {
                     onChangeText={setPassword}
                     title={_('Password')}
                     placeholder={_('Enter password')}
-                    password
+                    input={password}
                 />
                 <View style={styles.infoWrapper}>
                     <Text style={styles.info}>
@@ -109,9 +117,11 @@ const SignUp = () => {
                     style={styles.button}
                     onPress={handleSignUp}
                 />
-                <Text style={styles.text}>
-                    <Localize>Already have an account?</Localize>
-                </Text>
+                <TouchableOpacity onPress={handleGoLogin} style={styles.login}>
+                    <Text style={styles.text}>
+                        <Localize>Already have an account?</Localize>
+                    </Text>
+                </TouchableOpacity>
             </View>
         </SafeAreaView>
     );
