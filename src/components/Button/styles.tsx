@@ -25,6 +25,9 @@ export default StyleSheet.create({
     buttonLightGreen: {
         backgroundColor: '#F0F6EA',
     },
+    buttonDisabled: {
+        opacity: 0.8,
+    },
     buttonText: {
         color: COLORS.white,
         fontSize: 16,

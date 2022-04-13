@@ -15,6 +15,10 @@ export default StyleSheet.create({
         paddingHorizontal: 16,
         paddingVertical: 24,
     },
+    checkWrapper: {
+        marginTop: 8,
+        flexDirection: 'row',
+    },
     heading: {
         fontFamily: 'Inter-SemiBold',
         fontSize: 24,
@@ -22,7 +26,7 @@ export default StyleSheet.create({
         color: COLORS.tertiary,
     },
     message: {
-        marginTop: 8,
+        marginHorizontal: 10,
         fontFamily: 'Inter-Regular',
         fontSize: 16,
         lineHeight: 24,

@@ -9,6 +9,7 @@ export default StyleSheet.create({
         height: '100%',
         backgroundColor: '#E7ECF2',
         padding: 20,
+        paddingBottom: 80,
     },
 
     searchBar: {

@@ -1,6 +1,6 @@
 import React, {useCallback} from 'react';
-import {View, Image, Pressable} from 'react-native';
-import {FlatList, TouchableOpacity} from 'react-native-gesture-handler';
+import {View, Image, Pressable, Dimensions} from 'react-native';
+import {FlatList} from 'react-native-gesture-handler';
 import Modal from 'react-native-modal';
 
 import Text from 'components/Text';
@@ -21,11 +21,13 @@ interface CategoryProps {
     setOpenCategory(arg0: boolean): void;
 }
 
+const deviceHeight = Dimensions.get('window').height;
+
 const Category: React.FC<CategoryProps> = props => {
     const {category, setOpenCategory} = props;
     const renderSubCategory = useCallback(
         ({item}: {item: {icon: string; name: string; id: number}}) => (
-            <TouchableOpacity
+            <Pressable
                 onPress={() => {
                     props.setCategory(item);
                     setOpenCategory(false);
@@ -41,7 +43,7 @@ const Category: React.FC<CategoryProps> = props => {
                     />
                 </View>
                 <Text style={styles.categoryName} title={item.name} />
-            </TouchableOpacity>
+            </Pressable>
         ),
         [props, setOpenCategory],
     );
@@ -90,10 +92,11 @@ const CategoryListModal: React.FC<BoxProps> = ({
             isVisible={isOpen}
             backdropOpacity={0.5}
             style={styles.modal}
-            statusBarTranslucent={true}>
+            statusBarTranslucent={true}
+            deviceHeight={deviceHeight}>
             <View style={styles.boxContent}>
                 <View style={styles.modalHeader}>
-                    <TouchableOpacity
+                    <Pressable
                         onPress={onToggleModal}
                         style={styles.closeWrapper}>
                         <Icon
@@ -102,7 +105,7 @@ const CategoryListModal: React.FC<BoxProps> = ({
                             width={25}
                             fill={COLORS.tertiary}
                         />
-                    </TouchableOpacity>
+                    </Pressable>
                     <Text style={styles.heading} title="Select the Category" />
                 </View>
                 <FlatList
