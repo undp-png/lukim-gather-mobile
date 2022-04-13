@@ -8,7 +8,7 @@ import {
     View,
     Platform,
 } from 'react-native';
-import {useSelector} from 'react-redux';
+import {RootStateOrAny, useSelector} from 'react-redux';
 import {useMutation, gql} from '@apollo/client';
 import {ReactNativeFile} from 'apollo-upload-client';
 import {useNavigation, useRoute} from '@react-navigation/native';
@@ -23,6 +23,7 @@ import ImagePicker from 'components/ImagePicker';
 import {SaveButton} from 'components/HeaderButton';
 import {SurveyConfirmBox} from 'components/SurveyConfirmationBox';
 import {ModalLoader} from 'components/Loader';
+import CategoryListModal from 'components/CategoryListModal';
 
 import cs from '@rna/utils/cs';
 import {Localize} from '@rna/components/I18n';
@@ -38,7 +39,6 @@ import {
 import {getErrorMessage} from 'utils/error';
 
 import styles from './styles';
-
 interface FeelProps {
     feel: string;
     activeFeel: string;
@@ -165,18 +165,21 @@ const Photos: React.FC<PhotosProps> = ({photos, handleRemoveImage}) => {
 const CreateSurvey = () => {
     const route = useRoute<any>();
     const navigation = useNavigation<any>();
-    const {location} = useSelector(state => state.survey);
+    const {location} = useSelector((state: RootStateOrAny) => state.survey);
+    const [openCategory, setOpenCategory] = useState<boolean>(false);
 
     const [title, setTitle] = useState<string>('');
     const [activeFeel, setActiveFeel] = useState<string>('');
     const [images, setImages] = useState<ImageObj[]>([]);
     const [description, setDescription] = useState<string>('');
-    const [category, setCategory] = useState<number>(
-        route.params?.categoryItem.id,
-    );
+    const [category, setCategory] = useState<{
+        id: number;
+        name: string;
+        icon: string;
+    }>(route.params?.categoryItem);
     const [attachment, setAttachment] = useState<any>([]);
     const [confirmPublish, setConfirmPublish] = useState<boolean>(false);
-    const [coordinates, setCoordinates] = useState(null);
+    const [coordinates, setCoordinates] = useState(location || null);
 
     const iconFlex = useRef(new Animated.Value(1)).current;
     const imgFlex = useRef(new Animated.Value(0)).current;
@@ -203,7 +206,7 @@ const CreateSurvey = () => {
                 input: {
                     title: title,
                     description: description,
-                    categoryId: category,
+                    categoryId: category.id,
                     sentiment: activeFeel,
                     attachment: attachment,
                     location: location.point
@@ -314,8 +317,7 @@ const CreateSurvey = () => {
 
     const handleChangeLocation = useCallback(() => {
         navigation.navigate('ChangeLocation');
-        setCoordinates(location);
-    }, [navigation, location]);
+    }, [navigation]);
 
     const handleConfirmToggle = useCallback(() => {
         if (title) {
@@ -332,6 +334,13 @@ const CreateSurvey = () => {
             headerRight: () => <SaveButton onSavePress={handleConfirmToggle} />,
         });
     }, [navigation, handleConfirmToggle]);
+
+    const toggleOpenCategory = useCallback(
+        () => setOpenCategory(!openCategory),
+        [openCategory],
+    );
+
+    useEffect(() => setCoordinates(location), [location]);
 
     return (
         <ScrollView
@@ -352,12 +361,9 @@ const CreateSurvey = () => {
                         }
                         style={styles.categoryIcon}
                     />
-                    <Text
-                        style={styles.field}
-                        title={route.params.categoryItem.name}
-                    />
+                    <Text style={styles.field} title={category.name} />
                 </View>
-                <TouchableOpacity>
+                <TouchableOpacity onPress={toggleOpenCategory}>
                     <Text style={styles.change} title="Change" />
                 </TouchableOpacity>
             </View>
@@ -418,6 +424,12 @@ const CreateSurvey = () => {
                 onChangeText={setDescription}
                 value={description}
                 placeholder="What’s happening here?"
+            />
+            <CategoryListModal
+                setCategory={setCategory}
+                setOpenCategory={setOpenCategory}
+                onToggleModal={toggleOpenCategory}
+                isOpen={openCategory}
             />
         </ScrollView>
     );

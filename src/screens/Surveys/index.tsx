@@ -1,7 +1,7 @@
 import React, {useEffect, useCallback, useState} from 'react';
 import {gql, useQuery} from '@apollo/client';
-import {View} from 'react-native';
-import {useNavigation} from '@react-navigation/native';
+import {RefreshControl, View} from 'react-native';
+import {useFocusEffect, useNavigation} from '@react-navigation/native';
 import {FlatList, TouchableOpacity} from 'react-native-gesture-handler';
 import {Icon} from 'react-native-eva-icons';
 
@@ -11,6 +11,8 @@ import SurveyItem from 'components/SurveyItem';
 import {ModalLoader} from 'components/Loader';
 
 import styles from './styles';
+
+const keyExtractor = (item: {id: string}) => item.id;
 
 const GET_SURVEY = gql`
     query GetEnviromentalSurveys {
@@ -33,7 +35,11 @@ const GET_SURVEY = gql`
 const Surveys = () => {
     const navigation = useNavigation();
 
-    const {loading, error, data} = useQuery(GET_SURVEY);
+    const {loading, data, refetch} = useQuery(GET_SURVEY);
+
+    const handleRefresh = useCallback(() => {
+        refetch();
+    }, [refetch]);
 
     const onSearchPress = useCallback(
         () => navigation.navigate('SearchSurvey'),
@@ -76,6 +82,10 @@ const Surveys = () => {
         [],
     );
 
+    useFocusEffect(() => {
+        refetch();
+    });
+
     return (
         <View style={styles.container}>
             <ModalLoader loading={loading} />
@@ -83,8 +93,14 @@ const Surveys = () => {
                 <FlatList
                     data={data?.enviromentalSurveys}
                     renderItem={renderItem}
+                    refreshControl={
+                        <RefreshControl
+                            refreshing={loading}
+                            onRefresh={handleRefresh}
+                        />
+                    }
                     showsVerticalScrollIndicator={false}
-                    keyExtractor={item => item.id}
+                    keyExtractor={keyExtractor}
                 />
             )}
         </View>

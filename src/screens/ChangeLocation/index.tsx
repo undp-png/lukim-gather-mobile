@@ -86,7 +86,7 @@ const ChangeLocation = () => {
     }, []);
 
     return (
-        <SafeAreaView style={styles.container}>
+        <View style={styles.container}>
             <View>
                 <InputField
                     placeholder="Place"
@@ -114,7 +114,7 @@ const ChangeLocation = () => {
                     pickLocation={selectedMethod}
                 />
             </View>
-        </SafeAreaView>
+        </View>
     );
 };
 
