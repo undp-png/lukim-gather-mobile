@@ -93,6 +93,7 @@ const SignUp = () => {
                     title={_('Password')}
                     placeholder={_('Enter password')}
                     input={password}
+                    password
                 />
                 <View style={styles.infoWrapper}>
                     <Text style={styles.info}>
