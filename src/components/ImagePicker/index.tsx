@@ -1,7 +1,7 @@
 import React, {useCallback} from 'react';
 import {
     Pressable,
-    SafeAreaView,
+    View,
     Text,
     TouchableOpacity,
     Dimensions,
@@ -70,10 +70,10 @@ const _ImagePicker: React.FC<Props> = ({onChange}) => {
                 isVisible={visible}
                 onBackdropPress={close}
                 backdropTransitionOutTiming={10}
-                style={styles.modal}
                 statusBarTranslucent={true}
-                deviceHeight={deviceHeight}>
-                <SafeAreaView style={styles.options}>
+                deviceHeight={deviceHeight}
+                style={styles.modal}>
+                <View style={styles.options}>
                     <Pressable style={styles.option} onPress={handleGallery}>
                         <Icon
                             name="image"
@@ -92,7 +92,7 @@ const _ImagePicker: React.FC<Props> = ({onChange}) => {
                         />
                         <Text>Camera</Text>
                     </Pressable>
-                </SafeAreaView>
+                </View>
             </Modal>
         </>
     );

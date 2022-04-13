@@ -3,9 +3,9 @@ import {View, Text, Dimensions} from 'react-native';
 import Modal from 'react-native-modal';
 
 import Button from 'components/Button';
+import {_} from 'services/i18n';
 
 import {Localize} from '@rna/components/I18n';
-import {_} from 'services/i18n';
 
 import styles from './styles';
 

@@ -1,15 +1,16 @@
-import React, {useEffect, useCallback} from 'react';
+import React, {useEffect, useCallback, useState} from 'react';
 import {View, Image} from 'react-native';
 import {FlatList, ScrollView} from 'react-native-gesture-handler';
 import {useNavigation, useRoute} from '@react-navigation/native';
 
 import Text from 'components/Text';
 import {OptionIcon} from 'components/HeaderButton';
+import SurveyActions from 'components/SurveyActions';
 
 import useCategoryIcon from 'hooks/useCategoryIcon';
 import {_} from 'services/i18n';
-
 import SurveyCategory from 'services/data/surveyCategory';
+
 import styles from './styles';
 
 const Header = ({title}: {title: string}) => {
@@ -20,9 +21,9 @@ const Header = ({title}: {title: string}) => {
     );
 };
 
-const Photos = ({photos}: {photos: {image: string}[]}) => {
+const Photos = ({photos}: {photos: {media: string}[]}) => {
     const renderItem = useCallback(
-        ({item}: {item: {image: string}}) => (
+        ({item}: {item: {media: string}}) => (
             <Image
                 source={
                     {uri: item.media} ||
@@ -44,19 +45,48 @@ const Photos = ({photos}: {photos: {image: string}[]}) => {
 };
 
 const SurveyItem = () => {
-    const route = useRoute();
+    const route = useRoute<any>();
     const navigation = useNavigation();
+
+    const [isOpenActions, setIsOpenActions] = useState(false);
+    const [isOpenDelete, setIsOpenDelete] = useState(false);
 
     const surveyData = route?.params?.item;
     const [categoryIcon] = useCategoryIcon(
         SurveyCategory,
         Number(surveyData?.category?.id),
     );
+
+    const togggleOpenActions = useCallback(() => {
+        setIsOpenActions(!isOpenActions);
+        setIsOpenDelete(false);
+    }, [isOpenActions]);
+
+    const togggleEditPress = useCallback(() => {
+        // todo edit
+        setIsOpenActions(false);
+    }, []);
+
+    const toggleDeleteModal = useCallback(() => {
+        setIsOpenDelete(true);
+    }, []);
+
+    const toggleActionsModal = useCallback(() => {
+        setIsOpenActions(false);
+    }, []);
+
+    const toggleConfirmDelete = useCallback(() => {
+        //todo delete
+        setIsOpenActions(false);
+    }, []);
+
     useEffect(() => {
         navigation.setOptions({
-            headerRight: () => <OptionIcon onOptionPress={() => {}} />,
+            headerRight: () => (
+                <OptionIcon onOptionPress={togggleOpenActions} />
+            ),
         });
-    });
+    }, [navigation, togggleOpenActions]);
     return (
         <ScrollView
             style={styles.container}
@@ -98,6 +128,15 @@ const SurveyItem = () => {
                     title={surveyData?.description}
                 />
             </View>
+            <SurveyActions
+                isOpenActions={isOpenActions}
+                onEditPress={togggleEditPress}
+                onDeletePress={toggleDeleteModal}
+                onBackdropPress={toggleActionsModal}
+                isConfirmDeleteOpen={isOpenDelete}
+                toggleCancelDelete={toggleActionsModal}
+                toggleConfirmDelete={toggleConfirmDelete}
+            />
         </ScrollView>
     );
 };
