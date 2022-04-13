@@ -2,12 +2,7 @@ import {useMemo, useCallback} from 'react';
 
 import {searchTree} from 'utils';
 
-interface Props {
-    categories: object;
-    id: number;
-}
-
-const useCategoryIcon = ({categories, id}: Props) => {
+const useCategoryIcon = (categories, id) => {
     const getIcon = useCallback((item, categoryId) => {
         if (!categoryId) {
             return null;
