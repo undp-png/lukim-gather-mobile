@@ -117,6 +117,7 @@ const SignUp = () => {
                     title={_('Create an account')}
                     style={styles.button}
                     onPress={handleSignUp}
+                    disabled={!email || !firstName || !lastName || !password}
                 />
                 <TouchableOpacity onPress={handleGoLogin} style={styles.login}>
                     <Text style={styles.text}>

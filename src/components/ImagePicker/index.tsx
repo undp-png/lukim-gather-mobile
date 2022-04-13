@@ -1,5 +1,11 @@
 import React, {useCallback} from 'react';
-import {Pressable, SafeAreaView, Text, TouchableOpacity} from 'react-native';
+import {
+    Pressable,
+    SafeAreaView,
+    Text,
+    TouchableOpacity,
+    Dimensions,
+} from 'react-native';
 import ImagePicker, {Image} from 'react-native-image-crop-picker';
 import Modal from 'react-native-modal';
 import {Icon} from 'react-native-eva-icons';
@@ -9,6 +15,8 @@ import styles from './styles';
 interface Props {
     onChange?: (file: Image) => void;
 }
+
+const deviceHeight = Dimensions.get('window').height;
 
 const _ImagePicker: React.FC<Props> = ({onChange}) => {
     const [visible, setVisible] = React.useState(false);
@@ -62,7 +70,9 @@ const _ImagePicker: React.FC<Props> = ({onChange}) => {
                 isVisible={visible}
                 onBackdropPress={close}
                 backdropTransitionOutTiming={10}
-                style={styles.modal}>
+                style={styles.modal}
+                statusBarTranslucent={true}
+                deviceHeight={deviceHeight}>
                 <SafeAreaView style={styles.options}>
                     <Pressable style={styles.option} onPress={handleGallery}>
                         <Icon

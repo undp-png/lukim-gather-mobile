@@ -30,6 +30,7 @@ const _Button: React.FC<Props> = ({
                 [styles.buttonDark, dark],
                 [styles.buttonLight, light],
                 [styles.buttonLightGreen, lightGreen],
+                [styles.buttonDisabled, buttonProps.disabled],
                 style,
             )}
             pressableStyle={styles.buttonContent}

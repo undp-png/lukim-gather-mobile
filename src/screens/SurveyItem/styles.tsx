@@ -66,7 +66,7 @@ export default StyleSheet.create({
         height: 110,
         width: 150,
         resizeMode: 'cover',
-        backgroundColor: '#ffc',
+        backgroundColor: '#F0F3F7',
         marginRight: 16,
     },
     feelIcon: {

@@ -25,7 +25,7 @@ export default StyleSheet.create({
     closeWrapper: {
         width: 35,
         top: 10,
-        right: 10,
+        left: 10,
         padding: 5,
         alignItems: 'center',
     },

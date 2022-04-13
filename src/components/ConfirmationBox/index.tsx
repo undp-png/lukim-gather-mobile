@@ -1,5 +1,5 @@
 import React from 'react';
-import {View, Text} from 'react-native';
+import {View, Text, Dimensions} from 'react-native';
 import Modal from 'react-native-modal';
 
 import Button from 'components/Button';
@@ -15,6 +15,8 @@ interface BoxProps {
     onLogout(): void;
 }
 
+const deviceHeight = Dimensions.get('window').height;
+
 export const ConfirmBox: React.FC<BoxProps> = ({
     isOpen,
     onCancel,
@@ -26,7 +28,8 @@ export const ConfirmBox: React.FC<BoxProps> = ({
             isVisible={isOpen}
             backdropOpacity={0.5}
             style={styles.modal}
-            statusBarTranslucent={true}>
+            statusBarTranslucent={true}
+            deviceHeight={deviceHeight}>
             <View style={styles.boxContent}>
                 <Text style={styles.heading}>
                     <Localize>Log out</Localize>
