@@ -1,16 +1,15 @@
 import 'react-native-gesture-handler';
 import 'cross-fetch/polyfill';
 
-import React, {useMemo} from 'react';
+import React, {useEffect, useState, useMemo} from 'react';
 import {StatusBar} from 'react-native';
 import {NavigationContainer} from '@react-navigation/native';
-import {ApolloClient, InMemoryCache, ApolloProvider} from '@apollo/client';
-import {setContext} from '@apollo/client/link/context';
+import NetInfo, {useNetInfo} from '@react-native-community/netinfo';
+import {ApolloProvider} from '@apollo/client';
+import {NormalizedCacheObject} from 'apollo-cache-inmemory';
+import QueueLink from 'apollo-link-queue';
 import {Provider} from 'react-redux';
 import {PersistGate} from 'redux-persist/integration/react';
-import {createUploadLink} from 'apollo-upload-client';
-
-import {BASE_URL} from '@env';
 
 import AppNavigator from 'navigation';
 
@@ -18,60 +17,70 @@ import {store, persistor} from 'store';
 
 import SyncLocaleStore from 'components/SyncLocaleStore';
 import LocalizeProvider from '@rna/components/I18n';
-import {languages, translations} from 'services/i18n';
 
+import {getApolloClient} from 'services/gql/client';
+import {languages, translations} from 'services/i18n';
 import COLORS from 'utils/colors';
 
 import 'services/bootstrap';
 
-const httpLink = createUploadLink({
-    uri: BASE_URL,
-});
-
-const authLink = setContext((_, {headers}) => {
-    const {
-        auth: {token},
-    } = store.getState();
-    return {
-        headers: {
-            ...headers,
-            authorization: token ? `JWT ${token}` : '',
-        },
-    };
-});
-
-const client = new ApolloClient({
-    link: authLink.concat(httpLink),
-    cache: new InMemoryCache(),
-});
+const queueLink = new QueueLink();
 
 const App = () => {
     const initialLang = useMemo(() => 'en', []);
+    const [client, setClient] = useState<NormalizedCacheObject>(null);
+    const {isInternetReachable} = useNetInfo();
+
+    const initializeApolloClient = async () => {
+        const {
+            auth: {token},
+        } = store.getState();
+        await getApolloClient(token, queueLink).then(apolloClient => {
+            setClient(apolloClient);
+        });
+    };
+
+    useEffect(() => {
+        if (isInternetReachable) {
+            queueLink.open();
+            console.log('queueLink opened');
+        } else {
+            queueLink.close();
+            console.log('queueLink closed');
+        }
+    }, [isInternetReachable]);
+
+    useEffect(() => {
+        initializeApolloClient();
+    }, []);
+
     return (
-        <ApolloProvider client={client}>
-            <Provider store={store}>
-                <PersistGate persistor={persistor}>
-                    <LocalizeProvider
-                        translations={translations}
-                        languages={languages}
-                        defaultLanguage={initialLang}>
-                        <SyncLocaleStore>
-                            <StatusBar
-                                barStyle="dark-content"
-                                translucent
-                                backgroundColor="transparent"
-                            />
-                            <NavigationContainer
-                                theme={{
-                                    colors: {background: COLORS.background},
-                                }}>
-                                <AppNavigator />
-                            </NavigationContainer>
-                        </SyncLocaleStore>
-                    </LocalizeProvider>
-                </PersistGate>
-            </Provider>
-        </ApolloProvider>
+        client && (
+            <ApolloProvider client={client}>
+                <Provider store={store}>
+                    <PersistGate persistor={persistor}>
+                        <LocalizeProvider
+                            translations={translations}
+                            languages={languages}
+                            defaultLanguage={initialLang}>
+                            <SyncLocaleStore>
+                                <StatusBar
+                                    barStyle="dark-content"
+                                    translucent
+                                    backgroundColor="transparent"
+                                />
+                                <NavigationContainer
+                                    theme={{
+                                        colors: {background: COLORS.background},
+                                    }}>
+                                    <AppNavigator />
+                                </NavigationContainer>
+                            </SyncLocaleStore>
+                        </LocalizeProvider>
+                    </PersistGate>
+                </Provider>
+            </ApolloProvider>
+        )
     );
 };
 

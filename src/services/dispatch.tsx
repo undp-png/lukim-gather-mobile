@@ -1,5 +1,4 @@
 import {store} from 'store';
-import {gql, useQuery} from '@apollo/client';
 
 import {
     setLogin,

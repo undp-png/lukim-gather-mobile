@@ -16,6 +16,7 @@ import {TouchableOpacity} from 'react-native-gesture-handler';
 import {Image as ImageObj} from 'react-native-image-crop-picker';
 import {Icon} from 'react-native-eva-icons';
 import Toast from 'react-native-simple-toast';
+import uuid from 'react-native-uuid';
 
 import Text from 'components/Text';
 import InputField from 'components/InputField';
@@ -30,12 +31,17 @@ import {Localize} from '@rna/components/I18n';
 import {_} from 'services/i18n';
 
 import {
-    CreateSurveyMutation,
-    CreateSurveyMutationVariables,
+    CreateHappeningSurveyMutation,
+    CreateHappeningSurveyMutationVariables,
     UploadMediaMutation,
     UploadMediaMutationVariables,
 } from '@generated/types';
 
+import {
+    CREATE_HAPPENING_SURVEY,
+    GET_HAPPENING_SURVEY,
+    UPLOAD_IMAGE,
+} from 'services/gql/queries';
 import {getErrorMessage} from 'utils/error';
 
 import styles from './styles';
@@ -55,29 +61,6 @@ interface PhotosProps {
     photos: {path: string}[];
     handleRemoveImage(index: number): void;
 }
-
-const CREATE_SURVEY = gql`
-    mutation CreateSurvey($input: LocalEnviromentalSurveyInput!) {
-        createSurvey(data: $input) {
-            errors
-            ok
-            result {
-                id
-            }
-        }
-    }
-`;
-
-const UPLOAD_IMAGE = gql`
-    mutation UploadMedia($title: String!, $type: String!, $media: Upload) {
-        uploadMedia(title: $title, type: $type, media: $media) {
-            ok
-            result {
-                id
-            }
-        }
-    }
-`;
 
 const Feel: React.FC<FeelProps> = ({feel, activeFeel, onPress}) => {
     const handlePress = useCallback(() => {
@@ -162,11 +145,12 @@ const Photos: React.FC<PhotosProps> = ({photos, handleRemoveImage}) => {
     );
 };
 
-const CreateSurvey = () => {
+const CreateHappeningSurvey = () => {
     const route = useRoute<any>();
     const navigation = useNavigation<any>();
     const {location} = useSelector((state: RootStateOrAny) => state.survey);
     const [openCategory, setOpenCategory] = useState<boolean>(false);
+    const [processing, setProcessing] = useState<boolean>(false);
 
     const [title, setTitle] = useState<string>('');
     const [activeFeel, setActiveFeel] = useState<string>('');
@@ -179,56 +163,109 @@ const CreateSurvey = () => {
     }>(route.params?.categoryItem);
     const [attachment, setAttachment] = useState<any>([]);
     const [confirmPublish, setConfirmPublish] = useState<boolean>(false);
-    const [coordinates, setCoordinates] = useState(location || null);
+    const [coordinates, setCoordinates] = useState<object | null>(null);
+    const [isAnonymous, setIsAnonymous] = useState<boolean>(false);
+    const [locationDetail, setLocationDetail] = useState<string>('');
 
     const iconFlex = useRef(new Animated.Value(1)).current;
     const imgFlex = useRef(new Animated.Value(0)).current;
 
-    const [createSurvey, {loading, error}] = useMutation<
-        CreateSurveyMutation,
-        CreateSurveyMutationVariables
-    >(CREATE_SURVEY, {
+    const [createHappeningSurvey, {loading, error}] = useMutation<
+        CreateHappeningSurveyMutation,
+        CreateHappeningSurveyMutationVariables
+    >(CREATE_HAPPENING_SURVEY, {
         onCompleted: () => {
             Toast.show('Survey Created Sucessfully !');
             navigation.navigate('Feed');
+            setProcessing(loading);
         },
         onError: err => {
             Toast.show(getErrorMessage(err), Toast.LONG, [
                 'RCTModalHostViewController',
             ]);
+            setProcessing(loading);
             console.log(err);
         },
     });
 
     const handlePublish = useCallback(async () => {
-        await createSurvey({
+        setProcessing(true);
+        let surveyInput = {
+            title: title,
+            description: description,
+            sentiment: activeFeel,
+            attachment: attachment,
+            location: location.point
+                ? {type: 'Point', coordinates: location?.point}
+                : null,
+            boundary: location.polygon
+                ? {
+                      type: 'MultiPolygon',
+                      coordinates: [[location?.polygon]],
+                  }
+                : null,
+        };
+
+        await createHappeningSurvey({
             variables: {
-                input: {
-                    title: title,
-                    description: description,
-                    categoryId: category.id,
-                    sentiment: activeFeel,
-                    attachment: attachment,
-                    location: location.point
-                        ? {type: 'Point', coordinates: location?.point}
-                        : null,
-                    boundary: location.polygon
-                        ? {
-                              type: 'MultiPolygon',
-                              coordinates: [[location?.polygon]],
-                          }
-                        : null,
+                input: {...surveyInput, categoryId: category.id},
+            },
+            optimisticResponse: {
+                createHappeningSurvey: {
+                    __typename: 'HappeningSurveyType',
+                    errors: [],
+                    ok: null,
+                    result: {
+                        id: uuid.v4(),
+                        category: {
+                            id: category.id,
+                            title: category.name,
+                            __typename: 'ProtectedAreaCategoryType',
+                        },
+                        ...surveyInput,
+                    },
                 },
             },
+            update: (cache, {data}) => {
+                try {
+                    const readData: any = cache.readQuery({
+                        query: GET_HAPPENING_SURVEY,
+                    });
+                    let mergedSurveys = [];
+
+                    if (readData.happeningSurveys.length <= 0) {
+                        mergedSurveys = [data.createHappeningSurvey.result];
+                    } else {
+                        mergedSurveys = [
+                            data.createHappeningSurvey.result,
+                            ...readData.enviromentalSurveys,
+                        ];
+                    }
+                    cache.writeQuery({
+                        query: GET_HAPPENING_SURVEY,
+                        data: {
+                            ...readData,
+                            enviromentalSurveys: mergedSurveys,
+                        },
+                    });
+                    navigation.navigate('Feed');
+                } catch (e) {
+                    console.log({e});
+                }
+            },
         });
+        setProcessing(false);
+        setConfirmPublish(!confirmPublish);
     }, [
-        createSurvey,
         title,
         description,
         category,
+        createHappeningSurvey,
+        confirmPublish,
         activeFeel,
         attachment,
         location,
+        navigation,
     ]);
 
     const [uploadFile] = useMutation<
@@ -340,7 +377,23 @@ const CreateSurvey = () => {
         [openCategory],
     );
 
-    useEffect(() => setCoordinates(location), [location]);
+    const updateAnonymousStatus = useCallback(
+        anonymous => {
+            setIsAnonymous(isAnonymous);
+        },
+        [isAnonymous],
+    );
+
+    useEffect(() => {
+        setCoordinates(location);
+        if (coordinates && coordinates.polygon) {
+            setLocationDetail('Boundaries');
+        } else if (coordinates && coordinates.point) {
+            setLocationDetail(`${coordinates?.point}`);
+        } else {
+            setLocationDetail('Choose the location');
+        }
+    }, [location, coordinates]);
 
     return (
         <ScrollView
@@ -348,11 +401,12 @@ const CreateSurvey = () => {
             showsVerticalScrollIndicator={false}>
             <View style={styles.categoryCont}>
                 <SurveyConfirmBox
+                    updateAnonymousStatus
                     isOpen={confirmPublish}
                     onCancel={handleCancel}
                     onSubmit={handlePublish}
                 />
-                <ModalLoader loading={loading} />
+                <ModalLoader loading={processing} />
                 <View style={styles.category}>
                     <Image
                         source={
@@ -391,16 +445,7 @@ const CreateSurvey = () => {
             <View style={styles.locationCont}>
                 <View style={styles.locationWrapper}>
                     <Icon name="pin" height={20} width={20} fill={'#80A8C5'} />
-                    <Text
-                        style={styles.countyName}
-                        title={
-                            coordinates
-                                ? coordinates?.polygon
-                                    ? 'Polygon'
-                                    : `${coordinates?.point}`
-                                : 'Choose the location'
-                        }
-                    />
+                    <Text style={styles.countyName} title={locationDetail} />
                 </View>
                 <TouchableOpacity onPress={handleChangeLocation}>
                     <Text style={styles.change} title="Change" />
@@ -435,4 +480,4 @@ const CreateSurvey = () => {
     );
 };
 
-export default CreateSurvey;
+export default CreateHappeningSurvey;

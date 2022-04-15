@@ -81,6 +81,9 @@ export default StyleSheet.create({
     },
     linkText: {
         fontFamily: 'Inter-SemiBold',
+        fontSize: 16,
+        marginTop: 32,
+        color: COLORS.white,
     },
     login: {
         width: '45%',

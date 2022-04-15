@@ -8,34 +8,17 @@ import {Icon} from 'react-native-eva-icons';
 import Text from 'components/Text';
 
 import SurveyItem from 'components/SurveyItem';
-import {ModalLoader} from 'components/Loader';
+
+import {GET_HAPPENING_SURVEY} from 'services/gql/queries';
 
 import styles from './styles';
 
 const keyExtractor = (item: {id: string}) => item.id;
 
-const GET_SURVEY = gql`
-    query GetEnviromentalSurveys {
-        enviromentalSurveys {
-            id
-            title
-            description
-            sentiment
-            attachment {
-                media
-            }
-            category {
-                id
-                title
-            }
-        }
-    }
-`;
-
 const Surveys = () => {
     const navigation = useNavigation();
 
-    const {loading, data, refetch} = useQuery(GET_SURVEY);
+    const {loading, data, refetch} = useQuery(GET_HAPPENING_SURVEY);
 
     const handleRefresh = useCallback(() => {
         refetch();
@@ -88,7 +71,6 @@ const Surveys = () => {
 
     return (
         <View style={styles.container}>
-            <ModalLoader loading={loading} />
             {data && (
                 <FlatList
                     data={data?.enviromentalSurveys}

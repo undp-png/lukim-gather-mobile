@@ -13,16 +13,9 @@ import {SaveButton} from 'components/HeaderButton';
 import {_} from 'services/i18n';
 import {getErrorMessage} from 'utils/error';
 import {dispatchLogout} from 'services/dispatch';
+import {CHANGE_PASSWORD} from 'services/gql/queries';
 
 import styles from './styles';
-
-const CHANGE_PASSWORD = gql`
-    mutation ChangePassword($data: ChangePasswordInput!) {
-        changePassword(data: $data) {
-            ok
-        }
-    }
-`;
 
 const ChangePassword = () => {
     const navigation = useNavigation();
