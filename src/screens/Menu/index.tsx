@@ -101,7 +101,7 @@ const Menu = () => {
                 <View style={styles.menuWrapper}>
                     <MenuItem title={_('Settings')} linkTo="Settings" />
                     <MenuItem title={_('About Lukim Gather')} linkTo="About" />
-                    <MenuItem title={_('Feedbacks')} linkTo="Feedbacks" />
+                    <MenuItem title={_('Feedback')} linkTo="Feedback" />
                     <MenuItem title={_('Help')} linkTo="Help" />
                     {isAuthenticated && (
                         <TouchableOpacity

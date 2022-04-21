@@ -32,7 +32,7 @@ export type StackParamList = {
     CreateSurvey: undefined;
     EditProfile: undefined;
     Feed: undefined;
-    Feedbacks: undefined;
+    Feedback: undefined;
     Home: undefined;
     Settings: undefined;
     Help: undefined;
@@ -97,7 +97,7 @@ const AppNavigator = () => {
                 }}
             />
             <Stack.Screen name="About" component={About} />
-            <Stack.Screen name="Feedbacks" component={Feedbacks} />
+            <Stack.Screen name="Feedback" component={Feedbacks} />
             <Stack.Screen name="Help" component={Help} />
             <Stack.Screen
                 name="CreateSurvey"
