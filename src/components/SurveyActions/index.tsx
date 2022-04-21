@@ -51,8 +51,8 @@ const SurveyActions: React.FC<Props> = ({
                             title={_('Cancel')}
                             onPress={toggleCancelDelete}
                             style={styles.cancelButton}
-                            lightGreen
-                            light
+                            outline
+                            dark
                         />
                         <Button
                             title={_('Yes, delete')}

@@ -17,6 +17,7 @@ export default StyleSheet.create({
     modal: {
         justifyContent: 'flex-end',
         margin: 0,
+        backgroundColor: '#10182870',
     },
     icon: {
         marginHorizontal: 10,

@@ -5,7 +5,7 @@ export default StyleSheet.create({
     modal: {
         margin: 0,
         flex: 1,
-        backgroundColor: '#00000040',
+        backgroundColor: '#10182870',
     },
     boxContent: {
         width: '85%',

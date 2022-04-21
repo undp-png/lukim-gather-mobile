@@ -7,7 +7,7 @@ export default StyleSheet.create({
         alignItems: 'center',
         flexDirection: 'column',
         justifyContent: 'space-around',
-        backgroundColor: '#00000040',
+        backgroundColor: '#10182870',
     },
     activityIndicatorWrapper: {
         backgroundColor: 'rgba(0, 0, 0, 0.5)',

@@ -42,8 +42,8 @@ export const ConfirmBox: React.FC<BoxProps> = ({
                         title={_('Cancel')}
                         onPress={onCancel}
                         style={styles.login}
-                        lightGreen
-                        light
+                        outline
+                        dark
                     />
                     <Button
                         title={_('Yes, log out')}
