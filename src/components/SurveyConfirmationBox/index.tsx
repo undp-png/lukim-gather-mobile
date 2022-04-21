@@ -6,6 +6,7 @@ import {TouchableOpacity} from 'react-native-gesture-handler';
 import Button from 'components/Button';
 
 import {Localize} from '@rna/components/I18n';
+
 import {_} from 'services/i18n';
 
 import styles from './styles';

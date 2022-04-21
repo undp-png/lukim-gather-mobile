@@ -4,9 +4,10 @@ export default StyleSheet.create({
     options: {
         backgroundColor: 'white',
         flexDirection: 'row',
-        borderTopRightRadius: 30,
-        borderTopLeftRadius: 30,
-        paddingVertical: 20,
+        borderTopRightRadius: 20,
+        borderTopLeftRadius: 20,
+        paddingTop: 15,
+        paddingBottom: 25,
     },
     option: {
         flex: 1,
