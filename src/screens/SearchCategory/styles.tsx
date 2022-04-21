@@ -1,17 +1,10 @@
 import {StyleSheet, Dimensions, Platform} from 'react-native';
 
-import COLORS from 'utils/colors';
-
 const {width} = Dimensions.get('window');
 
+import COLORS from 'utils/colors';
+
 export default StyleSheet.create({
-    container: {
-        borderTopWidth: 10,
-        borderTopColor: '#fff',
-        height: '100%',
-        backgroundColor: '#E7ECF2',
-        padding: 20,
-    },
     searchWrapper: {
         marginRight: -25,
         marginLeft: Platform.OS === 'ios' ? -30 : 0,
@@ -30,27 +23,37 @@ export default StyleSheet.create({
         fontFamily: 'Inter-Medium',
         color: COLORS.inputText,
     },
-    tabWrapper: {
-        flexDirection: 'row',
-        backgroundColor: COLORS.border,
-        padding: 2,
-        borderRadius: 8,
-        marginBottom: 20,
-    },
-    tabItem: {
-        width: width / 2 - 22,
-        alignSelf: 'stretch',
-        padding: 8,
-        borderRadius: 8,
-    },
-    activeTabItem: {
+    container: {
         backgroundColor: COLORS.white,
+        borderTopWidth: 10,
+        borderTopColor: '#F0F3F6',
     },
-    tabTitle: {
-        fontSize: 14,
-        lineHeight: 20,
+    subCategoryList: {
+        padding: 20,
+        height: '100%',
+    },
+    subCategory: {
+        marginHorizontal: 5,
+        marginBottom: 10,
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+    },
+    iconWrapper: {
+        paddingVertical: 10,
+        flexDirection: 'row',
+        alignItems: 'center',
+    },
+    categoryIcon: {
+        height: 20,
+        width: 20,
+        resizeMode: 'contain',
+    },
+    categoryName: {
+        marginLeft: 10,
+        fontSize: 16,
         fontFamily: 'Inter-Medium',
-        color: COLORS.tertiary,
-        textAlign: 'center',
+        lineHeight: 19.36,
+        color: COLORS.greyTextDark,
     },
 });

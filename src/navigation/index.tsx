@@ -10,6 +10,7 @@ import AccountSettings from 'screens/AccountSettings';
 import ChangePassword from 'screens/ChangePassword';
 import ChangeLocation from 'screens/ChangeLocation';
 import ChooseCategory from 'screens/ChooseCategory';
+import SearchCategory from 'screens/SearchCategory';
 import CreateSurvey from 'screens/CreateSurvey';
 import EditProfile from 'screens/EditProfile';
 import Feedbacks from 'screens/Feedbacks';
@@ -29,6 +30,7 @@ export type StackParamList = {
     ChangePassword: undefined;
     ChangeLocation: undefined;
     ChooseCategory: undefined;
+    SearchCategory: undefined;
     CreateSurvey: undefined;
     EditProfile: undefined;
     Feed: undefined;
@@ -132,6 +134,18 @@ const AppNavigator = () => {
                 component={ChooseCategory}
                 options={{
                     headerTitle: 'Choose a category',
+                }}
+            />
+            <Stack.Screen
+                name="SearchCategory"
+                component={SearchCategory}
+                options={{
+                    headerStyle: {
+                        backgroundColor: COLORS.white,
+                        shadowColor: 'transparent',
+                        borderBottomColor: '#f0f3f6',
+                        borderBottomWidth: 1,
+                    },
                 }}
             />
             <Stack.Screen
