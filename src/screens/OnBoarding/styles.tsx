@@ -13,7 +13,6 @@ export default StyleSheet.create({
     },
     contentContainer: {
         flex: 1,
-        backgroundColor: '#000000c0',
     },
     titleWrapper: {
         display: 'flex',
@@ -50,7 +49,7 @@ export default StyleSheet.create({
         fontSize: 16,
         fontFamily: 'Inter-Regular',
         lineHeight: 24,
-        color: '#AEAEAE',
+        color: COLORS.white,
         textAlign: 'center',
     },
     dotsWrapper: {

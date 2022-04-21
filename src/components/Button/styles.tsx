@@ -20,7 +20,7 @@ export default StyleSheet.create({
         backgroundColor: '#284362',
     },
     buttonLight: {
-        backgroundColor: COLORS.border,
+        backgroundColor: COLORS.white,
     },
     buttonLightGreen: {
         backgroundColor: '#F0F6EA',

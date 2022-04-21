@@ -19,7 +19,7 @@ import {Localize} from '@rna/components/I18n';
 import {_} from 'services/i18n';
 import cs from '@rna/utils/cs';
 
-import waterfall from 'assets/images/waterfall.webp';
+import backgroundImage from 'assets/images/onboarding.png';
 import styles from './styles';
 
 const keyExtractor = (item: {title: string}) => item.title;
@@ -84,7 +84,7 @@ const OnBoarding = () => {
     return (
         <View style={styles.container}>
             <ImageBackground
-                source={waterfall}
+                source={backgroundImage}
                 resizeMode="cover"
                 style={styles.backgroundImage}>
                 <View style={styles.contentContainer}>
