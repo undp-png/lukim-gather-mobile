@@ -7,6 +7,7 @@ import {
     setRefreshToken,
     setLogout,
 } from 'store/slices/auth';
+import {setLanguages} from 'store/slices/locale';
 
 const {dispatch} = store;
 
@@ -19,4 +20,8 @@ export const dispatchLogin = async (accessToken, refreshToken, user) => {
 
 export const dispatchLogout = () => {
     dispatch(setLogout());
+};
+
+export const dispatchLocale = code => {
+    dispatch(setLanguages(code));
 };

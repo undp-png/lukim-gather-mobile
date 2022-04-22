@@ -27,9 +27,9 @@ const MenuItem = ({
     params,
 }: {
     title: string;
-    linkTo: any;
-    onPress(): void;
-    label: string;
+    linkTo?: any;
+    onPress?(): void;
+    label?: string;
     params?: object;
 }) => {
     const navigation = useNavigation();

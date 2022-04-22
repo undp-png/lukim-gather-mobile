@@ -1,7 +1,7 @@
 import 'react-native-gesture-handler';
 import 'cross-fetch/polyfill';
 
-import React, {useEffect, useState, useMemo} from 'react';
+import React, {useEffect, useState, useCallback} from 'react';
 import {StatusBar} from 'react-native';
 import {NavigationContainer} from '@react-navigation/native';
 import NetInfo, {useNetInfo} from '@react-native-community/netinfo';
@@ -27,7 +27,7 @@ import 'services/bootstrap';
 const queueLink = new QueueLink();
 
 const App = () => {
-    const initialLang = useMemo(() => 'en', []);
+    const [initialLang, setInitialLang] = useState('en');
     const [client, setClient] = useState<NormalizedCacheObject>(null);
     const {isInternetReachable} = useNetInfo();
 
@@ -54,11 +54,19 @@ const App = () => {
         initializeApolloClient();
     }, []);
 
+    const handleInitialize = useCallback(async () => {
+        const {
+            locale: {currentLanguage},
+        } = store.getState();
+        setInitialLang(currentLanguage);
+    }, []);
     return (
         client && (
             <ApolloProvider client={client}>
                 <Provider store={store}>
-                    <PersistGate persistor={persistor}>
+                    <PersistGate
+                        persistor={persistor}
+                        onBeforeLift={handleInitialize}>
                         <LocalizeProvider
                             translations={translations}
                             languages={languages}
