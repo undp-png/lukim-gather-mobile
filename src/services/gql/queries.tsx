@@ -99,3 +99,25 @@ export const CHANGE_PASSWORD = gql`
         }
     }
 `;
+
+export const GET_QUESTION_GROUPS = gql`
+    query {
+        questionGroup {
+            id
+            code
+            title
+            questions {
+                id
+                code
+                title
+                description
+                answerType
+                isRequired
+                options {
+                    id
+                    title
+                }
+            }
+        }
+    }
+`;

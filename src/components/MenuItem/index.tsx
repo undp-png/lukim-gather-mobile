@@ -24,16 +24,18 @@ const MenuItem = ({
     linkTo,
     onPress,
     label,
+    params,
 }: {
     title: string;
     linkTo: any;
     onPress(): void;
     label: string;
+    params?: object;
 }) => {
     const navigation = useNavigation();
     const onPressMenu = useCallback(
-        () => navigation.navigate(linkTo),
-        [linkTo, navigation],
+        () => navigation.navigate(linkTo, params),
+        [linkTo, navigation, params],
     );
     return (
         <TouchableOpacity

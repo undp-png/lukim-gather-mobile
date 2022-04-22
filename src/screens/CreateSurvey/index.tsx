@@ -88,63 +88,6 @@ const Feel: React.FC<FeelProps> = ({feel, activeFeel, onPress}) => {
     );
 };
 
-const Photo: React.FC<PhotoProps> = ({item, index, onCloseIconPress}) => {
-    const handleCloseIconPress = useCallback(() => {
-        onCloseIconPress(index);
-    }, [index, onCloseIconPress]);
-
-    return (
-        <View style={styles.surveyImageWrapper}>
-            <Image
-                source={
-                    {uri: item.path} ||
-                    require('assets/images/category-placeholder.png')
-                }
-                style={styles.surveyImage}
-            />
-            <Pressable style={styles.closeIcon} onPress={handleCloseIconPress}>
-                <Icon
-                    name="close-circle"
-                    height={20}
-                    width={20}
-                    fill={'#fff'}
-                />
-            </Pressable>
-        </View>
-    );
-};
-
-const Photos: React.FC<PhotosProps> = ({photos, handleRemoveImage}) => {
-    const listRef = useRef<FlatList>(null);
-    const handleCloseIcon = useCallback(
-        (index: number) => {
-            handleRemoveImage(index);
-            listRef.current?.scrollToIndex({animated: true, index: 0});
-        },
-        [handleRemoveImage],
-    );
-
-    const renderItem = useCallback(
-        ({item, index}: {item: {path: string}; index: number}) => (
-            <Photo
-                item={item}
-                index={index}
-                onCloseIconPress={handleCloseIcon}
-            />
-        ),
-        [handleCloseIcon],
-    );
-    return (
-        <FlatList
-            ref={listRef}
-            data={photos}
-            renderItem={renderItem}
-            horizontal
-            showsHorizontalScrollIndicator={false}
-        />
-    );
-};
-
 const CreateHappeningSurvey = () => {
     const route = useRoute<any>();
     const navigation = useNavigation<any>();
@@ -289,67 +232,31 @@ const CreateHappeningSurvey = () => {
 
     const handleImages = useCallback(
         async response => {
-            setImages([response, ...images]);
-            if (images.length === 1) {
-                Animated.timing(iconFlex, {
-                    toValue: 0.2,
-                    duration: 300,
-                    useNativeDriver: false,
-                }).start();
-            }
-            if (images.length === 0) {
-                Animated.timing(imgFlex, {
-                    toValue: 1,
-                    duration: 300,
-                    useNativeDriver: false,
-                }).start();
-            }
-            const image = {
-                name: response.path.substring(
-                    response.path.lastIndexOf('/') + 1,
-                ),
-                type: response.mime,
-                uri:
-                    Platform.OS === 'ios'
-                        ? response.path.replace('file://', '')
-                        : response.path,
-            };
-            const media = new ReactNativeFile({
-                uri: image.uri,
-                name: image.name,
-                type: image.type,
-            });
-            await uploadFile({
-                variables: {
-                    media: media,
-                    title: `survey-${Date.now()}`,
-                    type: 'image',
-                },
+            setImages([...response, ...images]);
+            response.forEach(async (res: ImageObj) => {
+                const image = {
+                    name: res.path.substring(res.path.lastIndexOf('/') + 1),
+                    type: res.mime,
+                    uri:
+                        Platform.OS === 'ios'
+                            ? res.path.replace('file://', '')
+                            : res.path,
+                };
+                const media = new ReactNativeFile({
+                    uri: image.uri,
+                    name: image.name,
+                    type: image.type,
+                });
+                await uploadFile({
+                    variables: {
+                        media: media,
+                        title: `survey-${Date.now()}`,
+                        type: 'image',
+                    },
+                });
             });
         },
-        [iconFlex, images, imgFlex, uploadFile],
-    );
-
-    const handleRemoveImage = useCallback(
-        index => {
-            const NewImages = images.filter((_, i) => i !== index);
-            setImages(NewImages);
-            if (NewImages.length === 1) {
-                Animated.timing(iconFlex, {
-                    toValue: 1,
-                    duration: 500,
-                    useNativeDriver: false,
-                }).start();
-            }
-            if (NewImages.length === 0) {
-                Animated.timing(imgFlex, {
-                    toValue: 0,
-                    duration: 500,
-                    useNativeDriver: false,
-                }).start();
-            }
-        },
-        [iconFlex, images, imgFlex],
+        [images, uploadFile],
     );
 
     const handleChangeLocation = useCallback(() => {
@@ -429,18 +336,12 @@ const CreateHappeningSurvey = () => {
                 placeholder="Enter survey name"
             />
             <Text style={styles.title} title="Add Images" />
-            <View style={styles.addImages}>
-                <Animated.View style={cs({flex: imgFlex})}>
-                    <Photos
-                        photos={images}
-                        handleRemoveImage={handleRemoveImage}
-                    />
-                </Animated.View>
-                <Animated.View
-                    style={cs(styles.imgPickerWrapper, {flex: iconFlex})}>
-                    <ImagePicker onChange={handleImages} />
-                </Animated.View>
-            </View>
+            <ImagePicker
+                onChange={handleImages}
+                onRemoveImage={setImages}
+                images={images}
+                multiple
+            />
             <Text style={styles.title} title="Location" />
             <View style={styles.locationCont}>
                 <View style={styles.locationWrapper}>

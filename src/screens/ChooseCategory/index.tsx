@@ -84,7 +84,7 @@ const ChooseCategory = () => {
                     setActiveCategory(item.id);
                     categoryListRef?.current?.scrollToIndex({
                         animated: true,
-                        index: index,
+                        index,
                     });
                 }}
                 style={styles.menu}>
@@ -109,7 +109,7 @@ const ChooseCategory = () => {
     return (
         <View style={styles.container}>
             <FlatList
-                style={styles.menuList}
+                contentContainerStyle={styles.menuItemsContainer}
                 data={surveyCategory}
                 renderItem={renderMenu}
                 horizontal

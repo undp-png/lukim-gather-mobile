@@ -1,9 +1,10 @@
 import React, {useCallback, useEffect, useState, useRef} from 'react';
-import {View, Image, Text} from 'react-native';
+import {View, Image, Text, Alert} from 'react-native';
 import {Icon} from 'react-native-eva-icons';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import MapboxGL from '@react-native-mapbox-gl/maps';
 import {useNetInfo} from '@react-native-community/netinfo';
+import Geolocation from 'react-native-geolocation-service';
 
 import HomeHeader from 'components/HomeHeader';
 
@@ -95,13 +96,25 @@ const Map: React.FC<Props> = ({
     const handlePress = useCallback(() => {
         checkLocation().then(result => {
             if (result) {
-                setMapCameraProps(mcProps => ({
-                    zoomLevel: 12,
-                    animationMode: 'flyTo',
-                    animationDuration: 6000,
-                    centerCoordinate: locationRef.current?.state?.coordinates,
-                }));
-                setCurrentLocation(locationRef.current?.state?.coordinates);
+                Geolocation.getCurrentPosition(
+                    position => {
+                        const coordinates = [
+                            position.coords.longitude,
+                            position.coords.latitude,
+                        ];
+                        setMapCameraProps({
+                            zoomLevel: 12,
+                            animationMode: 'flyTo',
+                            animationDuration: 6000,
+                            centerCoordinate: coordinates,
+                        });
+                        setCurrentLocation(coordinates);
+                    },
+                    error => {
+                        Alert.alert(`Code ${error.code}`, error.message);
+                    },
+                    {enableHighAccuracy: true, timeout: 15000},
+                );
             }
         });
     }, []);
@@ -218,8 +231,8 @@ const Map: React.FC<Props> = ({
                     />
                     {isOffline && <OfflineLayers />}
                     <MapboxGL.UserLocation
-                        visible={true}
-                        showUserLocation={true}
+                        visible
+                        showUserLocation
                         ref={locationRef}
                     />
                     {showMarker && renderAnnotation()}

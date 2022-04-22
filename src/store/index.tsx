@@ -18,12 +18,14 @@ const middlewares = [];
 if (__DEV__) {
     const {logger} = require('redux-logger');
     middlewares.push(logger);
+    const createDebugger = require('redux-flipper').default;
+    middlewares.push(createDebugger());
 }
 
 const persistConfig = {
     key: 'root',
     storage: reduxStorage,
-    whitelist: ['auth'],
+    whitelist: ['auth', 'form'],
 };
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);

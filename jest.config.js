@@ -14,6 +14,11 @@ module.exports = {
             '|react-native-reanimated' +
             '|react-native-modal' +
             '|react-native-animatable' +
+            '|react-native-flipper' +
+            '|react-native-geolocation-service' +
+            '|react-native-modal-datetime-picker' +
+            '|react-native-multiple-select' +
+            '|react-native-vector-icons' +
             ')/)',
     ],
     testPathIgnorePatterns: ['src/vendor', 'node_modules'],

@@ -44,14 +44,6 @@ export default StyleSheet.create({
         marginBottom: 11,
         color: '#70747E',
     },
-    addImages: {
-        height: 122,
-        flexDirection: 'row',
-    },
-    imgPickerWrapper: {
-        height: '100%',
-        justifyContent: 'center',
-    },
     locationCont: {
         flexDirection: 'row',
         alignItems: 'center',
@@ -104,21 +96,5 @@ export default StyleSheet.create({
     },
     feelIcon: {
         fontSize: 20,
-    },
-    surveyImageWrapper: {
-        position: 'relative',
-    },
-    surveyImage: {
-        borderRadius: 8,
-        height: 122,
-        width: 162,
-        resizeMode: 'cover',
-        backgroundColor: '#ffc',
-        marginRight: 10,
-    },
-    closeIcon: {
-        position: 'absolute',
-        right: 18,
-        top: 8,
     },
 });

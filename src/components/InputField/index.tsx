@@ -20,14 +20,14 @@ interface Props {
 }
 
 const InputField: React.FC<Props> = ({
-    input,
+    value,
     title,
     titleDark = false,
     password = false,
     searchInput = false,
     containerStyle,
     inputStyle,
-    placeholder,
+    multiline,
     ...inputProps
 }) => {
     const [focused, setFocused] = useState(false);
@@ -43,19 +43,29 @@ const InputField: React.FC<Props> = ({
         setHideText(!hideText);
     }, [hideText]);
 
-    const onFocus = useCallback(() => {
-        setFocused(true);
-    }, []);
+    const handleFocus = useCallback(
+        e => {
+            setFocused(true);
+            inputProps.onFocus && inputProps.onFocus(e);
+        },
+        [inputProps],
+    );
 
-    const onBlur = useCallback(() => {
-        setFocused(false);
-    }, []);
+    const handleBlur = useCallback(
+        e => {
+            setFocused(false);
+            inputProps.onBlur && inputProps.onBlur(e);
+        },
+        [inputProps],
+    );
 
     return (
         <View style={[styles.container, containerStyle]}>
-            <Text style={cs(styles.title, [styles.titleDark, titleDark])}>
-                {title}
-            </Text>
+            {!!title && (
+                <Text style={cs(styles.title, [styles.titleDark, titleDark])}>
+                    {title}
+                </Text>
+            )}
             <View style={styles.inputContainer}>
                 {searchInput && (
                     <View style={styles.searchIconWrapper}>
@@ -68,21 +78,22 @@ const InputField: React.FC<Props> = ({
                     </View>
                 )}
                 <TextInput
-                    onBlur={onBlur}
-                    onFocus={onFocus}
-                    value={input}
                     style={cs(
                         styles.input,
                         [styles.focused, focused],
                         [styles.password, password],
                         [styles.search, searchInput],
+                        [styles.textarea, multiline],
                         inputStyle,
                     )}
                     secureTextEntry={hideText ? true : false}
                     placeholderTextColor={
                         !titleDark ? COLORS.greyText : COLORS.inputText
                     }
-                    placeholder={placeholder}
+                    multiline={multiline}
+                    value={value}
+                    onBlur={handleBlur}
+                    onFocus={handleFocus}
                     {...inputProps}
                 />
                 {password && (

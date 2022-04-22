@@ -23,9 +23,10 @@ const Feedbacks = () => {
                 />
                 <InputField
                     title={_('Explain the issue')}
-                    multiline={true}
+                    multiline
                     numberOfLines={5}
                     textAlignVertical="top"
+                    inputStyle={styles.description}
                 />
                 <Button style={styles.button} title={_('Submit')} />
             </KeyboardAwareScrollView>

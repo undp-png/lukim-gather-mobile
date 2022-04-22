@@ -18,6 +18,8 @@ import Help from 'screens/Help';
 import SearchSurvey from 'screens/SearchSurvey';
 import Settings from 'screens/Settings';
 import SurveyItem from 'screens/SurveyItem';
+import Forms from 'screens/Forms';
+import FillForm from 'screens/FillForm';
 
 import {BackButton, CloseButton} from 'components/HeaderButton';
 
@@ -28,7 +30,7 @@ export type StackParamList = {
     AccountSettings: undefined;
     Auth: undefined;
     ChangePassword: undefined;
-    ChangeLocation: undefined;
+    ChangeLocation: {onChange?: (value: any) => void};
     ChooseCategory: undefined;
     SearchCategory: undefined;
     CreateSurvey: undefined;
@@ -40,6 +42,8 @@ export type StackParamList = {
     Help: undefined;
     SearchSurvey: undefined;
     SurveyItem: undefined;
+    Forms: undefined;
+    FillForm: undefined;
 };
 
 const Stack = createStackNavigator<StackParamList>();
@@ -152,6 +156,16 @@ const AppNavigator = () => {
                 name="Auth"
                 component={AuthNavigator}
                 options={{headerShown: false}}
+            />
+            <Stack.Screen name="Forms" component={Forms} />
+            <Stack.Screen
+                name="FillForm"
+                component={FillForm}
+                options={({route}) => ({
+                    headerLeft: () => <CloseButton />,
+                    headerTitle: route.params?.form?.title || 'Form',
+                    presentation: 'modal',
+                })}
             />
         </Stack.Navigator>
     );

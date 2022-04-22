@@ -6,15 +6,9 @@ export default StyleSheet.create({
     container: {
         height: '100%',
         backgroundColor: COLORS.white,
+    },
+    menuWrapper: {
+        display: 'flex',
         padding: 20,
-    },
-    picker: {
-        marginBottom: 2,
-    },
-    button: {
-        marginTop: 32,
-    },
-    description: {
-        height: 120,
     },
 });

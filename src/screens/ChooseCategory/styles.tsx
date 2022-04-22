@@ -9,8 +9,11 @@ export default StyleSheet.create({
         backgroundColor: COLORS.white,
         paddingBottom: 100,
     },
-    menuList: {
-        padding: 20,
+    menuItemsContainer: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        paddingHorizontal: 20,
+        marginVertical: 20,
     },
     menu: {
         marginRight: 25,
@@ -27,6 +30,9 @@ export default StyleSheet.create({
         paddingHorizontal: 20,
         paddingVertical: 8,
         backgroundColor: '#F0F3F6',
+    },
+    headerFirst: {
+        marginTop: 12,
     },
     headerTitle: {
         fontSize: 16,
