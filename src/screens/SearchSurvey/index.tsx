@@ -1,5 +1,6 @@
 import React, {useState, useCallback, useEffect, useMemo} from 'react';
 import {View, TextInput} from 'react-native';
+import {useSelector} from 'react-redux';
 import {gql, useQuery} from '@apollo/client';
 import {useNavigation} from '@react-navigation/native';
 import {FlatList, TouchableOpacity} from 'react-native-gesture-handler';
@@ -51,9 +52,9 @@ const TabItem = ({
 };
 
 const SearchSurvey = () => {
-    const userId = 3;
+    const {user} = useSelector(state => state.auth);
     const [searchQuery, setSearchQuery] = useState('');
-    const [selectedTab, setSelectedTab] = useState(1);
+    const [selectedTab, setSelectedTab] = useState(0);
     const navigation = useNavigation();
     const onClearSearch = useCallback(() => setSearchQuery(''), []);
     const handleSearchChange = useCallback(text => setSearchQuery(text), []);
@@ -94,9 +95,7 @@ const SearchSurvey = () => {
         });
     }, [handleSearchChange, navigation, onClearSearch, searchQuery]);
 
-    const renderItem = ({item}: {item: object}) => (
-        <SurveyItem item={item} onPress={() => {}} />
-    );
+    const renderItem = ({item}: {item: object}) => <SurveyItem item={item} />;
     const searchedSurveys = useMemo(
         () =>
             data?.enviromentalSurveys.filter(el =>
@@ -107,27 +106,27 @@ const SearchSurvey = () => {
 
     const selectedData = useMemo(
         () =>
-            selectedTab === userId
+            selectedTab === user?.id
                 ? searchedSurveys.filter(el => el.user === selectedTab)
                 : searchedSurveys,
-        [searchedSurveys, selectedTab],
+        [searchedSurveys, selectedTab, user],
     );
 
-    const onSelectTabAll = useCallback(() => setSelectedTab(1), []);
-    const onSelectTabMy = useCallback(() => setSelectedTab(userId), []);
+    const onSelectTabAll = useCallback(() => setSelectedTab(0), []);
+    const onSelectTabMy = useCallback(() => setSelectedTab(user?.id), [user]);
 
     return (
         <View style={styles.container}>
             <View style={styles.tabWrapper}>
                 <TabItem
                     active={selectedTab}
-                    id={1}
+                    id={0}
                     title="All"
                     onPress={onSelectTabAll}
                 />
                 <TabItem
                     active={selectedTab}
-                    id={userId}
+                    id={user?.id}
                     title="My Entries"
                     onPress={onSelectTabMy}
                 />

@@ -1,9 +1,10 @@
-import React, {useCallback, useState, useRef} from 'react';
+import React, {useCallback, useState, useRef, useEffect} from 'react';
 import {useNavigation} from '@react-navigation/native';
 import {Image, View} from 'react-native';
 import {FlatList, TouchableOpacity} from 'react-native-gesture-handler';
 
 import Text from 'components/Text';
+import {SearchIcon} from 'components/HeaderButton';
 
 import cs from '@rna/utils/cs';
 
@@ -41,6 +42,16 @@ const Category = ({category, navigation}: {category: any; navigation: any}) => {
         ),
         [handleCategoryPress],
     );
+
+    useEffect(() => {
+        navigation.setOptions({
+            headerRight: () => (
+                <SearchIcon
+                    onSearchPress={() => navigation.navigate('SearchCategory')}
+                />
+            ),
+        });
+    }, [navigation]);
     return (
         <View>
             <View style={styles.header}>

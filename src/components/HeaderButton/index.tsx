@@ -62,3 +62,16 @@ export const OptionIcon = ({onOptionPress}: {onOptionPress(): void}) => {
         </TouchableOpacity>
     );
 };
+
+export const SearchIcon = ({onSearchPress}: {onSearchPress(): void}) => {
+    return (
+        <TouchableOpacity onPress={onSearchPress} style={styles.saveIcon}>
+            <Icon
+                name="search-outline"
+                height={24}
+                width={24}
+                fill={'#888C94'}
+            />
+        </TouchableOpacity>
+    );
+};
