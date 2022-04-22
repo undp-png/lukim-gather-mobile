@@ -73,6 +73,9 @@ export const CREATE_HAPPENING_SURVEY = gql`
                     id
                     title
                 }
+                createdBy {
+                    id
+                }
             }
         }
     }

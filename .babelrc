@@ -1,12 +1,20 @@
 {
     "plugins": [
-        ["module:react-native-dotenv"],
+        [
+            "module:react-native-dotenv"
+        ],
         [
             "module-resolver",
             {
                 "cwd": "babelrc",
-                "root": ["./src"],
-                "extensions": [".js", ".ios.js", ".android.js"],
+                "root": [
+                    "./src"
+                ],
+                "extensions": [
+                    ".js",
+                    ".ios.js",
+                    ".android.js"
+                ],
                 "alias": {
                     "assets": "./src/assets",
                     "components": "./src/components",
@@ -16,6 +24,7 @@
                     "utils": "./src/utils",
                     "store": "./src/store",
                     "hooks": "./src/hooks",
+                    "vendor": "./src/vendor",
                     "@generated": "./src/generated",
                     "@rna": "./src/vendor/react-native-arsenal/lib"
                 }
