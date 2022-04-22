@@ -15,6 +15,7 @@ interface BoxProps {
     isOpen: boolean;
     onCancel(): void;
     onSubmit(): void;
+    updateAnonymousStatus: (value: boolean) => void;
 }
 
 const deviceHeight = Dimensions.get('window').height;

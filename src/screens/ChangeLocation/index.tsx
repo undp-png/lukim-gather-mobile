@@ -1,6 +1,7 @@
 import React, {useState, useCallback, useEffect} from 'react';
 import {FlatList, SafeAreaView, View} from 'react-native';
-import {useNavigation} from '@react-navigation/native';
+import {useNavigation, useRoute} from '@react-navigation/native';
+import type {RouteProp} from '@react-navigation/native';
 
 import InputField from 'components/InputField';
 import Map from 'components/Map';
@@ -22,8 +23,14 @@ const Labels = [
 
 const keyExtractor = (item: {label: string}) => item.label;
 
+type ChangeLocationScreenRouteProp = RouteProp<
+    RootStackParamList,
+    'ChangeLocation'
+>;
+
 const ChangeLocation = () => {
     const navigation = useNavigation();
+    const {params = {}} = useRoute<ChangeLocationScreenRouteProp>();
 
     const [selectedMethod, setSelectedMethod] = useState<string>('');
     const [selectedCoordinate, setSelectedCoordinate] = useState<
@@ -33,6 +40,13 @@ const ChangeLocation = () => {
     const handleSubmit = useCallback(() => {
         if (selectedMethod) {
             if (selectedMethod !== 'Draw polygon') {
+                if (params.onChange) {
+                    params.onChange({
+                        point: selectedCoordinate,
+                        polygon: null,
+                    });
+                    return navigation.goBack();
+                }
                 dispatch(
                     setLocation({
                         point: selectedCoordinate,
@@ -40,6 +54,13 @@ const ChangeLocation = () => {
                     }),
                 );
             } else {
+                if (params.onChange) {
+                    params.onChange({
+                        point: null,
+                        polygon: [...selectedCoordinate, selectedCoordinate[0]],
+                    });
+                    return navigation.goBack();
+                }
                 dispatch(
                     setLocation({
                         point: null,
@@ -49,7 +70,7 @@ const ChangeLocation = () => {
             }
         }
         navigation.goBack();
-    }, [navigation, selectedCoordinate, selectedMethod]);
+    }, [navigation, selectedCoordinate, selectedMethod, params]);
 
     useEffect(() => {
         navigation.setOptions({

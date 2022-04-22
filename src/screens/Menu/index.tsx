@@ -99,6 +99,7 @@ const Menu = () => {
                     </View>
                 )}
                 <View style={styles.menuWrapper}>
+                    <MenuItem title={_('Forms')} linkTo="Forms" />
                     <MenuItem title={_('Settings')} linkTo="Settings" />
                     <MenuItem title={_('About Lukim Gather')} linkTo="About" />
                     <MenuItem title={_('Feedback')} linkTo="Feedback" />

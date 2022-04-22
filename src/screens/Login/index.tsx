@@ -31,7 +31,7 @@ const Login = () => {
         onCompleted: ({tokenAuth}) => {
             const {token, refreshToken, user} = tokenAuth;
             dispatchLogin(token, refreshToken, user);
-            Toast.show('Successfully Logged In !!');
+            Toast.show(_('Successfully Logged In!'));
         },
         onError: err => {
             Toast.show(getErrorMessage(err), Toast.LONG, [
@@ -42,8 +42,10 @@ const Login = () => {
     });
 
     const handleLogin = useCallback(async () => {
-        await login({variables: {username, password}});
-        navigation.navigate('Feed');
+        const loginPayload = await login({variables: {username, password}});
+        if (loginPayload && !loginPayload.errors) {
+            navigation.navigate('Feed');
+        }
     }, [username, password, login, navigation]);
 
     const handleForgotPassword = useCallback(() => {

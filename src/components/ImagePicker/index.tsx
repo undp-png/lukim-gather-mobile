@@ -1,25 +1,113 @@
-import React, {useCallback} from 'react';
+import React, {useCallback, useRef} from 'react';
 import {
     Pressable,
-    View,
     Text,
     TouchableOpacity,
     Dimensions,
+    View,
+    Animated,
+    Image,
+    FlatList,
 } from 'react-native';
-import ImagePicker, {Image} from 'react-native-image-crop-picker';
+import ImagePicker, {Image as ImageType} from 'react-native-image-crop-picker';
 import Modal from 'react-native-modal';
 import {Icon} from 'react-native-eva-icons';
 
+import cs from '@rna/utils/cs';
+
 import styles from './styles';
 
-interface Props {
-    onChange?: (file: Image) => void;
+interface PhotoProps {
+    item: {path: string};
+    index: number;
+    onCloseIconPress(index: number): void;
+}
+
+interface PhotosProps {
+    photos: {path: string}[];
+    onRemoveImage(index: number): void;
+}
+
+interface ImagePickerProps {
+    images: ImageType[];
+    onChange: (file: ImageType) => void;
+    onRemoveImage: (images: ImageType[]) => void;
+    multiple?: boolean;
 }
 
 const deviceHeight = Dimensions.get('window').height;
 
-const _ImagePicker: React.FC<Props> = ({onChange}) => {
+const Photo: React.FC<PhotoProps> = ({item, index, onCloseIconPress}) => {
+    const handleCloseIconPress = useCallback(() => {
+        onCloseIconPress(index);
+    }, [index, onCloseIconPress]);
+
+    return (
+        <View style={styles.surveyImageWrapper}>
+            <Image
+                source={
+                    {uri: item.path} ||
+                    require('assets/images/category-placeholder.png')
+                }
+                style={styles.surveyImage}
+            />
+            <Pressable style={styles.closeIcon} onPress={handleCloseIconPress}>
+                <Icon
+                    name="close-circle"
+                    height={20}
+                    width={20}
+                    fill={'#fff'}
+                />
+            </Pressable>
+        </View>
+    );
+};
+
+const Photos: React.FC<PhotosProps> = ({photos, onRemoveImage}) => {
+    const listRef = useRef<FlatList>(null);
+    const handleCloseIcon = useCallback(
+        (index: number) => {
+            onRemoveImage(index);
+            listRef.current?.scrollToIndex({animated: true, index: 0});
+        },
+        [onRemoveImage],
+    );
+
+    const renderItem = useCallback(
+        ({item, index}: {item: {path: string}; index: number}) => (
+            <Photo
+                item={item}
+                index={index}
+                onCloseIconPress={handleCloseIcon}
+            />
+        ),
+        [handleCloseIcon],
+    );
+    return (
+        <FlatList
+            ref={listRef}
+            data={photos}
+            renderItem={renderItem}
+            horizontal
+            showsHorizontalScrollIndicator={false}
+        />
+    );
+};
+
+const _ImagePicker: React.FC<ImagePickerProps> = ({
+    images,
+    onChange: onChangeCallback,
+    multiple,
+    onRemoveImage: onRemoveCallback,
+}) => {
     const [visible, setVisible] = React.useState(false);
+
+    const iconFlex = useRef(
+        new Animated.Value(images.length >= 1 ? 0.2 : 1),
+    ).current;
+    const imgFlex = useRef(
+        new Animated.Value(images.length >= 1 ? 1 : 0),
+    ).current;
 
     const close = useCallback(() => {
         setVisible(false);
@@ -29,43 +117,103 @@ const _ImagePicker: React.FC<Props> = ({onChange}) => {
         setVisible(true);
     }, []);
 
+    const onChange = useCallback(
+        response => {
+            if ((multiple && response.length >= 1) || images.length === 1) {
+                Animated.timing(iconFlex, {
+                    toValue: 0.2,
+                    duration: 300,
+                    useNativeDriver: false,
+                }).start();
+            }
+            if (images.length === 0) {
+                Animated.timing(imgFlex, {
+                    toValue: 1,
+                    duration: 300,
+                    useNativeDriver: false,
+                }).start();
+            }
+            onChangeCallback(response);
+        },
+        [onChangeCallback, iconFlex, imgFlex, images, multiple],
+    );
+
+    const onRemoveImage = useCallback(
+        (index: number) => {
+            const newImages = images.filter(
+                (_: ImageType, i: number) => i !== index,
+            );
+
+            if (newImages.length === 1) {
+                Animated.timing(iconFlex, {
+                    toValue: 1,
+                    duration: 500,
+                    useNativeDriver: false,
+                }).start();
+            }
+            if (newImages.length === 0) {
+                Animated.timing(imgFlex, {
+                    toValue: 0,
+                    duration: 500,
+                    useNativeDriver: false,
+                }).start();
+            }
+            onRemoveCallback(newImages);
+        },
+        [onRemoveCallback, images, iconFlex, imgFlex],
+    );
+
     const handleCamera = useCallback(async () => {
         try {
             const image = await ImagePicker.openCamera({
                 cropping: true,
                 freeStyleCropEnabled: true,
+                compressImageQuality: 0.7,
+                multiple,
             });
             if (image) {
                 onChange?.(image);
                 close();
             }
         } catch (error) {}
-    }, [close, onChange]);
+    }, [close, multiple, onChange]);
 
     const handleGallery = useCallback(async () => {
         try {
             const image = await ImagePicker.openPicker({
                 cropping: true,
                 freeStyleCropEnabled: true,
+                compressImageQuality: 0.7,
+                multiple,
             });
             if (image) {
                 onChange?.(image);
                 close();
             }
         } catch (error) {}
-    }, [close, onChange]);
+    }, [close, onChange, multiple]);
 
     return (
         <>
-            <TouchableOpacity onPress={open}>
-                <Icon
-                    name="plus-circle"
-                    height={40}
-                    width={40}
-                    fill={'#99B9D1'}
-                    style={styles.icon}
-                />
-            </TouchableOpacity>
+            <View style={styles.addImages}>
+                <Animated.View style={cs({flex: imgFlex})}>
+                    <Photos photos={images} onRemoveImage={onRemoveImage} />
+                </Animated.View>
+                {(multiple || images.length !== 1) && (
+                    <Animated.View
+                        style={cs(styles.imgPickerWrapper, {flex: iconFlex})}>
+                        <TouchableOpacity onPress={open}>
+                            <Icon
+                                name="plus-circle"
+                                height={40}
+                                width={40}
+                                fill={'#99B9D1'}
+                                style={styles.icon}
+                            />
+                        </TouchableOpacity>
+                    </Animated.View>
+                )}
+            </View>
             <Modal
                 isVisible={visible}
                 onBackdropPress={close}
@@ -81,7 +229,7 @@ const _ImagePicker: React.FC<Props> = ({onChange}) => {
                             width={25}
                             fill={'#284362'}
                         />
-                        <Text>Gallery</Text>
+                        <Text style={styles.optionText}>Gallery</Text>
                     </Pressable>
                     <Pressable style={styles.option} onPress={handleCamera}>
                         <Icon
@@ -90,7 +238,7 @@ const _ImagePicker: React.FC<Props> = ({onChange}) => {
                             width={25}
                             fill={'#284362'}
                         />
-                        <Text>Camera</Text>
+                        <Text style={styles.optionText}>Camera</Text>
                     </Pressable>
                 </View>
             </Modal>

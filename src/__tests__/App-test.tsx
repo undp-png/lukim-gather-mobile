@@ -27,7 +27,14 @@ const mockUserInfo = {
     },
 };
 
+jest.mock('react-native-geolocation-service', () => ({
+    requestAuthorization: jest.fn(),
+    getCurrentPosition: jest.fn(),
+}));
+
 jest.mock('@react-native-community/netinfo', () => mockRNCNetInfo);
+
+jest.mock('@react-native-community/datetimepicker', () => jest.fn());
 
 jest.mock('react-native-permissions', () => ({
     request: jest.fn(),

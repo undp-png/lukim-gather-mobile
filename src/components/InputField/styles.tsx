@@ -50,4 +50,7 @@ export default StyleSheet.create({
         height: 40,
         paddingVertical: 8,
     },
+    textarea: {
+        height: 156,
+    },
 });

@@ -62,7 +62,7 @@ const rightTabBar = shape
 
 const tabBarPath = `${leftTabBar} ${centerTabBar} ${rightTabBar}`;
 
-const getIconName = (name, isFocused) => {
+const getIconName = (name: string, isFocused: boolean) => {
     if (isFocused) {
         return name;
     }
@@ -171,7 +171,9 @@ const TabBar = ({
                     return (
                         <TouchableOpacity
                             accessibilityRole="button"
-                            accessibilityStates={isFocused ? ['selected'] : []}
+                            accessibilityState={
+                                isFocused ? {selected: true} : {}
+                            }
                             accessibilityLabel={
                                 options.tabBarAccessibilityLabel
                             }

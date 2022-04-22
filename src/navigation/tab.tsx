@@ -15,6 +15,11 @@ import styles from './styles';
 
 const Tab = createBottomTabNavigator();
 
+export type TabParamList = {
+    Surveys: undefined;
+    Menu: undefined;
+};
+
 export default function TabNavigator() {
     return (
         <Tab.Navigator
