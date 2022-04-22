@@ -1,14 +1,14 @@
 import React, {useCallback, useState} from 'react';
-import {useMutation} from '@apollo/client';
-import {SafeAreaView, Text, TouchableOpacity, View} from 'react-native';
+import {useMutation, gql} from '@apollo/client';
+import {SafeAreaView, TouchableOpacity, View} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import Toast from 'react-native-simple-toast';
 
+import Text from 'components/Text';
 import InputField from 'components/InputField';
 import Button from 'components/Button';
 import {ModalLoader} from 'components/Loader';
 
-import {Localize} from '@rna/components/I18n';
 import {TokenAuthMutation, TokenAuthMutationVariables} from '@generated/types';
 
 import {_} from 'services/i18n';
@@ -75,9 +75,10 @@ const Login = () => {
                 />
                 <View style={styles.infoWrapper}>
                     <TouchableOpacity onPress={handleForgotPassword}>
-                        <Text style={styles.info}>
-                            <Localize>Forgot your password?</Localize>
-                        </Text>
+                        <Text
+                            style={styles.info}
+                            title={_('Forgot your password?')}
+                        />
                     </TouchableOpacity>
                 </View>
                 <Button
@@ -88,9 +89,10 @@ const Login = () => {
                 />
                 <View style={styles.signUp}>
                     <TouchableOpacity onPress={handleSignUp}>
-                        <Text style={styles.text}>
-                            <Localize>Don't have an account?</Localize>
-                        </Text>
+                        <Text
+                            style={styles.text}
+                            title={_("Don't have an account?")}
+                        />
                     </TouchableOpacity>
                 </View>
             </View>

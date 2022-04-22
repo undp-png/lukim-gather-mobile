@@ -25,7 +25,7 @@ if (__DEV__) {
 const persistConfig = {
     key: 'root',
     storage: reduxStorage,
-    whitelist: ['auth', 'form'],
+    whitelist: ['auth', 'locale', 'form'],
 };
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);

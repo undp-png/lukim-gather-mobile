@@ -4,7 +4,6 @@ import {
     Animated,
     FlatList,
     ImageBackground,
-    Text,
     useWindowDimensions,
     View,
     Image,
@@ -12,6 +11,7 @@ import {
 } from 'react-native';
 import {useNetInfo} from '@react-native-community/netinfo';
 
+import Text from 'components/Text';
 import Button from 'components/Button';
 import content from 'services/data/onBoarding.json';
 
@@ -73,8 +73,11 @@ const OnBoarding = () => {
         ({item}: {item: {title: string; description: string}}) => {
             return (
                 <View style={styles.contentWrapper}>
-                    <Text style={styles.contentTitle}>{item.title}</Text>
-                    <Text style={styles.contentInfo}>{item.description}</Text>
+                    <Text style={styles.contentTitle} title={_(item.title)} />
+                    <Text
+                        style={styles.contentInfo}
+                        title={_(item.description)}
+                    />
                 </View>
             );
         },
@@ -91,12 +94,8 @@ const OnBoarding = () => {
                     <View style={styles.titleWrapper}>
                         <Image source={require('assets/icons/logo.png')} />
                         <View>
-                            <Text style={styles.title}>
-                                <Localize>Lukim</Localize>
-                            </Text>
-                            <Text style={styles.title}>
-                                <Localize>Gather</Localize>
-                            </Text>
+                            <Text style={styles.title} title={_('Lukim')} />
+                            <Text style={styles.title} title={_('Gather')} />
                         </View>
                     </View>
                     <View style={styles.flatListWrapper}>
@@ -138,9 +137,10 @@ const OnBoarding = () => {
                             <TouchableOpacity
                                 style={styles.link}
                                 onPress={handleGuestPress}>
-                                <Text style={styles.linkText}>
-                                    <Localize>Continue as Guest</Localize>
-                                </Text>
+                                <Text
+                                    style={styles.linkText}
+                                    title={_('Continue as Guest')}
+                                />
                             </TouchableOpacity>
                         </View>
                     )}

@@ -3,6 +3,7 @@ import {useNavigation} from '@react-navigation/native';
 import {Image, View} from 'react-native';
 import {FlatList, TouchableOpacity} from 'react-native-gesture-handler';
 
+import {_} from 'services/i18n';
 import Text from 'components/Text';
 import {SearchIcon} from 'components/HeaderButton';
 
@@ -37,7 +38,7 @@ const Category = ({category, navigation}: {category: any; navigation: any}) => {
                         style={styles.categoryIcon}
                     />
                 </View>
-                <Text style={styles.categoryName} title={item.name} />
+                <Text style={styles.categoryName} title={_(item.name)} />
             </TouchableOpacity>
         ),
         [handleCategoryPress],
@@ -92,7 +93,7 @@ const ChooseCategory = () => {
                     style={cs(styles.menuTitle, [
                         item.id === activeCategory && styles.menuTitleActive,
                     ])}
-                    title={item.title}
+                    title={_(item.title)}
                 />
             </TouchableOpacity>
         ),

@@ -1,14 +1,14 @@
 import React, {useCallback, useState} from 'react';
 import {useMutation, gql} from '@apollo/client';
-import {SafeAreaView, Text, TouchableOpacity, View} from 'react-native';
+import {SafeAreaView, TouchableOpacity, View} from 'react-native';
 import Toast from 'react-native-simple-toast';
 import {useNavigation} from '@react-navigation/native';
 
+import Text from 'components/Text';
 import InputField from 'components/InputField';
 import Button from 'components/Button';
 import {ModalLoader} from 'components/Loader';
 
-import {Localize} from '@rna/components/I18n';
 import {_} from 'services/i18n';
 import {getErrorMessage} from 'utils/error';
 import {SIGNUP} from 'services/gql/queries';
@@ -88,21 +88,22 @@ const SignUp = () => {
                     password
                 />
                 <View style={styles.infoWrapper}>
-                    <Text style={styles.info}>
-                        <Localize>By continuing you agree to our</Localize>
-                    </Text>
+                    <Text
+                        style={styles.info}
+                        title={_('By continuing you agree to our')}
+                    />
                     <TouchableOpacity>
-                        <Text style={styles.infoPressable}>
-                            <Localize>Terms of services</Localize>
-                        </Text>
+                        <Text
+                            style={styles.infoPressable}
+                            title={_('Terms of services')}
+                        />
                     </TouchableOpacity>
-                    <Text style={styles.info}>
-                        <Localize>and</Localize>
-                    </Text>
+                    <Text style={styles.info} title={_('and')} />
                     <TouchableOpacity>
-                        <Text style={styles.infoPressable}>
-                            <Localize>Privacy policy.</Localize>
-                        </Text>
+                        <Text
+                            style={styles.infoPressable}
+                            title={_('Privacy policy.')}
+                        />
                     </TouchableOpacity>
                 </View>
                 <Button
@@ -112,9 +113,10 @@ const SignUp = () => {
                     disabled={!email || !firstName || !lastName || !password}
                 />
                 <TouchableOpacity onPress={handleGoLogin} style={styles.login}>
-                    <Text style={styles.text}>
-                        <Localize>Already have an account?</Localize>
-                    </Text>
+                    <Text
+                        style={styles.text}
+                        title={_('Already have an account?')}
+                    />
                 </TouchableOpacity>
             </View>
         </SafeAreaView>

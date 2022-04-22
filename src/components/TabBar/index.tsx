@@ -1,5 +1,5 @@
 import React from 'react';
-import {View, Dimensions, TouchableOpacity, Text} from 'react-native';
+import {View, Dimensions, TouchableOpacity} from 'react-native';
 import {Icon} from 'react-native-eva-icons';
 import Svg, {
     Defs,
@@ -8,6 +8,10 @@ import Svg, {
     Stop,
 } from 'react-native-svg';
 import * as shape from 'd3-shape';
+
+import Text from 'components/Text';
+
+import {_} from 'services/i18n';
 
 import cs from '@rna/utils/cs';
 import COLORS from 'utils/colors';
@@ -210,9 +214,9 @@ const TabBar = ({
                                             color: isFocused
                                                 ? activeColor
                                                 : inActiveColor,
-                                        })}>
-                                        {route.name}
-                                    </Text>
+                                        })}
+                                        title={_(route.name)}
+                                    />
                                 </>
                             )}
                         </TouchableOpacity>
