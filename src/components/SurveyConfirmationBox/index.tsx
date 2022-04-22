@@ -1,7 +1,6 @@
 import React, {useCallback, useState} from 'react';
-import {View, Text, Dimensions} from 'react-native';
+import {View, Text, Dimensions, TouchableOpacity} from 'react-native';
 import Modal from 'react-native-modal';
-import {TouchableOpacity} from 'react-native-gesture-handler';
 
 import Button from 'components/Button';
 
@@ -24,12 +23,13 @@ export const SurveyConfirmBox: React.FC<BoxProps> = ({
     isOpen,
     onCancel,
     onSubmit,
+    updateAnonymousStatus,
 }) => {
     const [isChecked, setIschecked] = useState(false);
-    const toggleCheckBox = useCallback(
-        () => setIschecked(!isChecked),
-        [isChecked],
-    );
+    const toggleCheckBox = useCallback(() => {
+        setIschecked(!isChecked);
+        updateAnonymousStatus(!isChecked);
+    }, [isChecked, updateAnonymousStatus]);
     return (
         <Modal
             animationInTiming={150}
@@ -68,7 +68,6 @@ export const SurveyConfirmBox: React.FC<BoxProps> = ({
                         title={_('Publish')}
                         onPress={onSubmit}
                         style={styles.getStarted}
-                        disabled={!isChecked}
                     />
                 </View>
             </View>

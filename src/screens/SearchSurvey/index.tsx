@@ -9,27 +9,10 @@ import {Icon} from 'react-native-eva-icons';
 import SurveyItem from 'components/SurveyItem';
 import Text from 'components/Text';
 
+import {GET_SURVEY} from 'services/gql/queries';
 import cs from '@rna/utils/cs';
 
 import styles from './styles';
-
-const GET_SURVEY = gql`
-    query GetEnviromentalSurveys {
-        enviromentalSurveys {
-            id
-            title
-            description
-            sentiment
-            attachment {
-                media
-            }
-            category {
-                id
-                title
-            }
-        }
-    }
-`;
 
 const TabItem = ({
     onPress,

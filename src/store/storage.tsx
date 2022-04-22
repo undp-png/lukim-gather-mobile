@@ -1,8 +1,6 @@
 import {MMKV} from 'react-native-mmkv';
 
-export const storage = new MMKV();
-
-export const reduxStorage = {
+export const createStorage = storage => ({
     setItem: (key, value) => {
         storage.set(key, value);
         return Promise.resolve(true);
@@ -15,4 +13,7 @@ export const reduxStorage = {
         storage.delete(key);
         return Promise.resolve(true);
     },
-};
+});
+
+export const reduxStorage = createStorage(new MMKV());
+export const queueStorage = createStorage(new MMKV());

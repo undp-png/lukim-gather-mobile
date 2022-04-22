@@ -11,17 +11,9 @@ import {ModalLoader} from 'components/Loader';
 import {Localize} from '@rna/components/I18n';
 import {_} from 'services/i18n';
 import {getErrorMessage} from 'utils/error';
+import {SIGNUP} from 'services/gql/queries';
 
 import styles from './styles';
-
-const SIGNUP = gql`
-    mutation RegisterUser($data: RegisterUserInput!) {
-        registerUser(data: $data) {
-            ok
-            errors
-        }
-    }
-`;
 
 const SignUp = () => {
     const [firstName, setFirstName] = useState<string>('');
