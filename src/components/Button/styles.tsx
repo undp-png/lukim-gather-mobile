@@ -22,8 +22,10 @@ export default StyleSheet.create({
     buttonLight: {
         backgroundColor: COLORS.white,
     },
-    buttonLightGreen: {
-        backgroundColor: '#F0F6EA',
+    buttonOutline: {
+        backgroundColor: 'transparent',
+        borderWidth: 1,
+        borderColor: COLORS.secondary,
     },
     buttonDisabled: {
         opacity: 0.8,

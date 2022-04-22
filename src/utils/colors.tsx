@@ -9,8 +9,8 @@ const COLORS = {
     border: '#CFD5DC',
 
     /* Text color */
-    blueText: '#196297',
-    blueTextAlt: '#00518B',
+    blueText: '#2263AA',
+    blueTextAlt: '#0A52A1',
     greyText: '#585D69',
     greyTextDark: '#282F3E',
     inputText: '#888C94',
@@ -20,7 +20,7 @@ const COLORS = {
     primaryAlt: '#6697B9',
     primaryLight: '#99B9D1',
     primaryLightAlt: '#E6EEF3',
-    secondary: '#6AA12A',
+    secondary: '#EC6D25',
     tertiary: '#101828',
 
     /* Alert Colors */
