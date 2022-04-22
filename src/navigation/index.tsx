@@ -1,6 +1,7 @@
 import React from 'react';
 import {createStackNavigator} from '@react-navigation/stack';
 import {RootStateOrAny, useSelector} from 'react-redux';
+import {useQuery} from '@apollo/client';
 
 import AuthNavigator from './auth';
 import TabNavigator from './tab';
@@ -22,9 +23,13 @@ import Settings from 'screens/Settings';
 import SurveyItem from 'screens/SurveyItem';
 import Forms from 'screens/Forms';
 import FillForm from 'screens/FillForm';
+import TermsAndCondition from 'screens/TermsAndCondition';
+import PrivacyPolicy from 'screens/PrivacyPolicy';
 
 import {BackButton, CloseButton} from 'components/HeaderButton';
 
+import {GET_LEGAL_DOCUMENT} from 'services/gql/queries';
+import {dispatchInfo} from 'services/dispatch';
 import type {HappeningSurveyType, FormType} from '@generated/types';
 import COLORS from 'utils/colors';
 import {_} from 'services/i18n';
@@ -53,6 +58,8 @@ export type StackParamList = {
     SurveyItem: {item?: HappeningSurveyType};
     Forms: undefined;
     FillForm: {form?: FormType; isViewOnlyMode?: boolean};
+    TermsAndCondition: undefined;
+    PrivacyPolicy: undefined;
 };
 
 const Stack = createStackNavigator<StackParamList>();
@@ -61,7 +68,9 @@ const AppNavigator = () => {
     const {isAuthenticated} = useSelector(
         (state: RootStateOrAny) => state.auth,
     );
+    const {loading, error, data} = useQuery(GET_LEGAL_DOCUMENT);
 
+    dispatchInfo(data?.legalDocument);
     return (
         <Stack.Navigator
             initialRouteName={isAuthenticated ? 'Feed' : 'Auth'}
@@ -125,6 +134,20 @@ const AppNavigator = () => {
             <Stack.Screen name="About" component={About} />
             <Stack.Screen name="Feedback" component={Feedbacks} />
             <Stack.Screen name="Help" component={Help} />
+            <Stack.Screen
+                name="TermsAndCondition"
+                component={TermsAndCondition}
+                options={{
+                    headerTitle: _('Terms & Condition'),
+                }}
+            />
+            <Stack.Screen
+                name="PrivacyPolicy"
+                component={PrivacyPolicy}
+                options={{
+                    headerTitle: _('Privacy Policy'),
+                }}
+            />
             <Stack.Screen
                 name="CreateSurvey"
                 component={CreateSurvey}

@@ -8,6 +8,7 @@ import {
     setLogout,
 } from 'store/slices/auth';
 import {setLanguages} from 'store/slices/locale';
+import {setInfo} from 'store/slices/info';
 
 const {dispatch} = store;
 
@@ -24,4 +25,8 @@ export const dispatchLogout = () => {
 
 export const dispatchLocale = code => {
     dispatch(setLanguages(code));
+};
+
+export const dispatchInfo = info => {
+    dispatch(setInfo(info));
 };

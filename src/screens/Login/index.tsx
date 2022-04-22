@@ -42,7 +42,9 @@ const Login = () => {
     });
 
     const handleLogin = useCallback(async () => {
-        const loginPayload = await login({variables: {username, password}});
+        const loginPayload = await login({
+            variables: {username: username.toLowerCase(), password},
+        });
         if (loginPayload && !loginPayload.errors) {
             navigation.navigate('Feed');
         }
