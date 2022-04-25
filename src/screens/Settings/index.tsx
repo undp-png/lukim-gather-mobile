@@ -1,18 +1,16 @@
-import React, {useState, useCallback, useMemo} from 'react';
+import React, {useCallback, useMemo} from 'react';
 import {View} from 'react-native';
 import {RootStateOrAny, useSelector} from 'react-redux';
+import {useNavigation} from '@react-navigation/native';
 
 import MenuItem from 'components/MenuItem';
-import LanguageSelectModal from 'components/LanguageSelectModal';
 
 import {languages, _} from 'services/i18n';
-import {dispatchLocale} from 'services/dispatch';
-
-import {useI18nContext} from '@rna/components/I18n';
 
 import styles from './styles';
 
 const Settings = () => {
+    const navigation = useNavigation();
     const {isAuthenticated} = useSelector(
         (state: RootStateOrAny) => state.auth,
     );
@@ -23,22 +21,11 @@ const Settings = () => {
         () => languages.find(el => el.code === currentLanguage),
         [currentLanguage],
     );
-    const {changeLanguage} = useI18nContext();
-
-    const [showLanguageModal, setShowLanguageModal] = useState(false);
 
     const toggleLanguageModal = useCallback(() => {
-        setShowLanguageModal(!showLanguageModal);
-    }, [showLanguageModal]);
+        navigation.navigate('Lauguage');
+    }, [navigation]);
 
-    const handleLanguageChange = useCallback(
-        langItem => {
-            changeLanguage(langItem.code);
-            dispatchLocale(langItem.code);
-            setShowLanguageModal(false);
-        },
-        [changeLanguage],
-    );
     return (
         <View style={styles.container}>
             <View style={styles.menuWrapper}>
@@ -57,12 +44,6 @@ const Settings = () => {
                     />
                 )}
             </View>
-            <LanguageSelectModal
-                isVisible={showLanguageModal}
-                onSelect={handleLanguageChange}
-                onBackdropPress={toggleLanguageModal}
-                onBackButtonPress={toggleLanguageModal}
-            />
         </View>
     );
 };

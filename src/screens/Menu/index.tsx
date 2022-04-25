@@ -28,10 +28,6 @@ const Menu = () => {
         navigation.navigate('Auth', {screen: 'Login'});
     }, [navigation]);
 
-    const onPressLogout = useCallback(() => {
-        dispatchLogout();
-    }, []);
-
     const handlePressLogout = useCallback(async () => {
         try {
             dispatchLogout();
