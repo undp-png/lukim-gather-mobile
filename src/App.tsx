@@ -10,6 +10,7 @@ import {NormalizedCacheObject} from 'apollo-cache-inmemory';
 import QueueLink from 'apollo-link-queue';
 import {Provider} from 'react-redux';
 import {PersistGate} from 'redux-persist/integration/react';
+import SplashScreen from 'react-native-splash-screen';
 
 import AppNavigator from 'navigation';
 
@@ -52,6 +53,7 @@ const App = () => {
 
     useEffect(() => {
         initializeApolloClient();
+        SplashScreen.hide();
     }, []);
 
     const handleInitialize = useCallback(async () => {
