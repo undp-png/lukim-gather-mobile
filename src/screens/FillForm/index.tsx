@@ -8,27 +8,21 @@ import Toast from 'react-native-simple-toast';
 import {useNetInfo} from '@react-native-community/netinfo';
 import {gql, useQuery} from '@apollo/client';
 
-import withReduxForm from 'components/WithReduxForm';
+import {FormType, QuestionGroupType, QuestionType} from 'generated/types';
+
+import withReduxForm, {ReduxFormProps} from 'components/WithReduxForm';
 import Button from 'components/Button';
 import {ModalLoader, Loader} from 'components/Loader';
 
 import {_} from 'services/i18n';
-import {GET_QUESTION_GROUPS} from 'services/gql/queries';
 import {isset} from '@rna/utils';
 
-import Question, {QuestionType} from './Question';
+import Question from './Question';
 
 import styles from './styles';
 
-const codeExtractor = (item: QuestionType) => item.code;
-
-interface QuestionGroupType {
-    id: number;
-    code?: string;
-    title: string;
-    skipLogic?: string;
-    questions?: QuestionType[];
-}
+type CodeExtractor = (item: QuestionType) => string;
+const codeExtractor: CodeExtractor = item => item.code;
 
 interface GroupContentProps {
     activeGroup?: QuestionGroupType;
@@ -44,6 +38,7 @@ interface GroupContentProps {
 
 interface FormProps {
     formName: string;
+    questionGroups: QuestionGroupType[];
     formConfig: {
         destroyOnUnmount?: boolean;
         enableReinitialize?: boolean;
@@ -111,29 +106,16 @@ const GroupContent: React.FC<GroupContentProps> = (
     );
 };
 
-let Form: React.FC<FormProps> = (props: FormProps) => {
-    const {formName} = props;
+let Form: React.FC<ReduxFormProps> = (props: ReduxFormProps) => {
+    const {formName, questionGroups} = props;
 
     const [activeGroupIndex, setActiveGroupIndex] = useState(0);
     const [showRequired, setRequiredVisibility] = useState(false);
     const [loading, setLoading] = useState(false);
 
-    const {
-        loading: fetching,
-        data = {},
-        refetch,
-    } = useQuery(GET_QUESTION_GROUPS);
-
-    const questionGroups = useMemo(() => data.questionGroup ?? [], [data]);
-
     const navigation = useNavigation();
 
     const dispatch = useDispatch();
-
-    const netInfo = useNetInfo();
-    useEffect(() => {
-        netInfo.isInternetReachable && refetch();
-    }, [refetch, netInfo.isInternetReachable]);
 
     const formStore = useSelector((state: RootStateOrAny) => state.form);
     const formState = formStore?.[formName];
@@ -201,60 +183,38 @@ let Form: React.FC<FormProps> = (props: FormProps) => {
             formData: formState.values,
         };
         dispatch(reset(formName));
-        if (netInfo.isInternetReachable) {
-            setLoading(true);
-            //TODO: Submit
-            return setTimeout(() => {
-                Toast.show(_('The form has been successfully submitted!'));
-                setLoading(false);
-                return navigation.goBack();
-            }, 2000);
-        }
-        Toast.show(
-            _(
-                'The form has been saved, and will be submitted when your device goes online',
-            ),
-        );
-        navigation.goBack();
-    }, [
-        formState,
-        isNextDisabled,
-        hasErrors,
-        dispatch,
-        formName,
-        netInfo,
-        navigation,
-    ]);
+        setLoading(true);
+        //TODO: Submit
+        setTimeout(() => {
+            Toast.show(_('The form has been successfully submitted!'));
+            setLoading(false);
+            return navigation.goBack();
+        }, 2000);
+    }, [formState, isNextDisabled, hasErrors, dispatch, formName, navigation]);
 
     return (
         <View style={styles.container}>
             <ModalLoader loading={loading} />
-            {fetching ? (
-                <Loader loading />
-            ) : (
-                <GroupContent
-                    activeGroup={activeGroup}
-                    questions={activeQuestions}
-                    showPrevious={activeGroupIndex !== 0}
-                    showNext={activeGroupIndex !== questionGroups.length - 1}
-                    showSubmit={activeGroupIndex === questionGroups.length - 1}
-                    onPreviousPress={handlePreviousPress}
-                    onNextPress={handleNextPress}
-                    onSubmitPress={handleSubmit}
-                    showRequired={showRequired}
-                />
-            )}
+            <GroupContent
+                activeGroup={activeGroup}
+                questions={activeQuestions}
+                showPrevious={activeGroupIndex !== 0}
+                showNext={activeGroupIndex !== questionGroups.length - 1}
+                showSubmit={activeGroupIndex === questionGroups.length - 1}
+                onPreviousPress={handlePreviousPress}
+                onNextPress={handleNextPress}
+                onSubmitPress={handleSubmit}
+                showRequired={showRequired}
+            />
         </View>
     );
 };
 
-Form = withReduxForm(Form);
+const ReduxForm = withReduxForm(Form);
 
 interface RouteParams {
     params: {
-        form: {
-            title: string;
-        };
+        form: FormType;
     };
     name: string;
     path?: string | undefined;
@@ -265,8 +225,8 @@ const FillForm: React.FC = () => {
     const {params} = useRoute<RouteParams>();
 
     return (
-        <Form
-            formName={params.form.title}
+        <ReduxForm
+            form={params.form}
             formConfig={{
                 destroyOnUnmount: false,
                 enableReinitialize: true,

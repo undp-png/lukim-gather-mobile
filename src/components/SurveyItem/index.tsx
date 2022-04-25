@@ -8,20 +8,16 @@ import Text from 'components/Text';
 import SurveyCategory from 'services/data/surveyCategory';
 import useCategoryIcon from 'hooks/useCategoryIcon';
 
+import {HappeningSurveyType} from 'generated/types';
+
 import styles from './styles';
 
-const SurveyItem = ({
-    item,
-    onPress,
-}: {
-    item: {
-        title: string;
-        icon: string;
-        category: {title: string};
-        created?: string;
-    };
-    onPress(): void;
-}) => {
+interface SurveyItemProps {
+    item: HappeningSurveyType;
+    onPress?: () => void;
+}
+
+const SurveyItem = ({item, onPress}: SurveyItemProps) => {
     const navigation = useNavigation();
     const [categoryIcon] = useCategoryIcon(
         SurveyCategory,
@@ -31,6 +27,7 @@ const SurveyItem = ({
         () => navigation.navigate('SurveyItem', {item}),
         [item, navigation],
     );
+
     return (
         <TouchableOpacity onPress={onPressItem} style={styles.item}>
             <View>
@@ -47,7 +44,7 @@ const SurveyItem = ({
                 </View>
             </View>
             <View style={styles.rightData}>
-                <Text style={styles.date} title={item.created} />
+                <Text style={styles.date} title={item.createdAt} />
             </View>
         </TouchableOpacity>
     );

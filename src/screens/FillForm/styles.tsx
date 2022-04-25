@@ -7,7 +7,6 @@ export default StyleSheet.create({
         height: '100%',
         backgroundColor: COLORS.white,
         padding: 20,
-        paddingBottom: 100,
     },
     groupTitleContainer: {
         marginBottom: 20,
@@ -23,6 +22,7 @@ export default StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'space-between',
+        paddingBottom: 100,
     },
     nextButton: {
         marginLeft: 'auto',

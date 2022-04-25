@@ -1,6 +1,6 @@
 import React from 'react';
 import {createStackNavigator} from '@react-navigation/stack';
-import {useSelector} from 'react-redux';
+import {RootStateOrAny, useSelector} from 'react-redux';
 
 import AuthNavigator from './auth';
 import TabNavigator from './tab';
@@ -24,6 +24,8 @@ import FillForm from 'screens/FillForm';
 
 import {BackButton, CloseButton} from 'components/HeaderButton';
 
+import {HappeningSurveyType, FormType} from 'generated/types';
+
 import COLORS from 'utils/colors';
 
 export type StackParamList = {
@@ -43,15 +45,17 @@ export type StackParamList = {
     Settings: undefined;
     Help: undefined;
     SearchSurvey: undefined;
-    SurveyItem: undefined;
+    SurveyItem: {item?: HappeningSurveyType};
     Forms: undefined;
-    FillForm: undefined;
+    FillForm: {form?: FormType};
 };
 
 const Stack = createStackNavigator<StackParamList>();
 
 const AppNavigator = () => {
-    const {isAuthenticated} = useSelector(state => state.auth);
+    const {isAuthenticated} = useSelector(
+        (state: RootStateOrAny) => state.auth,
+    );
 
     return (
         <Stack.Navigator
@@ -134,7 +138,11 @@ const AppNavigator = () => {
                     presentation: 'modal',
                 }}
             />
-            <Stack.Screen name="SearchSurvey" component={SearchSurvey} />
+            <Stack.Screen
+                name="SearchSurvey"
+                component={SearchSurvey}
+                options={{headerTitle: ''}}
+            />
             <Stack.Screen
                 name="SurveyItem"
                 component={SurveyItem}

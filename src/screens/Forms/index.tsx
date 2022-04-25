@@ -1,37 +1,56 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {View, FlatList} from 'react-native';
-import {useSelector} from 'react-redux';
+import {useSelector, RootStateOrAny} from 'react-redux';
+import {useQuery} from '@apollo/client';
+
+import {QuestionGroupType} from 'screens/FillForm';
 
 import MenuItem from 'components/MenuItem';
+import {Loader} from 'components/Loader';
+
 import {_} from 'services/i18n';
+import {GET_SURVEY_FORMS} from 'services/gql/queries';
+import {FormType} from 'generated/types';
 
 import styles from './styles';
 
-const formList = [
-    {
-        id: 1,
-        title: 'Local Environmental Survey',
-    },
-];
+type KeyExtractor = (item: FormType, index: number) => string;
+const keyExtractor: KeyExtractor = (item: FormType) => item.id.toString();
 
-const FormMenuItem = ({item}) => {
+interface FormMenuItemProps {
+    item: FormType;
+}
+
+const FormMenuItem: React.FC<FormMenuItemProps> = ({
+    item,
+}: FormMenuItemProps) => {
     return (
         <MenuItem title={item.title} linkTo="FillForm" params={{form: item}} />
     );
 };
 
 const Forms = () => {
-    const {user} = useSelector(state => state.auth);
+    const {user} = useSelector((state: RootStateOrAny) => state.auth);
+
+    const {loading: fetching, data = {}, refetch} = useQuery(GET_SURVEY_FORMS);
+
+    useEffect(() => {
+        refetch();
+    }, [refetch]);
 
     return (
         <View style={styles.container}>
-            <View style={styles.menuWrapper}>
-                <FlatList
-                    data={formList}
-                    renderItem={FormMenuItem}
-                    keyExtractor={item => item.id}
-                />
-            </View>
+            {fetching ? (
+                <Loader loading />
+            ) : (
+                <View style={styles.menuWrapper}>
+                    <FlatList
+                        data={data?.surveyForm ?? []}
+                        renderItem={FormMenuItem}
+                        keyExtractor={keyExtractor}
+                    />
+                </View>
+            )}
         </View>
     );
 };

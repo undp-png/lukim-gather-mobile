@@ -1,19 +1,24 @@
 import React, {useEffect, useCallback, useState} from 'react';
 import {gql, useQuery} from '@apollo/client';
-import {RefreshControl, View} from 'react-native';
+import {RefreshControl, View, ListRenderItem} from 'react-native';
 import {useFocusEffect, useNavigation} from '@react-navigation/native';
 import {FlatList, TouchableOpacity} from 'react-native-gesture-handler';
 import {Icon} from 'react-native-eva-icons';
 
 import Text from 'components/Text';
-
 import SurveyItem from 'components/SurveyItem';
 
 import {GET_HAPPENING_SURVEY} from 'services/gql/queries';
+import {HappeningSurveyType, ProtectedAreaCategoryType} from 'generated/types';
 
 import styles from './styles';
 
-const keyExtractor = (item: {id: string}) => item.id;
+interface SurveyUserType {
+    id: string | number;
+}
+
+type KeyExtractor = (item: HappeningSurveyType, index: number) => string;
+const keyExtractor: KeyExtractor = item => item.id.toString();
 
 const Surveys = () => {
     const navigation = useNavigation();
@@ -60,20 +65,22 @@ const Surveys = () => {
         });
     }, [navigation, onMapPress, onSearchPress]);
 
-    const renderItem = useCallback(
-        ({item}: {item: object}) => <SurveyItem item={item} />,
+    const renderItem: ListRenderItem<HappeningSurveyType> = useCallback(
+        ({item}: {item: HappeningSurveyType}) => <SurveyItem item={item} />,
         [],
     );
 
-    useFocusEffect(() => {
-        refetch();
-    });
+    useFocusEffect(
+        useCallback(() => {
+            refetch();
+        }, [refetch]),
+    );
 
     return (
         <View style={styles.container}>
             {data && (
                 <FlatList
-                    data={data?.enviromentalSurveys}
+                    data={data?.happeningSurveys}
                     renderItem={renderItem}
                     refreshControl={
                         <RefreshControl
