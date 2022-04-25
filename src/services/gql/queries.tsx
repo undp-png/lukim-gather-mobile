@@ -9,6 +9,8 @@ export const LOGIN = gql`
                 firstName
                 lastName
                 email
+                organization
+                avatar
             }
         }
     }
