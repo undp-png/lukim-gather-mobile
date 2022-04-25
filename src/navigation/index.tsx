@@ -7,6 +7,7 @@ import TabNavigator from './tab';
 
 import About from 'screens/About';
 import AccountSettings from 'screens/AccountSettings';
+import Lauguage from 'screens/Language';
 import ChangePassword from 'screens/ChangePassword';
 import ChangeLocation from 'screens/ChangeLocation';
 import ChooseCategory from 'screens/ChooseCategory';
@@ -28,6 +29,7 @@ import COLORS from 'utils/colors';
 export type StackParamList = {
     About: undefined;
     AccountSettings: undefined;
+    Lauguage: undefined;
     Auth: undefined;
     ChangePassword: undefined;
     ChangeLocation: {onChange?: (value: any) => void};
@@ -82,6 +84,15 @@ const AppNavigator = () => {
                 component={AccountSettings}
                 options={{
                     headerTitle: 'Account Settings',
+                }}
+            />
+            <Stack.Screen
+                name="Lauguage"
+                component={Lauguage}
+                options={{
+                    headerLeft: () => <CloseButton />,
+                    headerTitle: 'Lauguage',
+                    presentation: 'modal',
                 }}
             />
             <Stack.Screen
