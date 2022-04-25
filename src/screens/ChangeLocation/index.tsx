@@ -10,6 +10,7 @@ import {SaveButton} from 'components/HeaderButton';
 
 import {store} from 'store';
 import {setLocation} from 'store/slices/survey';
+import {StackParamList} from 'navigation';
 
 import styles from './styles';
 
@@ -24,7 +25,7 @@ const Labels = [
 const keyExtractor = (item: {label: string}) => item.label;
 
 type ChangeLocationScreenRouteProp = RouteProp<
-    RootStackParamList,
+    StackParamList,
     'ChangeLocation'
 >;
 

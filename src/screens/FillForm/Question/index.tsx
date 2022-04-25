@@ -10,19 +10,11 @@ import LocationInput from 'components/Inputs/LocationInput';
 import BooleanInput from 'components/Inputs/BooleanInput';
 import ImageInput from 'components/Inputs/ImageInput';
 
+import {QuestionType} from 'generated/types';
+
 import {isset} from '@rna/utils';
 
 import styles from './styles';
-
-export interface QuestionType {
-    id: number;
-    title: string;
-    code: string;
-    description?: string;
-    isRequired: boolean;
-    answerType: string;
-    options?: object[];
-}
 
 interface QuestionProps {
     item: QuestionType;

@@ -53,4 +53,9 @@ export default StyleSheet.create({
         color: COLORS.tertiary,
         textAlign: 'center',
     },
+    message: {
+        color: COLORS.greyTextDark,
+        fontFamily: 'Inter-Medium',
+        textAlign: 'center',
+    },
 });

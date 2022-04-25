@@ -1,5 +1,6 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useMemo} from 'react';
 import {View, Image} from 'react-native';
+import {RootStateOrAny, useSelector} from 'react-redux';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import {useNavigation} from '@react-navigation/native';
@@ -14,11 +15,21 @@ import styles from './styles';
 
 const EditProfile = () => {
     const navigation = useNavigation();
+    const {user} = useSelector((state: RootStateOrAny) => state.auth);
+
     useEffect(() => {
         navigation.setOptions({
             headerRight: () => <SaveButton />,
         });
     });
+
+    const nameValue = useMemo(() => {
+        if (user) {
+            return `${user.firstName} ${user.lastName}`;
+        }
+        return '';
+    }, [user]);
+
     return (
         <View style={styles.container}>
             <KeyboardAwareScrollView>
@@ -41,8 +52,11 @@ const EditProfile = () => {
                         title={_('Change photo')}
                     />
                 </TouchableOpacity>
-                <InputField title={_('Name')} />
-                <InputField title={_('Organization name')} />
+                <InputField title={_('Name')} defaultValue={nameValue} />
+                <InputField
+                    title={_('Organization name')}
+                    defaultValue={user?.organization}
+                />
             </KeyboardAwareScrollView>
         </View>
     );

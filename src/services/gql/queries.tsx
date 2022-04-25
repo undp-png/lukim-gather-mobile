@@ -6,6 +6,7 @@ export const LOGIN = gql`
             token
             refreshToken
             user {
+                id
                 firstName
                 lastName
                 email
@@ -37,6 +38,9 @@ export const GET_HAPPENING_SURVEY = gql`
             category {
                 id
                 title
+            }
+            createdBy {
+                id
             }
         }
     }
@@ -102,22 +106,27 @@ export const CHANGE_PASSWORD = gql`
     }
 `;
 
-export const GET_QUESTION_GROUPS = gql`
+export const GET_SURVEY_FORMS = gql`
     query {
-        questionGroup {
+        surveyForm {
             id
             code
             title
-            questions {
+            questionGroup {
                 id
                 code
                 title
-                description
-                answerType
-                isRequired
-                options {
+                questions {
                     id
+                    code
                     title
+                    description
+                    answerType
+                    isRequired
+                    options {
+                        id
+                        title
+                    }
                 }
             }
         }
