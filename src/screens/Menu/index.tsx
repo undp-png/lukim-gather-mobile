@@ -59,7 +59,11 @@ const Menu = () => {
                         onPress={onProfilePress}
                         style={styles.userInfoWrapper}>
                         <Image
-                            source={require('assets/images/user-placeholder.png')}
+                            source={
+                                user?.avatar
+                                    ? {uri: user.avatar}
+                                    : require('assets/images/user-placeholder.png')
+                            }
                             style={styles.userImage}
                         />
                         <View style={styles.userTextInfo}>
@@ -74,7 +78,7 @@ const Menu = () => {
                                 />
                                 <Text
                                     style={styles.userOrg}
-                                    title="ABC Organization"
+                                    title={user?.organization}
                                 />
                             </View>
                             <Icon
