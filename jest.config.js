@@ -19,6 +19,7 @@ module.exports = {
             '|react-native-modal-datetime-picker' +
             '|react-native-multiple-select' +
             '|react-native-vector-icons' +
+            '|react-native-splash-screen' +
             ')/)',
     ],
     testPathIgnorePatterns: ['src/vendor', 'node_modules'],

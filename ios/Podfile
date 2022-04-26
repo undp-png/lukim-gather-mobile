@@ -14,6 +14,8 @@ target 'lukimgather' do
   permissions_path = '../node_modules/react-native-permissions/ios'
   pod 'Permission-LocationWhenInUse', :path => "#{permissions_path}/LocationWhenInUse"
 
+  pod 'react-native-splash-screen', :path => '../node_modules/react-native-splash-screen'
+
   pre_install do |installer|
     $RNMBGL.pre_install(installer)
   end

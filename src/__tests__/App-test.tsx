@@ -27,6 +27,13 @@ const mockUserInfo = {
     },
 };
 
+jest.mock('react-native-splash-screen', () => {
+    return {
+        hide: jest.fn(),
+        show: jest.fn(),
+    };
+});
+
 jest.mock('react-native-geolocation-service', () => ({
     requestAuthorization: jest.fn(),
     getCurrentPosition: jest.fn(),
