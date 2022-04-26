@@ -12,6 +12,7 @@ import ChangePassword from 'screens/ChangePassword';
 import ChangeLocation from 'screens/ChangeLocation';
 import ChooseCategory from 'screens/ChooseCategory';
 import SearchCategory from 'screens/SearchCategory';
+import EditSurvey from 'screens/EditSurvey';
 import CreateSurvey from 'screens/CreateSurvey';
 import EditProfile from 'screens/EditProfile';
 import Feedbacks from 'screens/Feedbacks';
@@ -41,6 +42,7 @@ export type StackParamList = {
     ChooseCategory: undefined;
     SearchCategory: undefined;
     CreateSurvey: undefined;
+    EditSurvey: undefined;
     EditProfile: undefined;
     Feed: undefined;
     Feedback: undefined;
@@ -128,7 +130,16 @@ const AppNavigator = () => {
                 component={CreateSurvey}
                 options={{
                     headerLeft: () => <CloseButton />,
-                    headerTitle: _('Details'),
+                    headerTitle: _('Enter details'),
+                    presentation: 'modal',
+                }}
+            />
+            <Stack.Screen
+                name="EditSurvey"
+                component={EditSurvey}
+                options={{
+                    headerLeft: () => <CloseButton />,
+                    headerTitle: _('Edit Details'),
                     presentation: 'modal',
                 }}
             />

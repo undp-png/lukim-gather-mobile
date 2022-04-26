@@ -1,5 +1,5 @@
-import React, {useCallback, useEffect, useState} from 'react';
-import {Image, ScrollView, View, Platform} from 'react-native';
+import React, {useCallback, useEffect, useRef, useState} from 'react';
+import {Animated, Image, ScrollView, View, Platform} from 'react-native';
 import {RootStateOrAny, useSelector} from 'react-redux';
 import {useMutation} from '@apollo/client';
 import {ReactNativeFile} from 'apollo-upload-client';
@@ -8,60 +8,78 @@ import {TouchableOpacity} from 'react-native-gesture-handler';
 import {Image as ImageObj} from 'react-native-image-crop-picker';
 import {Icon} from 'react-native-eva-icons';
 import Toast from 'react-native-simple-toast';
-import uuid from 'react-native-uuid';
 
 import Text from 'components/Text';
 import InputField from 'components/InputField';
 import ImagePicker from 'components/ImagePicker';
 import {SaveButton} from 'components/HeaderButton';
-import {SurveyConfirmBox} from 'components/SurveyConfirmationBox';
 import {ModalLoader} from 'components/Loader';
 import CategoryListModal from 'components/CategoryListModal';
 import SurveySentiment from 'components/SurveySentiment';
 import SurveyReview from 'components/SurveyReview';
 
+import SurveyCategory from 'services/data/surveyCategory';
 import {_} from 'services/i18n';
+import useCategoryIcon from 'hooks/useCategoryIcon';
 
 import {
-    CreateHappeningSurveyMutation,
-    CreateHappeningSurveyMutationVariables,
-    UploadMediaMutation,
-    UploadMediaMutationVariables,
-} from '@generated/types';
-
-import {
-    CREATE_HAPPENING_SURVEY,
+    UPDATE_HAPPENING_SURVEY,
     GET_HAPPENING_SURVEY,
     UPLOAD_IMAGE,
 } from 'services/gql/queries';
+
 import {getErrorMessage} from 'utils/error';
+
+import {
+    UploadMediaMutation,
+    UploadMediaMutationVariables,
+    UpdateHappeningSurveyMutation,
+    UpdateHappeningSurveyMutationVariables,
+} from '@generated/types';
 
 import styles from './styles';
 
-const CreateHappeningSurvey = () => {
+const EditHappeningSurvey = () => {
     const route = useRoute<any>();
     const navigation = useNavigation<any>();
-    const {location} = useSelector((state: RootStateOrAny) => state.survey);
     const {user} = useSelector((state: RootStateOrAny) => state.auth);
+    const {location} = useSelector((state: RootStateOrAny) => state.survey);
     const [openCategory, setOpenCategory] = useState<boolean>(false);
     const [processing, setProcessing] = useState<boolean>(false);
 
-    const [title, setTitle] = useState<string>('');
-    const [activeFeel, setActiveFeel] = useState<string>('');
+    const [title, setTitle] = useState<string>(
+        route.params?.categoryItem?.title,
+    );
+    const [activeFeel, setActiveFeel] = useState<string>(
+        route.params?.categoryItem?.sentiment,
+    );
     const [activeReview, setActiveReview] = useState<string>('');
-    const [images, setImages] = useState<ImageObj[]>([]);
-    const [description, setDescription] = useState<string>('');
-    const [category, setCategory] = useState<{
+    const [images, setImages] = useState<ImageObj[]>(
+        route?.params?.categoryItem.attachment,
+    );
+    const [description, setDescription] = useState<string>(
+        route.params?.categoryItem.description || '',
+    );
+    const [categoryItem, setCategoryItem] = useState<{
         id: number;
         name: string;
-        icon: string;
-    }>(route.params?.categoryItem);
+    }>({
+        id: route.params?.categoryItem?.category.id,
+        name: route.params?.categoryItem?.category.title,
+    });
+    const [categoryIcon] = useCategoryIcon(
+        SurveyCategory,
+        Number(categoryItem.id),
+    );
     const [attachment, setAttachment] = useState<any>([]);
     const [confirmPublish, setConfirmPublish] = useState<boolean>(false);
-    const [coordinates, setCoordinates] = useState<object | null>(null);
-    const [isAnonymous, setIsAnonymous] = useState<boolean>(false);
-    const [locationDetail, setLocationDetail] =
-        useState<string>('Current Location');
+    const [coordinates, setCoordinates] = useState<{
+        polygon: string;
+        point: string;
+    } | null>(null);
+    const [locationDetail, setLocationDetail] = useState<string>(
+        route.params?.categoryItem?.location?.coordinates,
+    );
 
     const handleFeel = useCallback(feel => {
         setActiveFeel(feel);
@@ -71,12 +89,15 @@ const CreateHappeningSurvey = () => {
         setActiveReview(review);
     }, []);
 
-    const [createHappeningSurvey, {loading}] = useMutation<
-        CreateHappeningSurveyMutation,
-        CreateHappeningSurveyMutationVariables
-    >(CREATE_HAPPENING_SURVEY, {
+    const iconFlex = useRef(new Animated.Value(1)).current;
+    const imgFlex = useRef(new Animated.Value(0)).current;
+
+    const [updateHappeningSurvey, {loading, error}] = useMutation<
+        UpdateHappeningSurveyMutation,
+        UpdateHappeningSurveyMutationVariables
+    >(UPDATE_HAPPENING_SURVEY, {
         onCompleted: () => {
-            Toast.show('Survey Created Sucessfully !');
+            Toast.show('Survey updated Sucessfully !');
             navigation.navigate('Feed');
             setProcessing(loading);
         },
@@ -85,13 +106,14 @@ const CreateHappeningSurvey = () => {
                 'RCTModalHostViewController',
             ]);
             setProcessing(loading);
-            console.log('happening survey', err);
+            console.log(err);
         },
     });
 
     const handlePublish = useCallback(async () => {
         setProcessing(true);
         let surveyInput = {
+            categoryId: categoryItem?.id,
             title: title,
             description: description,
             sentiment: activeFeel,
@@ -108,21 +130,21 @@ const CreateHappeningSurvey = () => {
                 : null,
         };
 
-        await createHappeningSurvey({
+        await updateHappeningSurvey({
             variables: {
-                input: {...surveyInput, categoryId: category.id},
-                anonymous: isAnonymous,
+                input: {...surveyInput},
+                id: route.params?.categoryItem.id,
             },
             optimisticResponse: {
-                createHappeningSurvey: {
-                    __typename: 'CreateHappeningSurvey',
+                updateHappeningSurvey: {
+                    __typename: 'UpdateHappeningSurvey',
                     errors: [],
                     ok: null,
                     result: {
-                        id: uuid.v4(),
+                        id: route.params?.categoryItem.id,
                         category: {
-                            id: category.id,
-                            title: category.name,
+                            id: categoryItem.id,
+                            title: categoryItem?.name,
                             __typename: 'ProtectedAreaCategoryType',
                         },
                         ...surveyInput,
@@ -142,10 +164,10 @@ const CreateHappeningSurvey = () => {
                     let mergedSurveys = [];
 
                     if (readData.happeningSurveys.length <= 0) {
-                        mergedSurveys = [data.createHappeningSurvey.result];
+                        mergedSurveys = [data.updateHappeningSurvey.result];
                     } else {
                         mergedSurveys = [
-                            data.createHappeningSurvey.result,
+                            data.updateHappeningSurvey.result,
                             ...readData.happeningSurveys,
                         ];
                     }
@@ -166,16 +188,16 @@ const CreateHappeningSurvey = () => {
         setProcessing(false);
         setConfirmPublish(!confirmPublish);
     }, [
+        categoryItem,
         title,
         description,
-        category,
-        createHappeningSurvey,
-        confirmPublish,
         activeFeel,
         activeReview,
         attachment,
+        updateHappeningSurvey,
+        confirmPublish,
         location,
-        isAnonymous,
+        route.params?.categoryItem.id,
         navigation,
         user?.id,
     ]);
@@ -228,32 +250,15 @@ const CreateHappeningSurvey = () => {
         navigation.navigate('ChangeLocation');
     }, [navigation]);
 
-    const handleConfirmToggle = useCallback(() => {
-        if (title) {
-            setConfirmPublish(!confirmPublish);
-        }
-    }, [title, confirmPublish]);
-
-    const handleCancel = useCallback(() => {
-        setConfirmPublish(!confirmPublish);
-    }, [confirmPublish]);
-
     useEffect(() => {
         navigation.setOptions({
-            headerRight: () => <SaveButton onSavePress={handleConfirmToggle} />,
+            headerRight: () => <SaveButton onSavePress={handlePublish} />,
         });
-    }, [navigation, handleConfirmToggle]);
+    }, [handlePublish, navigation]);
 
     const toggleOpenCategory = useCallback(
         () => setOpenCategory(!openCategory),
         [openCategory],
-    );
-
-    const updateAnonymousStatus = useCallback(
-        anonymous => {
-            setIsAnonymous(anonymous);
-        },
-        [setIsAnonymous],
     );
 
     useEffect(() => {
@@ -262,32 +267,26 @@ const CreateHappeningSurvey = () => {
             setLocationDetail('Boundaries');
         } else if (coordinates && coordinates.point) {
             setLocationDetail(`${coordinates?.point}`);
+        } else if (route.params?.categoryItem?.location?.coordinates) {
+            setLocationDetail(route.params.categoryItem.location.coordinates);
         } else {
             setLocationDetail('Choose the location');
         }
-    }, [location, coordinates]);
+    }, [
+        location,
+        coordinates,
+        route.params?.categoryItem?.location?.coordinates,
+    ]);
 
     return (
         <ScrollView
             style={styles.container}
             showsVerticalScrollIndicator={false}>
             <View style={styles.categoryCont}>
-                <SurveyConfirmBox
-                    updateAnonymousStatus={updateAnonymousStatus}
-                    isOpen={confirmPublish}
-                    onCancel={handleCancel}
-                    onSubmit={handlePublish}
-                />
                 <ModalLoader loading={processing} />
                 <View style={styles.category}>
-                    <Image
-                        source={
-                            route.params.categoryItem.icon ||
-                            require('assets/images/category-placeholder.png')
-                        }
-                        style={styles.categoryIcon}
-                    />
-                    <Text style={styles.field} title={category.name} />
+                    <Image source={categoryIcon} style={styles.categoryIcon} />
+                    <Text style={styles.field} title={categoryItem?.name} />
                 </View>
                 <TouchableOpacity onPress={toggleOpenCategory}>
                     <Text style={styles.change} title="Change" />
@@ -338,6 +337,7 @@ const CreateHappeningSurvey = () => {
                     onPress={handleFeel}
                 />
             </View>
+
             <Text
                 style={styles.title}
                 title="Is the condition of this feature improving, staying the same, or decreasing?"
@@ -372,7 +372,7 @@ const CreateHappeningSurvey = () => {
                 placeholder="What’s happening here?"
             />
             <CategoryListModal
-                setCategory={setCategory}
+                setCategory={setCategoryItem}
                 setOpenCategory={setOpenCategory}
                 onToggleModal={toggleOpenCategory}
                 isOpen={openCategory}
@@ -381,4 +381,4 @@ const CreateHappeningSurvey = () => {
     );
 };
 
-export default CreateHappeningSurvey;
+export default EditHappeningSurvey;
