@@ -7,6 +7,7 @@ import {Icon} from 'react-native-eva-icons';
 
 import Text from 'components/Text';
 import SurveyItem from 'components/SurveyItem';
+import EmptyListMessage from 'components/EmptyListMessage';
 
 import {GET_HAPPENING_SURVEY} from 'services/gql/queries';
 import {HappeningSurveyType, ProtectedAreaCategoryType} from 'generated/types';
@@ -90,6 +91,7 @@ const Surveys = () => {
                     }
                     showsVerticalScrollIndicator={false}
                     keyExtractor={keyExtractor}
+                    ListEmptyComponent={EmptyListMessage}
                 />
             )}
         </View>

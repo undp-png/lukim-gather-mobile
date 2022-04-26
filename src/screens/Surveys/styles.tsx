@@ -11,7 +11,6 @@ export default StyleSheet.create({
         padding: 20,
         paddingBottom: 80,
     },
-
     searchBar: {
         marginLeft: 20,
         backgroundColor: COLORS.white,

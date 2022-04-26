@@ -22,6 +22,9 @@ export default StyleSheet.create({
     buttonLight: {
         backgroundColor: COLORS.white,
     },
+    buttonBlue: {
+        backgroundColor: COLORS.blueTextAlt,
+    },
     buttonOutline: {
         backgroundColor: 'transparent',
         borderWidth: 1,
@@ -40,6 +43,9 @@ export default StyleSheet.create({
         color: COLORS.secondary,
     },
     textLight: {
-        color: COLORS.primary,
+        color: COLORS.blueTextAlt,
+    },
+    textWhite: {
+        color: COLORS.white,
     },
 });

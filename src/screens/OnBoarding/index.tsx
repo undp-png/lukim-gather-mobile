@@ -130,6 +130,7 @@ const OnBoarding = () => {
                             title={_('Get Started')}
                             onPress={handleGetStarted}
                             style={styles.getStarted}
+                            blue
                         />
                     </View>
                     {!netInfo.isInternetReachable && (

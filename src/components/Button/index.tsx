@@ -12,6 +12,7 @@ interface Props extends PressableProps {
     title: string;
     dark?: boolean;
     light?: boolean;
+    blue?: boolean;
     outline?: boolean;
 }
 
@@ -20,6 +21,7 @@ const _Button: React.FC<Props> = ({
     title,
     dark = false,
     light = false,
+    blue = false,
     outline = false,
     ...buttonProps
 }) => {
@@ -29,6 +31,7 @@ const _Button: React.FC<Props> = ({
                 styles.button,
                 [styles.buttonDark, dark],
                 [styles.buttonLight, light],
+                [styles.buttonBlue, blue],
                 [styles.buttonOutline, outline],
                 [styles.buttonDisabled, buttonProps.disabled],
                 style,
@@ -40,6 +43,7 @@ const _Button: React.FC<Props> = ({
                     styles.buttonText,
                     [styles.textDark, dark],
                     [styles.textLight, light],
+                    [styles.textWhite, blue],
                 )}
                 title={title}
             />
