@@ -1,6 +1,5 @@
-import React, {useMemo, useCallback, useState} from 'react';
-import {View, Text, TouchableOpacity, FlatList, Image} from 'react-native';
-import {useMutation} from '@apollo/client';
+import React, {useMemo, useCallback} from 'react';
+import {View, Text} from 'react-native';
 
 import ImagePicker from 'components/ImagePicker';
 
@@ -12,7 +11,6 @@ import styles from './styles';
 const ImageInput: React.FC<InputProps> = (props: InputProps) => {
     const {
         fieldContainerStyle,
-        containerStyle,
         titleStyle,
         title,
         showRequired,

@@ -10,6 +10,7 @@ import Toast from 'react-native-simple-toast';
 import SurveyItem from 'components/SurveyItem';
 import Text from 'components/Text';
 import {Loader} from 'components/Loader';
+import EmptyListMessage from 'components/EmptyListMessage';
 
 import {GET_HAPPENING_SURVEY} from 'services/gql/queries';
 import cs from '@rna/utils/cs';
@@ -150,10 +151,7 @@ const SearchSurvey = () => {
                                 title={getErrorMessage(error)}
                             />
                         ) : !loading ? (
-                            <Text
-                                style={styles.message}
-                                title={_('No entries found!')}
-                            />
+                            <EmptyListMessage />
                         ) : null}
                     </React.Fragment>
                 }
