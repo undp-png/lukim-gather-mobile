@@ -3,6 +3,7 @@ import {TouchableOpacity, View, Text} from 'react-native';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 
 import cs from '@rna/utils/cs';
+import {_} from 'services/i18n';
 
 import {InputProps} from '..index';
 import styles from './styles';
@@ -16,6 +17,7 @@ const DateInput: React.FC<InputProps> = (props: InputProps) => {
         showRequired,
         input: {onChange, value},
         meta: {touched, error, warning},
+        inputProps: {hints, editable},
     } = props;
 
     const showError = useMemo(() => touched && !!error, [touched, error]);
@@ -53,6 +55,7 @@ const DateInput: React.FC<InputProps> = (props: InputProps) => {
             {!!title && (
                 <Text style={cs(styles.title, titleStyle)}>{title}</Text>
             )}
+            {!!hints && <Text style={styles.hints}>{hints}</Text>}
             <TouchableOpacity
                 style={cs(
                     styles.input,
@@ -62,16 +65,15 @@ const DateInput: React.FC<InputProps> = (props: InputProps) => {
                     ],
                     [styles.inputError, showError],
                 )}
-                onPress={showDatePicker}>
+                onPress={showDatePicker}
+                disabled={!editable}>
                 {selectedDate && (
-                    <Text style={styles.inputText}>
-                        {selectedDate.toISOString().slice(0, 10)}
-                    </Text>
+                    <Text style={styles.inputText}>{dateString}</Text>
                 )}
             </TouchableOpacity>
             {showError && <Text style={styles.errorText}>{error}</Text>}
             {!showError && !value && showRequired && (
-                <Text style={styles.warningText}>Required</Text>
+                <Text style={styles.warningText}>{_('Required')}</Text>
             )}
             <DateTimePickerModal
                 isVisible={isDatePickerVisible}

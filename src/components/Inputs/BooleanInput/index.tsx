@@ -20,6 +20,7 @@ const BooleanInput: React.FC<InputProps> = (props: InputProps) => {
         showRequired,
         input: {onChange, value},
         meta: {touched, error, warning},
+        inputProps: {hints, editable},
     } = props;
 
     const showError = useMemo(() => touched && !!error, [touched, error]);
@@ -32,7 +33,17 @@ const BooleanInput: React.FC<InputProps> = (props: InputProps) => {
             {!!title && (
                 <Text style={cs(styles.title, titleStyle)}>{title}</Text>
             )}
-            <View style={styles.input}>
+            {!!hints && <Text style={styles.hints}>{hints}</Text>}
+            <View
+                style={cs(
+                    styles.input,
+                    [
+                        styles.inputWarning,
+                        !!warning ||
+                            (!showError && !isset(value) && showRequired),
+                    ],
+                    [styles.inputError, showError],
+                )}>
                 <RadioInput
                     label={_('Yes')}
                     contentContainerStyle={styles.radioInput}
@@ -41,6 +52,7 @@ const BooleanInput: React.FC<InputProps> = (props: InputProps) => {
                     onPress={handleYesPress}
                     selected={value === true}
                     color={COLORS.primary}
+                    disabled={!editable}
                 />
                 <RadioInput
                     label={_('No')}
@@ -50,11 +62,12 @@ const BooleanInput: React.FC<InputProps> = (props: InputProps) => {
                     onPress={handleNoPress}
                     selected={value === false}
                     color={COLORS.primary}
+                    disabled={!editable}
                 />
             </View>
             {showError && <Text style={styles.errorText}>{error}</Text>}
             {!showError && !isset(value) && showRequired && (
-                <Text style={styles.warningText}>Required</Text>
+                <Text style={styles.warningText}>{_('Required')}</Text>
             )}
         </View>
     );

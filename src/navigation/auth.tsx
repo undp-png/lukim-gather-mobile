@@ -11,6 +11,7 @@ import OnBoarding from 'screens/OnBoarding';
 import {BackButton} from 'components/HeaderButton';
 
 import COLORS from 'utils/colors';
+import {_} from 'services/i18n';
 
 export type AuthStackParamList = {
     Login: undefined;
@@ -23,10 +24,10 @@ export type AuthStackParamList = {
 
 const Stack = createStackNavigator<AuthStackParamList>();
 
-export default function AuthNavigator(props) {
+export default function AuthNavigator() {
     return (
         <Stack.Navigator
-            initialRoutename="OnBoarding"
+            initialRouteName="OnBoarding"
             screenOptions={{
                 headerLeft: () => <BackButton />,
                 headerShown: true,
@@ -52,17 +53,17 @@ export default function AuthNavigator(props) {
             <Stack.Screen
                 name="Login"
                 component={Login}
-                options={{headerTitle: 'Log in'}}
+                options={{headerTitle: _('Log in')}}
             />
             <Stack.Screen
                 name="SignUp"
                 component={SignUp}
-                options={{headerTitle: 'Create an account'}}
+                options={{headerTitle: _('Create an account')}}
             />
             <Stack.Screen
                 name="ForgotPassword"
                 component={ForgotPassword}
-                options={{headerTitle: 'Forgot password?'}}
+                options={{headerTitle: _('Forgot password?')}}
             />
             <Stack.Screen name="VerifyEmail" component={VerifyEmail} />
             <Stack.Screen name="ChangePassword" component={ChangePassword} />

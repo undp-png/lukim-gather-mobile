@@ -13,8 +13,10 @@ const ForgotPassword = () => {
         <SafeAreaView>
             <View style={styles.container}>
                 <Text style={styles.title}>
-                    Enter the email address or phone number associated with your
-                    account
+                    <Localize>
+                        Enter the email address or phone number associated with
+                        your account
+                    </Localize>
                 </Text>
                 <InputField
                     title={_('Email or Phone')}

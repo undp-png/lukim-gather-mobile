@@ -68,6 +68,7 @@ interface BoxProps {
     isOpen: boolean;
     onToggleModal(): void;
     setOpenCategory(): void;
+    setCategory(): void;
 }
 
 const CategoryListModal: React.FC<BoxProps> = ({

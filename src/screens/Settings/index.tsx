@@ -23,7 +23,7 @@ const Settings = () => {
     );
 
     const toggleLanguageModal = useCallback(() => {
-        navigation.navigate('Lauguage');
+        navigation.navigate('Language');
     }, [navigation]);
 
     return (

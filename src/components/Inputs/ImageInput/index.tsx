@@ -4,6 +4,7 @@ import {View, Text} from 'react-native';
 import ImagePicker from 'components/ImagePicker';
 
 import cs from '@rna/utils/cs';
+import {_} from 'services/i18n';
 
 import {InputProps} from '../index';
 import styles from './styles';
@@ -16,7 +17,7 @@ const ImageInput: React.FC<InputProps> = (props: InputProps) => {
         showRequired,
         input: {onChange, value},
         meta: {touched, error, warning},
-        inputProps: {multiple},
+        inputProps: {multiple, hints, editable},
     } = props;
 
     const showError = useMemo(() => touched && !!error, [touched, error]);
@@ -53,6 +54,7 @@ const ImageInput: React.FC<InputProps> = (props: InputProps) => {
             {!!title && (
                 <Text style={cs(styles.title, titleStyle)}>{title}</Text>
             )}
+            {!!hints && <Text style={styles.hints}>{hints}</Text>}
             <View
                 style={cs(
                     styles.input,
@@ -63,6 +65,7 @@ const ImageInput: React.FC<InputProps> = (props: InputProps) => {
                     [styles.inputError, showError],
                 )}>
                 <ImagePicker
+                    disabled={!editable}
                     onChange={handleImageChange}
                     multiple={multiple}
                     images={value ?? []}
@@ -71,7 +74,7 @@ const ImageInput: React.FC<InputProps> = (props: InputProps) => {
             </View>
             {showError && <Text style={styles.errorText}>{error}</Text>}
             {!showError && !value && showRequired && (
-                <Text style={styles.warningText}>Required</Text>
+                <Text style={styles.warningText}>{_('Required')}</Text>
             )}
         </View>
     );

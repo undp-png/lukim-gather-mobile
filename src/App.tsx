@@ -76,7 +76,15 @@ const App = () => {
                                 />
                                 <NavigationContainer
                                     theme={{
-                                        colors: {background: COLORS.background},
+                                        dark: false,
+                                        colors: {
+                                            background: COLORS.background,
+                                            primary: COLORS.primary,
+                                            card: COLORS.backgroundLight,
+                                            text: COLORS.greyTextDark,
+                                            border: COLORS.border,
+                                            notification: COLORS.primary,
+                                        },
                                     }}>
                                     <AppNavigator />
                                 </NavigationContainer>

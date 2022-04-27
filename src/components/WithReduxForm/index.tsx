@@ -2,7 +2,7 @@ import React, {FC} from 'react';
 import {reduxForm} from 'redux-form';
 import hoistNonReactStatic from 'hoist-non-react-statics';
 
-import {FormType, QuestionGroupType} from 'generated/types';
+import {FormType, QuestionGroupType} from '@generated/types';
 
 interface FormProps {
     form: FormType;

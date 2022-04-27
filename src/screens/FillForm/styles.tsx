@@ -8,6 +8,12 @@ export default StyleSheet.create({
         backgroundColor: COLORS.white,
         padding: 20,
     },
+    surveyTitleContainer: {
+        marginBottom: 25,
+    },
+    surveyTitle: {
+        marginTop: 0,
+    },
     groupTitleContainer: {
         marginBottom: 20,
     },
