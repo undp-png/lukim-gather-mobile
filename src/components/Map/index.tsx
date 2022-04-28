@@ -1,4 +1,5 @@
 import React, {useCallback, useEffect, useState, useRef} from 'react';
+import {useQuery} from '@apollo/client';
 import {View, Image, Text, Alert} from 'react-native';
 import {Icon} from 'react-native-eva-icons';
 import {TouchableOpacity} from 'react-native-gesture-handler';
@@ -9,6 +10,8 @@ import Geolocation from 'react-native-geolocation-service';
 import HomeHeader from 'components/HomeHeader';
 
 import cs from '@rna/utils/cs';
+import surveyCategory from 'services/data/surveyCategory';
+import {GET_HAPPENING_SURVEY} from 'services/gql/queries';
 import {MAPBOX_ACCESS_TOKEN} from '@env';
 import {checkLocation} from 'utils/location';
 import COLORS from 'utils/colors';
@@ -18,7 +21,7 @@ import styleJSON from 'assets/map/style.json';
 import OfflineLayers from './OfflineLayers';
 import DrawPolygonIcon from './Icon/DrawPolygon';
 import MarkerIcon from './Icon/Marker';
-import styles from './styles';
+import styles, {mapStyles} from './styles';
 
 MapboxGL.setAccessToken(MAPBOX_ACCESS_TOKEN);
 
@@ -29,6 +32,7 @@ interface locationRefType {
 }
 
 interface Props {
+    showCluster?: boolean;
     hideHeader?: boolean;
     showMarker?: boolean;
     locationBarStyle?: object;
@@ -39,6 +43,7 @@ interface Props {
 const mapViewStyles = JSON.stringify(styleJSON);
 
 const Map: React.FC<Props> = ({
+    showCluster = false,
     hideHeader = false,
     showMarker = false,
     locationBarStyle,
@@ -158,6 +163,66 @@ const Map: React.FC<Props> = ({
         );
     }, [currentLocation]);
 
+    const {data} = useQuery(GET_HAPPENING_SURVEY);
+
+    const renderCluster = useCallback(() => {
+        const shape =
+            data?.happeningSurveys
+                .filter(survey => survey.location)
+                .map(survey => ({
+                    type: 'Feature',
+                    properties: {
+                        categoryId: survey.category?.id,
+                        categoryIcon: survey.category?.id,
+                    },
+                    geometry: {
+                        type: survey.location.type,
+                        coordinates: survey.location.coordinates,
+                    },
+                })) || [];
+        let surveyGeoJSON = {
+            type: 'FeatureCollection',
+            features: [...shape],
+        };
+        let icons = surveyCategory
+            .map(category =>
+                category.childs.map(child => ({[child.id]: child.icon})),
+            )
+            .flat();
+        let categoryIcons = Object.assign({}, ...icons);
+
+        if (!shape) {
+            return;
+        }
+
+        return (
+            <>
+                <MapboxGL.Images images={categoryIcons} />
+                <MapboxGL.ShapeSource
+                    id="surveySource"
+                    cluster
+                    shape={surveyGeoJSON}>
+                    <MapboxGL.SymbolLayer
+                        id="pointCount"
+                        style={mapStyles.pointCount}
+                        filter={['has', 'point_count']}
+                    />
+                    <MapboxGL.CircleLayer
+                        id="circles"
+                        belowLayerID="pointCount"
+                        style={mapStyles.clusterPoints}
+                        filter={['has', 'point_count']}
+                    />
+                    <MapboxGL.SymbolLayer
+                        id="singlePoint"
+                        style={mapStyles.singlePoint}
+                        filter={['!', ['has', 'point_count']]}
+                    />
+                </MapboxGL.ShapeSource>
+            </>
+        );
+    }, [data]);
+
     const renderPolygon = useCallback(() => {
         const polygonGeoJSON = {
             type: 'Feature',
@@ -237,6 +302,7 @@ const Map: React.FC<Props> = ({
                     />
                     {showMarker && renderAnnotation()}
                     {pickLocation === 'Draw polygon' && renderPolygon()}
+                    {showCluster && renderCluster()}
                 </MapboxGL.MapView>
             </View>
             <View style={cs(styles.locationBar, locationBarStyle)}>

@@ -26,17 +26,20 @@ const keyExtractor: KeyExtractor = item => item.id.toString();
 const TabItem = ({
     onPress,
     title,
-    active,
-    id,
+    activeTab,
+    name,
 }: {
     onPress(): void;
     title: string;
-    active: string;
-    id: string;
+    activeTab: string;
+    name: string;
 }) => {
     return (
         <TouchableOpacity
-            style={cs(styles.tabItem, [styles.activeTabItem, active === id])}
+            style={cs(styles.tabItem, [
+                styles.activeTabItem,
+                activeTab === name,
+            ])}
             onPress={onPress}>
             <Text style={styles.tabTitle} title={title} />
         </TouchableOpacity>
@@ -48,7 +51,7 @@ const SearchSurvey = () => {
         (state: RootStateOrAny) => state.auth,
     );
     const [searchQuery, setSearchQuery] = useState('');
-    const [selectedTab, setSelectedTab] = useState('');
+    const [selectedTab, setSelectedTab] = useState('all');
     const navigation = useNavigation();
     const onClearSearch = useCallback(() => setSearchQuery(''), []);
     const handleSearchChange = useCallback(text => setSearchQuery(text), []);
@@ -94,6 +97,7 @@ const SearchSurvey = () => {
     }: {
         item: HappeningSurveyType;
     }) => <SurveyItem item={item} />;
+
     const searchedSurveys = useMemo(
         () =>
             data?.happeningSurveys.filter((el: HappeningSurveyType) =>
@@ -104,41 +108,41 @@ const SearchSurvey = () => {
 
     const selectedData = useMemo(
         () =>
-            selectedTab === user?.id
+            selectedTab === 'myentries'
                 ? searchedSurveys.filter(
                       (el: HappeningSurveyType) =>
-                          el.createdBy?.id === selectedTab,
+                          el.createdBy?.id && el.createdBy?.id === user?.id,
                   )
                 : searchedSurveys,
         [searchedSurveys, selectedTab, user],
     );
 
-    const onSelectTabAll = useCallback(() => setSelectedTab(''), []);
-    const onSelectTabMy = useCallback(() => {
+    const handleAllTabSelect = useCallback(() => setSelectedTab('all'), []);
+    const handleMyTabSelect = useCallback(() => {
         if (!isAuthenticated) {
             return Toast.show(_('You are not logged in!'));
         }
-        setSelectedTab(user?.id);
-    }, [user, isAuthenticated]);
+        setSelectedTab('myentries');
+    }, [isAuthenticated]);
 
     return (
         <View style={styles.container}>
             <View style={styles.tabWrapper}>
                 <TabItem
-                    active={selectedTab}
-                    id={''}
+                    name="all"
+                    activeTab={selectedTab}
                     title="All"
-                    onPress={onSelectTabAll}
+                    onPress={handleAllTabSelect}
                 />
                 <TabItem
-                    active={selectedTab}
-                    id={user?.id}
+                    name="myentries"
+                    activeTab={selectedTab}
                     title="My Entries"
-                    onPress={onSelectTabMy}
+                    onPress={handleMyTabSelect}
                 />
             </View>
             <FlatList
-                data={selectedTab ? selectedData : searchedSurveys}
+                data={selectedTab === 'all' ? selectedData : searchedSurveys}
                 renderItem={renderItem}
                 showsVerticalScrollIndicator={false}
                 keyExtractor={keyExtractor}

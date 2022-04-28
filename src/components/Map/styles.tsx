@@ -74,3 +74,20 @@ export default StyleSheet.create({
         circleColor: COLORS.white,
     },
 });
+
+export const mapStyles = {
+    pointCount: {
+        textColor: 'white',
+        textField: ['get', 'point_count_abbreviated'],
+        textSize: 16,
+    },
+    clusterPoints: {
+        circleColor: '#5486BD',
+        circleRadius: 20,
+    },
+    singlePoint: {
+        iconImage: ['get', 'categoryIcon'],
+        iconAllowOverlap: true,
+        iconSize: 0.6,
+    },
+};

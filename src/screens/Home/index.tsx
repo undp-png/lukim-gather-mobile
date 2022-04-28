@@ -6,7 +6,7 @@ import Map from 'components/Map';
 const Home = () => {
     return (
         <View>
-            <Map />
+            <Map showCluster={true} />
         </View>
     );
 };

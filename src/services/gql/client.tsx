@@ -29,7 +29,7 @@ export const getApolloClient = async queueLink => {
         return {
             headers: {
                 ...headers,
-                authorization: token ? `JWT ${token}` : '',
+                authorization: token ? `Bearer ${token}` : '',
             },
         };
     });
