@@ -4,10 +4,10 @@ import 'cross-fetch/polyfill';
 import React, {useEffect, useState, useCallback} from 'react';
 import {StatusBar} from 'react-native';
 import {NavigationContainer} from '@react-navigation/native';
-import NetInfo, {useNetInfo} from '@react-native-community/netinfo';
+import {useNetInfo} from '@react-native-community/netinfo';
 import {ApolloProvider} from '@apollo/client';
 import {NormalizedCacheObject} from 'apollo-cache-inmemory';
-import QueueLink from 'apollo-link-queue';
+import {QueueLink} from 'vendor/apollo-link-queue-persist';
 import {Provider} from 'react-redux';
 import {PersistGate} from 'redux-persist/integration/react';
 import SplashScreen from 'react-native-splash-screen';
@@ -25,6 +25,7 @@ import COLORS from 'utils/colors';
 
 import 'services/bootstrap';
 
+QueueLink.setFilter(['query']);
 const queueLink = new QueueLink();
 
 const App = () => {
@@ -32,29 +33,23 @@ const App = () => {
     const [client, setClient] = useState<NormalizedCacheObject>(null);
     const {isInternetReachable} = useNetInfo();
 
-    const initializeApolloClient = async () => {
-        const {
-            auth: {token},
-        } = store.getState();
-        await getApolloClient(token, queueLink).then(apolloClient => {
-            setClient(apolloClient);
-        });
-    };
+    const initializeApolloClient = useCallback(async () => {
+        const apolloClient = await getApolloClient(queueLink);
+        setClient(apolloClient);
+    }, []);
 
     useEffect(() => {
         if (isInternetReachable) {
             queueLink.open();
-            console.log('queueLink opened');
         } else {
             queueLink.close();
-            console.log('queueLink closed');
         }
     }, [isInternetReachable]);
 
     useEffect(() => {
         initializeApolloClient();
         SplashScreen.hide();
-    }, []);
+    }, [initializeApolloClient]);
 
     const handleInitialize = useCallback(async () => {
         const {

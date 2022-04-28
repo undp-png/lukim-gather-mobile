@@ -1,7 +1,7 @@
 import React, {useState, useCallback, useEffect, useMemo} from 'react';
 import {View, TextInput, ListRenderItem} from 'react-native';
 import {RootStateOrAny, useSelector} from 'react-redux';
-import {gql, useQuery} from '@apollo/client';
+import {useQuery} from '@apollo/client';
 import {useNavigation} from '@react-navigation/native';
 import {FlatList, TouchableOpacity} from 'react-native-gesture-handler';
 import {Icon} from 'react-native-eva-icons';
@@ -31,8 +31,8 @@ const TabItem = ({
 }: {
     onPress(): void;
     title: string;
-    active: number;
-    id: number;
+    active: string;
+    id: string;
 }) => {
     return (
         <TouchableOpacity
@@ -48,7 +48,7 @@ const SearchSurvey = () => {
         (state: RootStateOrAny) => state.auth,
     );
     const [searchQuery, setSearchQuery] = useState('');
-    const [selectedTab, setSelectedTab] = useState(0);
+    const [selectedTab, setSelectedTab] = useState('');
     const navigation = useNavigation();
     const onClearSearch = useCallback(() => setSearchQuery(''), []);
     const handleSearchChange = useCallback(text => setSearchQuery(text), []);
@@ -113,7 +113,7 @@ const SearchSurvey = () => {
         [searchedSurveys, selectedTab, user],
     );
 
-    const onSelectTabAll = useCallback(() => setSelectedTab(0), []);
+    const onSelectTabAll = useCallback(() => setSelectedTab(''), []);
     const onSelectTabMy = useCallback(() => {
         if (!isAuthenticated) {
             return Toast.show(_('You are not logged in!'));
@@ -126,7 +126,7 @@ const SearchSurvey = () => {
             <View style={styles.tabWrapper}>
                 <TabItem
                     active={selectedTab}
-                    id={0}
+                    id={''}
                     title="All"
                     onPress={onSelectTabAll}
                 />

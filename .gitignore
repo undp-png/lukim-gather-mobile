@@ -62,7 +62,7 @@ buck-out/
 .env
 
 # React Native Arsenal
-src/vendor
+src/vendor/react-native-arsenal
 
 # Graphql
 src/generated/

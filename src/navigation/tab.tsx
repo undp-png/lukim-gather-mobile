@@ -45,6 +45,7 @@ export default function TabNavigator() {
                 name="Surveys"
                 component={Surveys}
                 options={{
+                    title: 'Points',
                     headerShown: true,
                     headerTitleAlign: 'center',
                 }}

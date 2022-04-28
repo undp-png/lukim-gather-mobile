@@ -7,20 +7,25 @@ import {
 import {
     persistQueue,
     MMKVStorageWrapper as MMKVQueueStorageWrapper,
-} from 'apollo-link-queue-persist';
+} from 'vendor/apollo-link-queue-persist';
 import {createUploadLink} from 'apollo-upload-client';
 
 import {BASE_URL} from '@env';
 
+import {store} from 'store';
 import {reduxStorage, queueStorage} from 'store/storage';
 
-export const getApolloClient = async (token, queueLink) => {
+export const getApolloClient = async queueLink => {
     const cache = new InMemoryCache();
     const httpLink = createUploadLink({
         uri: BASE_URL,
     });
 
     const authLink = setContext((_, {headers}) => {
+        const {
+            auth: {token},
+        } = store.getState();
+
         return {
             headers: {
                 ...headers,
@@ -44,6 +49,7 @@ export const getApolloClient = async (token, queueLink) => {
         queueLink,
         storage: new MMKVQueueStorageWrapper(queueStorage),
         client,
+        debug: __DEV__,
     });
 
     return client;

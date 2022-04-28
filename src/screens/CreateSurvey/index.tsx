@@ -1,15 +1,7 @@
-import React, {useCallback, useEffect, useRef, useState} from 'react';
-import {
-    Animated,
-    FlatList,
-    Image,
-    Pressable,
-    ScrollView,
-    View,
-    Platform,
-} from 'react-native';
+import React, {useCallback, useEffect, useState} from 'react';
+import {Image, Pressable, ScrollView, View, Platform} from 'react-native';
 import {RootStateOrAny, useSelector} from 'react-redux';
-import {useMutation, gql} from '@apollo/client';
+import {useMutation} from '@apollo/client';
 import {ReactNativeFile} from 'apollo-upload-client';
 import {useNavigation, useRoute} from '@react-navigation/native';
 import {TouchableOpacity} from 'react-native-gesture-handler';
@@ -51,17 +43,6 @@ interface FeelProps {
     onPress(emo: string): void;
 }
 
-interface PhotoProps {
-    item: {path: string};
-    index: number;
-    onCloseIconPress(index: number): void;
-}
-
-interface PhotosProps {
-    photos: {path: string}[];
-    handleRemoveImage(index: number): void;
-}
-
 const Feel: React.FC<FeelProps> = ({feel, activeFeel, onPress}) => {
     const handlePress = useCallback(() => {
         onPress(feel);
@@ -92,6 +73,7 @@ const CreateHappeningSurvey = () => {
     const route = useRoute<any>();
     const navigation = useNavigation<any>();
     const {location} = useSelector((state: RootStateOrAny) => state.survey);
+    const {user} = useSelector((state: RootStateOrAny) => state.auth);
     const [openCategory, setOpenCategory] = useState<boolean>(false);
     const [processing, setProcessing] = useState<boolean>(false);
 
@@ -108,12 +90,10 @@ const CreateHappeningSurvey = () => {
     const [confirmPublish, setConfirmPublish] = useState<boolean>(false);
     const [coordinates, setCoordinates] = useState<object | null>(null);
     const [isAnonymous, setIsAnonymous] = useState<boolean>(false);
-    const [locationDetail, setLocationDetail] = useState<string>('');
+    const [locationDetail, setLocationDetail] =
+        useState<string>('Current Location');
 
-    const iconFlex = useRef(new Animated.Value(1)).current;
-    const imgFlex = useRef(new Animated.Value(0)).current;
-
-    const [createHappeningSurvey, {loading, error}] = useMutation<
+    const [createHappeningSurvey, {loading}] = useMutation<
         CreateHappeningSurveyMutation,
         CreateHappeningSurveyMutationVariables
     >(CREATE_HAPPENING_SURVEY, {
@@ -127,7 +107,7 @@ const CreateHappeningSurvey = () => {
                 'RCTModalHostViewController',
             ]);
             setProcessing(loading);
-            console.log(err);
+            console.log('happening survey', err);
         },
     });
 
@@ -166,6 +146,10 @@ const CreateHappeningSurvey = () => {
                             __typename: 'ProtectedAreaCategoryType',
                         },
                         ...surveyInput,
+                        createdBy: {
+                            id: user?.id || '',
+                            __typename: 'UserType',
+                        },
                     },
                 },
             },
@@ -181,19 +165,20 @@ const CreateHappeningSurvey = () => {
                     } else {
                         mergedSurveys = [
                             data.createHappeningSurvey.result,
-                            ...readData.enviromentalSurveys,
+                            ...readData.happeningSurveys,
                         ];
                     }
+
                     cache.writeQuery({
                         query: GET_HAPPENING_SURVEY,
                         data: {
                             ...readData,
-                            enviromentalSurveys: mergedSurveys,
+                            happeningSurveys: mergedSurveys,
                         },
                     });
                     navigation.navigate('Feed');
                 } catch (e) {
-                    console.log({e});
+                    console.log('error on happening survey', e);
                 }
             },
         });
@@ -209,6 +194,7 @@ const CreateHappeningSurvey = () => {
         attachment,
         location,
         navigation,
+        user?.id,
     ]);
 
     const [uploadFile] = useMutation<
