@@ -123,6 +123,7 @@ export const GET_SURVEY_FORMS = gql`
                     id
                     code
                     title
+                    hints
                     description
                     answerType
                     isRequired
@@ -131,6 +132,20 @@ export const GET_SURVEY_FORMS = gql`
                         title
                     }
                 }
+            }
+        }
+    }
+`;
+
+export const CREATE_WRITABLE_SURVEY = gql`
+    mutation CreateWritableSurvey($input: WritableSurveyMutationInput!) {
+        createWritableSurvey(input: $input) {
+            id
+            title
+            ok
+            errors {
+                field
+                messages
             }
         }
     }

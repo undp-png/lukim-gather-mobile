@@ -10,7 +10,7 @@ import SurveyItem from 'components/SurveyItem';
 import EmptyListMessage from 'components/EmptyListMessage';
 
 import {GET_HAPPENING_SURVEY} from 'services/gql/queries';
-import {HappeningSurveyType, ProtectedAreaCategoryType} from 'generated/types';
+import {HappeningSurveyType, ProtectedAreaCategoryType} from '@generated/types';
 
 import styles from './styles';
 

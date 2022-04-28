@@ -10,9 +10,10 @@ import LocationInput from 'components/Inputs/LocationInput';
 import BooleanInput from 'components/Inputs/BooleanInput';
 import ImageInput from 'components/Inputs/ImageInput';
 
-import {QuestionType} from 'generated/types';
+import {QuestionType} from '@generated/types';
 
 import {isset} from '@rna/utils';
+import {_} from 'services/i18n';
 
 import styles from './styles';
 
@@ -20,10 +21,11 @@ interface QuestionProps {
     item: QuestionType;
     index: number;
     showRequired: boolean | undefined;
+    editable: boolean;
 }
 
-const requiredValidator = (value?: any) =>
-    isset(value) && value !== '' ? undefined : 'This field is required';
+export const requiredValidator = (value?: any) =>
+    isset(value) && value !== '' ? undefined : _('This field is required');
 
 const getInputComponent = (question: QuestionType) => {
     switch (question.answerType) {
@@ -45,7 +47,7 @@ const getInputComponent = (question: QuestionType) => {
 };
 
 const Question: React.FC<QuestionProps> = (props: QuestionProps) => {
-    const {item, index, showRequired} = props;
+    const {item, showRequired, editable = true} = props;
 
     const InputComponent = useMemo(() => getInputComponent(item), [item]);
 
@@ -83,10 +85,12 @@ const Question: React.FC<QuestionProps> = (props: QuestionProps) => {
                         single: item.answerType === 'SINGLE_OPTION',
                         selectText:
                             item.answerType === 'SINGLE_OPTION'
-                                ? 'Select...'
-                                : 'Select all that apply...',
+                                ? _('Select...')
+                                : _('Select all that apply...'),
                         multiple: item.answerType === 'MULTIPLE_IMAGE',
                         options: item.options,
+                        hints: item.hints,
+                        editable: editable,
                     }}
                     validate={validations}
                 />

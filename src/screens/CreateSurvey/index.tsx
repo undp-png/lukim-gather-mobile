@@ -19,7 +19,6 @@ import {ModalLoader} from 'components/Loader';
 import CategoryListModal from 'components/CategoryListModal';
 
 import cs from '@rna/utils/cs';
-import {Localize} from '@rna/components/I18n';
 import {_} from 'services/i18n';
 
 import {
@@ -155,9 +154,10 @@ const CreateHappeningSurvey = () => {
             },
             update: (cache, {data}) => {
                 try {
-                    const readData: any = cache.readQuery({
-                        query: GET_HAPPENING_SURVEY,
-                    });
+                    const readData: any =
+                        cache.readQuery({
+                            query: GET_HAPPENING_SURVEY,
+                        }) || [];
                     let mergedSurveys = [];
 
                     if (readData.happeningSurveys.length <= 0) {

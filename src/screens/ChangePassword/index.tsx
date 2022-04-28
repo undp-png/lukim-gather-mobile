@@ -3,7 +3,7 @@ import {View} from 'react-native';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import {useNavigation} from '@react-navigation/native';
-import {useMutation, gql} from '@apollo/client';
+import {useMutation} from '@apollo/client';
 import Toast from 'react-native-simple-toast';
 
 import {ModalLoader} from 'components/Loader';

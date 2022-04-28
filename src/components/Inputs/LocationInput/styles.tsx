@@ -9,6 +9,11 @@ export default StyleSheet.create({
         lineHeight: 19,
         color: '#70747E',
     },
+    hints: {
+        marginTop: 4,
+        fontFamily: 'Inter-Regular',
+        color: COLORS.inputText,
+    },
     locationCont: {
         flexDirection: 'row',
         alignItems: 'center',

@@ -1,16 +1,13 @@
 import React, {useEffect} from 'react';
 import {View, FlatList} from 'react-native';
-import {useSelector, RootStateOrAny} from 'react-redux';
 import {useQuery} from '@apollo/client';
-
-import {QuestionGroupType} from 'screens/FillForm';
 
 import MenuItem from 'components/MenuItem';
 import {Loader} from 'components/Loader';
 
 import {_} from 'services/i18n';
 import {GET_SURVEY_FORMS} from 'services/gql/queries';
-import {FormType} from 'generated/types';
+import {FormType} from '@generated/types';
 
 import styles from './styles';
 
@@ -30,8 +27,6 @@ const FormMenuItem: React.FC<FormMenuItemProps> = ({
 };
 
 const Forms = () => {
-    const {user} = useSelector((state: RootStateOrAny) => state.auth);
-
     const {loading: fetching, data = {}, refetch} = useQuery(GET_SURVEY_FORMS);
 
     useEffect(() => {

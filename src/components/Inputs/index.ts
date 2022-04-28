@@ -1,4 +1,6 @@
-export interface InputProps {
+import {WrappedFieldProps} from 'redux-form';
+
+export interface InputProps extends WrappedFieldProps {
     fieldContainerStyle?: object;
     containerStyle?: object;
     titleStyle?: object;
@@ -8,14 +10,14 @@ export interface InputProps {
     input: {
         value: any;
         onChange: (val: any) => void;
-        [key: string]: any;
-    };
-    meta: {
-        touched: boolean;
-        error?: any;
-        warning?: any;
+        onBlur: () => void;
+        onFocus: () => void;
+        onDrop: () => void;
+        onDragStart: () => void;
+        name: string;
     };
     inputProps: {
+        editable?: boolean;
         [key: string]: any;
     };
 }

@@ -13,6 +13,11 @@ export default StyleSheet.create({
         fontFamily: 'Inter-Medium',
         color: COLORS.inputText,
     },
+    hints: {
+        marginTop: 4,
+        fontFamily: 'Inter-Regular',
+        color: COLORS.inputText,
+    },
     dropdownMenu: {
         height: 56,
         marginTop: 8,

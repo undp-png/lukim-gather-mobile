@@ -3,7 +3,7 @@ import {View, Image} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import {Icon} from 'react-native-eva-icons';
-import {useSelector} from 'react-redux';
+import {RootStateOrAny, useSelector} from 'react-redux';
 
 import Button from 'components/Button';
 import Text from 'components/Text';
@@ -16,7 +16,9 @@ import {dispatchLogout} from 'services/dispatch';
 import styles from './styles';
 
 const Menu = () => {
-    const {isAuthenticated, user} = useSelector(state => state.auth);
+    const {isAuthenticated, user} = useSelector(
+        (state: RootStateOrAny) => state.auth,
+    );
     const [openConfirmLogout, setOpenConfirmLogout] = useState(false);
     const navigation = useNavigation();
     const onProfilePress = useCallback(

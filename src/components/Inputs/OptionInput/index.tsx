@@ -3,6 +3,9 @@ import {View, Text} from 'react-native';
 import MultiSelect from 'react-native-multiple-select';
 
 import cs from '@rna/utils/cs';
+import {_} from 'services/i18n';
+
+import {OptionType} from '@generated/types';
 
 import COLORS from 'utils/colors';
 
@@ -21,8 +24,20 @@ const OptionInput: React.FC<InputProps> = (props: InputProps) => {
     } = props;
 
     const showError = useMemo(() => touched && !!error, [touched, error]);
+    const items = useMemo(() => {
+        if (inputProps.options) {
+            if (!inputProps.editable) {
+                return inputProps.options.map((i: OptionType) => ({
+                    ...i,
+                    disabled: true,
+                }));
+            }
+            return inputProps.options;
+        }
+        return [];
+    }, [inputProps]);
 
-    const inputRef = useRef();
+    const inputRef = useRef() as React.MutableRefObject<MultiSelect>;
 
     const [selectedItems, setSelectedItems] = useState(
         Array.isArray(value) ? value : [],
@@ -30,10 +45,12 @@ const OptionInput: React.FC<InputProps> = (props: InputProps) => {
 
     const handleChange = useCallback(
         payload => {
-            onChange && onChange(payload?.length ? payload : null);
-            setSelectedItems(payload);
+            if (inputProps.editable) {
+                onChange && onChange(payload?.length ? payload : null);
+                setSelectedItems(payload);
+            }
         },
-        [onChange],
+        [onChange, inputProps],
     );
 
     return (
@@ -41,10 +58,13 @@ const OptionInput: React.FC<InputProps> = (props: InputProps) => {
             {!!title && (
                 <Text style={cs(styles.title, titleStyle)}>{title}</Text>
             )}
+            {!!inputProps.hints && (
+                <Text style={styles.hints}>{inputProps.hints}</Text>
+            )}
             <MultiSelect
                 uniqueKey="id"
                 ref={inputRef}
-                items={inputProps.options ?? []}
+                items={items}
                 displayKey="title"
                 hideSubmitButton
                 fontFamily="Inter-Regular"
@@ -55,7 +75,10 @@ const OptionInput: React.FC<InputProps> = (props: InputProps) => {
                     styles.dropdownMenu,
                     [
                         styles.inputWarning,
-                        !!warning || (!showError && !value && showRequired),
+                        !!warning ||
+                            (!showError &&
+                                (!value || value?.length === 0) &&
+                                showRequired),
                     ],
                     [styles.inputError, showError],
                 )}
@@ -72,6 +95,10 @@ const OptionInput: React.FC<InputProps> = (props: InputProps) => {
                 tagTextColor={COLORS.tertiary}
                 removeSelected
                 selectedItems={selectedItems}
+                textInputProps={{
+                    editable: inputProps.editable,
+                    autoFocus: false,
+                }}
                 {...inputProps}
             />
             {inputProps.single && (
@@ -80,8 +107,8 @@ const OptionInput: React.FC<InputProps> = (props: InputProps) => {
                 </View>
             )}
             {showError && <Text style={styles.errorText}>{error}</Text>}
-            {!showError && !value && showRequired && (
-                <Text style={styles.warningText}>Required</Text>
+            {!showError && (!value || value?.length === 0) && showRequired && (
+                <Text style={styles.warningText}>{_('Required')}</Text>
             )}
         </View>
     );

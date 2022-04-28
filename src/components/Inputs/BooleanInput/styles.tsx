@@ -10,9 +10,19 @@ export default StyleSheet.create({
     },
     input: {
         marginVertical: 8,
+        borderRadius: 8,
         display: 'flex',
         flexDirection: 'row',
         justifyContent: 'space-between',
+        borderWidth: 1,
+        borderColor: COLORS.border,
+        paddingVertical: 4,
+        paddingHorizontal: 16,
+    },
+    hints: {
+        marginTop: 4,
+        fontFamily: 'Inter-Regular',
+        color: COLORS.inputText,
     },
     inputText: {
         fontSize: 16,
@@ -26,6 +36,12 @@ export default StyleSheet.create({
     },
     radioButton: {
         marginRight: 20,
+    },
+    inputWarning: {
+        borderColor: COLORS.warning,
+    },
+    inputError: {
+        borderColor: COLORS.error,
     },
     warningText: {
         color: COLORS.warning,

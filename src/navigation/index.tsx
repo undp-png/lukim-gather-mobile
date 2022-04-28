@@ -7,7 +7,7 @@ import TabNavigator from './tab';
 
 import About from 'screens/About';
 import AccountSettings from 'screens/AccountSettings';
-import Lauguage from 'screens/Language';
+import Language from 'screens/Language';
 import ChangePassword from 'screens/ChangePassword';
 import ChangeLocation from 'screens/ChangeLocation';
 import ChooseCategory from 'screens/ChooseCategory';
@@ -24,17 +24,20 @@ import FillForm from 'screens/FillForm';
 
 import {BackButton, CloseButton} from 'components/HeaderButton';
 
-import {HappeningSurveyType, FormType} from 'generated/types';
-
+import type {HappeningSurveyType, FormType} from '@generated/types';
 import COLORS from 'utils/colors';
+import {_} from 'services/i18n';
 
 export type StackParamList = {
     About: undefined;
     AccountSettings: undefined;
-    Lauguage: undefined;
+    Language: undefined;
     Auth: undefined;
     ChangePassword: undefined;
-    ChangeLocation: {onChange?: (value: any) => void};
+    ChangeLocation: {
+        onChange?: (value: any) => void;
+        polygonDisabled?: boolean;
+    };
     ChooseCategory: undefined;
     SearchCategory: undefined;
     CreateSurvey: undefined;
@@ -47,7 +50,7 @@ export type StackParamList = {
     SearchSurvey: undefined;
     SurveyItem: {item?: HappeningSurveyType};
     Forms: undefined;
-    FillForm: {form?: FormType};
+    FillForm: {form?: FormType; isViewOnlyMode?: boolean};
 };
 
 const Stack = createStackNavigator<StackParamList>();
@@ -87,15 +90,15 @@ const AppNavigator = () => {
                 name="AccountSettings"
                 component={AccountSettings}
                 options={{
-                    headerTitle: 'Account Settings',
+                    headerTitle: _('Account Settings'),
                 }}
             />
             <Stack.Screen
-                name="Lauguage"
-                component={Lauguage}
+                name="Language"
+                component={Language}
                 options={{
                     headerLeft: () => <CloseButton />,
-                    headerTitle: 'Lauguage',
+                    headerTitle: _('Language'),
                     presentation: 'modal',
                 }}
             />
@@ -104,7 +107,7 @@ const AppNavigator = () => {
                 component={ChangePassword}
                 options={{
                     headerLeft: () => <CloseButton />,
-                    headerTitle: 'Change Password',
+                    headerTitle: _('Change Password'),
                     presentation: 'modal',
                 }}
             />
@@ -113,7 +116,7 @@ const AppNavigator = () => {
                 component={EditProfile}
                 options={{
                     headerLeft: () => <CloseButton />,
-                    headerTitle: 'Edit Profile',
+                    headerTitle: _('Edit Profile'),
                     presentation: 'modal',
                 }}
             />
@@ -125,7 +128,7 @@ const AppNavigator = () => {
                 component={CreateSurvey}
                 options={{
                     headerLeft: () => <CloseButton />,
-                    headerTitle: 'Details',
+                    headerTitle: _('Details'),
                     presentation: 'modal',
                 }}
             />
@@ -134,7 +137,7 @@ const AppNavigator = () => {
                 component={ChangeLocation}
                 options={{
                     headerLeft: () => <CloseButton />,
-                    headerTitle: 'Change Location',
+                    headerTitle: _('Change Location'),
                     presentation: 'modal',
                 }}
             />
@@ -148,7 +151,7 @@ const AppNavigator = () => {
                 component={SurveyItem}
                 options={{
                     headerLeft: () => <CloseButton />,
-                    headerTitle: 'Public Entries',
+                    headerTitle: _('Public Entries'),
                     presentation: 'modal',
                 }}
             />
@@ -156,7 +159,7 @@ const AppNavigator = () => {
                 name="ChooseCategory"
                 component={ChooseCategory}
                 options={{
-                    headerTitle: 'Choose a category',
+                    headerTitle: _('Choose a category'),
                 }}
             />
             <Stack.Screen

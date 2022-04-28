@@ -1,5 +1,5 @@
 import React, {useState, useCallback, useEffect} from 'react';
-import {FlatList, SafeAreaView, View} from 'react-native';
+import {FlatList, View} from 'react-native';
 import {useNavigation, useRoute} from '@react-navigation/native';
 import type {RouteProp} from '@react-navigation/native';
 
@@ -122,7 +122,7 @@ const ChangeLocation = () => {
                     editable={false}
                 />
                 <FlatList
-                    data={Labels}
+                    data={params.polygonDisabled ? Labels.slice(0, -1) : Labels}
                     renderItem={renderItem}
                     keyExtractor={keyExtractor}
                 />

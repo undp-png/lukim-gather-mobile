@@ -16,6 +16,7 @@ interface Props {
     placeholder?: string;
     containerStyle?: object;
     inputStyle?: object;
+    hints?: string;
     [key: string]: any;
 }
 
@@ -28,6 +29,7 @@ const InputField: React.FC<Props> = ({
     containerStyle,
     inputStyle,
     multiline,
+    hints,
     ...inputProps
 }) => {
     const [focused, setFocused] = useState(false);
@@ -66,6 +68,7 @@ const InputField: React.FC<Props> = ({
                     {title}
                 </Text>
             )}
+            {!!hints && <Text style={styles.hints}>{hints}</Text>}
             <View style={styles.inputContainer}>
                 {searchInput && (
                     <View style={styles.searchIconWrapper}>

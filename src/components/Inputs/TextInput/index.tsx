@@ -4,6 +4,7 @@ import {Text, View} from 'react-native';
 import InputField from 'components/InputField';
 
 import cs from '@rna/utils/cs';
+import {_} from 'services/i18n';
 
 import {InputProps} from '../index';
 import styles from './styles';
@@ -39,7 +40,7 @@ const TextInput: React.FC<InputProps> = (props: InputProps) => {
             />
             {showError && <Text style={styles.errorText}>{error}</Text>}
             {!showError && !value && showRequired && (
-                <Text style={styles.warningText}>Required</Text>
+                <Text style={styles.warningText}>{_('Required')}</Text>
             )}
         </View>
     );

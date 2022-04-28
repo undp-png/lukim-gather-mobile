@@ -33,6 +33,7 @@ interface ImagePickerProps {
     onChange: (file: ImageType) => void;
     onRemoveImage: (images: ImageType[]) => void;
     multiple?: boolean;
+    disabled?: boolean;
 }
 
 const deviceHeight = Dimensions.get('window').height;
@@ -99,6 +100,7 @@ const _ImagePicker: React.FC<ImagePickerProps> = ({
     onChange: onChangeCallback,
     multiple,
     onRemoveImage: onRemoveCallback,
+    disabled,
 }) => {
     const [visible, setVisible] = React.useState(false);
 
@@ -202,7 +204,7 @@ const _ImagePicker: React.FC<ImagePickerProps> = ({
                 {(multiple || images.length !== 1) && (
                     <Animated.View
                         style={cs(styles.imgPickerWrapper, {flex: iconFlex})}>
-                        <TouchableOpacity onPress={open}>
+                        <TouchableOpacity onPress={open} disabled={disabled}>
                             <Icon
                                 name="plus-circle"
                                 height={40}

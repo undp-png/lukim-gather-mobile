@@ -16,7 +16,7 @@ import {GET_HAPPENING_SURVEY} from 'services/gql/queries';
 import cs from '@rna/utils/cs';
 import {_} from 'services/i18n';
 import {getErrorMessage} from 'utils/error';
-import {HappeningSurveyType} from 'generated/types';
+import {HappeningSurveyType} from '@generated/types';
 
 import styles from './styles';
 
