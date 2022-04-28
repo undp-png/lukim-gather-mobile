@@ -36,6 +36,7 @@ import {
 import {getErrorMessage} from 'utils/error';
 
 import styles from './styles';
+import SurveyReview from 'components/SurveyReview';
 interface FeelProps {
     feel: string;
     activeFeel: string;
@@ -78,6 +79,7 @@ const CreateHappeningSurvey = () => {
 
     const [title, setTitle] = useState<string>('');
     const [activeFeel, setActiveFeel] = useState<string>('');
+    const [activeReview, setActiveReview] = useState<string>('');
     const [images, setImages] = useState<ImageObj[]>([]);
     const [description, setDescription] = useState<string>('');
     const [category, setCategory] = useState<{
@@ -116,6 +118,7 @@ const CreateHappeningSurvey = () => {
             title: title,
             description: description,
             sentiment: activeFeel,
+            improvement: activeReview,
             attachment: attachment,
             location: location.point
                 ? {type: 'Point', coordinates: location?.point}
@@ -131,6 +134,7 @@ const CreateHappeningSurvey = () => {
         await createHappeningSurvey({
             variables: {
                 input: {...surveyInput, categoryId: category.id},
+                anonymous: isAnonymous,
             },
             optimisticResponse: {
                 createHappeningSurvey: {
@@ -191,8 +195,10 @@ const CreateHappeningSurvey = () => {
         createHappeningSurvey,
         confirmPublish,
         activeFeel,
+        activeReview,
         attachment,
         location,
+        isAnonymous,
         navigation,
         user?.id,
     ]);
@@ -214,6 +220,10 @@ const CreateHappeningSurvey = () => {
 
     const handleFeel = useCallback(feel => {
         setActiveFeel(feel);
+    }, []);
+
+    const handleReview = useCallback(review => {
+        setActiveReview(review);
     }, []);
 
     const handleImages = useCallback(
@@ -272,9 +282,9 @@ const CreateHappeningSurvey = () => {
 
     const updateAnonymousStatus = useCallback(
         anonymous => {
-            setIsAnonymous(isAnonymous);
+            setIsAnonymous(anonymous);
         },
-        [isAnonymous],
+        [setIsAnonymous],
     );
 
     useEffect(() => {
@@ -294,7 +304,7 @@ const CreateHappeningSurvey = () => {
             showsVerticalScrollIndicator={false}>
             <View style={styles.categoryCont}>
                 <SurveyConfirmBox
-                    updateAnonymousStatus
+                    updateAnonymousStatus={updateAnonymousStatus}
                     isOpen={confirmPublish}
                     onCancel={handleCancel}
                     onSubmit={handlePublish}
@@ -346,6 +356,29 @@ const CreateHappeningSurvey = () => {
                 <Feel feel="🙁" activeFeel={activeFeel} onPress={handleFeel} />
                 <Feel feel="🙂" activeFeel={activeFeel} onPress={handleFeel} />
                 <Feel feel="😐" activeFeel={activeFeel} onPress={handleFeel} />
+            </View>
+            <Text
+                style={styles.title}
+                title="Is the condition of this feature improving, staying the same, or decreasing?"
+            />
+            <View style={styles.feelings}>
+                <SurveyReview
+                    name="Increasing"
+                    activeReview={activeReview}
+                    onPress={handleReview}
+                    icon="trending-up-outline"
+                />
+                <SurveyReview
+                    name="Same"
+                    activeReview={activeReview}
+                    onPress={handleReview}
+                />
+                <SurveyReview
+                    name="Decreasing"
+                    activeReview={activeReview}
+                    onPress={handleReview}
+                    icon="trending-down-outline"
+                />
             </View>
             <InputField
                 title="Description"
