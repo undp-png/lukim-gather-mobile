@@ -1,9 +1,10 @@
-import React, {useCallback, useState} from 'react';
+import React, {useCallback, useState, useMemo} from 'react';
 import {View, Image} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import {Icon} from 'react-native-eva-icons';
 import {RootStateOrAny, useSelector} from 'react-redux';
+import VersionNumber from 'react-native-version-number';
 
 import Button from 'components/Button';
 import Text from 'components/Text';
@@ -43,6 +44,15 @@ const Menu = () => {
         () => setOpenConfirmLogout(!openConfirmLogout),
         [openConfirmLogout],
     );
+
+    const versionString = useMemo(() => {
+        if (VersionNumber.appVersion && VersionNumber.buildVersion) {
+            return `${_('Version')} ${VersionNumber.appVersion}.${
+                VersionNumber.buildVersion
+            }`;
+        }
+        return '';
+    }, []);
 
     return (
         <View style={styles.container}>
@@ -118,7 +128,7 @@ const Menu = () => {
                     )}
                 </View>
             </View>
-            <Text style={styles.appVersion} title={_('Version 0.1')} />
+            <Text style={styles.appVersion} title={versionString} />
         </View>
     );
 };

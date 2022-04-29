@@ -54,6 +54,14 @@ jest.mock('react-native-keyboard-aware-scroll-view', () => {
     return {KeyboardAwareScrollView};
 });
 
+jest.mock('react-native-version-number', () => {
+    return {
+        appVersion: '',
+        buildVersion: '',
+        bundleIdentifier: '',
+    };
+});
+
 jest.mock('react-native-image-crop-picker', () => {
     return {
         openPicker: jest.fn().mockImplementation(() => Promise.resolve()),
