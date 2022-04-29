@@ -35,17 +35,14 @@ const Forms = () => {
 
     return (
         <View style={styles.container}>
-            {fetching ? (
-                <Loader loading />
-            ) : (
-                <View style={styles.menuWrapper}>
-                    <FlatList
-                        data={data?.surveyForm ?? []}
-                        renderItem={FormMenuItem}
-                        keyExtractor={keyExtractor}
-                    />
-                </View>
-            )}
+            <View style={styles.menuWrapper}>
+                <FlatList
+                    data={data?.surveyForm ?? []}
+                    renderItem={FormMenuItem}
+                    keyExtractor={keyExtractor}
+                    ListEmptyComponent={<Loader loading={fetching} />}
+                />
+            </View>
         </View>
     );
 };
