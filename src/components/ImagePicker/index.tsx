@@ -24,7 +24,7 @@ interface PhotoProps {
 }
 
 interface PhotosProps {
-    photos: {path: string}[];
+    photos: {path: string; media: string}[];
     onRemoveImage(index: number): void;
 }
 
@@ -47,7 +47,7 @@ const Photo: React.FC<PhotoProps> = ({item, index, onCloseIconPress}) => {
         <View style={styles.surveyImageWrapper}>
             <Image
                 source={
-                    {uri: item.path} ||
+                    {uri: item.media || item.path} ||
                     require('assets/images/category-placeholder.png')
                 }
                 style={styles.surveyImage}

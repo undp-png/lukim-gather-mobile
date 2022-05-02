@@ -81,6 +81,44 @@ export const CREATE_HAPPENING_SURVEY = gql`
     }
 `;
 
+export const UPDATE_HAPPENING_SURVEY = gql`
+    mutation UpdateHappeningSurvey(
+        $input: UpdateHappeningSurveyInput!
+        $id: UUID!
+    ) {
+        updateHappeningSurvey(data: $input, id: $id) {
+            __typename
+            errors
+            ok
+            result {
+                id
+                title
+                description
+                location {
+                    type
+                    coordinates
+                }
+                boundary {
+                    type
+                    coordinates
+                }
+                sentiment
+                attachment {
+                    media
+                }
+                category {
+                    __typename
+                    id
+                    title
+                }
+                createdBy {
+                    id
+                }
+            }
+        }
+    }
+`;
+
 export const UPLOAD_IMAGE = gql`
     mutation UploadMedia($title: String!, $type: String!, $media: Upload) {
         uploadMedia(title: $title, type: $type, media: $media) {
@@ -142,7 +180,6 @@ export const CREATE_WRITABLE_SURVEY = gql`
         createWritableSurvey(input: $input) {
             id
             title
-            ok
             errors {
                 field
                 messages

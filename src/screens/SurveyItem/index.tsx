@@ -46,7 +46,7 @@ const Photos = ({photos}: {photos: {media: string}[]}) => {
 
 const SurveyItem = () => {
     const route = useRoute<any>();
-    const navigation = useNavigation();
+    const navigation = useNavigation<any>();
 
     const [isOpenActions, setIsOpenActions] = useState(false);
     const [isOpenDelete, setIsOpenDelete] = useState(false);
@@ -63,9 +63,9 @@ const SurveyItem = () => {
     }, [isOpenActions]);
 
     const togggleEditPress = useCallback(() => {
-        // todo edit
         setIsOpenActions(false);
-    }, []);
+        navigation.navigate('EditSurvey', {categoryItem: surveyData});
+    }, [navigation, surveyData]);
 
     const toggleDeleteModal = useCallback(() => {
         setIsOpenDelete(true);
