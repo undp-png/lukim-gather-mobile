@@ -1,7 +1,9 @@
 import React, {useEffect, useCallback, useState} from 'react';
 import {View, Image} from 'react-native';
 import {FlatList, ScrollView} from 'react-native-gesture-handler';
+import {useMutation} from '@apollo/client';
 import {useNavigation, useRoute} from '@react-navigation/native';
+import Toast from 'react-native-simple-toast';
 
 import Text from 'components/Text';
 import {OptionIcon} from 'components/HeaderButton';
@@ -10,8 +12,13 @@ import SurveyActions from 'components/SurveyActions';
 import useCategoryIcon from 'hooks/useCategoryIcon';
 import {_} from 'services/i18n';
 import SurveyCategory from 'services/data/surveyCategory';
+import {
+    DELETE_HAPPENING_SURVEY,
+    GET_HAPPENING_SURVEY,
+} from 'services/gql/queries';
 
 import styles from './styles';
+import {getErrorMessage} from 'utils/error';
 
 const Header = ({title}: {title: string}) => {
     return (
@@ -57,6 +64,21 @@ const SurveyItem = () => {
         Number(surveyData?.category?.id),
     );
 
+    const [deleteHappeningSurvey, {loading}] = useMutation<
+        DeleteHappeningSurveyMutation,
+        DeleteHappeningSurveyMutationVariables
+    >(DELETE_HAPPENING_SURVEY, {
+        onCompleted: () => {
+            Toast.show('Happening survey deleted sucessfully !');
+        },
+        onError: err => {
+            Toast.show(getErrorMessage(err), Toast.LONG, [
+                'RCTModalHostViewController',
+            ]);
+            console.log('Delete happening survey', err);
+        },
+    });
+
     const togggleOpenActions = useCallback(() => {
         setIsOpenActions(!isOpenActions);
         setIsOpenDelete(false);
@@ -75,10 +97,43 @@ const SurveyItem = () => {
         setIsOpenActions(false);
     }, []);
 
-    const toggleConfirmDelete = useCallback(() => {
-        //todo delete
+    const toggleConfirmDelete = useCallback(async () => {
         setIsOpenActions(false);
-    }, []);
+        await deleteHappeningSurvey({
+            variables: {
+                id: surveyData.id,
+            },
+            optimisticResponse: {
+                deleteHappeningSurvey: {
+                    __typename: 'DeleteHappeningSurvey',
+                    ok: true,
+                    errors: null,
+                },
+            },
+            update: (cache, {data}) => {
+                try {
+                    const readData: any =
+                        cache.readQuery({
+                            query: GET_HAPPENING_SURVEY,
+                        }) || [];
+                    let happeningSurveys = readData?.happeningSurveys.filter(
+                        obj => {
+                            return obj.id !== surveyData.id;
+                        },
+                    );
+                    cache.writeQuery({
+                        query: GET_HAPPENING_SURVEY,
+                        data: {
+                            happeningSurveys: happeningSurveys,
+                        },
+                    });
+                    navigation.navigate('Feed');
+                } catch (e) {
+                    console.log('Error on deleting happening survey !!!', e);
+                }
+            },
+        });
+    }, [deleteHappeningSurvey, navigation, surveyData?.id]);
 
     useEffect(() => {
         navigation.setOptions({

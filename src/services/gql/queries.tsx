@@ -119,6 +119,15 @@ export const UPDATE_HAPPENING_SURVEY = gql`
     }
 `;
 
+export const DELETE_HAPPENING_SURVEY = gql`
+    mutation DeleteHappeningSurvey($id: UUID!) {
+        deleteHappeningSurvey(id: $id) {
+            ok
+            errors
+        }
+    }
+`;
+
 export const UPLOAD_IMAGE = gql`
     mutation UploadMedia($title: String!, $type: String!, $media: Upload) {
         uploadMedia(title: $title, type: $type, media: $media) {
