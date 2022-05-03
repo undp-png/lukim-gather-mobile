@@ -21,6 +21,7 @@ module.exports = {
             '|react-native-vector-icons' +
             '|react-native-splash-screen' +
             '|react-native-webview' +
+            '|react-native-dropdown-picker' +
             ')/)',
     ],
     testPathIgnorePatterns: ['src/vendor', 'node_modules'],

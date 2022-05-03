@@ -36,6 +36,14 @@ interface ImagePickerProps {
     disabled?: boolean;
 }
 
+interface ImagePickerModalProps {
+    onChange: (file: ImageType) => void;
+    multiple?: boolean;
+    disabled?: boolean;
+    isVisible: boolean;
+    onBackdropPress(): void;
+}
+
 const deviceHeight = Dimensions.get('window').height;
 
 const Photo: React.FC<PhotoProps> = ({item, index, onCloseIconPress}) => {
@@ -95,6 +103,72 @@ const Photos: React.FC<PhotosProps> = ({photos, onRemoveImage}) => {
     );
 };
 
+export const ImagePickerModal: React.FC<ImagePickerModalProps> = ({
+    onChange,
+    multiple,
+    isVisible,
+    onBackdropPress,
+}) => {
+    const handleCamera = useCallback(async () => {
+        try {
+            const image = await ImagePicker.openCamera({
+                cropping: true,
+                freeStyleCropEnabled: true,
+                compressImageQuality: 0.7,
+                multiple,
+            });
+            if (image) {
+                onChange?.(image);
+            }
+        } catch (error) {}
+    }, [multiple, onChange]);
+
+    const handleGallery = useCallback(async () => {
+        try {
+            const image = await ImagePicker.openPicker({
+                cropping: true,
+                freeStyleCropEnabled: true,
+                compressImageQuality: 0.7,
+                multiple,
+            });
+            if (image) {
+                onChange?.(image);
+            }
+        } catch (error) {}
+    }, [onChange, multiple]);
+
+    return (
+        <Modal
+            isVisible={isVisible}
+            onBackdropPress={onBackdropPress}
+            backdropTransitionOutTiming={10}
+            statusBarTranslucent={true}
+            deviceHeight={deviceHeight}
+            style={styles.modal}>
+            <View style={styles.options}>
+                <Pressable style={styles.option} onPress={handleGallery}>
+                    <Icon
+                        name="image"
+                        height={25}
+                        width={25}
+                        fill={'#284362'}
+                    />
+                    <Text style={styles.optionText}>Gallery</Text>
+                </Pressable>
+                <Pressable style={styles.option} onPress={handleCamera}>
+                    <Icon
+                        name="camera"
+                        height={25}
+                        width={25}
+                        fill={'#284362'}
+                    />
+                    <Text style={styles.optionText}>Camera</Text>
+                </Pressable>
+            </View>
+        </Modal>
+    );
+};
+
 const _ImagePicker: React.FC<ImagePickerProps> = ({
     images,
     onChange: onChangeCallback,
@@ -136,8 +210,9 @@ const _ImagePicker: React.FC<ImagePickerProps> = ({
                 }).start();
             }
             onChangeCallback(response);
+            close();
         },
-        [onChangeCallback, iconFlex, imgFlex, images, multiple],
+        [multiple, images.length, onChangeCallback, close, iconFlex, imgFlex],
     );
 
     const onRemoveImage = useCallback(
@@ -165,36 +240,6 @@ const _ImagePicker: React.FC<ImagePickerProps> = ({
         [onRemoveCallback, images, iconFlex, imgFlex],
     );
 
-    const handleCamera = useCallback(async () => {
-        try {
-            const image = await ImagePicker.openCamera({
-                cropping: true,
-                freeStyleCropEnabled: true,
-                compressImageQuality: 0.7,
-                multiple,
-            });
-            if (image) {
-                onChange?.(image);
-                close();
-            }
-        } catch (error) {}
-    }, [close, multiple, onChange]);
-
-    const handleGallery = useCallback(async () => {
-        try {
-            const image = await ImagePicker.openPicker({
-                cropping: true,
-                freeStyleCropEnabled: true,
-                compressImageQuality: 0.7,
-                multiple,
-            });
-            if (image) {
-                onChange?.(image);
-                close();
-            }
-        } catch (error) {}
-    }, [close, onChange, multiple]);
-
     return (
         <>
             <View style={styles.addImages}>
@@ -216,34 +261,12 @@ const _ImagePicker: React.FC<ImagePickerProps> = ({
                     </Animated.View>
                 )}
             </View>
-            <Modal
+            <ImagePickerModal
                 isVisible={visible}
                 onBackdropPress={close}
-                backdropTransitionOutTiming={10}
-                statusBarTranslucent={true}
-                deviceHeight={deviceHeight}
-                style={styles.modal}>
-                <View style={styles.options}>
-                    <Pressable style={styles.option} onPress={handleGallery}>
-                        <Icon
-                            name="image"
-                            height={25}
-                            width={25}
-                            fill={'#284362'}
-                        />
-                        <Text style={styles.optionText}>Gallery</Text>
-                    </Pressable>
-                    <Pressable style={styles.option} onPress={handleCamera}>
-                        <Icon
-                            name="camera"
-                            height={25}
-                            width={25}
-                            fill={'#284362'}
-                        />
-                        <Text style={styles.optionText}>Camera</Text>
-                    </Pressable>
-                </View>
-            </Modal>
+                onChange={onChange}
+                multiple
+            />
         </>
     );
 };

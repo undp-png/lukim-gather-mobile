@@ -149,6 +149,14 @@ export const SIGNUP = gql`
     }
 `;
 
+export const UPDATE_USER = gql`
+    mutation UpdateUser($data: UserInput!) {
+        updateUser(data: $data) {
+            ok
+        }
+    }
+`;
+
 export const CHANGE_PASSWORD = gql`
     mutation ChangePassword($data: ChangePasswordInput!) {
         changePassword(data: $data) {
@@ -204,6 +212,14 @@ export const GET_LEGAL_DOCUMENT = gql`
             id
             documentType
             description
+        }
+    }
+`;
+
+export const CREATE_FEEDBACK = gql`
+    mutation CreateFeedback($input: FeedbackMutationInput!) {
+        createFeedback(input: $input) {
+            id
         }
     }
 `;
