@@ -1,6 +1,5 @@
 import React, {useCallback} from 'react';
-import {View, Image} from 'react-native';
-import {TouchableOpacity} from 'react-native-gesture-handler';
+import {View, Image, TouchableOpacity} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 
 import Text from 'components/Text';

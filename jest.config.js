@@ -22,6 +22,7 @@ module.exports = {
             '|react-native-splash-screen' +
             '|react-native-webview' +
             '|react-native-dropdown-picker' +
+            '|react-native-code-push' +
             ')/)',
     ],
     testPathIgnorePatterns: ['src/vendor', 'node_modules'],

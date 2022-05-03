@@ -5,22 +5,30 @@ import Modal from 'react-native-modal';
 import Button from 'components/Button';
 import {_} from 'services/i18n';
 
-import {Localize} from '@rna/components/I18n';
-
 import styles from './styles';
 
 interface BoxProps {
     isOpen: boolean;
+    headerText: string;
+    descriptionText?: string;
     onCancel(): void;
-    onLogout(): void;
+    positiveText: string;
+    onPositive(): void;
+    negativeText?: string;
+    onNegative?(): void;
 }
 
 const deviceHeight = Dimensions.get('window').height;
 
 export const ConfirmBox: React.FC<BoxProps> = ({
     isOpen,
+    headerText,
+    descriptionText,
     onCancel,
-    onLogout,
+    positiveText,
+    onPositive,
+    negativeText,
+    onNegative,
 }) => {
     return (
         <Modal
@@ -31,25 +39,31 @@ export const ConfirmBox: React.FC<BoxProps> = ({
             statusBarTranslucent={true}
             deviceHeight={deviceHeight}>
             <View style={styles.boxContent}>
-                <Text style={styles.heading}>
-                    <Localize>Log out</Localize>
-                </Text>
-                <Text style={styles.message}>
-                    <Localize>Are you sure you want to log out?</Localize>
-                </Text>
+                <Text style={styles.heading}>{headerText}</Text>
+                <Text style={styles.message}>{descriptionText}</Text>
                 <View style={styles.buttonsWrapper}>
-                    <Button
-                        title={_('Cancel')}
-                        onPress={onCancel}
-                        style={styles.login}
-                        outline
-                        dark
-                    />
-                    <Button
-                        title={_('Yes, log out')}
-                        onPress={onLogout}
-                        style={styles.getStarted}
-                    />
+                    {!!negativeText && (
+                        <Button
+                            title={negativeText}
+                            onPress={onNegative}
+                            style={styles.buttonNegative}
+                        />
+                    )}
+                    <View style={styles.buttonsRight}>
+                        <Button
+                            title={positiveText}
+                            onPress={onPositive}
+                            style={styles.buttonPositive}
+                        />
+                        {onCancel && (
+                            <Button
+                                title={_('Cancel')}
+                                onPress={onCancel}
+                                outline
+                                dark
+                            />
+                        )}
+                    </View>
                 </View>
             </View>
         </Modal>

@@ -66,11 +66,11 @@ export const CREATE_HAPPENING_SURVEY = gql`
                     coordinates
                 }
                 sentiment
+                improvement
                 attachment {
                     media
                 }
                 category {
-                    __typename
                     id
                     title
                 }
@@ -209,29 +209,11 @@ export const PASSWORD_RESET_CHANGE = gql`
 `;
 
 export const GET_SURVEY_FORMS = gql`
-    query {
+    {
         surveyForm {
             id
-            code
             title
-            questionGroup {
-                id
-                code
-                title
-                questions {
-                    id
-                    code
-                    title
-                    hints
-                    description
-                    answerType
-                    isRequired
-                    options {
-                        id
-                        title
-                    }
-                }
-            }
+            xform
         }
     }
 `;

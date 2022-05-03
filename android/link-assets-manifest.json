@@ -1,0 +1,81 @@
+{
+  "migIndex": 1,
+  "data": [
+    {
+      "path": "src/assets/fonts/Gilroy-Bold.ttf",
+      "sha1": "eeda33cebb0c6cb6cdbf2af87ef0cebfcb9e9f99"
+    },
+    {
+      "path": "src/assets/fonts/Inter-Medium.ttf",
+      "sha1": "17ec5016a5f2b2ea4f27f7bce1df4192d3590161"
+    },
+    {
+      "path": "src/assets/fonts/Inter-Regular.ttf",
+      "sha1": "077f819e60120b1ded3d5c5d8a23b8b53e12ec17"
+    },
+    {
+      "path": "src/assets/fonts/Inter-SemiBold.ttf",
+      "sha1": "29d9db84af04e729a01e0bb076c0afdf723e8bc5"
+    },
+    {
+      "path": "src/assets/xforms/app.js",
+      "sha1": "fbf310eac80dd08cec6fcbc6320ac1cde76bdee5"
+    },
+    {
+      "path": "src/assets/xforms/css/formhub-print.css",
+      "sha1": "21cf48e553770529d2c31d7868bb50664d236c04"
+    },
+    {
+      "path": "src/assets/xforms/css/formhub.css",
+      "sha1": "23b5b2f1e843044a8c351d837202e6cb5c8ce763"
+    },
+    {
+      "path": "src/assets/xforms/css/grid-print.css",
+      "sha1": "2904363d52636588b8e021d46ddc99a1b1bf6421"
+    },
+    {
+      "path": "src/assets/xforms/css/grid.css",
+      "sha1": "825e712e785790788df331be990adc1c7a1374d5"
+    },
+    {
+      "path": "src/assets/xforms/css/plain-print.css",
+      "sha1": "7a3b31ae354afc12204102a2c51d89b145574624"
+    },
+    {
+      "path": "src/assets/xforms/css/plain.css",
+      "sha1": "b725457a117fdac256a45bc821332bd5b1d4c386"
+    },
+    {
+      "path": "src/assets/xforms/formhub-print.css",
+      "sha1": "21cf48e553770529d2c31d7868bb50664d236c04"
+    },
+    {
+      "path": "src/assets/xforms/formhub.css",
+      "sha1": "17030d71ba68690e1823ebd647ff35fb1c2f1adb"
+    },
+    {
+      "path": "src/assets/xforms/grid-print.css",
+      "sha1": "2904363d52636588b8e021d46ddc99a1b1bf6421"
+    },
+    {
+      "path": "src/assets/xforms/grid.css",
+      "sha1": "cae8252c858a2b2417f03da582f1e2fad8a028f3"
+    },
+    {
+      "path": "src/assets/xforms/index.html",
+      "sha1": "b2c71224a252a6226b187209b841134e9e26ca6b"
+    },
+    {
+      "path": "src/assets/xforms/plain-print.css",
+      "sha1": "7a3b31ae354afc12204102a2c51d89b145574624"
+    },
+    {
+      "path": "src/assets/xforms/plain.css",
+      "sha1": "472f9a6cdb69d1004c87e8c4bbaab0359e9da48f"
+    },
+    {
+      "path": "src/assets/xforms/src/index.js",
+      "sha1": "966bcbe23508f84fc4bd56634863b8571b92b71c"
+    }
+  ]
+}

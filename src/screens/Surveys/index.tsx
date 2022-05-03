@@ -1,22 +1,24 @@
 import React, {useEffect, useCallback, useState} from 'react';
-import {gql, useQuery} from '@apollo/client';
-import {RefreshControl, View, ListRenderItem} from 'react-native';
-import {useFocusEffect, useNavigation} from '@react-navigation/native';
-import {FlatList, TouchableOpacity} from 'react-native-gesture-handler';
+import {
+    RefreshControl,
+    View,
+    ListRenderItem,
+    TouchableOpacity,
+    FlatList,
+} from 'react-native';
+import {useNavigation, useFocusEffect} from '@react-navigation/native';
 import {Icon} from 'react-native-eva-icons';
 
 import Text from 'components/Text';
 import SurveyItem from 'components/SurveyItem';
 import EmptyListMessage from 'components/EmptyListMessage';
 
+import useQuery from 'hooks/useQuery';
+
 import {GET_HAPPENING_SURVEY} from 'services/gql/queries';
-import {HappeningSurveyType, ProtectedAreaCategoryType} from '@generated/types';
+import {HappeningSurveyType} from '@generated/types';
 
 import styles from './styles';
-
-interface SurveyUserType {
-    id: string | number;
-}
 
 type KeyExtractor = (item: HappeningSurveyType, index: number) => string;
 const keyExtractor: KeyExtractor = item => item.id.toString();
@@ -29,6 +31,7 @@ const Surveys = () => {
     const handleRefresh = useCallback(() => {
         refetch();
     }, [refetch]);
+    useFocusEffect(handleRefresh);
 
     const onSearchPress = useCallback(
         () => navigation.navigate('SearchSurvey'),
@@ -71,29 +74,21 @@ const Surveys = () => {
         [],
     );
 
-    useFocusEffect(
-        useCallback(() => {
-            refetch();
-        }, [refetch]),
-    );
-
     return (
         <View style={styles.container}>
-            {data && (
-                <FlatList
-                    data={data?.happeningSurveys}
-                    renderItem={renderItem}
-                    refreshControl={
-                        <RefreshControl
-                            refreshing={loading}
-                            onRefresh={handleRefresh}
-                        />
-                    }
-                    showsVerticalScrollIndicator={false}
-                    keyExtractor={keyExtractor}
-                    ListEmptyComponent={EmptyListMessage}
-                />
-            )}
+            <FlatList
+                data={data?.happeningSurveys || []}
+                renderItem={renderItem}
+                refreshControl={
+                    <RefreshControl
+                        refreshing={loading}
+                        onRefresh={handleRefresh}
+                    />
+                }
+                showsVerticalScrollIndicator={false}
+                keyExtractor={keyExtractor}
+                ListEmptyComponent={loading ? null : EmptyListMessage}
+            />
         </View>
     );
 };

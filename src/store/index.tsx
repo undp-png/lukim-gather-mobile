@@ -10,7 +10,7 @@ import {
     REGISTER,
 } from 'redux-persist';
 
-import {reduxStorage} from './storage';
+import {cacheStorage} from './storage';
 import rootReducer from './rootReducer';
 
 const middlewares = [];
@@ -24,7 +24,7 @@ if (__DEV__) {
 
 const persistConfig = {
     key: 'root',
-    storage: reduxStorage,
+    storage: cacheStorage,
     whitelist: ['auth', 'locale', 'form', 'info'],
 };
 

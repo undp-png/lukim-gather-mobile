@@ -15,5 +15,7 @@ export const createStorage = storage => ({
     },
 });
 
-export const reduxStorage = createStorage(new MMKV());
+export default createStorage;
+
+export const cacheStorage = createStorage(new MMKV());
 export const queueStorage = createStorage(new MMKV());

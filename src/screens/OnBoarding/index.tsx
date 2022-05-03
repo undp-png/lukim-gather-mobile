@@ -132,7 +132,7 @@ const OnBoarding = () => {
                                 blue
                             />
                         </View>
-                        {!netInfo.isInternetReachable && (
+                        {(__DEV__ || !netInfo.isInternetReachable) && (
                             <View style={styles.bottomSpacer}>
                                 <TouchableOpacity
                                     style={styles.link}

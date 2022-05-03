@@ -4,6 +4,7 @@ import {FlatList, ScrollView} from 'react-native-gesture-handler';
 import {useMutation} from '@apollo/client';
 import {useNavigation, useRoute} from '@react-navigation/native';
 import Toast from 'react-native-simple-toast';
+import {RootStateOrAny, useSelector} from 'react-redux';
 
 import Text from 'components/Text';
 import {OptionIcon} from 'components/HeaderButton';
@@ -70,6 +71,8 @@ const SurveyItem = () => {
         SurveyCategory,
         Number(surveyData?.category?.id),
     );
+
+    const {user} = useSelector((state: RootStateOrAny) => state.auth);
 
     const [deleteHappeningSurvey] = useMutation<
         DeleteHappeningSurveyMutation,
@@ -144,11 +147,12 @@ const SurveyItem = () => {
 
     useEffect(() => {
         navigation.setOptions({
-            headerRight: () => (
-                <OptionIcon onOptionPress={togggleOpenActions} />
-            ),
+            headerRight: () =>
+                surveyData.createdBy?.id == user?.id ? (
+                    <OptionIcon onOptionPress={togggleOpenActions} />
+                ) : null,
         });
-    }, [navigation, togggleOpenActions]);
+    }, [navigation, togggleOpenActions, surveyData, user]);
 
     return (
         <ScrollView

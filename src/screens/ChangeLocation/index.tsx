@@ -33,7 +33,9 @@ const ChangeLocation = () => {
     const navigation = useNavigation();
     const {params = {}} = useRoute<ChangeLocationScreenRouteProp>();
 
-    const [selectedMethod, setSelectedMethod] = useState<string>('');
+    const [selectedMethod, setSelectedMethod] = useState<string>(
+        'Use my current location',
+    );
     const [selectedCoordinate, setSelectedCoordinate] = useState<
         number[] | number[][]
     >([]);
