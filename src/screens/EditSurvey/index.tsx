@@ -161,22 +161,25 @@ const EditHappeningSurvey = () => {
                         cache.readQuery({
                             query: GET_HAPPENING_SURVEY,
                         }) || [];
-                    let mergedSurveys = [];
-
-                    if (readData.happeningSurveys.length <= 0) {
-                        mergedSurveys = [data.updateHappeningSurvey.result];
-                    } else {
-                        mergedSurveys = [
-                            data.updateHappeningSurvey.result,
-                            ...readData.happeningSurveys,
-                        ];
-                    }
+                    let updatedHappeningSurvey = readData.happeningSurveys.map(
+                        obj => {
+                            if (
+                                data.updateHappeningSurvey.result.id === obj.id
+                            ) {
+                                return {
+                                    __typename: obj.__typename,
+                                    ...data.updateHappeningSurvey.result,
+                                    createdBy: obj.createdBy,
+                                };
+                            }
+                            return obj;
+                        },
+                    );
 
                     cache.writeQuery({
                         query: GET_HAPPENING_SURVEY,
                         data: {
-                            ...readData,
-                            happeningSurveys: mergedSurveys,
+                            happeningSurveys: updatedHappeningSurvey,
                         },
                     });
                     navigation.navigate('Feed');
