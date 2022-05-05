@@ -4,6 +4,7 @@ import {View, Image, Text, Alert} from 'react-native';
 import {Icon} from 'react-native-eva-icons';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import MapboxGL from '@react-native-mapbox-gl/maps';
+import {useFocusEffect} from '@react-navigation/native';
 import {useNetInfo} from '@react-native-community/netinfo';
 import Geolocation from 'react-native-geolocation-service';
 
@@ -163,7 +164,13 @@ const Map: React.FC<Props> = ({
         );
     }, [currentLocation]);
 
-    const {data} = useQuery(GET_HAPPENING_SURVEY);
+    const {data, refetch} = useQuery(GET_HAPPENING_SURVEY);
+
+    useFocusEffect(
+        useCallback(() => {
+            refetch();
+        }, [refetch]),
+    );
 
     const renderCluster = useCallback(() => {
         const shape =
