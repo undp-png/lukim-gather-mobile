@@ -1,15 +1,16 @@
 import React from 'react';
-import {View, Text} from 'react-native';
-import {Localize} from '@rna/components/I18n';
+import {View} from 'react-native';
+
+import WebViewer from 'components/WebViewer';
+import useLukimInfo from 'hooks/useLukimInfo';
 
 import styles from './styles';
 
 const Help = () => {
+    const infoData = useLukimInfo('HELP');
     return (
         <View style={styles.container}>
-            <Text>
-                <Localize>Help</Localize>
-            </Text>
+            <WebViewer html={infoData?.description} />
         </View>
     );
 };

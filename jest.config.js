@@ -20,6 +20,7 @@ module.exports = {
             '|react-native-multiple-select' +
             '|react-native-vector-icons' +
             '|react-native-splash-screen' +
+            '|react-native-webview' +
             ')/)',
     ],
     testPathIgnorePatterns: ['src/vendor', 'node_modules'],

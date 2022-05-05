@@ -6,8 +6,8 @@ import useLukimInfo from 'hooks/useLukimInfo';
 
 import styles from './styles';
 
-const About = () => {
-    const infoData = useLukimInfo('ABOUT');
+const TermsAndCondition = () => {
+    const infoData = useLukimInfo('TERMS_AND_CONDITIONS');
     return (
         <View style={styles.container}>
             <WebViewer html={infoData.description} />
@@ -15,4 +15,4 @@ const About = () => {
     );
 };
 
-export default About;
+export default TermsAndCondition;

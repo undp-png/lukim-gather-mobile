@@ -196,3 +196,13 @@ export const CREATE_WRITABLE_SURVEY = gql`
         }
     }
 `;
+
+export const GET_LEGAL_DOCUMENT = gql`
+    query {
+        legalDocument {
+            id
+            documentType
+            description
+        }
+    }
+`;

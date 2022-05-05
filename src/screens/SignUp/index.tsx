@@ -1,5 +1,5 @@
 import React, {useCallback, useState} from 'react';
-import {useMutation, gql} from '@apollo/client';
+import {useMutation} from '@apollo/client';
 import {SafeAreaView, TouchableOpacity, View} from 'react-native';
 import Toast from 'react-native-simple-toast';
 import {useNavigation} from '@react-navigation/native';
@@ -22,7 +22,7 @@ const SignUp = () => {
     const [password, setPassword] = useState<string>('');
 
     const navigation = useNavigation();
-    const [signup, {loading, error}] = useMutation(SIGNUP, {
+    const [signup, {loading}] = useMutation(SIGNUP, {
         onCompleted: () => {
             Toast.show('Your account has been successfully created !!');
             navigation.navigate('Login');
@@ -41,10 +41,10 @@ const SignUp = () => {
                 data: {
                     firstName,
                     lastName,
-                    email,
+                    email: email.toLowerCase(),
                     password,
                     rePassword: password,
-                    username: email,
+                    username: email.toLowerCase(),
                 },
             },
         });
@@ -52,6 +52,14 @@ const SignUp = () => {
 
     const handleGoLogin = useCallback(() => {
         navigation.navigate('Login');
+    }, [navigation]);
+
+    const handlePressTOC = useCallback(() => {
+        navigation.navigate('TermsAndCondition');
+    }, [navigation]);
+
+    const handlePressPrivacyPolicy = useCallback(() => {
+        navigation.navigate('PrivacyPolicy');
     }, [navigation]);
 
     return (
@@ -92,14 +100,14 @@ const SignUp = () => {
                         style={styles.info}
                         title={_('By continuing you agree to our')}
                     />
-                    <TouchableOpacity>
+                    <TouchableOpacity onPress={handlePressTOC}>
                         <Text
                             style={styles.infoPressable}
-                            title={_('Terms of services')}
+                            title={_('Terms & Condition')}
                         />
                     </TouchableOpacity>
                     <Text style={styles.info} title={_('and')} />
-                    <TouchableOpacity>
+                    <TouchableOpacity onPress={handlePressPrivacyPolicy}>
                         <Text
                             style={styles.infoPressable}
                             title={_('Privacy policy.')}

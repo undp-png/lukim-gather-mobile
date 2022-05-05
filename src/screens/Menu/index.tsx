@@ -116,6 +116,10 @@ const Menu = () => {
                     <MenuItem title={_('About Lukim Gather')} linkTo="About" />
                     <MenuItem title={_('Feedback')} linkTo="Feedback" />
                     <MenuItem title={_('Help')} linkTo="Help" />
+                    <MenuItem
+                        title={_('Terms & Condition')}
+                        linkTo="TermsAndCondition"
+                    />
                     {isAuthenticated && (
                         <TouchableOpacity
                             onPress={handleToggleLogout}
