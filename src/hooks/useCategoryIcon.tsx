@@ -1,19 +1,20 @@
-import {useMemo, useCallback} from 'react';
+import {useMemo} from 'react';
+import surveyCategory from 'services/data/surveyCategory';
 
 import {searchTree} from 'utils';
 
-const useCategoryIcon = (categories, id) => {
-    const getIcon = useCallback((item, categoryId) => {
-        if (!categoryId) {
-            return null;
-        }
-        let node = searchTree(item, categoryId);
-        return node?.icon;
-    }, []);
+export const getCategoryIcon = (categories = surveyCategory, categoryId) => {
+    if (!categoryId) {
+        return null;
+    }
+    let node = searchTree(categories, categoryId);
+    return node?.icon;
+};
 
+const useCategoryIcon = (categories, id) => {
     const iconSrc = useMemo(
-        () => getIcon(categories, id),
-        [getIcon, categories, id],
+        () => getCategoryIcon(categories, id),
+        [categories, id],
     );
     return [iconSrc];
 };
