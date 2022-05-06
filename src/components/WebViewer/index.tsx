@@ -3,7 +3,7 @@ import {Linking} from 'react-native';
 import WebView from 'react-native-webview';
 
 const WebViewer = ({
-    html,
+    html = '',
     style,
     containerStyle,
 }: {

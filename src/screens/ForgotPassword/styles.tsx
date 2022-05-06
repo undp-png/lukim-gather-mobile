@@ -18,10 +18,12 @@ export default StyleSheet.create({
     button: {
         marginTop: 32,
     },
-    text: {
-        color: COLORS.blueTextAlt,
+    link: {
         marginTop: 'auto',
         marginBottom: 40,
+    },
+    text: {
+        color: COLORS.blueTextAlt,
         textAlign: 'center',
         fontSize: 14,
         fontWeight: '400',

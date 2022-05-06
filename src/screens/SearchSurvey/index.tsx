@@ -142,7 +142,7 @@ const SearchSurvey = () => {
                 />
             </View>
             <FlatList
-                data={selectedTab === 'all' ? selectedData : searchedSurveys}
+                data={selectedData}
                 renderItem={renderItem}
                 showsVerticalScrollIndicator={false}
                 keyExtractor={keyExtractor}
