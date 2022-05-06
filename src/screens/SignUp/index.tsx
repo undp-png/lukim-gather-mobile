@@ -16,16 +16,16 @@ import {SIGNUP} from 'services/gql/queries';
 import styles from './styles';
 
 const SignUp = () => {
+    const navigation = useNavigation<any>();
     const [firstName, setFirstName] = useState<string>('');
     const [lastName, setLastName] = useState<string>('');
     const [email, setEmail] = useState<string>('');
     const [password, setPassword] = useState<string>('');
 
-    const navigation = useNavigation();
     const [signup, {loading}] = useMutation(SIGNUP, {
         onCompleted: () => {
             Toast.show('Your account has been successfully created !!');
-            navigation.navigate('Login');
+            navigation.navigate('ConfirmEmail', {email});
         },
         onError: err => {
             Toast.show(getErrorMessage(err), Toast.LONG, [

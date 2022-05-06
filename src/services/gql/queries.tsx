@@ -149,6 +149,22 @@ export const SIGNUP = gql`
     }
 `;
 
+export const EMAIL_CONFIRM = gql`
+    mutation EmailConfirm($data: EmailConfirmInput!) {
+        emailConfirm(data: $data) {
+            ok
+        }
+    }
+`;
+
+export const EMAIL_CONFIRM_VERIFY = gql`
+    mutation EmailConfirmVerify($data: EmailConfirmInput!) {
+        emailConfirmVerify(data: $data) {
+            ok
+        }
+    }
+`;
+
 export const UPDATE_USER = gql`
     mutation UpdateUser($data: UserInput!) {
         updateUser(data: $data) {
@@ -160,6 +176,33 @@ export const UPDATE_USER = gql`
 export const CHANGE_PASSWORD = gql`
     mutation ChangePassword($data: ChangePasswordInput!) {
         changePassword(data: $data) {
+            ok
+        }
+    }
+`;
+
+export const PASSWORD_RESET = gql`
+    mutation PasswordReset($data: PasswordResetPinInput!) {
+        passwordReset(data: $data) {
+            ok
+        }
+    }
+`;
+
+export const PASSWORD_RESET_VERIFY = gql`
+    mutation PasswordResetVerify($data: PasswordResetPinInput!) {
+        passwordResetVerify(data: $data) {
+            ok
+            result {
+                identifier
+            }
+        }
+    }
+`;
+
+export const PASSWORD_RESET_CHANGE = gql`
+    mutation PasswordResetChange($data: PasswordResetChangeInput!) {
+        passwordResetChange(data: $data) {
             ok
         }
     }

@@ -3,8 +3,7 @@ import {createStackNavigator} from '@react-navigation/stack';
 
 import Login from 'screens/Login';
 import SignUp from 'screens/SignUp';
-import ForgotPassword from 'screens/ForgotPassword';
-import VerifyEmail from 'screens/VerifyEmail';
+import ConfirmEmail from 'screens/ConfirmEmail';
 import ChangePassword from 'screens/ChangePassword';
 import OnBoarding from 'screens/OnBoarding';
 
@@ -17,8 +16,7 @@ export type AuthStackParamList = {
     Login: undefined;
     OnBoarding: undefined;
     SignUp: undefined;
-    ForgotPassword: undefined;
-    VerifyEmail: undefined;
+    ConfirmEmail: undefined;
     ChangePassword: undefined;
 };
 
@@ -61,11 +59,10 @@ export default function AuthNavigator() {
                 options={{headerTitle: _('Create an account')}}
             />
             <Stack.Screen
-                name="ForgotPassword"
-                component={ForgotPassword}
-                options={{headerTitle: _('Forgot password?')}}
+                name="ConfirmEmail"
+                component={ConfirmEmail}
+                options={{headerTitle: _('Confirm your email')}}
             />
-            <Stack.Screen name="VerifyEmail" component={VerifyEmail} />
             <Stack.Screen name="ChangePassword" component={ChangePassword} />
         </Stack.Navigator>
     );
