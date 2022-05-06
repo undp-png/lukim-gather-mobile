@@ -8,6 +8,7 @@ import Toast from 'react-native-simple-toast';
 import Text from 'components/Text';
 import {OptionIcon} from 'components/HeaderButton';
 import SurveyActions from 'components/SurveyActions';
+import SurveyReview from 'components/SurveyReview';
 
 import useCategoryIcon from 'hooks/useCategoryIcon';
 import {_} from 'services/i18n';
@@ -16,6 +17,12 @@ import {
     DELETE_HAPPENING_SURVEY,
     GET_HAPPENING_SURVEY,
 } from 'services/gql/queries';
+
+import type {
+    HappeningSurveyType,
+    DeleteHappeningSurveyMutation,
+    DeleteHappeningSurveyMutationVariables,
+} from '@generated/types';
 
 import styles from './styles';
 import {getErrorMessage} from 'utils/error';
@@ -64,7 +71,7 @@ const SurveyItem = () => {
         Number(surveyData?.category?.id),
     );
 
-    const [deleteHappeningSurvey, {loading}] = useMutation<
+    const [deleteHappeningSurvey] = useMutation<
         DeleteHappeningSurveyMutation,
         DeleteHappeningSurveyMutationVariables
     >(DELETE_HAPPENING_SURVEY, {
@@ -117,7 +124,7 @@ const SurveyItem = () => {
                             query: GET_HAPPENING_SURVEY,
                         }) || [];
                     let happeningSurveys = readData?.happeningSurveys.filter(
-                        obj => {
+                        (obj: HappeningSurveyType) => {
                             return obj.id !== surveyData.id;
                         },
                     );
@@ -142,6 +149,7 @@ const SurveyItem = () => {
             ),
         });
     }, [navigation, togggleOpenActions]);
+
     return (
         <ScrollView
             style={styles.container}
@@ -176,6 +184,14 @@ const SurveyItem = () => {
                     />
                 </View>
             </View>
+            {surveyData?.improvement && (
+                <>
+                    <Header title="Improvement" />
+                    <View style={styles.content}>
+                        <SurveyReview name={surveyData.improvement} />
+                    </View>
+                </>
+            )}
             <Header title="Description" />
             <View style={styles.content}>
                 <Text

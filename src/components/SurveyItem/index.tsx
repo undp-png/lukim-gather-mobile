@@ -14,7 +14,7 @@ import styles from './styles';
 
 interface SurveyItemProps {
     item: HappeningSurveyType;
-    onPress?: () => void;
+    onPress?: (item: HappeningSurveyType) => void;
 }
 
 const SurveyItem = ({item, onPress}: SurveyItemProps) => {
@@ -23,10 +23,12 @@ const SurveyItem = ({item, onPress}: SurveyItemProps) => {
         SurveyCategory,
         Number(item?.category?.id),
     );
-    const onPressItem = useCallback(
-        () => navigation.navigate('SurveyItem', {item}),
-        [item, navigation],
-    );
+    const onPressItem = useCallback(() => {
+        if (onPress) {
+            return onPress(item);
+        }
+        navigation.navigate('SurveyItem', {item});
+    }, [item, navigation, onPress]);
 
     return (
         <TouchableOpacity onPress={onPressItem} style={styles.item}>

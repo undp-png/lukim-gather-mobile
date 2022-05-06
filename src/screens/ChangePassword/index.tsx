@@ -25,7 +25,10 @@ const ChangePassword = () => {
 
     const [change_password, {loading}] = useMutation(CHANGE_PASSWORD, {
         onCompleted: () => {
-            Toast.show('Password has been successfully changed !!', Toast.LONG);
+            Toast.show(
+                _('Password has been successfully changed!'),
+                Toast.LONG,
+            );
             dispatchLogout();
         },
         onError: err => {
@@ -55,6 +58,11 @@ const ChangePassword = () => {
             ),
         });
     }, [handleChangePassword, navigation]);
+
+    const handleForgotPress = useCallback(() => {
+        navigation.navigate('Auth', {screen: 'ForgotPassword'});
+    }, [navigation]);
+
     return (
         <View style={styles.container}>
             <ModalLoader loading={loading} />
@@ -65,7 +73,9 @@ const ChangePassword = () => {
                         title={_('Current password')}
                         placeholder={_('Enter current password')}
                     />
-                    <TouchableOpacity style={styles.forgotPassword}>
+                    <TouchableOpacity
+                        style={styles.forgotPassword}
+                        onPress={handleForgotPress}>
                         <Text
                             style={styles.forgotTitle}
                             title={_('Forgot your password?')}

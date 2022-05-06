@@ -9,14 +9,27 @@ import styles from './styles';
 
 interface Props {
     name: string;
-    activeReview: string;
-    onPress(emo: string): void;
+    activeReview?: string;
+    onPress?(emo: string): void;
     icon?: string;
 }
 
-const SurveyReview: React.FC<Props> = ({name, activeReview, onPress, icon}) => {
+function useSurveyReviewIcon(improvementName: string) {
+    switch (improvementName) {
+        case 'INCREASING':
+            return 'trending-up-outline';
+        case 'DECREASING':
+            return 'trending-down-outline';
+        default:
+            return null;
+    }
+}
+
+const SurveyReview: React.FC<Props> = ({name, activeReview, onPress}) => {
+    const icon = useSurveyReviewIcon(name);
+
     const handlePress = useCallback(() => {
-        onPress(name);
+        onPress && onPress(name);
     }, [name, onPress]);
 
     return (

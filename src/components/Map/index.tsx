@@ -28,12 +28,6 @@ import styles, {mapStyles} from './styles';
 
 MapboxGL.setAccessToken(MAPBOX_ACCESS_TOKEN);
 
-interface locationRefType {
-    state?: {
-        [coordinates: string]: Array<number>;
-    };
-}
-
 interface Props {
     showCluster?: boolean;
     hideHeader?: boolean;
@@ -191,6 +185,12 @@ const Map: React.FC<Props> = ({
             } else if (shape?.features?.length > 1) {
                 try {
                     const feature = shape.features[0];
+                    const currentZoom = await mapRef.current.getZoom();
+                    if (currentZoom > 19 && feature?.properties?.surveyItem) {
+                        return navigation.navigate('SurveyItem', {
+                            item: feature.properties.surveyItem,
+                        });
+                    }
                     const zoom =
                         await shapeSourceRef.current.getClusterExpansionZoom(
                             feature,
