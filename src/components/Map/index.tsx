@@ -1,10 +1,10 @@
 import React, {useCallback, useEffect, useState, useRef} from 'react';
 import {useQuery} from '@apollo/client';
-import {View, Image, Text, Alert} from 'react-native';
+import {View, Image, Alert} from 'react-native';
 import {Icon} from 'react-native-eva-icons';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import MapboxGL from '@react-native-mapbox-gl/maps';
-import {useFocusEffect} from '@react-navigation/native';
+import {useFocusEffect, useNavigation} from '@react-navigation/native';
 import {useNetInfo} from '@react-native-community/netinfo';
 import Geolocation from 'react-native-geolocation-service';
 
@@ -16,6 +16,8 @@ import {GET_HAPPENING_SURVEY} from 'services/gql/queries';
 import {MAPBOX_ACCESS_TOKEN} from '@env';
 import {checkLocation} from 'utils/location';
 import COLORS from 'utils/colors';
+
+import {HappeningSurveyType} from '@generated/types';
 
 import styleJSON from 'assets/map/style.json';
 
@@ -53,6 +55,8 @@ const Map: React.FC<Props> = ({
 }) => {
     const netInfo = useNetInfo();
 
+    const navigation = useNavigation();
+
     const [isOffline, setIsOffline] = useState(true);
 
     const manageOffline = useCallback(
@@ -89,7 +93,10 @@ const Map: React.FC<Props> = ({
         manageOffline('png_14_20');
     }, [manageOffline]);
 
-    const locationRef = useRef<locationRefType | null>();
+    const mapRef = useRef() as React.MutableRefObject<MapboxGL.MapView>;
+    const locationRef = useRef() as React.RefObject<MapboxGL.UserLocation>;
+    const shapeSourceRef =
+        useRef() as React.MutableRefObject<MapboxGL.ShapeSource>;
 
     const [currentLocation, setCurrentLocation] = useState<
         number[] | undefined
@@ -146,7 +153,7 @@ const Map: React.FC<Props> = ({
         }
     }, [pickLocation, currentLocation, handlePress, onLocationPick]);
 
-    const onRegionDidChange = useCallback(value => {
+    const onRegionDidChange = useCallback(() => {
         setMapCameraProps({});
     }, []);
 
@@ -172,15 +179,46 @@ const Map: React.FC<Props> = ({
         }, [refetch]),
     );
 
+    const handleSurveyShapePress = useCallback(
+        async shape => {
+            if (shape?.features?.length === 1) {
+                const feature = shape.features[0];
+                if (feature?.properties?.surveyItem) {
+                    return navigation.navigate('SurveyItem', {
+                        item: feature.properties.surveyItem,
+                    });
+                }
+            } else if (shape?.features?.length > 1) {
+                try {
+                    const feature = shape.features[0];
+                    const zoom =
+                        await shapeSourceRef.current.getClusterExpansionZoom(
+                            feature,
+                        );
+                    if (zoom) {
+                        setMapCameraProps({
+                            zoomLevel: zoom,
+                            animationMode: 'flyTo',
+                            animationDuration: 1000,
+                            centerCoordinate: feature.geometry.coordinates,
+                        });
+                    }
+                } catch (error) {
+                    console.log(error);
+                }
+            }
+        },
+        [navigation],
+    );
+
     const renderCluster = useCallback(() => {
         const shape =
             data?.happeningSurveys
-                .filter(survey => survey.location)
-                .map(survey => ({
+                .filter((survey: HappeningSurveyType) => survey.location)
+                .map((survey: HappeningSurveyType) => ({
                     type: 'Feature',
                     properties: {
-                        categoryId: survey.category?.id,
-                        categoryIcon: survey.category?.id,
+                        surveyItem: survey,
                     },
                     geometry: {
                         type: survey.location.type,
@@ -206,8 +244,10 @@ const Map: React.FC<Props> = ({
             <>
                 <MapboxGL.Images images={categoryIcons} />
                 <MapboxGL.ShapeSource
+                    ref={shapeSourceRef}
                     id="surveySource"
                     cluster
+                    onPress={handleSurveyShapePress}
                     shape={surveyGeoJSON}>
                     <MapboxGL.SymbolLayer
                         id="pointCount"
@@ -228,7 +268,7 @@ const Map: React.FC<Props> = ({
                 </MapboxGL.ShapeSource>
             </>
         );
-    }, [data]);
+    }, [data, handleSurveyShapePress]);
 
     const renderPolygon = useCallback(() => {
         const polygonGeoJSON = {
@@ -245,7 +285,7 @@ const Map: React.FC<Props> = ({
                     style={styles.polygonFill}
                 />
                 {polygonPoint &&
-                    polygonPoint.map((value, index) => (
+                    polygonPoint.map((_, index) => (
                         <MapboxGL.CircleLayer
                             key={index}
                             id={'point-' + index}
@@ -289,6 +329,7 @@ const Map: React.FC<Props> = ({
             {!hideHeader && <HomeHeader />}
             <View style={styles.container}>
                 <MapboxGL.MapView
+                    ref={mapRef}
                     style={styles.map}
                     onRegionDidChange={onRegionDidChange}
                     styleJSON={isOffline ? mapViewStyles : ''}
@@ -304,8 +345,10 @@ const Map: React.FC<Props> = ({
                     {isOffline && <OfflineLayers />}
                     <MapboxGL.UserLocation
                         visible
-                        showUserLocation
                         ref={locationRef}
+                        renderMode="native"
+                        androidRenderMode="compass"
+                        showsUserHeadingIndicator
                     />
                     {showMarker && renderAnnotation()}
                     {pickLocation === 'Draw polygon' && renderPolygon()}

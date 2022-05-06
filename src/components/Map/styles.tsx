@@ -86,7 +86,7 @@ export const mapStyles = {
         circleRadius: 20,
     },
     singlePoint: {
-        iconImage: ['get', 'categoryIcon'],
+        iconImage: ['get', 'id', ['get', 'category', ['get', 'surveyItem']]],
         iconAllowOverlap: true,
         iconSize: 0.6,
     },

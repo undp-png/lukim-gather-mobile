@@ -8,12 +8,13 @@ export default StyleSheet.create({
     container: {
         backgroundColor: COLORS.white,
         paddingBottom: 100,
+        paddingTop: 10,
     },
     menuItemsContainer: {
         flexDirection: 'row',
         alignItems: 'center',
         paddingHorizontal: 20,
-        marginVertical: 20,
+        paddingBottom: 20,
     },
     menu: {
         marginRight: 25,
