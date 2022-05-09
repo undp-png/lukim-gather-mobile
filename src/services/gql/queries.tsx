@@ -32,6 +32,7 @@ export const GET_HAPPENING_SURVEY = gql`
                 coordinates
             }
             sentiment
+            improvement
             attachment {
                 media
             }

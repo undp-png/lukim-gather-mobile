@@ -11,7 +11,7 @@ export const BackButton = () => {
     const navigation = useNavigation();
     const onBackPress = useCallback(() => navigation.goBack(), [navigation]);
     return (
-        <TouchableOpacity onPress={onBackPress} style={styles.closeIcon}>
+        <TouchableOpacity onPress={onBackPress} style={styles.headerIcon}>
             <Icon
                 name="arrow-ios-back-outline"
                 height={24}
@@ -26,7 +26,7 @@ export const CloseButton = () => {
     const navigation = useNavigation();
     const onBackPress = useCallback(() => navigation.goBack(), [navigation]);
     return (
-        <TouchableOpacity onPress={onBackPress} style={styles.closeIcon}>
+        <TouchableOpacity onPress={onBackPress} style={styles.headerIcon}>
             <Icon
                 name="close-circle-outline"
                 height={24}
@@ -39,7 +39,7 @@ export const CloseButton = () => {
 
 export const SaveButton = ({onSavePress}: {onSavePress(): void}) => {
     return (
-        <TouchableOpacity onPress={onSavePress} style={styles.saveIcon}>
+        <TouchableOpacity onPress={onSavePress} style={styles.headerIcon}>
             <Icon
                 name="checkmark-circle-2"
                 height={24}
@@ -52,7 +52,7 @@ export const SaveButton = ({onSavePress}: {onSavePress(): void}) => {
 
 export const OptionIcon = ({onOptionPress}: {onOptionPress(): void}) => {
     return (
-        <TouchableOpacity onPress={onOptionPress} style={styles.saveIcon}>
+        <TouchableOpacity onPress={onOptionPress} style={styles.headerIcon}>
             <Icon
                 name="more-horizontal-outline"
                 height={20}
@@ -65,7 +65,7 @@ export const OptionIcon = ({onOptionPress}: {onOptionPress(): void}) => {
 
 export const SearchIcon = ({onSearchPress}: {onSearchPress(): void}) => {
     return (
-        <TouchableOpacity onPress={onSearchPress} style={styles.saveIcon}>
+        <TouchableOpacity onPress={onSearchPress} style={styles.headerIcon}>
             <Icon
                 name="search-outline"
                 height={24}

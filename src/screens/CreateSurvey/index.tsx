@@ -344,21 +344,19 @@ const CreateHappeningSurvey = () => {
             />
             <View style={styles.feelings}>
                 <SurveyReview
-                    name="Increasing"
-                    activeReview={activeReview}
-                    onPress={handleReview}
-                    icon="trending-up-outline"
-                />
-                <SurveyReview
-                    name="Same"
+                    name="INCREASING"
                     activeReview={activeReview}
                     onPress={handleReview}
                 />
                 <SurveyReview
-                    name="Decreasing"
+                    name="SAME"
                     activeReview={activeReview}
                     onPress={handleReview}
-                    icon="trending-down-outline"
+                />
+                <SurveyReview
+                    name="DECREASING"
+                    activeReview={activeReview}
+                    onPress={handleReview}
                 />
             </View>
             <InputField

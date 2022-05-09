@@ -31,6 +31,7 @@ import {
 import {getErrorMessage} from 'utils/error';
 
 import {
+    HappeningSurveyType,
     UploadMediaMutation,
     UploadMediaMutationVariables,
     UpdateHappeningSurveyMutation,
@@ -53,7 +54,9 @@ const EditHappeningSurvey = () => {
     const [activeFeel, setActiveFeel] = useState<string>(
         route.params?.categoryItem?.sentiment,
     );
-    const [activeReview, setActiveReview] = useState<string>('');
+    const [activeReview, setActiveReview] = useState<string>(
+        route.params?.categoryItem?.improvement,
+    );
     const [images, setImages] = useState<ImageObj[]>(
         route?.params?.categoryItem.attachment,
     );
@@ -89,10 +92,7 @@ const EditHappeningSurvey = () => {
         setActiveReview(review);
     }, []);
 
-    const iconFlex = useRef(new Animated.Value(1)).current;
-    const imgFlex = useRef(new Animated.Value(0)).current;
-
-    const [updateHappeningSurvey, {loading, error}] = useMutation<
+    const [updateHappeningSurvey, {loading}] = useMutation<
         UpdateHappeningSurveyMutation,
         UpdateHappeningSurveyMutationVariables
     >(UPDATE_HAPPENING_SURVEY, {
@@ -162,7 +162,7 @@ const EditHappeningSurvey = () => {
                             query: GET_HAPPENING_SURVEY,
                         }) || [];
                     let updatedHappeningSurvey = readData.happeningSurveys.map(
-                        obj => {
+                        (obj: HappeningSurveyType) => {
                             if (
                                 data.updateHappeningSurvey.result.id === obj.id
                             ) {
@@ -340,28 +340,25 @@ const EditHappeningSurvey = () => {
                     onPress={handleFeel}
                 />
             </View>
-
             <Text
                 style={styles.title}
                 title="Is the condition of this feature improving, staying the same, or decreasing?"
             />
             <View style={styles.feelings}>
                 <SurveyReview
-                    name="Increasing"
-                    activeReview={activeReview}
-                    onPress={handleReview}
-                    icon="trending-up-outline"
-                />
-                <SurveyReview
-                    name="Same"
+                    name="INCREASING"
                     activeReview={activeReview}
                     onPress={handleReview}
                 />
                 <SurveyReview
-                    name="Decreasing"
+                    name="SAME"
                     activeReview={activeReview}
                     onPress={handleReview}
-                    icon="trending-down-outline"
+                />
+                <SurveyReview
+                    name="DECREASING"
+                    activeReview={activeReview}
+                    onPress={handleReview}
                 />
             </View>
             <InputField

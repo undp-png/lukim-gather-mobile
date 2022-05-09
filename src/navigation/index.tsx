@@ -38,7 +38,7 @@ export type StackParamList = {
     About: undefined;
     AccountSettings: undefined;
     Language: undefined;
-    Auth: undefined;
+    Auth: {screen: string};
     ChangePassword: undefined;
     ChangeLocation: {
         onChange?: (value: any) => void;
