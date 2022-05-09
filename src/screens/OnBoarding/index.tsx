@@ -98,7 +98,7 @@ const OnBoarding = () => {
                             <Text style={styles.title} title={_('Gather')} />
                         </View>
                     </View>
-                    <View style={styles.flatListWrapper}>
+                    <View>
                         <FlatList
                             horizontal
                             pagingEnabled
@@ -113,38 +113,38 @@ const OnBoarding = () => {
                             )}
                             scrollEventThrottle={32}
                         />
-                    </View>
-                    <Pagination />
-                    <View
-                        style={cs(styles.buttonsWrapper, [
-                            styles.bottomSpacer,
-                            netInfo.isInternetReachable,
-                        ])}>
-                        <Button
-                            title={_('Login')}
-                            onPress={handleLogin}
-                            style={styles.login}
-                            light
-                        />
-                        <Button
-                            title={_('Get Started')}
-                            onPress={handleGetStarted}
-                            style={styles.getStarted}
-                            blue
-                        />
-                    </View>
-                    {!netInfo.isInternetReachable && (
-                        <View style={styles.bottomSpacer}>
-                            <TouchableOpacity
-                                style={styles.link}
-                                onPress={handleGuestPress}>
-                                <Text
-                                    style={styles.linkText}
-                                    title={_('Continue as Guest')}
-                                />
-                            </TouchableOpacity>
+                        <Pagination />
+                        <View
+                            style={cs(styles.buttonsWrapper, [
+                                styles.bottomSpacer,
+                                netInfo.isInternetReachable,
+                            ])}>
+                            <Button
+                                title={_('Login')}
+                                onPress={handleLogin}
+                                style={styles.login}
+                                light
+                            />
+                            <Button
+                                title={_('Get Started')}
+                                onPress={handleGetStarted}
+                                style={styles.getStarted}
+                                blue
+                            />
                         </View>
-                    )}
+                        {!netInfo.isInternetReachable && (
+                            <View style={styles.bottomSpacer}>
+                                <TouchableOpacity
+                                    style={styles.link}
+                                    onPress={handleGuestPress}>
+                                    <Text
+                                        style={styles.linkText}
+                                        title={_('Continue as Guest')}
+                                    />
+                                </TouchableOpacity>
+                            </View>
+                        )}
+                    </View>
                 </View>
             </ImageBackground>
         </View>
