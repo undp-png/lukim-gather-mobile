@@ -16,6 +16,10 @@ import {dispatchLogout} from 'services/dispatch';
 import {CHANGE_PASSWORD} from 'services/gql/queries';
 
 import styles from './styles';
+import {
+    ChangePasswordMutation,
+    ChangePasswordMutationVariables,
+} from 'generated/types';
 
 const ChangePassword = () => {
     const navigation = useNavigation();
@@ -23,7 +27,10 @@ const ChangePassword = () => {
     const [newPassword, setNewPassword] = useState<string>('');
     const [rePassword, setRePassword] = useState<string>('');
 
-    const [change_password, {loading}] = useMutation(CHANGE_PASSWORD, {
+    const [change_password, {loading}] = useMutation<
+        ChangePasswordMutation,
+        ChangePasswordMutationVariables
+    >(CHANGE_PASSWORD, {
         onCompleted: () => {
             Toast.show(
                 _('Password has been successfully changed!'),

@@ -1,15 +1,24 @@
-import React, {useEffect, useMemo} from 'react';
-import {View, Image} from 'react-native';
+import React, {useEffect, useCallback, useState} from 'react';
+import {View, Image, Platform} from 'react-native';
 import {RootStateOrAny, useSelector} from 'react-redux';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
-import {TouchableOpacity} from 'react-native-gesture-handler';
 import {useNavigation} from '@react-navigation/native';
 import {Icon} from 'react-native-eva-icons';
+import {useMutation} from '@apollo/client';
+import Toast from 'react-native-simple-toast';
+import {Image as ImageObj} from 'react-native-image-crop-picker';
+import {ReactNativeFile} from 'apollo-upload-client';
+import {TouchableOpacity} from 'react-native-gesture-handler';
 
 import Text from 'components/Text';
 import InputField from 'components/InputField';
 import {SaveButton} from 'components/HeaderButton';
+import {ModalLoader} from 'components/Loader';
+import {ImagePickerModal} from 'components/ImagePicker';
+
 import {_} from 'services/i18n';
+import {getErrorMessage} from 'utils/error';
+import {UPDATE_USER} from 'services/gql/queries';
 
 import styles from './styles';
 
@@ -17,23 +26,84 @@ const EditProfile = () => {
     const navigation = useNavigation();
     const {user} = useSelector((state: RootStateOrAny) => state.auth);
 
+    const [visiblePickerModal, setVisiblePickerModal] = useState(false);
+
+    const toggleImagePickerModal = useCallback(() => {
+        setVisiblePickerModal(!visiblePickerModal);
+    }, [visiblePickerModal]);
+
+    const [fullName, setFullName] = useState(
+        user.firstName ? user.firstName + ' ' + user.lastName : '',
+    );
+    const [organization, setOrganization] = useState(user?.organization);
+    const [avatar, setAvatar] = useState<ImageObj[]>([]);
+
+    const [update_user, {loading}] = useMutation(UPDATE_USER, {
+        onCompleted: () => {
+            Toast.show('Updated !!', Toast.LONG);
+        },
+        onError: err => {
+            Toast.show(getErrorMessage(err), Toast.LONG, [
+                'RCTModalHostViewController',
+            ]);
+            console.log(err);
+        },
+    });
+
+    const handleSavePress = useCallback(async () => {
+        const name = fullName.split(' ');
+        const firstName = name[0];
+        const lastName = fullName.substring(name[0].length).trim();
+        await update_user({
+            variables: {
+                data: {
+                    firstName,
+                    lastName,
+                    organization,
+                    avatar: {
+                        media: avatar,
+                        title: avatar?.name,
+                        type: 'image',
+                    },
+                },
+            },
+        });
+    }, [fullName, organization, avatar, update_user]);
+
+    const handleImages = useCallback(
+        async res => {
+            const image = {
+                name: res.path.substring(res.path.lastIndexOf('/') + 1),
+                type: res.mime,
+                uri:
+                    Platform.OS === 'ios'
+                        ? res.path.replace('file://', '')
+                        : res.path,
+            };
+            const media = new ReactNativeFile({
+                uri: image.uri,
+                name: image.name,
+                type: image.type,
+            });
+            setAvatar(media);
+            toggleImagePickerModal();
+        },
+        [toggleImagePickerModal],
+    );
+
     useEffect(() => {
         navigation.setOptions({
-            headerRight: () => <SaveButton />,
+            headerRight: () => <SaveButton onSavePress={handleSavePress} />,
         });
     });
 
-    const nameValue = useMemo(() => {
-        if (user) {
-            return `${user.firstName} ${user.lastName}`;
-        }
-        return '';
-    }, [user]);
-
     return (
         <View style={styles.container}>
+            <ModalLoader loading={loading} />
             <KeyboardAwareScrollView>
-                <TouchableOpacity style={styles.imageWrapper}>
+                <TouchableOpacity
+                    onPress={toggleImagePickerModal}
+                    style={styles.imageWrapper}>
                     <View style={styles.overlay}>
                         <Icon
                             style={styles.camera}
@@ -44,7 +114,11 @@ const EditProfile = () => {
                         />
                     </View>
                     <Image
-                        source={require('assets/images/user-placeholder.png')}
+                        source={
+                            user.avatar || avatar
+                                ? {uri: avatar?.uri || user.avatar}
+                                : require('assets/images/user-placeholder.png')
+                        }
                         style={styles.userImage}
                     />
                     <Text
@@ -52,12 +126,22 @@ const EditProfile = () => {
                         title={_('Change photo')}
                     />
                 </TouchableOpacity>
-                <InputField title={_('Name')} defaultValue={nameValue} />
+                <InputField
+                    title={_('Name')}
+                    value={fullName}
+                    onChangeText={setFullName}
+                />
                 <InputField
                     title={_('Organization name')}
-                    defaultValue={user?.organization}
+                    value={organization}
+                    onChangeText={setOrganization}
                 />
             </KeyboardAwareScrollView>
+            <ImagePickerModal
+                isVisible={visiblePickerModal}
+                onBackdropPress={toggleImagePickerModal}
+                onChange={handleImages}
+            />
         </View>
     );
 };
