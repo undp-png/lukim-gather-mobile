@@ -208,7 +208,7 @@ const AppNavigator = () => {
                 component={SurveyItem}
                 options={{
                     headerLeft: () => <CloseButton />,
-                    headerTitle: _('Public Entries'),
+                    headerTitle: _('Entries'),
                     presentation: 'modal',
                 }}
             />

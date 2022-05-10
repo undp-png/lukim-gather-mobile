@@ -6,6 +6,7 @@ import {Icon} from 'react-native-eva-icons';
 import {RootStateOrAny, useSelector} from 'react-redux';
 import VersionNumber from 'react-native-version-number';
 
+import {useI18nContext} from '@rna/components/I18n';
 import Button from 'components/Button';
 import Text from 'components/Text';
 import MenuItem from 'components/MenuItem';
@@ -20,6 +21,8 @@ const Menu = () => {
     const {isAuthenticated, user} = useSelector(
         (state: RootStateOrAny) => state.auth,
     );
+    const {selectedLanguage} = useI18nContext();
+
     const [openConfirmLogout, setOpenConfirmLogout] = useState(false);
     const navigation = useNavigation();
     const onProfilePress = useCallback(
@@ -47,21 +50,24 @@ const Menu = () => {
 
     const versionString = useMemo(() => {
         if (VersionNumber.appVersion && VersionNumber.buildVersion) {
-            return `${_('Version')} ${VersionNumber.appVersion}.${
-                VersionNumber.buildVersion
-            }`;
+            return `${_('Version', selectedLanguage)} ${
+                VersionNumber.appVersion
+            }.${VersionNumber.buildVersion}`;
         }
         return '';
-    }, []);
+    }, [selectedLanguage]);
 
     return (
         <View style={styles.container}>
             <ConfirmBox
-                headerText={_('Log out')}
-                descriptionText={_('Are you sure you want to log out?')}
+                headerText={_('Log out', selectedLanguage)}
+                descriptionText={_(
+                    'Are you sure you want to log out?',
+                    selectedLanguage,
+                )}
                 isOpen={openConfirmLogout}
                 onCancel={handleToggleLogout}
-                positiveText={_('Yes, log out')}
+                positiveText={_('Yes, log out', selectedLanguage)}
                 onPositive={handlePressLogout}
             />
             <View>
@@ -108,19 +114,34 @@ const Menu = () => {
                         />
                         <Button
                             style={styles.loginButton}
-                            title={_('Log in / Sign up')}
+                            title={_('Log in / Sign up', selectedLanguage)}
                             onPress={handleLoginPress}
                         />
                     </View>
                 )}
                 <View style={styles.menuWrapper}>
-                    <MenuItem title={_('Forms')} linkTo="Forms" />
-                    <MenuItem title={_('Settings')} linkTo="Settings" />
-                    <MenuItem title={_('About Lukim Gather')} linkTo="About" />
-                    <MenuItem title={_('Feedback')} linkTo="Feedback" />
-                    <MenuItem title={_('Help')} linkTo="Help" />
                     <MenuItem
-                        title={_('Terms & Condition')}
+                        title={_('Forms', selectedLanguage)}
+                        linkTo="Forms"
+                    />
+                    <MenuItem
+                        title={_('Settings', selectedLanguage)}
+                        linkTo="Settings"
+                    />
+                    <MenuItem
+                        title={_('About Lukim Gather', selectedLanguage)}
+                        linkTo="About"
+                    />
+                    <MenuItem
+                        title={_('Feedback', selectedLanguage)}
+                        linkTo="Feedback"
+                    />
+                    <MenuItem
+                        title={_('Help', selectedLanguage)}
+                        linkTo="Help"
+                    />
+                    <MenuItem
+                        title={_('Terms & Condition', selectedLanguage)}
                         linkTo="TermsAndCondition"
                     />
                     {isAuthenticated && (
@@ -129,13 +150,16 @@ const Menu = () => {
                             style={styles.menuItem}>
                             <Text
                                 style={styles.menuTitle}
-                                title={_('Log out')}
+                                title={_('Log out', selectedLanguage)}
                             />
                         </TouchableOpacity>
                     )}
                 </View>
             </View>
-            <Text style={styles.appVersion} title={versionString} />
+            <Text
+                style={styles.appVersion}
+                title={`${versionString} | ${selectedLanguage}`}
+            />
         </View>
     );
 };

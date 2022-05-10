@@ -2,7 +2,7 @@ import 'react-native-gesture-handler';
 import 'cross-fetch/polyfill';
 
 import React, {useEffect, useState, useCallback} from 'react';
-import {StatusBar, Platform} from 'react-native';
+import {StatusBar, Platform, LogBox} from 'react-native';
 import {NavigationContainer} from '@react-navigation/native';
 import {useNetInfo} from '@react-native-community/netinfo';
 import {ApolloProvider} from '@apollo/client';
@@ -27,9 +27,14 @@ import COLORS from 'utils/colors';
 import 'services/bootstrap';
 
 import {
+    HIDE_LOGBOX,
     CODEPUSH_DEPLOYMENT_KEY_IOS,
     CODEPUSH_DEPLOYMENT_KEY_ANDROID,
 } from '@env';
+
+if (HIDE_LOGBOX === 'yes') {
+    LogBox.ignoreAllLogs();
+}
 
 QueueLink.setFilter(['query']);
 const queueLink = new QueueLink();

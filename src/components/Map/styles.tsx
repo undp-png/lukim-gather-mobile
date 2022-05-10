@@ -90,4 +90,14 @@ export const mapStyles = {
         iconAllowOverlap: true,
         iconSize: 0.6,
     },
+    polygon: {
+        fillOpacity: 0.7,
+        fillColor: '#b4b4b4',
+        fillOutlineColor: '#b4b4b4',
+    },
+    polyTitle: {
+        textColor: '#0033cc',
+        textField: ['get', 'title'],
+        textSize: 16,
+    },
 };

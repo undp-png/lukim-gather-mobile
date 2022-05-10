@@ -220,6 +220,9 @@ const CreateHappeningSurvey = () => {
 
     const handleImages = useCallback(
         async response => {
+            if (response?.path) {
+                response = [response];
+            }
             setImages([...response, ...images]);
             response.forEach(async (res: ImageObj) => {
                 const image = {
