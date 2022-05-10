@@ -71,6 +71,9 @@ PODS:
     - FlipperKit/Core
     - FlipperKit/FlipperKitNetworkPlugin
   - fmt (6.2.1)
+  - GCDWebServer (3.5.4):
+    - GCDWebServer/Core (= 3.5.4)
+  - GCDWebServer/Core (3.5.4)
   - glog (0.3.5)
   - libevent (2.1.12)
   - Mapbox-iOS-SDK (5.9.0):
@@ -310,6 +313,9 @@ PODS:
     - Toast (~> 4.0.0)
   - react-native-splash-screen (3.3.0):
     - React-Core
+  - react-native-static-server (0.5.0):
+    - GCDWebServer (~> 3.0)
+    - React
   - react-native-version-number (0.3.6):
     - React
   - React-perflogger (0.67.1)
@@ -460,6 +466,7 @@ DEPENDENCIES:
   - react-native-safe-area-context (from `../node_modules/react-native-safe-area-context`)
   - react-native-simple-toast (from `../node_modules/react-native-simple-toast`)
   - react-native-splash-screen (from `../node_modules/react-native-splash-screen`)
+  - react-native-static-server (from `../node_modules/react-native-static-server`)
   - react-native-version-number (from `../node_modules/react-native-version-number`)
   - React-perflogger (from `../node_modules/react-native/ReactCommon/reactperflogger`)
   - React-RCTActionSheet (from `../node_modules/react-native/Libraries/ActionSheetIOS`)
@@ -497,6 +504,7 @@ SPEC REPOS:
     - Flipper-RSocket
     - FlipperKit
     - fmt
+    - GCDWebServer
     - libevent
     - Mapbox-iOS-SDK
     - MapboxMobileEvents
@@ -560,6 +568,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-simple-toast"
   react-native-splash-screen:
     :path: "../node_modules/react-native-splash-screen"
+  react-native-static-server:
+    :path: "../node_modules/react-native-static-server"
   react-native-version-number:
     :path: "../node_modules/react-native-version-number"
   React-perflogger:
@@ -623,6 +633,7 @@ SPEC CHECKSUMS:
   Flipper-RSocket: d9d9ade67cbecf6ac10730304bf5607266dd2541
   FlipperKit: d8d346844eca5d9120c17d441a2f38596e8ed2b9
   fmt: ff9d55029c625d3757ed641535fd4a75fedc7ce9
+  GCDWebServer: 2c156a56c8226e2d5c0c3f208a3621ccffbe3ce4
   glog: 85ecdd10ee8d8ec362ef519a6a45ff9aa27b2e85
   libevent: 4049cae6c81cdb3654a443be001fb9bdceff7913
   Mapbox-iOS-SDK: a5915700ec84bc1a7f8b3e746d474789e35b7956
@@ -651,6 +662,7 @@ SPEC CHECKSUMS:
   react-native-safe-area-context: 584dc04881deb49474363f3be89e4ca0e854c057
   react-native-simple-toast: bf002828cf816775a6809f7a9ec3907509bce11f
   react-native-splash-screen: 4312f786b13a81b5169ef346d76d33bc0c6dc457
+  react-native-static-server: 201b2a945a35096be3ae7f43e367c65bcbd61343
   react-native-version-number: b415bbec6a13f2df62bf978e85bc0d699462f37f
   React-perflogger: 9a6172711d9c4c8c7ac0a426717317c3c6ecf85c
   React-RCTActionSheet: ed408b54b08278e6af8a75e08679675041da61ae

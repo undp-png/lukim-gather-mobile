@@ -54,7 +54,10 @@ export const SurveyConfirmBox: React.FC<BoxProps> = ({
                         />
                     </TouchableOpacity>
                     <Text style={styles.message}>
-                        Please check this box if you want to publish anonymously
+                        <Localize>
+                            Please check this box if you want to publish
+                            anonymously
+                        </Localize>
                     </Text>
                 </View>
                 <View style={styles.buttonsWrapper}>

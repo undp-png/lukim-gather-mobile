@@ -54,7 +54,7 @@ const EditHappeningSurvey = () => {
     const [activeFeel, setActiveFeel] = useState<string>(
         route.params?.categoryItem?.sentiment,
     );
-    const [activeReview, setActiveReview] = useState<string>(
+    const [activeReview, setActiveReview] = useState<string | null>(
         route.params?.categoryItem?.improvement,
     );
     const [images, setImages] = useState<ImageObj[]>(
@@ -113,7 +113,7 @@ const EditHappeningSurvey = () => {
     const handlePublish = useCallback(async () => {
         setProcessing(true);
         let surveyInput = {
-            categoryId: categoryItem?.id,
+            categoryId: +categoryItem?.id,
             title: title,
             description: description,
             sentiment: activeFeel,

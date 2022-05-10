@@ -1,4 +1,5 @@
 import {ApolloClient, ApolloLink, InMemoryCache} from '@apollo/client';
+
 import {setContext} from '@apollo/client/link/context';
 import {
     persistCache,
@@ -13,7 +14,7 @@ import {createUploadLink} from 'apollo-upload-client';
 import {BASE_URL} from '@env';
 
 import {store} from 'store';
-import {reduxStorage, queueStorage} from 'store/storage';
+import {cacheStorage, queueStorage} from 'store/storage';
 
 export const getApolloClient = async queueLink => {
     const cache = new InMemoryCache();
@@ -38,7 +39,7 @@ export const getApolloClient = async queueLink => {
 
     await persistCache({
         cache: cache,
-        storage: new MMKVCacheStorageWrapper(reduxStorage),
+        storage: new MMKVCacheStorageWrapper(cacheStorage),
         debug: __DEV__,
         trigger: 'background',
     });

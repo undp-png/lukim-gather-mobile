@@ -2,18 +2,27 @@
     "compilerOptions": {
         "target": "esnext",
         "module": "commonjs",
-        "lib": ["es2017"],
+        "lib": [
+            "es2017"
+        ],
         "allowJs": true,
         "jsx": "react-native",
         "declaration": true,
         "noEmit": true,
         "isolatedModules": true,
-
         "strict": true,
         "moduleResolution": "node",
         "baseUrl": ".",
         "paths": {
-            "*": ["src/*"]
+            "*": [
+                "src/*"
+            ],
+            "@generated/*": [
+                "src/generated/*"
+            ],
+            "@rna/*": [
+                "src/vendor/react-native-arsenal/lib/*"
+            ]
         },
         "allowSyntheticDefaultImports": true,
         "esModuleInterop": true,

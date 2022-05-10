@@ -2,7 +2,7 @@ import 'react-native-gesture-handler';
 import 'cross-fetch/polyfill';
 
 import React, {useEffect, useState, useCallback} from 'react';
-import {StatusBar} from 'react-native';
+import {StatusBar, Platform} from 'react-native';
 import {NavigationContainer} from '@react-navigation/native';
 import {useNetInfo} from '@react-native-community/netinfo';
 import {ApolloProvider} from '@apollo/client';
@@ -11,6 +11,7 @@ import {QueueLink} from 'vendor/apollo-link-queue-persist';
 import {Provider} from 'react-redux';
 import {PersistGate} from 'redux-persist/integration/react';
 import SplashScreen from 'react-native-splash-screen';
+import codePush from 'react-native-code-push';
 
 import AppNavigator from 'navigation';
 
@@ -25,8 +26,21 @@ import COLORS from 'utils/colors';
 
 import 'services/bootstrap';
 
+import {
+    CODEPUSH_DEPLOYMENT_KEY_IOS,
+    CODEPUSH_DEPLOYMENT_KEY_ANDROID,
+} from '@env';
+
 QueueLink.setFilter(['query']);
 const queueLink = new QueueLink();
+
+const codePushOptions = {
+    checkFrequency: codePush.CheckFrequency.ON_APP_RESUME,
+    deploymentKey:
+        Platform.OS === 'android'
+            ? CODEPUSH_DEPLOYMENT_KEY_ANDROID
+            : CODEPUSH_DEPLOYMENT_KEY_IOS,
+};
 
 const App = () => {
     const [initialLang, setInitialLang] = useState('en');
@@ -97,4 +111,4 @@ const App = () => {
     );
 };
 
-export default App;
+export default codePush(codePushOptions)(App);

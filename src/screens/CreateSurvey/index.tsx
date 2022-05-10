@@ -1,6 +1,6 @@
 import React, {useCallback, useEffect, useState} from 'react';
 import {Image, ScrollView, View, Platform} from 'react-native';
-import {RootStateOrAny, useSelector} from 'react-redux';
+import {RootStateOrAny, useSelector, useDispatch} from 'react-redux';
 import {useMutation} from '@apollo/client';
 import {ReactNativeFile} from 'apollo-upload-client';
 import {useNavigation, useRoute} from '@react-navigation/native';
@@ -9,6 +9,7 @@ import {Image as ImageObj} from 'react-native-image-crop-picker';
 import {Icon} from 'react-native-eva-icons';
 import Toast from 'react-native-simple-toast';
 import uuid from 'react-native-uuid';
+import Geolocation from 'react-native-geolocation-service';
 
 import Text from 'components/Text';
 import InputField from 'components/InputField';
@@ -21,18 +22,17 @@ import SurveySentiment from 'components/SurveySentiment';
 import SurveyReview from 'components/SurveyReview';
 
 import {_} from 'services/i18n';
+import {setLocation} from 'store/slices/survey';
+import {checkLocation} from 'utils/location';
 
 import {
     CreateHappeningSurveyMutation,
     CreateHappeningSurveyMutationVariables,
-    UploadMediaMutation,
-    UploadMediaMutationVariables,
 } from '@generated/types';
 
 import {
     CREATE_HAPPENING_SURVEY,
     GET_HAPPENING_SURVEY,
-    UPLOAD_IMAGE,
 } from 'services/gql/queries';
 import {getErrorMessage} from 'utils/error';
 
@@ -41,6 +41,9 @@ import styles from './styles';
 const CreateHappeningSurvey = () => {
     const route = useRoute<any>();
     const navigation = useNavigation<any>();
+
+    const dispatch = useDispatch();
+
     const {location} = useSelector((state: RootStateOrAny) => state.survey);
     const {user} = useSelector((state: RootStateOrAny) => state.auth);
     const [openCategory, setOpenCategory] = useState<boolean>(false);
@@ -48,7 +51,9 @@ const CreateHappeningSurvey = () => {
 
     const [title, setTitle] = useState<string>('');
     const [activeFeel, setActiveFeel] = useState<string>('');
-    const [activeReview, setActiveReview] = useState<string>('');
+    const [activeReview, setActiveReview] = useState<string | undefined>(
+        undefined,
+    );
     const [images, setImages] = useState<ImageObj[]>([]);
     const [description, setDescription] = useState<string>('');
     const [category, setCategory] = useState<{
@@ -58,10 +63,8 @@ const CreateHappeningSurvey = () => {
     }>(route.params?.categoryItem);
     const [attachment, setAttachment] = useState<any>([]);
     const [confirmPublish, setConfirmPublish] = useState<boolean>(false);
-    const [coordinates, setCoordinates] = useState<object | null>(null);
     const [isAnonymous, setIsAnonymous] = useState<boolean>(false);
-    const [locationDetail, setLocationDetail] =
-        useState<string>('Current Location');
+    const [locationDetail, setLocationDetail] = useState<string>('');
 
     const handleFeel = useCallback(feel => {
         setActiveFeel(feel);
@@ -88,6 +91,36 @@ const CreateHappeningSurvey = () => {
             console.log('happening survey', err);
         },
     });
+
+    const initializeLocation = useCallback(() => {
+        checkLocation().then(result => {
+            if (result) {
+                Geolocation.getCurrentPosition(position => {
+                    dispatch(
+                        setLocation({
+                            point: [
+                                position.coords.longitude,
+                                position.coords.latitude,
+                            ],
+                        }),
+                    );
+                    setLocationDetail('Your location');
+                });
+            }
+        });
+    }, [dispatch]);
+
+    useEffect(() => {
+        if (!locationDetail) {
+            initializeLocation();
+        } else {
+            if (location && location.polygon) {
+                setLocationDetail('Boundaries');
+            } else if (location && location.point) {
+                setLocationDetail('Your location');
+            }
+        }
+    }, [location, locationDetail, initializeLocation]);
 
     const handlePublish = useCallback(async () => {
         setProcessing(true);
@@ -126,6 +159,11 @@ const CreateHappeningSurvey = () => {
                             __typename: 'ProtectedAreaCategoryType',
                         },
                         ...surveyInput,
+                        attachment: [
+                            ...surveyInput.attachment.map(file => ({
+                                media: file.uri,
+                            })),
+                        ],
                         createdBy: {
                             id: user?.id || '',
                             __typename: 'UserType',
@@ -180,21 +218,6 @@ const CreateHappeningSurvey = () => {
         user?.id,
     ]);
 
-    const [uploadFile] = useMutation<
-        UploadMediaMutation,
-        UploadMediaMutationVariables
-    >(UPLOAD_IMAGE, {
-        onCompleted: res => {
-            setAttachment([res?.uploadMedia.result.id, ...attachment]);
-        },
-        onError: err => {
-            Toast.show(getErrorMessage(err), Toast.LONG, [
-                'RCTModalHostViewController',
-            ]);
-            console.log(err);
-        },
-    });
-
     const handleImages = useCallback(
         async response => {
             setImages([...response, ...images]);
@@ -212,16 +235,10 @@ const CreateHappeningSurvey = () => {
                     name: image.name,
                     type: image.type,
                 });
-                await uploadFile({
-                    variables: {
-                        media: media,
-                        title: `survey-${Date.now()}`,
-                        type: 'image',
-                    },
-                });
+                setAttachment([media, ...attachment]);
             });
         },
-        [images, uploadFile],
+        [images, attachment],
     );
 
     const handleChangeLocation = useCallback(() => {
@@ -229,9 +246,10 @@ const CreateHappeningSurvey = () => {
     }, [navigation]);
 
     const handleConfirmToggle = useCallback(() => {
-        if (title) {
-            setConfirmPublish(!confirmPublish);
+        if (!title) {
+            return Toast.show(_('Please enter a title for the survey'));
         }
+        setConfirmPublish(!confirmPublish);
     }, [title, confirmPublish]);
 
     const handleCancel = useCallback(() => {
@@ -255,17 +273,6 @@ const CreateHappeningSurvey = () => {
         },
         [setIsAnonymous],
     );
-
-    useEffect(() => {
-        setCoordinates(location);
-        if (coordinates && coordinates.polygon) {
-            setLocationDetail('Boundaries');
-        } else if (coordinates && coordinates.point) {
-            setLocationDetail(`${coordinates?.point}`);
-        } else {
-            setLocationDetail('Choose the location');
-        }
-    }, [location, coordinates]);
 
     return (
         <ScrollView

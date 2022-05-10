@@ -1,7 +1,6 @@
 import React, {useState, useCallback, useEffect, useMemo} from 'react';
 import {View, TextInput, ListRenderItem} from 'react-native';
 import {RootStateOrAny, useSelector} from 'react-redux';
-import {useQuery} from '@apollo/client';
 import {useNavigation} from '@react-navigation/native';
 import {FlatList, TouchableOpacity} from 'react-native-gesture-handler';
 import {Icon} from 'react-native-eva-icons';
@@ -11,6 +10,8 @@ import SurveyItem from 'components/SurveyItem';
 import Text from 'components/Text';
 import {Loader} from 'components/Loader';
 import EmptyListMessage from 'components/EmptyListMessage';
+
+import useQuery from 'hooks/useQuery';
 
 import {GET_HAPPENING_SURVEY} from 'services/gql/queries';
 import cs from '@rna/utils/cs';

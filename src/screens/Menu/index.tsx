@@ -57,9 +57,12 @@ const Menu = () => {
     return (
         <View style={styles.container}>
             <ConfirmBox
+                headerText={_('Log out')}
+                descriptionText={_('Are you sure you want to log out?')}
                 isOpen={openConfirmLogout}
                 onCancel={handleToggleLogout}
-                onLogout={handlePressLogout}
+                positiveText={_('Yes, log out')}
+                onPositive={handlePressLogout}
             />
             <View>
                 {isAuthenticated ? (

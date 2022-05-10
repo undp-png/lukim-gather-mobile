@@ -1,10 +1,10 @@
 import {combineReducers} from 'redux';
-import {reducer as formReducer} from 'redux-form';
 
 import authReducer from 'store/slices/auth';
 import localeReducer from 'store/slices/locale';
 import surveyReducer from 'store/slices/survey';
 import infoReducer from 'store/slices/info';
+import formReducer from 'store/slices/form';
 
 const rootReducer = combineReducers({
     auth: authReducer,

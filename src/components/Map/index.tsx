@@ -1,5 +1,4 @@
 import React, {useCallback, useEffect, useState, useRef} from 'react';
-import {useQuery} from '@apollo/client';
 import {View, Image, Alert} from 'react-native';
 import {Icon} from 'react-native-eva-icons';
 import {TouchableOpacity} from 'react-native-gesture-handler';
@@ -16,6 +15,8 @@ import {GET_HAPPENING_SURVEY} from 'services/gql/queries';
 import {MAPBOX_ACCESS_TOKEN} from '@env';
 import {checkLocation} from 'utils/location';
 import COLORS from 'utils/colors';
+
+import useQuery from 'hooks/useQuery';
 
 import {HappeningSurveyType} from '@generated/types';
 
@@ -100,7 +101,7 @@ const Map: React.FC<Props> = ({
     const [mapCameraProps, setMapCameraProps] = useState<object | null>({});
     const [polygonPoint, setPolygonPoint] = useState<number[][]>([]);
 
-    const handlePress = useCallback(() => {
+    const handleLocationCheck = useCallback(() => {
         checkLocation().then(result => {
             if (result) {
                 Geolocation.getCurrentPosition(
@@ -127,11 +128,15 @@ const Map: React.FC<Props> = ({
     }, []);
 
     useEffect(() => {
+        handleLocationCheck();
+    }, [handleLocationCheck]);
+
+    useEffect(() => {
         switch (pickLocation) {
             case 'Use my current location':
                 setDrawPolygon(false);
                 setPolygonPoint([]);
-                handlePress();
+                handleLocationCheck();
                 onLocationPick && onLocationPick?.(currentLocation);
                 break;
             case 'Set on a map':
@@ -145,7 +150,7 @@ const Map: React.FC<Props> = ({
                 setDrawPolygon(false);
                 setPolygonPoint([]);
         }
-    }, [pickLocation, currentLocation, handlePress, onLocationPick]);
+    }, [pickLocation, currentLocation, handleLocationCheck, onLocationPick]);
 
     const onRegionDidChange = useCallback(() => {
         setMapCameraProps({});
@@ -358,7 +363,7 @@ const Map: React.FC<Props> = ({
             <View style={cs(styles.locationBar, locationBarStyle)}>
                 <TouchableOpacity
                     style={styles.locationWrapper}
-                    onPress={handlePress}>
+                    onPress={handleLocationCheck}>
                     <Image
                         source={require('assets/images/locate.png')}
                         style={styles.icon}

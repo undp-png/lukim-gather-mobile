@@ -25,9 +25,11 @@ import SearchSurvey from 'screens/SearchSurvey';
 import Settings from 'screens/Settings';
 import SurveyItem from 'screens/SurveyItem';
 import Forms from 'screens/Forms';
-import FillForm from 'screens/FillForm';
 import TermsAndCondition from 'screens/TermsAndCondition';
 import PrivacyPolicy from 'screens/PrivacyPolicy';
+import WebViewForm from 'screens/Webviewform';
+
+import type {FormDataType} from 'screens/WebViewForm';
 
 import {BackButton, CloseButton} from 'components/HeaderButton';
 
@@ -63,7 +65,7 @@ export type StackParamList = {
     SearchSurvey: undefined;
     SurveyItem: {item?: HappeningSurveyType};
     Forms: undefined;
-    FillForm: {form?: FormType; isViewOnlyMode?: boolean};
+    WebViewForm: {form?: FormType; data?: FormDataType};
     TermsAndCondition: undefined;
     PrivacyPolicy: undefined;
 };
@@ -74,7 +76,7 @@ const AppNavigator = () => {
     const {isAuthenticated} = useSelector(
         (state: RootStateOrAny) => state.auth,
     );
-    const {loading, error, data} = useQuery(GET_LEGAL_DOCUMENT);
+    const {data} = useQuery(GET_LEGAL_DOCUMENT);
 
     dispatchInfo(data?.legalDocument);
     return (
@@ -236,8 +238,8 @@ const AppNavigator = () => {
             />
             <Stack.Screen name="Forms" component={Forms} />
             <Stack.Screen
-                name="FillForm"
-                component={FillForm}
+                name="WebViewForm"
+                component={WebViewForm}
                 options={({route}) => ({
                     headerLeft: () => <CloseButton />,
                     headerTitle: route.params?.form?.title || 'Form',

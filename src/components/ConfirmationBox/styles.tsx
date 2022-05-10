@@ -33,10 +33,16 @@ export default StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-between',
     },
-    login: {
-        width: '47%',
+    buttonNegative: {
+        backgroundColor: COLORS.error,
+        color: COLORS.white,
     },
-    getStarted: {
-        width: '47%',
+    buttonsRight: {
+        flexDirection: 'row-reverse',
+        flex: 1,
+    },
+    buttonPositive: {
+        marginLeft: 8,
+        minWidth: '35%',
     },
 });
