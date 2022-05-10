@@ -13,19 +13,26 @@ import Text from 'components/Text';
 import {_} from 'services/i18n';
 import {CREATE_FEEDBACK} from 'services/gql/queries';
 import {getErrorMessage} from 'utils/error';
+import {
+    CreateFeedbackMutation,
+    CreateFeedbackMutationVariables,
+} from 'generated/types';
 
 import styles from './styles';
 
 const Feedbacks = () => {
     const navigation = useNavigation<any>();
     const [open, setOpen] = useState(false);
-    const [value, setValue] = useState(null);
+    const [value, setValue] = useState<string>('');
     const [items, setItems] = useState([
         {label: 'Issue 1', value: 'issue 1'},
         {label: 'Issue 2', value: 'issue 2'},
     ]);
     const [description, setDescription] = useState<string>('');
-    const [create_feedback, {loading}] = useMutation(CREATE_FEEDBACK, {
+    const [create_feedback, {loading}] = useMutation<
+        CreateFeedbackMutation,
+        CreateFeedbackMutationVariables
+    >(CREATE_FEEDBACK, {
         onCompleted: () => {
             Toast.show(
                 'Feedback has been successfully submitted !!',

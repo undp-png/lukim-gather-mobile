@@ -10,33 +10,30 @@ import Button from 'components/Button';
 import OtpInput from 'components/OtpInput';
 
 import {_} from 'services/i18n';
-import {PASSWORD_RESET, PASSWORD_RESET_VERIFY} from 'services/gql/queries';
+import {EMAIL_CONFIRM, EMAIL_CONFIRM_VERIFY} from 'services/gql/queries';
 import {getErrorMessage} from 'utils/error';
 import {
-    PasswordResetMutation,
-    PasswordResetMutationVariables,
-    PasswordResetVerifyMutation,
-    PasswordResetVerifyMutationVariables,
+    EmailConfirmMutation,
+    EmailConfirmMutationVariables,
+    EmailConfirmVerifyMutation,
+    EmailConfirmVerifyMutationVariables,
 } from 'generated/types';
 
 import styles from './styles';
 
-const VerifyEmail = () => {
+const ConfirmEmail = () => {
     const navigation = useNavigation<any>();
     const [pin, setPin] = useState('');
     const route = useRoute<any>();
     const username = route?.params?.email;
 
     const [email_confirm_verify, {loading: loading}] = useMutation<
-        PasswordResetVerifyMutation,
-        PasswordResetVerifyMutationVariables
-    >(PASSWORD_RESET_VERIFY, {
-        onCompleted: res => {
-            Toast.show('Email verified successfully !!');
-            navigation.navigate('CreateNewPassword', {
-                username,
-                identifier: res?.passwordResetVerify?.result?.identifier,
-            });
+        EmailConfirmVerifyMutation,
+        EmailConfirmVerifyMutationVariables
+    >(EMAIL_CONFIRM_VERIFY, {
+        onCompleted: () => {
+            Toast.show('Account activated successfully !!');
+            navigation.navigate('Login');
         },
         onError: err => {
             Toast.show(getErrorMessage(err), Toast.LONG, [
@@ -46,7 +43,7 @@ const VerifyEmail = () => {
         },
     });
 
-    const handleEmailVerify = useCallback(async () => {
+    const handleEmailConfirmVerify = useCallback(async () => {
         await email_confirm_verify({
             variables: {
                 data: {
@@ -58,9 +55,9 @@ const VerifyEmail = () => {
     }, [email_confirm_verify, username, pin]);
 
     const [email_confirm, {loading: resendLoading}] = useMutation<
-        PasswordResetMutation,
-        PasswordResetMutationVariables
-    >(PASSWORD_RESET, {
+        EmailConfirmMutation,
+        EmailConfirmMutationVariables
+    >(EMAIL_CONFIRM, {
         onCompleted: () => {
             Toast.show('Code successfully sent !!');
         },
@@ -95,7 +92,7 @@ const VerifyEmail = () => {
             <Button
                 title="Verify"
                 style={styles.button}
-                onPress={handleEmailVerify}
+                onPress={handleEmailConfirmVerify}
                 disabled={pin.length < 6}
             />
             <Pressable style={styles.resendWrapper} onPress={handleResendCode}>
@@ -105,4 +102,4 @@ const VerifyEmail = () => {
     );
 };
 
-export default VerifyEmail;
+export default ConfirmEmail;

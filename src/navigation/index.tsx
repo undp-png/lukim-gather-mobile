@@ -10,6 +10,9 @@ import About from 'screens/About';
 import AccountSettings from 'screens/AccountSettings';
 import Language from 'screens/Language';
 import ChangePassword from 'screens/ChangePassword';
+import ForgotPassword from 'screens/ForgotPassword';
+import VerifyEmail from 'screens/VerifyEmail';
+import CreateNewPassword from 'screens/CreateNewPassword';
 import ChangeLocation from 'screens/ChangeLocation';
 import ChooseCategory from 'screens/ChooseCategory';
 import SearchCategory from 'screens/SearchCategory';
@@ -53,6 +56,9 @@ export type StackParamList = {
     Feedback: undefined;
     Home: undefined;
     Settings: undefined;
+    ForgotPassword: undefined;
+    VerifyEmail: undefined;
+    CreateNewPassword: undefined;
     Help: undefined;
     SearchSurvey: undefined;
     SurveyItem: {item?: HappeningSurveyType};
@@ -121,6 +127,21 @@ const AppNavigator = () => {
                     headerTitle: _('Change Password'),
                     presentation: 'modal',
                 }}
+            />
+            <Stack.Screen
+                name="ForgotPassword"
+                component={ForgotPassword}
+                options={{headerTitle: _('Forgot password?')}}
+            />
+            <Stack.Screen
+                name="VerifyEmail"
+                component={VerifyEmail}
+                options={{headerTitle: _('Verify your email')}}
+            />
+            <Stack.Screen
+                name="CreateNewPassword"
+                component={CreateNewPassword}
+                options={{headerTitle: _('Create new Password')}}
             />
             <Stack.Screen
                 name="EditProfile"

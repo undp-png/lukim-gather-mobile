@@ -67,7 +67,7 @@ const ChangePassword = () => {
     }, [handleChangePassword, navigation]);
 
     const handleForgotPress = useCallback(() => {
-        navigation.navigate('Auth', {screen: 'ForgotPassword'});
+        navigation.navigate('ForgotPassword');
     }, [navigation]);
 
     return (
