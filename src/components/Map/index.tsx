@@ -230,10 +230,28 @@ const Map: React.FC<Props> = ({
                         coordinates: survey.location.coordinates,
                     },
                 })) || [];
+
         let surveyGeoJSON = {
             type: 'FeatureCollection',
             features: [...shape],
         };
+        const polyShape =
+            data?.happeningSurveys
+                .filter((survey: HappeningSurveyType) => survey.boundary)
+                .map((survey: HappeningSurveyType) => ({
+                    type: 'Feature',
+                    properties: {
+                        surveyItem: survey,
+                        title: survey.title,
+                    },
+                    geometry: survey.boundary,
+                })) || [];
+
+        let surveyPolyGeoJSON = {
+            type: 'FeatureCollection',
+            features: [...polyShape],
+        };
+
         let icons = surveyCategory
             .map(category =>
                 category.childs.map(child => ({[child.id]: child.icon})),
@@ -248,6 +266,21 @@ const Map: React.FC<Props> = ({
         return (
             <>
                 <MapboxGL.Images images={categoryIcons} />
+                <MapboxGL.ShapeSource
+                    id="surveyPolySource"
+                    onPress={handleSurveyShapePress}
+                    shape={surveyPolyGeoJSON}>
+                    <MapboxGL.SymbolLayer
+                        id="polyTitle"
+                        style={mapStyles.polyTitle}
+                    />
+                    <MapboxGL.FillLayer
+                        id="polygon"
+                        sourceLayerID="surveyPolySource"
+                        belowLayerID="polyTitle"
+                        style={mapStyles.polygon}
+                    />
+                </MapboxGL.ShapeSource>
                 <MapboxGL.ShapeSource
                     ref={shapeSourceRef}
                     id="surveySource"

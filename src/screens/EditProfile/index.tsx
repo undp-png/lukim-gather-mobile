@@ -36,7 +36,7 @@ const EditProfile = () => {
         user.firstName ? user.firstName + ' ' + user.lastName : '',
     );
     const [organization, setOrganization] = useState(user?.organization);
-    const [avatar, setAvatar] = useState<ImageObj[]>([]);
+    const [avatar, setAvatar] = useState<ImageObj | undefined>();
 
     const [update_user, {loading}] = useMutation(UPDATE_USER, {
         onCompleted: () => {
@@ -60,11 +60,7 @@ const EditProfile = () => {
                     firstName,
                     lastName,
                     organization,
-                    avatar: {
-                        media: avatar,
-                        title: avatar?.name,
-                        type: 'image',
-                    },
+                    avatar: avatar,
                 },
             },
         });

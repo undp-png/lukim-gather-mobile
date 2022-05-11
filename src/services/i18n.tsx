@@ -91,10 +91,13 @@ export const languages = [
     {code: 'tpi', title: 'Tok Pisin'},
 ];
 
-export const _ = text => {
-    const {
-        locale: {currentLanguage, translations},
-    } = store.getState();
+export const _ = (text: string, lang: string | null = null) => {
+    if (!lang) {
+        const {
+            locale: {currentLanguage, translations},
+        } = store.getState();
+        lang = currentLanguage;
+    }
 
-    return translator(text, currentLanguage, translations);
+    return translator(text, lang, translations);
 };

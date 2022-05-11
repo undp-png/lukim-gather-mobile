@@ -13,6 +13,12 @@
 # Uncomment the line if you want fastlane to automatically update itself
 # update_fastlane
 
+fastlane_require 'dotenv'
+
+before_all do
+  Dotenv.overload '.env'
+end
+
 default_platform(:android)
 
 platform :android do
@@ -21,18 +27,54 @@ platform :android do
     gradle(task: "test")
   end
 
-  desc "Submit a new Beta Build to Crashlytics Beta"
+  desc "Submit a new Beta Build"
   lane :beta do
-    gradle(task: "clean assembleRelease")
-    crashlytics
-  
+    increment_version_code
+    gradle(
+       task: "clean bundle",
+       build_type: "Release",
+       properties: {
+         "android.injected.signing.store.file" => ENV['SIGNING_STORE_FILE'],
+         "android.injected.signing.store.password" => ENV['SIGNING_STORE_PASSWORD'],
+         "android.injected.signing.key.alias" => ENV['SIGNING_KEY_ALIAS'],
+         "android.injected.signing.key.password" => ENV['SIGNING_KEY_PASSWORD'],
+       }
+    )
+    upload_to_play_store(
+        track: 'beta',
+        skip_upload_changelogs: true,
+        skip_upload_images: true,
+    )
+   slack(
+       message: "Android app update has been uploaded to open testing! It should be available after a review period.",
+       slack_url: ENV['SLACK_URL'],
+       success: true,
+       fail_on_error: false,
+   )
+
     # sh "your_script.sh"
     # You can also use other beta testing services here
   end
 
   desc "Deploy a new version to the Google Play"
   lane :deploy do
-    gradle(task: "clean assembleRelease")
-    upload_to_play_store
+    increment_version_code
+    gradle(
+        task: "clean bundle",
+        build_type: "Release",
+        properties: {
+          "android.injected.signing.store.file" => ENV['SIGNING_STORE_FILE'],
+          "android.injected.signing.store.password" => ENV['SIGNING_STORE_PASSWORD'],
+          "android.injected.signing.key.alias" => ENV['SIGNING_KEY_ALIAS'],
+          "android.injected.signing.key.password" => ENV['SIGNING_KEY_PASSWORD'],
+        }
+    )
+    upload_to_play_store(skip_upload_apk: true)
+    slack(
+        message: "Android app update has been uploaded to production! It should be available after a review period.",
+        slack_url: ENV['SLACK_URL'],
+        success: true,
+        fail_on_error: false,
+    )
   end
 end
