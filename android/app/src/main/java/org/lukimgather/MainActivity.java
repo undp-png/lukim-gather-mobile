@@ -1,4 +1,4 @@
-package com.lukimgather;
+package org.lukimgather;
 
 import android.os.Bundle;
 import org.devio.rn.splashscreen.SplashScreen;
