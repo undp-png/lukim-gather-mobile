@@ -169,6 +169,14 @@ export const UPDATE_USER = gql`
     mutation UpdateUser($data: UserInput!) {
         updateUser(data: $data) {
             ok
+            errors
+            result {
+                id
+                firstName
+                lastName
+                organization
+                avatar
+            }
         }
     }
 `;

@@ -38,7 +38,7 @@ const EditProfile = () => {
     const [organization, setOrganization] = useState(user?.organization);
     const [avatar, setAvatar] = useState<ImageObj | undefined>();
 
-    const [update_user, {loading}] = useMutation(UPDATE_USER, {
+    const [updateUser, {loading}] = useMutation(UPDATE_USER, {
         onCompleted: () => {
             Toast.show('Updated !!', Toast.LONG);
         },
@@ -54,7 +54,7 @@ const EditProfile = () => {
         const name = fullName.split(' ');
         const firstName = name[0];
         const lastName = fullName.substring(name[0].length).trim();
-        await update_user({
+        await updateUser({
             variables: {
                 data: {
                     firstName,
@@ -63,8 +63,42 @@ const EditProfile = () => {
                     avatar: avatar,
                 },
             },
+            optimisticResponse: {
+                updateUser: {
+                    __typename: 'UpdateUser',
+                    errors: [],
+                    ok: null,
+                    result: {
+                        firstName,
+                        lastName,
+                        organization,
+                        avatar,
+                    },
+                },
+            },
+            update: (cache, {data}) => {
+                try {
+                    const readData: any =
+                        cache.readQuery({
+                            query: UPDATE_USER,
+                        }) || [];
+
+                    let mergedUserData = data.updateUser.result;
+
+                    cache.writeQuery({
+                        query: UPDATE_USER,
+                        data: {
+                            ...readData,
+                            updateUser: mergedUserData,
+                        },
+                    });
+                    navigation.navigate('Menu');
+                } catch (e) {
+                    console.log('error on update profile', e);
+                }
+            },
         });
-    }, [fullName, organization, avatar, update_user]);
+    }, [fullName, organization, avatar, updateUser, navigation]);
 
     const handleImages = useCallback(
         async res => {
