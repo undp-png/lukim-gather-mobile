@@ -205,21 +205,6 @@ const EditHappeningSurvey = () => {
         user?.id,
     ]);
 
-    const [uploadFile] = useMutation<
-        UploadMediaMutation,
-        UploadMediaMutationVariables
-    >(UPLOAD_IMAGE, {
-        onCompleted: res => {
-            setAttachment([res?.uploadMedia.result.id, ...attachment]);
-        },
-        onError: err => {
-            Toast.show(getErrorMessage(err), Toast.LONG, [
-                'RCTModalHostViewController',
-            ]);
-            console.log(err);
-        },
-    });
-
     const handleImages = useCallback(
         async response => {
             if (response?.path) {
@@ -240,16 +225,10 @@ const EditHappeningSurvey = () => {
                     name: image.name,
                     type: image.type,
                 });
-                await uploadFile({
-                    variables: {
-                        media: media,
-                        title: `survey-${Date.now()}`,
-                        type: 'image',
-                    },
-                });
+                setAttachment([media, ...attachment]);
             });
         },
-        [images, uploadFile],
+        [images, attachment],
     );
 
     const handleChangeLocation = useCallback(() => {
