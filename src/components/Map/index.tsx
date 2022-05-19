@@ -178,6 +178,27 @@ const Map: React.FC<Props> = ({
         }, [refetch]),
     );
 
+    const handleSurveyPolyShapePress = useCallback(
+        shape => {
+            if (shape?.features?.length === 1) {
+                const feature = shape.features[0];
+                if (feature?.properties?.surveyItem) {
+                    return navigation.navigate('SurveyItem', {
+                        item: feature.properties.surveyItem,
+                    });
+                }
+            } else if (shape?.features?.length > 1) {
+                const feature = shape.features[shape.features.length - 1];
+                if (feature?.properties?.surveyItem) {
+                    return navigation.navigate('SurveyItem', {
+                        item: feature.properties.surveyItem,
+                    });
+                }
+            }
+        },
+        [navigation],
+    );
+
     const handleSurveyShapePress = useCallback(
         async shape => {
             if (shape?.features?.length === 1) {
@@ -268,7 +289,7 @@ const Map: React.FC<Props> = ({
                 <MapboxGL.Images images={categoryIcons} />
                 <MapboxGL.ShapeSource
                     id="surveyPolySource"
-                    onPress={handleSurveyShapePress}
+                    onPress={handleSurveyPolyShapePress}
                     shape={surveyPolyGeoJSON}>
                     <MapboxGL.SymbolLayer
                         id="polyTitle"
@@ -306,7 +327,7 @@ const Map: React.FC<Props> = ({
                 </MapboxGL.ShapeSource>
             </>
         );
-    }, [data, handleSurveyShapePress]);
+    }, [data, handleSurveyShapePress, handleSurveyPolyShapePress]);
 
     const renderPolygon = useCallback(() => {
         const polygonGeoJSON = {

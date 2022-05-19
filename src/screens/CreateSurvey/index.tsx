@@ -233,11 +233,7 @@ const CreateHappeningSurvey = () => {
                             ? res.path.replace('file://', '')
                             : res.path,
                 };
-                const media = new ReactNativeFile({
-                    uri: image.uri,
-                    name: image.name,
-                    type: image.type,
-                });
+                const media = new ReactNativeFile(image);
                 setAttachment([media, ...attachment]);
             });
         },

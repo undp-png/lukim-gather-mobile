@@ -1,5 +1,5 @@
 import React, {useCallback, useState} from 'react';
-import {useMutation, gql} from '@apollo/client';
+import {useMutation} from '@apollo/client';
 import {SafeAreaView, TouchableOpacity, View} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import Toast from 'react-native-simple-toast';
@@ -24,7 +24,7 @@ const Login = () => {
 
     const navigation = useNavigation();
 
-    const [login, {loading, error}] = useMutation<
+    const [login, {loading}] = useMutation<
         TokenAuthMutation,
         TokenAuthMutationVariables
     >(LOGIN, {

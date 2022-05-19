@@ -1,7 +1,6 @@
 import React, {useEffect, useCallback, useMemo, useState} from 'react';
 import {View, FlatList, Alert} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
-import {useQuery} from '@apollo/client';
 import {RootStateOrAny, useSelector, useDispatch} from 'react-redux';
 
 import MenuItem from 'components/MenuItem';
@@ -9,6 +8,7 @@ import {Loader} from 'components/Loader';
 import {ConfirmBox} from 'components/ConfirmationBox';
 
 import {_} from 'services/i18n';
+import useQuery from 'hooks/useQuery';
 import {GET_SURVEY_FORMS} from 'services/gql/queries';
 import {FormType} from '@generated/types';
 

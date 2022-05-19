@@ -64,8 +64,6 @@ jest.mock('react-native-geolocation-service', () => ({
 
 jest.mock('@react-native-community/netinfo', () => mockRNCNetInfo);
 
-jest.mock('@react-native-community/datetimepicker', () => jest.fn());
-
 jest.mock('react-native-permissions', () => ({
     request: jest.fn(),
     PERMISSIONS: {},
