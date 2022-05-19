@@ -65,12 +65,14 @@ const Login = () => {
                 <InputField
                     title={_('Email or Phone')}
                     input={username}
+                    value={username}
                     onChangeText={setUsername}
                     placeholder={_('Enter email or phone')}
                 />
                 <InputField
                     title={_('Password')}
                     input={password}
+                    value={password}
                     onChangeText={setPassword}
                     placeholder={_('Enter password')}
                     password

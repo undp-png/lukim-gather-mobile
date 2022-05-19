@@ -75,6 +75,7 @@ const SignUp = () => {
                 <View style={styles.name}>
                     <InputField
                         input={firstName}
+                        value={firstName}
                         onChangeText={setFirstName}
                         title={_('First name')}
                         placeholder={_('Enter first name')}
@@ -82,6 +83,7 @@ const SignUp = () => {
                     />
                     <InputField
                         input={lastName}
+                        value={lastName}
                         onChangeText={setLastName}
                         title={_('Surname')}
                         placeholder={_('Enter surname')}
@@ -93,6 +95,7 @@ const SignUp = () => {
                     title={_('Password')}
                     placeholder={_('Enter password')}
                     input={password}
+                    value={password}
                     password
                 />
                 <View style={styles.infoWrapper}>
