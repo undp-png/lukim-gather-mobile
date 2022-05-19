@@ -42,7 +42,7 @@ export default StyleSheet.create({
     },
     contentInfo: {
         maxWidth: 271,
-        marginTop: 20,
+        marginTop: 15,
         marginBottom: 10,
         fontSize: 16,
         fontFamily: 'Inter-Regular',
@@ -55,6 +55,7 @@ export default StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         height: 40,
+        marginBottom: 15,
     },
     dot: {
         height: 12,
@@ -66,11 +67,10 @@ export default StyleSheet.create({
     buttonsWrapper: {
         flexDirection: 'row',
         justifyContent: 'space-around',
-        marginTop: 60,
+        marginBottom: 20,
     },
     bottomSpacer: {
-        marginTop: 10,
-        marginBottom: 40,
+        marginBottom: 25,
     },
     link: {
         alignSelf: 'center',
