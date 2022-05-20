@@ -16,7 +16,7 @@ export default StyleSheet.create({
         left: 0,
         right: 0,
         flexDirection: 'row',
-        alignItems: 'center',
+        alignItems: 'flex-end',
     },
     containerHidden: {
         display: 'none',
@@ -38,5 +38,9 @@ export default StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         backgroundColor: COLORS.blueTextAlt,
+    },
+    iconWrapper: {
+        alignItems: 'center',
+        marginBottom: 10,
     },
 });

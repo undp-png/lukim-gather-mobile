@@ -14,8 +14,8 @@ export const BackButton = () => {
         <TouchableOpacity onPress={onBackPress} style={styles.headerIcon}>
             <Icon
                 name="arrow-ios-back-outline"
-                height={24}
-                width={24}
+                height={27}
+                width={27}
                 fill={COLORS.tertiary}
             />
         </TouchableOpacity>
@@ -28,9 +28,9 @@ export const CloseButton = () => {
     return (
         <TouchableOpacity onPress={onBackPress} style={styles.headerIcon}>
             <Icon
-                name="close-circle-outline"
-                height={24}
-                width={24}
+                name="close-outline"
+                height={27}
+                width={27}
                 fill={COLORS.tertiary}
             />
         </TouchableOpacity>
@@ -42,8 +42,8 @@ export const SaveButton = ({onSavePress}: {onSavePress(): void}) => {
         <TouchableOpacity onPress={onSavePress} style={styles.headerIcon}>
             <Icon
                 name="checkmark-circle-2"
-                height={24}
-                width={24}
+                height={27}
+                width={27}
                 fill={COLORS.accent}
             />
         </TouchableOpacity>
@@ -55,8 +55,8 @@ export const OptionIcon = ({onOptionPress}: {onOptionPress(): void}) => {
         <TouchableOpacity onPress={onOptionPress} style={styles.headerIcon}>
             <Icon
                 name="more-horizontal-outline"
-                height={20}
-                width={20}
+                height={27}
+                width={27}
                 fill={'#000'}
             />
         </TouchableOpacity>
@@ -68,8 +68,8 @@ export const SearchIcon = ({onSearchPress}: {onSearchPress(): void}) => {
         <TouchableOpacity onPress={onSearchPress} style={styles.headerIcon}>
             <Icon
                 name="search-outline"
-                height={24}
-                width={24}
+                height={27}
+                width={27}
                 fill={'#888C94'}
             />
         </TouchableOpacity>
