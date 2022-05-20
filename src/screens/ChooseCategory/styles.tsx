@@ -8,16 +8,16 @@ export default StyleSheet.create({
     container: {
         backgroundColor: COLORS.white,
         paddingBottom: 100,
-        paddingTop: 10,
     },
     menuItemsContainer: {
         flexDirection: 'row',
         alignItems: 'center',
         paddingHorizontal: 20,
-        paddingBottom: 20,
     },
     menu: {
+        height: 35,
         marginRight: 25,
+        marginVertical: 15,
     },
     menuTitle: {
         fontSize: 24,

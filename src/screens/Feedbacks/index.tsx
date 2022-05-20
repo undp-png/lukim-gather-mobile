@@ -25,8 +25,13 @@ const Feedbacks = () => {
     const [open, setOpen] = useState(false);
     const [value, setValue] = useState<string>('');
     const [items, setItems] = useState([
-        {label: 'Issue 1', value: 'issue 1'},
-        {label: 'Issue 2', value: 'issue 2'},
+        {label: 'Issue adding survey', value: 'Issue adding survey'},
+        {label: 'Issue with App', value: 'Issue with App'},
+        {
+            label: 'Suggestion to Lukim Gather',
+            value: 'Suggestion to Lukim Gather',
+        },
+        {label: 'Other', value: 'Other'},
     ]);
     const [description, setDescription] = useState<string>('');
     const [create_feedback, {loading}] = useMutation<
