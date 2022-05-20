@@ -174,6 +174,7 @@ export const UPDATE_USER = gql`
                 id
                 firstName
                 lastName
+                email
                 organization
                 avatar
             }

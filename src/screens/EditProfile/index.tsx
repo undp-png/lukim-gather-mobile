@@ -1,6 +1,6 @@
 import React, {useEffect, useCallback, useState} from 'react';
 import {View, Image, Platform} from 'react-native';
-import {RootStateOrAny, useSelector} from 'react-redux';
+import {RootStateOrAny, useSelector, useDispatch} from 'react-redux';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import {useNavigation} from '@react-navigation/native';
 import {Icon} from 'react-native-eva-icons';
@@ -17,12 +17,15 @@ import {ModalLoader} from 'components/Loader';
 import {ImagePickerModal} from 'components/ImagePicker';
 
 import {_} from 'services/i18n';
-import {getErrorMessage} from 'utils/error';
 import {UPDATE_USER} from 'services/gql/queries';
+import {getErrorMessage} from 'utils/error';
+
+import {setUser} from 'store/slices/auth';
 
 import styles from './styles';
 
 const EditProfile = () => {
+    const dispatch = useDispatch();
     const navigation = useNavigation();
     const {user} = useSelector((state: RootStateOrAny) => state.auth);
 
@@ -39,8 +42,10 @@ const EditProfile = () => {
     const [avatar, setAvatar] = useState<ImageObj | undefined>();
 
     const [updateUser, {loading}] = useMutation(UPDATE_USER, {
-        onCompleted: () => {
+        onCompleted: res => {
             Toast.show('Updated !!', Toast.LONG);
+            navigation.navigate('Menu');
+            dispatch(setUser(res?.updateUser?.result));
         },
         onError: err => {
             Toast.show(getErrorMessage(err), Toast.LONG, [
@@ -76,29 +81,8 @@ const EditProfile = () => {
                     },
                 },
             },
-            update: (cache, {data}) => {
-                try {
-                    const readData: any =
-                        cache.readQuery({
-                            query: UPDATE_USER,
-                        }) || [];
-
-                    let mergedUserData = data.updateUser.result;
-
-                    cache.writeQuery({
-                        query: UPDATE_USER,
-                        data: {
-                            ...readData,
-                            updateUser: mergedUserData,
-                        },
-                    });
-                    navigation.navigate('Menu');
-                } catch (e) {
-                    console.log('error on update profile', e);
-                }
-            },
         });
-    }, [fullName, organization, avatar, updateUser, navigation]);
+    }, [fullName, organization, avatar, updateUser]);
 
     const handleImages = useCallback(
         async res => {
