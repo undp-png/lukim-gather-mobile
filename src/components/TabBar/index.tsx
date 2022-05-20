@@ -198,7 +198,7 @@ const TabBar = ({
                                     />
                                 </View>
                             ) : (
-                                <>
+                                <View style={styles.iconWrapper}>
                                     <Icon
                                         name={iconName}
                                         fill={
@@ -217,7 +217,7 @@ const TabBar = ({
                                         })}
                                         title={_(route.name)}
                                     />
-                                </>
+                                </View>
                             )}
                         </TouchableOpacity>
                     );
