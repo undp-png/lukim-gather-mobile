@@ -25,7 +25,8 @@ const SignUp = () => {
     const [signup, {loading}] = useMutation(SIGNUP, {
         onCompleted: () => {
             Toast.show('Your account has been successfully created !!');
-            navigation.navigate('ConfirmEmail', {email});
+            // navigation.navigate('ConfirmEmail', {email}); to confirm email
+            navigation.navigate('Login');
         },
         onError: err => {
             Toast.show(getErrorMessage(err), Toast.LONG, [

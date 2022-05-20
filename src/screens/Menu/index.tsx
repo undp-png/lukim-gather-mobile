@@ -1,7 +1,7 @@
 import React, {useCallback, useState, useMemo} from 'react';
 import {View, Image} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
-import {TouchableOpacity} from 'react-native-gesture-handler';
+import {ScrollView, TouchableOpacity} from 'react-native-gesture-handler';
 import {Icon} from 'react-native-eva-icons';
 import {RootStateOrAny, useSelector} from 'react-redux';
 import VersionNumber from 'react-native-version-number';
@@ -70,7 +70,7 @@ const Menu = () => {
                 positiveText={_('Yes, log out', selectedLanguage)}
                 onPositive={handlePressLogout}
             />
-            <View>
+            <ScrollView showsVerticalScrollIndicator={false}>
                 {isAuthenticated ? (
                     <TouchableOpacity
                         onPress={onProfilePress}
@@ -155,7 +155,7 @@ const Menu = () => {
                         </TouchableOpacity>
                     )}
                 </View>
-            </View>
+            </ScrollView>
             <Text
                 style={styles.appVersion}
                 title={`${versionString} | ${selectedLanguage}`}
