@@ -79,6 +79,8 @@ const ChangePassword = () => {
                         onChangeText={setPassword}
                         title={_('Current password')}
                         placeholder={_('Enter current password')}
+                        value={password}
+                        password
                     />
                     <TouchableOpacity
                         style={styles.forgotPassword}
@@ -93,11 +95,15 @@ const ChangePassword = () => {
                     onChangeText={setNewPassword}
                     title={_('New password')}
                     placeholder={_('Enter new password')}
+                    value={newPassword}
+                    password
                 />
                 <InputField
                     onChangeText={setRePassword}
                     title={_('Confirm new password')}
                     placeholder={_('Re-enter new password')}
+                    value={rePassword}
+                    password
                 />
             </KeyboardAwareScrollView>
         </View>
