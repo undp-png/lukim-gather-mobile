@@ -22,30 +22,6 @@
       "sha1": "fbf310eac80dd08cec6fcbc6320ac1cde76bdee5"
     },
     {
-      "path": "src/assets/xforms/css/formhub-print.css",
-      "sha1": "21cf48e553770529d2c31d7868bb50664d236c04"
-    },
-    {
-      "path": "src/assets/xforms/css/formhub.css",
-      "sha1": "23b5b2f1e843044a8c351d837202e6cb5c8ce763"
-    },
-    {
-      "path": "src/assets/xforms/css/grid-print.css",
-      "sha1": "2904363d52636588b8e021d46ddc99a1b1bf6421"
-    },
-    {
-      "path": "src/assets/xforms/css/grid.css",
-      "sha1": "825e712e785790788df331be990adc1c7a1374d5"
-    },
-    {
-      "path": "src/assets/xforms/css/plain-print.css",
-      "sha1": "7a3b31ae354afc12204102a2c51d89b145574624"
-    },
-    {
-      "path": "src/assets/xforms/css/plain.css",
-      "sha1": "b725457a117fdac256a45bc821332bd5b1d4c386"
-    },
-    {
       "path": "src/assets/xforms/formhub-print.css",
       "sha1": "21cf48e553770529d2c31d7868bb50664d236c04"
     },
