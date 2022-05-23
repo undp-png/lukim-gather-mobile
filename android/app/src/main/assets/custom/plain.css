@@ -355,7 +355,7 @@ body {
   margin: 0 16px 0 0; }
 
 .form-footer {
-  margin: 45px -45px -45px -45px; }
+  margin: 45px -45px 45px -45px; }
 
 .enketo-power {
   position: relative;
@@ -4513,7 +4513,7 @@ table th[class*='col-'] {
     margin-right: -30px;
     width: calc(100% + (2 * 30px)); }
   .form-footer {
-    margin: 30px -30px -30px -30px; } }
+    margin: 30px -30px 30px -30px; } }
 
 @media screen and (max-width: 400px) {
   body {
@@ -4534,7 +4534,7 @@ table th[class*='col-'] {
     .form-header .form-language-selector {
       border-right: none; }
   .form-footer {
-    margin: 20px -20px -20px -20px; } }
+    margin: 20px -20px 20px -20px; } }
 
 .caret {
   display: inline-block;

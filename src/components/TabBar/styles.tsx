@@ -1,6 +1,6 @@
 import {StyleSheet, Dimensions} from 'react-native';
 
-const {width} = Dimensions.get('window');
+const {height, width} = Dimensions.get('window');
 
 import COLORS from 'utils/colors';
 
@@ -8,7 +8,6 @@ export default StyleSheet.create({
     safeArea: {
         position: 'absolute',
         bottom: 0,
-        width,
     },
     container: {
         position: 'absolute',
@@ -31,8 +30,8 @@ export default StyleSheet.create({
         marginTop: 6,
     },
     plusButton: {
-        height: width / 6.5,
-        width: width / 6.5,
+        height: Math.min(height, width) / 6.5,
+        width: Math.min(height, width) / 6.5,
         borderRadius: width / 13,
         bottom: 35,
         justifyContent: 'center',

@@ -97,6 +97,7 @@ const WebViewForm: React.FC = () => {
             const path = RNFS.DocumentDirectoryPath + '/custom/';
             server = new StaticServer(8080, path, {
                 keepAlive: true,
+                localOnly: true,
             });
             await server.start();
             setUri(server._origin);
@@ -181,13 +182,12 @@ const WebViewForm: React.FC = () => {
         <>
             {!!uri && (
                 <WebView
-                    androidLayerType="software"
-                    androidHardwareAccelerationDisabled={true}
                     source={{
                         uri: `${uri}/?xform=${formObj.id}`,
                     }}
                     injectedJavaScriptBeforeContentLoaded={initializeData}
                     onMessage={handleMessage}
+                    geolocationEnabled={true}
                 />
             )}
             <Loader loading={loading || !uri} />

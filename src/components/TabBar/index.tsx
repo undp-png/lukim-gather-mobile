@@ -1,5 +1,5 @@
-import React from 'react';
-import {View, Dimensions, TouchableOpacity} from 'react-native';
+import React, {useMemo} from 'react';
+import {View, useWindowDimensions, TouchableOpacity} from 'react-native';
 import {Icon} from 'react-native-eva-icons';
 import Svg, {
     Defs,
@@ -18,53 +18,7 @@ import COLORS from 'utils/colors';
 
 import styles from './styles';
 
-const {width} = Dimensions.get('window');
 const height = 64;
-const tabWidth = width / 5;
-
-const leftTabBar = shape
-    .line()
-    .x(d => d.x)
-    .y(d => d.y)([
-    {x: 0, y: 0},
-    {x: 2 * tabWidth, y: 0},
-]);
-
-const centerTabBar = shape
-    .line()
-    .x(d => d.x)
-    .y(d => d.y)
-    .curve(shape.curveBundle)([
-    {x: 1.75 * tabWidth - 10, y: 0},
-    {x: 1.85 * tabWidth, y: 1.5},
-    {x: 2 * tabWidth, y: 11},
-    {x: 2.05 * tabWidth, y: 22},
-    {x: 2.15 * tabWidth, y: 32},
-    {x: 2.25 * tabWidth, y: 39},
-    {x: 2.35 * tabWidth, y: 42},
-    {x: 2.45 * tabWidth, y: 44},
-    {x: 2.55 * tabWidth, y: 44},
-    {x: 2.65 * tabWidth, y: 42},
-    {x: 2.75 * tabWidth, y: 39},
-    {x: 2.85 * tabWidth, y: 32},
-    {x: 2.95 * tabWidth, y: 22},
-    {x: 3 * tabWidth + 10, y: 0},
-    {x: 3.25 * tabWidth, y: 0},
-    {x: 3.5 * tabWidth, y: 0},
-]);
-
-const rightTabBar = shape
-    .line()
-    .x(d => d.x)
-    .y(d => d.y)([
-    {x: 3 * tabWidth, y: 0},
-    {x: width, y: 0},
-    {x: width, y: height},
-    {x: 0, y: height},
-    {x: 0, y: 0},
-]);
-
-const tabBarPath = `${leftTabBar} ${centerTabBar} ${rightTabBar}`;
 
 const getIconName = (name: string, isFocused: boolean) => {
     if (isFocused) {
@@ -81,13 +35,74 @@ const TabBar = ({
     activeColor,
     inActiveColor,
 }) => {
+    const {width} = useWindowDimensions();
+    const tabWidth = width / 5;
+
+    const leftTabBar = useMemo(
+        () =>
+            shape
+                .line()
+                .x(d => d.x)
+                .y(d => d.y)([
+                {x: 0, y: 0},
+                {x: 2 * tabWidth, y: 0},
+            ]),
+        [tabWidth],
+    );
+
+    const centerTabBar = useMemo(
+        () =>
+            shape
+                .line()
+                .x(d => d.x)
+                .y(d => d.y)
+                .curve(shape.curveBundle)([
+                {x: 1.75 * tabWidth - 10, y: 0},
+                {x: 1.85 * tabWidth, y: 1.5},
+                {x: 2 * tabWidth, y: 11},
+                {x: 2.05 * tabWidth, y: 22},
+                {x: 2.15 * tabWidth, y: 32},
+                {x: 2.25 * tabWidth, y: 39},
+                {x: 2.35 * tabWidth, y: 42},
+                {x: 2.45 * tabWidth, y: 44},
+                {x: 2.55 * tabWidth, y: 44},
+                {x: 2.65 * tabWidth, y: 42},
+                {x: 2.75 * tabWidth, y: 39},
+                {x: 2.85 * tabWidth, y: 32},
+                {x: 2.95 * tabWidth, y: 22},
+                {x: 3 * tabWidth + 10, y: 0},
+                {x: 3.25 * tabWidth, y: 0},
+                {x: 3.5 * tabWidth, y: 0},
+            ]),
+        [tabWidth],
+    );
+
+    const rightTabBar = useMemo(
+        () =>
+            shape
+                .line()
+                .x(d => d.x)
+                .y(d => d.y)([
+                {x: 3 * tabWidth, y: 0},
+                {x: width, y: 0},
+                {x: width, y: height},
+                {x: 0, y: height},
+                {x: 0, y: 0},
+            ]),
+        [tabWidth, width],
+    );
+
     return (
         <View
-            style={cs(styles.safeArea, [
-                styles.containerHidden,
-                state.index ===
-                    state.routes.findIndex(rt => rt.name === 'Menu'),
-            ])}>
+            style={cs(
+                styles.safeArea,
+                [
+                    styles.containerHidden,
+                    state.index ===
+                        state.routes.findIndex(rt => rt.name === 'Menu'),
+                ],
+                {width},
+            )}>
             <>
                 <Svg height={height / 2} width={width}>
                     <Defs>
@@ -123,7 +138,10 @@ const TabBar = ({
                 {state.index !==
                     state.routes.findIndex(rt => rt.name === 'Menu') && (
                     <Svg height={height} width={width}>
-                        <Path d={`${tabBarPath}`} fill={COLORS.white} />
+                        <Path
+                            d={`${leftTabBar} ${centerTabBar} ${rightTabBar}`}
+                            fill={COLORS.white}
+                        />
                     </Svg>
                 )}
             </>
