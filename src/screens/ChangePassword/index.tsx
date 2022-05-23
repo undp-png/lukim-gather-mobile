@@ -12,7 +12,6 @@ import InputField from 'components/InputField';
 import {SaveButton} from 'components/HeaderButton';
 import {_} from 'services/i18n';
 import {getErrorMessage} from 'utils/error';
-import {dispatchLogout} from 'services/dispatch';
 import {CHANGE_PASSWORD} from 'services/gql/queries';
 
 import styles from './styles';
@@ -36,7 +35,7 @@ const ChangePassword = () => {
                 _('Password has been successfully changed!'),
                 Toast.LONG,
             );
-            dispatchLogout();
+            navigation.navigate('Menu');
         },
         onError: err => {
             Toast.show(getErrorMessage(err), Toast.LONG, [
@@ -73,7 +72,7 @@ const ChangePassword = () => {
     return (
         <View style={styles.container}>
             <ModalLoader loading={loading} />
-            <KeyboardAwareScrollView>
+            <KeyboardAwareScrollView showsVerticalScrollIndicator={false}>
                 <View>
                     <InputField
                         onChangeText={setPassword}

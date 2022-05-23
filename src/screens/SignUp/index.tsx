@@ -1,6 +1,7 @@
 import React, {useCallback, useState} from 'react';
 import {useMutation} from '@apollo/client';
-import {SafeAreaView, TouchableOpacity, View} from 'react-native';
+import {TouchableOpacity, View} from 'react-native';
+import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import Toast from 'react-native-simple-toast';
 import {useNavigation} from '@react-navigation/native';
 
@@ -64,74 +65,74 @@ const SignUp = () => {
     }, [navigation]);
 
     return (
-        <SafeAreaView>
-            <View style={styles.container}>
-                <ModalLoader loading={loading} />
+        <KeyboardAwareScrollView
+            showsVerticalScrollIndicator={false}
+            style={styles.container}>
+            <ModalLoader loading={loading} />
+            <InputField
+                input={email}
+                onChangeText={setEmail}
+                title={_('Email or Phone')}
+                placeholder="johndoe@example.com"
+            />
+            <View style={styles.name}>
                 <InputField
-                    input={email}
-                    onChangeText={setEmail}
-                    title={_('Email or Phone')}
-                    placeholder="johndoe@example.com"
+                    input={firstName}
+                    value={firstName}
+                    onChangeText={setFirstName}
+                    title={_('First name')}
+                    placeholder={_('Enter first name')}
+                    containerStyle={styles.fullName}
                 />
-                <View style={styles.name}>
-                    <InputField
-                        input={firstName}
-                        value={firstName}
-                        onChangeText={setFirstName}
-                        title={_('First name')}
-                        placeholder={_('Enter first name')}
-                        containerStyle={styles.fullName}
-                    />
-                    <InputField
-                        input={lastName}
-                        value={lastName}
-                        onChangeText={setLastName}
-                        title={_('Surname')}
-                        placeholder={_('Enter surname')}
-                        containerStyle={styles.surName}
-                    />
-                </View>
                 <InputField
-                    onChangeText={setPassword}
-                    title={_('Password')}
-                    placeholder={_('Enter password')}
-                    input={password}
-                    value={password}
-                    password
+                    input={lastName}
+                    value={lastName}
+                    onChangeText={setLastName}
+                    title={_('Surname')}
+                    placeholder={_('Enter surname')}
+                    containerStyle={styles.surName}
                 />
-                <View style={styles.infoWrapper}>
+            </View>
+            <InputField
+                onChangeText={setPassword}
+                title={_('Password')}
+                placeholder={_('Enter password')}
+                input={password}
+                value={password}
+                password
+            />
+            <View style={styles.infoWrapper}>
+                <Text
+                    style={styles.info}
+                    title={_('By continuing you agree to our')}
+                />
+                <TouchableOpacity onPress={handlePressTOC}>
                     <Text
-                        style={styles.info}
-                        title={_('By continuing you agree to our')}
+                        style={styles.infoPressable}
+                        title={_('Terms & Condition')}
                     />
-                    <TouchableOpacity onPress={handlePressTOC}>
-                        <Text
-                            style={styles.infoPressable}
-                            title={_('Terms & Condition')}
-                        />
-                    </TouchableOpacity>
-                    <Text style={styles.info} title={_('and')} />
-                    <TouchableOpacity onPress={handlePressPrivacyPolicy}>
-                        <Text
-                            style={styles.infoPressable}
-                            title={_('Privacy policy.')}
-                        />
-                    </TouchableOpacity>
-                </View>
-                <Button
-                    title={_('Create an account')}
-                    style={styles.button}
-                    onPress={handleSignUp}
-                    disabled={!email || !firstName || !lastName || !password}
-                />
-                <TouchableOpacity onPress={handleGoLogin} style={styles.login}>
+                </TouchableOpacity>
+                <Text style={styles.info} title={_('and')} />
+                <TouchableOpacity onPress={handlePressPrivacyPolicy}>
                     <Text
-                        style={styles.text}
-                        title={_('Already have an account?')}
+                        style={styles.infoPressable}
+                        title={_('Privacy policy.')}
                     />
                 </TouchableOpacity>
             </View>
-        </SafeAreaView>
+            <Button
+                title={_('Create an account')}
+                style={styles.button}
+                onPress={handleSignUp}
+                disabled={!email || !firstName || !lastName || !password}
+            />
+            <TouchableOpacity onPress={handleGoLogin} style={styles.login}>
+                <Text
+                    style={styles.text}
+                    title={_('Already have an account?')}
+                />
+            </TouchableOpacity>
+        </KeyboardAwareScrollView>
     );
 };
 

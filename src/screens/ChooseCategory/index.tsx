@@ -1,6 +1,6 @@
-import React, {useCallback, useState, useRef, useEffect} from 'react';
+import React, {useCallback, useState, useRef, useEffect, useMemo} from 'react';
 import {useNavigation} from '@react-navigation/native';
-import {Image, View} from 'react-native';
+import {Image, View, useWindowDimensions} from 'react-native';
 import {FlatList, TouchableOpacity} from 'react-native-gesture-handler';
 
 import {_} from 'services/i18n';
@@ -16,6 +16,7 @@ import styles from './styles';
 const keyExtractor = (item: {id: any}) => item.id;
 
 const Category = ({category, navigation}: {category: any; navigation: any}) => {
+    const {width} = useWindowDimensions();
     const handleCategoryPress = useCallback(
         categoryItem => {
             navigation.navigate('CreateSurvey', {
@@ -24,12 +25,15 @@ const Category = ({category, navigation}: {category: any; navigation: any}) => {
         },
         [navigation],
     );
+    const wrapperWidth = useMemo(() => {
+        return {width: (width - 50) / 3};
+    }, [width]);
     const renderSubCategory = useCallback(
         ({item}: {item: {icon: string; name: string; id: number}}) => (
             <TouchableOpacity
                 onPress={() => handleCategoryPress(item)}
                 style={styles.subCategory}>
-                <View style={styles.iconWrapper}>
+                <View style={cs(styles.iconWrapper, wrapperWidth)}>
                     <Image
                         source={
                             item.icon ||
@@ -38,10 +42,13 @@ const Category = ({category, navigation}: {category: any; navigation: any}) => {
                         style={styles.categoryIcon}
                     />
                 </View>
-                <Text style={styles.categoryName} title={_(item.name)} />
+                <Text
+                    style={cs(styles.categoryName, wrapperWidth)}
+                    title={_(item.name)}
+                />
             </TouchableOpacity>
         ),
-        [handleCategoryPress],
+        [handleCategoryPress, wrapperWidth],
     );
 
     useEffect(() => {

@@ -1,8 +1,6 @@
-import {StyleSheet, Dimensions, Platform} from 'react-native';
+import {StyleSheet, Platform} from 'react-native';
 
 import COLORS from 'utils/colors';
-
-const {width} = Dimensions.get('window');
 
 export default StyleSheet.create({
     container: {
@@ -17,7 +15,6 @@ export default StyleSheet.create({
         marginLeft: Platform.OS === 'ios' ? -30 : 0,
         flexDirection: 'row',
         alignItems: 'center',
-        width: width - 70,
         backgroundColor: '#E7ECF2',
         borderWidth: 1,
         borderColor: COLORS.primaryAlt,
@@ -26,7 +23,6 @@ export default StyleSheet.create({
     },
     searchInput: {
         height: 40,
-        width: width - 136,
         fontFamily: 'Inter-Medium',
         color: COLORS.inputText,
     },
@@ -38,7 +34,6 @@ export default StyleSheet.create({
         marginBottom: 20,
     },
     tabItem: {
-        width: width / 2 - 22,
         alignSelf: 'stretch',
         padding: 8,
         borderRadius: 8,

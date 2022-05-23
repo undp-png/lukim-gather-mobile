@@ -21,7 +21,8 @@ export default StyleSheet.create({
         marginTop: 32,
     },
     signUp: {
-        marginTop: 30,
+        marginVertical: 20,
+        paddingVertical: 10,
         alignItems: 'center',
     },
     text: {

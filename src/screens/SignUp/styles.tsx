@@ -42,7 +42,8 @@ export default StyleSheet.create({
         marginTop: 20,
     },
     login: {
-        marginTop: 30,
+        marginVertical: 20,
+        paddingVertical: 10,
     },
     text: {
         color: COLORS.blueTextAlt,

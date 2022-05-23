@@ -4,6 +4,7 @@ import {useMutation} from '@apollo/client';
 import Toast from 'react-native-simple-toast';
 import {useNavigation} from '@react-navigation/native';
 import DropDownPicker from 'react-native-dropdown-picker';
+import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 
 import Button from 'components/Button';
 import InputField from 'components/InputField';
@@ -64,7 +65,9 @@ const Feedbacks = () => {
     }, [create_feedback, value, description]);
 
     return (
-        <View style={styles.container}>
+        <KeyboardAwareScrollView
+            showsVerticalScrollIndicator={false}
+            style={styles.container}>
             <ModalLoader loading={loading} />
             <View>
                 <Text style={styles.pickerLabel} title={_('Issue type')} />
@@ -95,7 +98,7 @@ const Feedbacks = () => {
                     disabled={!value || !description}
                 />
             </View>
-        </View>
+        </KeyboardAwareScrollView>
     );
 };
 

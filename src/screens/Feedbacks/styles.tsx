@@ -26,7 +26,7 @@ export default StyleSheet.create({
         color: COLORS.greyText,
     },
     button: {
-        marginTop: 32,
+        marginVertical: 32,
     },
     description: {
         height: 120,

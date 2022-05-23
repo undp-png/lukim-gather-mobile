@@ -1,5 +1,10 @@
 import React, {useState, useCallback, useEffect, useMemo} from 'react';
-import {View, TextInput, ListRenderItem} from 'react-native';
+import {
+    View,
+    TextInput,
+    ListRenderItem,
+    useWindowDimensions,
+} from 'react-native';
 import {RootStateOrAny, useSelector} from 'react-redux';
 import {useNavigation} from '@react-navigation/native';
 import {FlatList, TouchableOpacity} from 'react-native-gesture-handler';
@@ -35,12 +40,17 @@ const TabItem = ({
     activeTab: string;
     name: string;
 }) => {
+    const {width} = useWindowDimensions();
+    const tabWidth = useMemo(() => {
+        return {width: width / 2 - 22};
+    }, [width]);
     return (
         <TouchableOpacity
-            style={cs(styles.tabItem, [
-                styles.activeTabItem,
-                activeTab === name,
-            ])}
+            style={cs(
+                styles.tabItem,
+                [styles.activeTabItem, activeTab === name],
+                tabWidth,
+            )}
             onPress={onPress}>
             <Text style={styles.tabTitle} title={title} />
         </TouchableOpacity>
@@ -48,6 +58,7 @@ const TabItem = ({
 };
 
 const SearchSurvey = () => {
+    const {width} = useWindowDimensions();
     const {user, isAuthenticated} = useSelector(
         (state: RootStateOrAny) => state.auth,
     );
@@ -60,9 +71,15 @@ const SearchSurvey = () => {
     const {loading, error, data} = useQuery(GET_HAPPENING_SURVEY);
 
     useEffect(() => {
+        const inputWidth = {
+            width: width - 136,
+        };
+        const wrapperWidth = {
+            width: width - 70,
+        };
         navigation.setOptions({
             headerTitle: () => (
-                <View style={styles.searchWrapper}>
+                <View style={cs(styles.searchWrapper, wrapperWidth)}>
                     <Icon
                         name="search-outline"
                         height={20}
@@ -70,7 +87,7 @@ const SearchSurvey = () => {
                         fill={'#888C94'}
                     />
                     <TextInput
-                        style={styles.searchInput}
+                        style={cs(styles.searchInput, inputWidth)}
                         value={searchQuery}
                         onChangeText={handleSearchChange}
                     />
@@ -91,7 +108,7 @@ const SearchSurvey = () => {
                 shadowColor: 'transparent',
             },
         });
-    }, [handleSearchChange, navigation, onClearSearch, searchQuery]);
+    }, [handleSearchChange, navigation, onClearSearch, searchQuery, width]);
 
     const renderItem: ListRenderItem<HappeningSurveyType> = ({
         item,

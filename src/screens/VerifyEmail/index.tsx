@@ -1,6 +1,7 @@
 import React, {useState, useCallback} from 'react';
-import {Pressable, View} from 'react-native';
+import {Pressable} from 'react-native';
 import {useRoute, useNavigation} from '@react-navigation/native';
+import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import {useMutation} from '@apollo/client';
 import Toast from 'react-native-simple-toast';
 
@@ -83,7 +84,9 @@ const VerifyEmail = () => {
     }, [email_confirm, username]);
 
     return (
-        <View style={styles.container}>
+        <KeyboardAwareScrollView
+            showsVerticalScrollIndicator={false}
+            style={styles.container}>
             <ModalLoader loading={loading || resendLoading} />
             <Text
                 style={styles.title}
@@ -101,7 +104,7 @@ const VerifyEmail = () => {
             <Pressable style={styles.resendWrapper} onPress={handleResendCode}>
                 <Text style={styles.text} title={_('Send the code again?')} />
             </Pressable>
-        </View>
+        </KeyboardAwareScrollView>
     );
 };
 

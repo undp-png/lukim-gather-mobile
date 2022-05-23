@@ -1,8 +1,9 @@
 import React, {useCallback, useState} from 'react';
 import {useMutation} from '@apollo/client';
-import {SafeAreaView, TouchableOpacity, View} from 'react-native';
+import {TouchableOpacity, View} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import Toast from 'react-native-simple-toast';
+import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 
 import Text from 'components/Text';
 import InputField from 'components/InputField';
@@ -59,48 +60,48 @@ const Login = () => {
     }, [navigation]);
 
     return (
-        <SafeAreaView>
-            <View style={styles.container}>
-                <ModalLoader loading={loading} />
-                <InputField
-                    title={_('Email or Phone')}
-                    input={username}
-                    value={username}
-                    onChangeText={setUsername}
-                    placeholder={_('Enter email or phone')}
-                />
-                <InputField
-                    title={_('Password')}
-                    input={password}
-                    value={password}
-                    onChangeText={setPassword}
-                    placeholder={_('Enter password')}
-                    password
-                />
-                <View style={styles.infoWrapper}>
-                    <TouchableOpacity onPress={handleForgotPassword}>
-                        <Text
-                            style={styles.info}
-                            title={_('Forgot your password?')}
-                        />
-                    </TouchableOpacity>
-                </View>
-                <Button
-                    title={_('Login')}
-                    disabled={!username || !password}
-                    style={styles.button}
-                    onPress={handleLogin}
-                />
-                <View style={styles.signUp}>
-                    <TouchableOpacity onPress={handleSignUp}>
-                        <Text
-                            style={styles.text}
-                            title={_("Don't have an account?")}
-                        />
-                    </TouchableOpacity>
-                </View>
+        <KeyboardAwareScrollView
+            showsVerticalScrollIndicator={false}
+            style={styles.container}>
+            <ModalLoader loading={loading} />
+            <InputField
+                title={_('Email or Phone')}
+                input={username}
+                value={username}
+                onChangeText={setUsername}
+                placeholder={_('Enter email or phone')}
+            />
+            <InputField
+                title={_('Password')}
+                input={password}
+                value={password}
+                onChangeText={setPassword}
+                placeholder={_('Enter password')}
+                password
+            />
+            <View style={styles.infoWrapper}>
+                <TouchableOpacity onPress={handleForgotPassword}>
+                    <Text
+                        style={styles.info}
+                        title={_('Forgot your password?')}
+                    />
+                </TouchableOpacity>
             </View>
-        </SafeAreaView>
+            <Button
+                title={_('Login')}
+                disabled={!username || !password}
+                style={styles.button}
+                onPress={handleLogin}
+            />
+            <View style={styles.signUp}>
+                <TouchableOpacity onPress={handleSignUp}>
+                    <Text
+                        style={styles.text}
+                        title={_("Don't have an account?")}
+                    />
+                </TouchableOpacity>
+            </View>
+        </KeyboardAwareScrollView>
     );
 };
 

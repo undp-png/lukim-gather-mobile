@@ -1,6 +1,4 @@
-import {Dimensions, StyleSheet} from 'react-native';
-
-const {width} = Dimensions.get('window');
+import {StyleSheet} from 'react-native';
 
 import COLORS from 'utils/colors';
 
@@ -29,7 +27,6 @@ export default StyleSheet.create({
         marginLeft: 10,
     },
     contentWrapper: {
-        width: width,
         justifyContent: 'flex-end',
         alignItems: 'center',
     },

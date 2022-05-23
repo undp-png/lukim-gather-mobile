@@ -9,6 +9,6 @@ export default StyleSheet.create({
         backgroundColor: COLORS.white,
     },
     button: {
-        marginTop: 32,
+        marginVertical: 32,
     },
 });
