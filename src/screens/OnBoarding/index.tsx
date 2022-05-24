@@ -15,7 +15,7 @@ import Text from 'components/Text';
 import Button from 'components/Button';
 import content from 'services/data/onBoarding.json';
 
-import {Localize} from '@rna/components/I18n';
+import {useI18nContext, Localize} from '@rna/components/I18n';
 import {_} from 'services/i18n';
 import cs from '@rna/utils/cs';
 
@@ -28,6 +28,8 @@ const OnBoarding = () => {
     const navigation = useNavigation();
     const {width} = useWindowDimensions();
     const scrollX = useRef(new Animated.Value(0)).current;
+
+    const {selectedLanguage} = useI18nContext();
 
     const handleLogin = useCallback(() => {
         navigation.navigate('Login');
@@ -120,13 +122,13 @@ const OnBoarding = () => {
                                 netInfo.isInternetReachable,
                             ])}>
                             <Button
-                                title={_('Login')}
+                                title={_('Login', selectedLanguage)}
                                 onPress={handleLogin}
                                 style={styles.login}
                                 light
                             />
                             <Button
-                                title={_('Get Started')}
+                                title={_('Get Started', selectedLanguage)}
                                 onPress={handleGetStarted}
                                 style={styles.getStarted}
                                 blue
@@ -139,7 +141,10 @@ const OnBoarding = () => {
                                     onPress={handleGuestPress}>
                                     <Text
                                         style={styles.linkText}
-                                        title={_('Continue as Guest')}
+                                        title={_(
+                                            'Continue as Guest',
+                                            selectedLanguage,
+                                        )}
                                     />
                                 </TouchableOpacity>
                             </View>

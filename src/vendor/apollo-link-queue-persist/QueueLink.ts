@@ -52,8 +52,24 @@ export default class QueueLink extends ApolloLink {
     }
 
     private isFilteredOut(operation: Operation): boolean {
+        // TODO: extract value from queries gql and check if using operationName is available is safe in all scenarios
+        // TODO: set excludedOperationNames this setter
+        const excludedOperationNames = [
+            'TokenAuth',
+            'RegisterUser',
+            'EmailConfirm',
+            'EmailConfirmVerify',
+            'UpdateUser',
+            'ChangePassword',
+            'PasswordReset',
+            'PasswordResetVerify',
+            'PasswordResetChange',
+        ];
         if (!QueueLink.filter || !QueueLink.filter.length) {
             return false;
+        }
+        if (excludedOperationNames.includes(operation.operationName)) {
+            return true;
         }
         return (
             operation.query.definitions.filter(e => {
