@@ -63,11 +63,11 @@ const Map: React.FC<Props> = ({
                 if (!offlinePack) {
                     if (netInfo.isInternetReachable) {
                         setIsOffline(false);
-                        await MapboxGL.offlineManager.createPack({
+                        return MapboxGL.offlineManager.createPack({
                             name: packName,
                             styleURL: 'mapbox://styles/mapbox/streets-v11',
-                            minZoom: 14,
-                            maxZoom: 20,
+                            minZoom: 10,
+                            maxZoom: 14,
                             bounds: [
                                 [156.4715, -1.5917],
                                 [140.7927, -12.1031],
@@ -84,7 +84,7 @@ const Map: React.FC<Props> = ({
         [netInfo],
     );
 
-    useEffect(() => {
+    const handleFinishMapLoad = useCallback(() => {
         manageOffline('png_14_20');
     }, [manageOffline]);
 
@@ -130,6 +130,12 @@ const Map: React.FC<Props> = ({
     useEffect(() => {
         handleLocationCheck();
     }, [handleLocationCheck]);
+
+    useEffect(() => {
+        if (netInfo.isInternetReachable) {
+            setIsOffline(false);
+        }
+    }, [netInfo]);
 
     useEffect(() => {
         switch (pickLocation) {
@@ -391,6 +397,7 @@ const Map: React.FC<Props> = ({
                     ref={mapRef}
                     style={styles.map}
                     onRegionDidChange={onRegionDidChange}
+                    onDidFinishLoadingStyle={handleFinishMapLoad}
                     styleJSON={isOffline ? mapViewStyles : ''}
                     compassViewMargins={{x: 30, y: 150}}
                     onPress={handleMapPress}>
