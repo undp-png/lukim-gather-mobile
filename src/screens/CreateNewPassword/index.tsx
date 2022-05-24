@@ -44,6 +44,9 @@ const CreateNewPassword = () => {
     });
 
     const handlePasswordResetChange = useCallback(async () => {
+        if (password !== rePassword) {
+            return Toast.show(_('Passwords do not match!'));
+        }
         await password_reset_change({
             variables: {
                 data: {

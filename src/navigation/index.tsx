@@ -244,6 +244,8 @@ const AppNavigator = () => {
                     headerLeft: () => <CloseButton />,
                     headerTitle: route.params?.form?.title || 'Form',
                     presentation: 'modal',
+                    animationEnabled: false,
+                    stackAnimation: 'none',
                 })}
             />
         </Stack.Navigator>

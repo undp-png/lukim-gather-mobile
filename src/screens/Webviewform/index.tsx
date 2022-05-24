@@ -111,7 +111,7 @@ const WebViewForm: React.FC = () => {
         const parser = new XMLParser({
             attributeNamePrefix: '_',
         });
-        const title = 'Local Environment Survey';
+        const title = formObj.title;
         const {data, errors} = await createWritableSurvey({
             variables: {
                 input: {
@@ -153,7 +153,14 @@ const WebViewForm: React.FC = () => {
             ['RCTModalHostViewController'],
         );
         navigation.goBack();
-    }, [createWritableSurvey, navigation, dispatch, FORM_KEY, formState]);
+    }, [
+        createWritableSurvey,
+        navigation,
+        dispatch,
+        FORM_KEY,
+        formState,
+        formObj,
+    ]);
 
     const handleMessage = useCallback(
         ({nativeEvent}) => {
