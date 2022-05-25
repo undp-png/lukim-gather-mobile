@@ -1,10 +1,12 @@
 import React, {useCallback, useEffect, useMemo, useState} from 'react';
 import {useNavigation} from '@react-navigation/native';
-import {Image, View, TextInput} from 'react-native';
+import {Image, View, TextInput, useWindowDimensions} from 'react-native';
 import {FlatList, TouchableOpacity} from 'react-native-gesture-handler';
 import {Icon} from 'react-native-eva-icons';
 
 import Text from 'components/Text';
+
+import cs from '@rna/utils/cs';
 
 import data from 'services/data/surveyCategory';
 
@@ -73,6 +75,7 @@ const Category = ({
 
 const SearchCategory = () => {
     const navigation = useNavigation();
+    const {width} = useWindowDimensions();
     const [searchQuery, setSearchQuery] = useState('');
     const onClearSearch = useCallback(() => setSearchQuery(''), []);
     const handleSearchChange = useCallback(text => setSearchQuery(text), []);
@@ -89,9 +92,15 @@ const SearchCategory = () => {
     );
 
     useEffect(() => {
+        const inputWidth = {
+            width: width - 136,
+        };
+        const wrapperWidth = {
+            width: width - 70,
+        };
         navigation.setOptions({
             headerTitle: () => (
-                <View style={styles.searchWrapper}>
+                <View style={cs(styles.searchWrapper, wrapperWidth)}>
                     <Icon
                         name="search-outline"
                         height={20}
@@ -99,7 +108,7 @@ const SearchCategory = () => {
                         fill={'#888C94'}
                     />
                     <TextInput
-                        style={styles.searchInput}
+                        style={cs(styles.searchInput, inputWidth)}
                         value={searchQuery}
                         onChangeText={handleSearchChange}
                     />
@@ -120,7 +129,7 @@ const SearchCategory = () => {
                 shadowColor: 'transparent',
             },
         });
-    }, [handleSearchChange, navigation, onClearSearch, searchQuery]);
+    }, [handleSearchChange, navigation, onClearSearch, searchQuery, width]);
 
     return (
         <View style={styles.container}>

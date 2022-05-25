@@ -1,5 +1,5 @@
 import React, {useState, useCallback} from 'react';
-import {View} from 'react-native';
+import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import {useNavigation, useRoute} from '@react-navigation/native';
 import {useMutation} from '@apollo/client';
 import Toast from 'react-native-simple-toast';
@@ -59,7 +59,9 @@ const CreateNewPassword = () => {
         });
     }, [password_reset_change, username, password, rePassword, identifier]);
     return (
-        <View style={styles.container}>
+        <KeyboardAwareScrollView
+            showsVerticalScrollIndicator={false}
+            style={styles.container}>
             <ModalLoader loading={loading} />
             <InputField
                 value={password}
@@ -81,7 +83,7 @@ const CreateNewPassword = () => {
                 onPress={handlePasswordResetChange}
                 disabled={!password || !rePassword}
             />
-        </View>
+        </KeyboardAwareScrollView>
     );
 };
 

@@ -1,5 +1,6 @@
 import React, {useState, useCallback} from 'react';
-import {Text, View, TouchableOpacity} from 'react-native';
+import {Text, TouchableOpacity} from 'react-native';
+import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import {useNavigation} from '@react-navigation/native';
 import {RootStateOrAny, useSelector} from 'react-redux';
 import {useMutation} from '@apollo/client';
@@ -58,7 +59,9 @@ const ForgotPassword = () => {
     }, [navigation]);
 
     return (
-        <View style={styles.container}>
+        <KeyboardAwareScrollView
+            showsVerticalScrollIndicator={false}
+            style={styles.container}>
             <ModalLoader loading={loading} />
             <Text style={styles.title}>
                 <Localize>
@@ -87,7 +90,7 @@ const ForgotPassword = () => {
                     </Text>
                 </TouchableOpacity>
             )}
-        </View>
+        </KeyboardAwareScrollView>
     );
 };
 

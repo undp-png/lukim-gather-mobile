@@ -19,8 +19,9 @@ export default StyleSheet.create({
         marginTop: 32,
     },
     link: {
-        marginTop: 'auto',
-        marginBottom: 40,
+        marginVertical: 20,
+        paddingVertical: 10,
+        alignItems: 'center',
     },
     text: {
         color: COLORS.blueTextAlt,

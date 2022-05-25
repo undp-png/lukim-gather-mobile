@@ -1,4 +1,4 @@
-import React, {useCallback, useRef} from 'react';
+import React, {useCallback, useMemo, useRef} from 'react';
 import {useNavigation} from '@react-navigation/native';
 import {
     Animated,
@@ -71,10 +71,14 @@ const OnBoarding = () => {
         );
     }, [scrollX, width]);
 
+    const contentWidth = useMemo(() => {
+        return {width: width};
+    }, [width]);
+
     const renderItem = useCallback(
         ({item}: {item: {title: string; description: string}}) => {
             return (
-                <View style={styles.contentWrapper}>
+                <View style={cs(styles.contentWrapper, contentWidth)}>
                     <Text style={styles.contentTitle} title={_(item.title)} />
                     <Text
                         style={styles.contentInfo}
@@ -83,7 +87,7 @@ const OnBoarding = () => {
                 </View>
             );
         },
-        [],
+        [contentWidth],
     );
 
     return (

@@ -19,8 +19,8 @@ export default StyleSheet.create({
         marginTop: 32,
     },
     resendWrapper: {
-        marginTop: 'auto',
-        marginBottom: 40,
+        marginVertical: 10,
+        paddingVertical: 10,
     },
     text: {
         color: COLORS.blueTextAlt,

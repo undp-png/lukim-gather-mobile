@@ -54,7 +54,6 @@ export default StyleSheet.create({
     iconWrapper: {
         borderRadius: 12,
         height: 100,
-        width: (width - 50) / 3,
         borderWidth: 1,
         borderColor: COLORS.primaryLightAlt,
         justifyContent: 'center',
@@ -66,7 +65,6 @@ export default StyleSheet.create({
         resizeMode: 'contain',
     },
     categoryName: {
-        width: (width - 50) / 3,
         marginTop: 5,
         fontSize: 14,
         fontFamily: 'Inter-SemiBold',
