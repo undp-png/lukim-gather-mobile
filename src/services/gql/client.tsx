@@ -1,6 +1,12 @@
-import {ApolloClient, ApolloLink, InMemoryCache} from '@apollo/client';
+import {
+    ApolloClient,
+    ApolloLink,
+    InMemoryCache,
+    fromPromise,
+} from '@apollo/client';
 
 import {setContext} from '@apollo/client/link/context';
+import {onError} from '@apollo/client/link/error';
 import {
     persistCache,
     MMKVStorageWrapper as MMKVCacheStorageWrapper,
@@ -15,18 +21,105 @@ import {BASE_URL} from '@env';
 
 import {store} from 'store';
 import {cacheStorage, queueStorage} from 'store/storage';
+import {setToken, setRefreshToken} from 'store/slices/auth';
 
-export const getApolloClient = async queueLink => {
+import {REFRESH_TOKEN} from './queries';
+
+const {dispatch} = store;
+
+export const getApolloClient = async (queueLink: any) => {
     const cache = new InMemoryCache();
     const httpLink = createUploadLink({
         uri: BASE_URL,
     });
 
-    const authLink = setContext((_, {headers}) => {
+    let isRefreshing = false;
+    let pendingRequests: any = [];
+
+    const resolvePendingRequests = () => {
+        pendingRequests.map((callback: any) => callback());
+        pendingRequests = [];
+    };
+
+    const errorLink = onError(
+        ({graphQLErrors, networkError, operation, forward}) => {
+            if (graphQLErrors) {
+                for (let err of graphQLErrors) {
+                    const {
+                        auth: {refreshToken},
+                    } = store.getState();
+                    if (
+                        err?.message?.toLowerCase() ===
+                            'error decoding signature' &&
+                        refreshToken
+                    ) {
+                        let _forward;
+                        if (!isRefreshing) {
+                            isRefreshing = true;
+                            _forward = fromPromise(
+                                client
+                                    .mutate({
+                                        mutation: REFRESH_TOKEN,
+                                        variables: {
+                                            refreshToken: refreshToken,
+                                        },
+                                    })
+                                    .then(
+                                        ({data: {refreshToken: refToken}}) => {
+                                            if (refToken) {
+                                                dispatch(
+                                                    setToken(refToken.token),
+                                                );
+                                                dispatch(
+                                                    setRefreshToken(
+                                                        refToken.refreshToken,
+                                                    ),
+                                                );
+                                            }
+                                            return true;
+                                        },
+                                    )
+                                    .then(() => {
+                                        resolvePendingRequests();
+                                        return true;
+                                    })
+                                    .catch(() => {
+                                        pendingRequests = [];
+                                        return false;
+                                    })
+                                    .finally(() => {
+                                        isRefreshing = false;
+                                    }),
+                            );
+                        } else {
+                            _forward = fromPromise(
+                                new Promise(resolve => {
+                                    pendingRequests.push(resolve);
+                                }),
+                            );
+                        }
+                        return _forward.flatMap(() => forward(operation));
+                    } else {
+                        console.log(
+                            `[GraphQL error]: Message: ${err.message}, Location: ${err.locations}, Path: ${err.path}`,
+                        );
+                    }
+                }
+            }
+            if (networkError) {
+                console.log(`[Network error]: ${networkError}`);
+            }
+        },
+    );
+
+    const authLink = setContext((operation, {headers}) => {
         const {
             auth: {token},
         } = store.getState();
 
+        if (operation.operationName === 'RefreshToken') {
+            return headers;
+        }
         return {
             headers: {
                 ...headers,
@@ -35,7 +128,7 @@ export const getApolloClient = async queueLink => {
         };
     });
 
-    const link = ApolloLink.from([queueLink, authLink, httpLink]);
+    const link = ApolloLink.from([queueLink, errorLink, authLink, httpLink]);
 
     await persistCache({
         cache: cache,

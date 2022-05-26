@@ -17,6 +17,15 @@ export const LOGIN = gql`
     }
 `;
 
+export const REFRESH_TOKEN = gql`
+    mutation RefreshToken($refreshToken: String) {
+        refreshToken(refreshToken: $refreshToken) {
+            token
+            refreshToken
+        }
+    }
+`;
+
 export const GET_HAPPENING_SURVEY = gql`
     query {
         happeningSurveys {

@@ -12,9 +12,13 @@ import {setInfo} from 'store/slices/info';
 
 const {dispatch} = store;
 
-export const dispatchLogin = async (accessToken, refreshToken, user) => {
+export const dispatchLogin = async (
+    accessToken: string,
+    refreshToken: string,
+    user,
+) => {
     dispatch(setToken(accessToken));
-    setRefreshToken(refreshToken);
+    dispatch(setRefreshToken(refreshToken));
     dispatch(setUser(user));
     dispatch(setLogin());
 };
