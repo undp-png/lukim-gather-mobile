@@ -20,11 +20,9 @@ export default StyleSheet.create({
         alignItems: 'center',
         marginTop: 75,
     },
-    title: {
-        fontSize: 24,
-        fontFamily: 'Gilroy-Bold',
-        color: COLORS.white,
-        marginLeft: 10,
+    logo: {
+        height: 90,
+        resizeMode: 'contain',
     },
     contentWrapper: {
         justifyContent: 'flex-end',

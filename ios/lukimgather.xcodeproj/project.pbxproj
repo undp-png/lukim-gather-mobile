@@ -16,7 +16,6 @@
 		5A3C09523BC814C7993BF16E /* libPods-lukimgather-lukimgatherTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4ED566A97F9B3D2A13C9013E /* libPods-lukimgather-lukimgatherTests.a */; };
 		810311D9CEEF4100948ACA94 /* Inter-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A35BE9BE164E4BBBA99DAD01 /* Inter-Regular.ttf */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
-		C5B46158FB614240A2EB44E2 /* Gilroy-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 51C216958C19427092BC79F1 /* Gilroy-Bold.ttf */; };
 		DA9099200376486B8FD446D7 /* Inter-SemiBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = EF8F24F1435B4447825FF945 /* Inter-SemiBold.ttf */; };
 		030ADB66DE594DAD937C7239 /* index.html in Resources */ = {isa = PBXBuildFile; fileRef = 8037CC8B06EA404CB23A33ED /* index.html */; };
 		495E237CB1EC427C9FF208F9 /* index.js in Resources */ = {isa = PBXBuildFile; fileRef = 7B0605E9E30E4EE2A5566B49 /* index.js */; };
@@ -53,7 +52,6 @@
 		1FA315DA5F08F0EBCD2A5451 /* libPods-lukimgather.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-lukimgather.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		21F5F7F96F48BCBE5A7872C7 /* Pods-lukimgather.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-lukimgather.debug.xcconfig"; path = "Target Support Files/Pods-lukimgather/Pods-lukimgather.debug.xcconfig"; sourceTree = "<group>"; };
 		4ED566A97F9B3D2A13C9013E /* libPods-lukimgather-lukimgatherTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-lukimgather-lukimgatherTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
-		51C216958C19427092BC79F1 /* Gilroy-Bold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Gilroy-Bold.ttf"; path = "../src/assets/fonts/Gilroy-Bold.ttf"; sourceTree = "<group>"; };
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = lukimgather/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		9DD6EFF70E95F57DFFA4299D /* Pods-lukimgather-lukimgatherTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-lukimgather-lukimgatherTests.debug.xcconfig"; path = "Target Support Files/Pods-lukimgather-lukimgatherTests/Pods-lukimgather-lukimgatherTests.debug.xcconfig"; sourceTree = "<group>"; };
 		A35BE9BE164E4BBBA99DAD01 /* Inter-Regular.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Inter-Regular.ttf"; path = "../src/assets/fonts/Inter-Regular.ttf"; sourceTree = "<group>"; };
@@ -184,7 +182,6 @@
 				1D31323E29794A06B3D3F605 /* Inter-Medium.ttf */,
 				A35BE9BE164E4BBBA99DAD01 /* Inter-Regular.ttf */,
 				EF8F24F1435B4447825FF945 /* Inter-SemiBold.ttf */,
-				51C216958C19427092BC79F1 /* Gilroy-Bold.ttf */,
 				E6820A605CE146389C20B499 /* formhub-print.css */,
 				5DB9F8AE36144CDAAD48BD7B /* grid-print.css */,
 				8C7A6E5F22554DE6B6687EA9 /* plain-print.css */,
@@ -300,7 +297,6 @@
 				5525EC6791D14253B296CD4B /* Inter-Medium.ttf in Resources */,
 				810311D9CEEF4100948ACA94 /* Inter-Regular.ttf in Resources */,
 				DA9099200376486B8FD446D7 /* Inter-SemiBold.ttf in Resources */,
-				C5B46158FB614240A2EB44E2 /* Gilroy-Bold.ttf in Resources */,
 				1B302BAE6336412F82398DA1 /* formhub-print.css in Resources */,
 				45FCF6B3F31A4F60AC3E437A /* grid-print.css in Resources */,
 				7503160A7C0048F986E0287C /* plain-print.css in Resources */,
