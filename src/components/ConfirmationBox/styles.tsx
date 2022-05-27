@@ -34,8 +34,11 @@ export default StyleSheet.create({
         justifyContent: 'space-between',
     },
     buttonNegative: {
-        backgroundColor: COLORS.error,
-        color: COLORS.white,
+        borderColor: COLORS.error,
+        marginBottom: 8,
+    },
+    buttonNegativeText: {
+        color: COLORS.error,
     },
     buttonsRight: {
         flexDirection: 'row-reverse',
@@ -47,8 +50,24 @@ export default StyleSheet.create({
     logoutButton: {
         width: '47%',
     },
+    buttonsRightVertical: {
+        flexDirection: 'column',
+    },
     buttonPositive: {
         marginLeft: 8,
         minWidth: '35%',
+    },
+    buttonPositiveVertical: {
+        marginLeft: 0,
+        marginBottom: 8,
+    },
+    cancel: {
+        borderColor: COLORS.greyLight,
+    },
+    cancelText: {
+        color: COLORS.greyLightAlt,
+    },
+    logoutText: {
+        color: COLORS.accent,
     },
 });

@@ -55,7 +55,7 @@ const Photo: React.FC<PhotoProps> = ({item, index, onCloseIconPress}) => {
         <View style={styles.surveyImageWrapper}>
             <Image
                 source={
-                    {uri: item.media || item.path} ||
+                    {uri: item.media || item.path || item.uri} ||
                     require('assets/images/category-placeholder.png')
                 }
                 style={styles.surveyImage}

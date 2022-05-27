@@ -3,7 +3,7 @@ import {View, Image, Alert} from 'react-native';
 import {Icon} from 'react-native-eva-icons';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import MapboxGL from '@react-native-mapbox-gl/maps';
-import {useFocusEffect, useNavigation} from '@react-navigation/native';
+import {useNavigation} from '@react-navigation/native';
 import {useNetInfo} from '@react-native-community/netinfo';
 import Geolocation from 'react-native-geolocation-service';
 
@@ -11,12 +11,9 @@ import HomeHeader from 'components/HomeHeader';
 
 import cs from '@rna/utils/cs';
 import surveyCategory from 'services/data/surveyCategory';
-import {GET_HAPPENING_SURVEY} from 'services/gql/queries';
 import {MAPBOX_ACCESS_TOKEN} from '@env';
 import {checkLocation} from 'utils/location';
 import COLORS from 'utils/colors';
-
-import useQuery from 'hooks/useQuery';
 
 import {HappeningSurveyType} from '@generated/types';
 
@@ -37,6 +34,8 @@ interface Props {
     locationBarStyle?: object;
     onLocationPick?: (location: number[] | number[][] | undefined) => void;
     pickLocation?: string;
+    surveyData?: HappeningSurveyType[];
+    isStatic?: boolean;
 }
 
 const mapViewStyles = JSON.stringify(styleJSON);
@@ -48,6 +47,8 @@ const Map: React.FC<Props> = ({
     locationBarStyle,
     onLocationPick,
     pickLocation = null,
+    surveyData = [],
+    isStatic = false,
 }) => {
     const netInfo = useNetInfo();
 
@@ -85,11 +86,8 @@ const Map: React.FC<Props> = ({
         [netInfo],
     );
 
-    const handleFinishMapLoad = useCallback(() => {
-        manageOffline('png_14_20');
-    }, [manageOffline]);
-
     const mapRef = useRef() as React.MutableRefObject<MapboxGL.MapView>;
+    const mapCameraRef = useRef() as React.MutableRefObject<MapboxGL.Camera>;
     const shapeSourceRef =
         useRef() as React.MutableRefObject<MapboxGL.ShapeSource>;
 
@@ -102,6 +100,26 @@ const Map: React.FC<Props> = ({
     const [polygonPoint, setPolygonPoint] = useState<number[][]>([]);
 
     const handleLocationPress = useCallback(() => {
+        if (
+            isStatic &&
+            surveyData?.length === 1 &&
+            (surveyData[0].location || surveyData[0].boundary)
+        ) {
+            let coordinates = [];
+            if (surveyData[0].location) {
+                coordinates = surveyData[0].location.coordinates;
+            } else if (surveyData[0].boundary) {
+                coordinates = surveyData[0].boundary.coordinates?.[0]?.[0]?.[0];
+            }
+            if (coordinates?.length) {
+                mapCameraRef.current.setCamera({
+                    zoomLevel: 13,
+                    animationDuration: 3000,
+                    centerCoordinate: coordinates,
+                });
+            }
+            return;
+        }
         checkLocation().then(result => {
             if (result) {
                 Geolocation.getCurrentPosition(
@@ -110,10 +128,9 @@ const Map: React.FC<Props> = ({
                             position.coords.longitude,
                             position.coords.latitude,
                         ];
-                        setMapCameraProps({
-                            zoomLevel: 12,
-                            animationMode: 'flyTo',
-                            animationDuration: 6000,
+                        mapCameraRef.current.setCamera({
+                            zoomLevel: 13,
+                            animationDuration: 3000,
                             centerCoordinate: coordinates,
                         });
                         setCurrentLocation(coordinates);
@@ -125,30 +142,35 @@ const Map: React.FC<Props> = ({
                 );
             }
         });
-    }, []);
+    }, [isStatic, surveyData]);
 
-    useEffect(() => {
+    const handleFinishMapLoad = useCallback(() => {
+        manageOffline('png_14_20');
         handleLocationPress();
-    }, [handleLocationPress]);
+    }, [manageOffline, handleLocationPress]);
 
     useEffect(() => {
         if (netInfo.isInternetReachable) {
             setIsOffline(false);
         }
-    }, [netInfo]);
+    }, [netInfo.isInternetReachable]);
 
     useEffect(() => {
         switch (pickLocation) {
             case 'Use my current location':
                 setDrawPolygon(false);
                 setPolygonPoint([]);
-                handleLocationPress();
-                onLocationPick && onLocationPick?.(currentLocation);
+                Geolocation.getCurrentPosition(position => {
+                    const coordinates = [
+                        position.coords.longitude,
+                        position.coords.latitude,
+                    ];
+                    onLocationPick && onLocationPick?.(coordinates);
+                });
                 break;
             case 'Set on a map':
                 setDrawPolygon(false);
                 setPolygonPoint([]);
-                onLocationPick && onLocationPick?.(currentLocation);
                 break;
             case 'Draw polygon':
                 break;
@@ -156,7 +178,7 @@ const Map: React.FC<Props> = ({
                 setDrawPolygon(false);
                 setPolygonPoint([]);
         }
-    }, [pickLocation, currentLocation, handleLocationPress, onLocationPick]);
+    }, [pickLocation, onLocationPick]);
 
     const onRegionDidChange = useCallback(() => {
         setMapCameraProps({});
@@ -176,16 +198,11 @@ const Map: React.FC<Props> = ({
         );
     }, [currentLocation]);
 
-    const {data, refetch} = useQuery(GET_HAPPENING_SURVEY);
-
-    useFocusEffect(
-        useCallback(() => {
-            refetch();
-        }, [refetch]),
-    );
-
     const handleSurveyPolyShapePress = useCallback(
         shape => {
+            if (isStatic) {
+                return;
+            }
             if (shape?.features?.length === 1) {
                 const feature = shape.features[0];
                 if (feature?.properties?.surveyItem) {
@@ -202,11 +219,14 @@ const Map: React.FC<Props> = ({
                 }
             }
         },
-        [navigation],
+        [navigation, isStatic],
     );
 
     const handleSurveyShapePress = useCallback(
         async shape => {
+            if (isStatic) {
+                return;
+            }
             if (shape?.features?.length === 1) {
                 const feature = shape.features[0];
                 if (feature?.properties?.surveyItem) {
@@ -240,12 +260,12 @@ const Map: React.FC<Props> = ({
                 }
             }
         },
-        [navigation],
+        [navigation, isStatic],
     );
 
     const renderCluster = useCallback(() => {
         const shape =
-            data?.happeningSurveys
+            surveyData
                 .filter((survey: HappeningSurveyType) => survey.location)
                 .map((survey: HappeningSurveyType) => ({
                     type: 'Feature',
@@ -263,7 +283,7 @@ const Map: React.FC<Props> = ({
             features: [...shape],
         };
         const polyShape =
-            data?.happeningSurveys
+            surveyData
                 .filter((survey: HappeningSurveyType) => survey.boundary)
                 .map((survey: HappeningSurveyType) => ({
                     type: 'Feature',
@@ -300,6 +320,7 @@ const Map: React.FC<Props> = ({
                     <MapboxGL.SymbolLayer
                         id="polyTitle"
                         style={mapStyles.polyTitle}
+                        belowLayerID="singlePoint"
                     />
                     <MapboxGL.FillLayer
                         id="polygon"
@@ -321,19 +342,20 @@ const Map: React.FC<Props> = ({
                     />
                     <MapboxGL.CircleLayer
                         id="circles"
-                        belowLayerID="pointCount"
                         style={mapStyles.clusterPoints}
                         filter={['has', 'point_count']}
+                        belowLayerID="pointCount"
                     />
                     <MapboxGL.SymbolLayer
                         id="singlePoint"
                         style={mapStyles.singlePoint}
                         filter={['!', ['has', 'point_count']]}
+                        belowLayerID="circles"
                     />
                 </MapboxGL.ShapeSource>
             </>
         );
-    }, [data, handleSurveyShapePress, handleSurveyPolyShapePress]);
+    }, [surveyData, handleSurveyShapePress, handleSurveyPolyShapePress]);
 
     const renderPolygon = useCallback(() => {
         const polygonGeoJSON = {
@@ -343,6 +365,7 @@ const Map: React.FC<Props> = ({
                 coordinates: [...polygonPoint],
             },
         };
+
         return (
             <MapboxGL.ShapeSource id="polygonSource" shape={polygonGeoJSON}>
                 <MapboxGL.FillLayer
@@ -370,6 +393,7 @@ const Map: React.FC<Props> = ({
             switch (pickLocation) {
                 case 'Set on a map':
                     setCurrentLocation(mapEvent.geometry.coordinates);
+                    onLocationPick?.(mapEvent.geometry.coordinates);
                     break;
                 case 'Draw polygon':
                     setPolygonPoint([
@@ -410,6 +434,7 @@ const Map: React.FC<Props> = ({
                             centerCoordinate: currentLocation,
                             zoomLevel: 5,
                         }}
+                        ref={mapCameraRef}
                         {...mapCameraProps}
                     />
                     {isOffline && <OfflineLayers />}

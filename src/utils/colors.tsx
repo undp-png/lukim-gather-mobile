@@ -15,6 +15,10 @@ const COLORS = {
     greyTextDark: '#282F3E',
     inputText: '#888C94',
 
+    /** Greys **/
+    greyLight: '#B7BABF',
+    greyLightAlt: '#888C94',
+
     /** Primary and Secondary colors **/
     primary: '#6AA12A',
     primaryAlt: '#6697B9',

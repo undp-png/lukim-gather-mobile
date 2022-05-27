@@ -45,12 +45,12 @@ platform :android do
         skip_upload_changelogs: true,
         skip_upload_images: true,
     )
-   slack(
-       message: "Android app update has been uploaded to open testing! It should be available after a review period.",
-       slack_url: ENV['SLACK_URL'],
-       success: true,
-       fail_on_error: false,
-   )
+    slack(
+        message: "Android app update has been uploaded to open testing! It should be available after a review period.",
+        slack_url: ENV['SLACK_URL'],
+        success: true,
+        fail_on_error: false,
+    )
 
     # sh "your_script.sh"
     # You can also use other beta testing services here

@@ -96,10 +96,11 @@ const FormMenuItem: React.FC<FormMenuItemProps> = ({
                 )}
                 isOpen={isResumeModalVisible}
                 onCancel={handleHideResumeModal}
-                negativeText={_('No')}
+                negativeText={_('Delete, and continue')}
                 onNegative={handleNoResumePress}
-                positiveText={_('Yes')}
+                positiveText={_('Resume, and continue')}
                 onPositive={goToFormWithData}
+                vertical
             />
             <MenuItem title={item.title} onPress={handleFormPress} />
         </>

@@ -19,6 +19,7 @@ const useQuery = (query, options = {}) => {
                 fetchPolicy: netInfo.isInternetReachable
                     ? 'network-only'
                     : 'cache-first',
+                context: {__skipErrorAccordingCache__: true},
                 ...options,
             });
             setData(resData);

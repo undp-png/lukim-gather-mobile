@@ -43,6 +43,7 @@ export const GET_HAPPENING_SURVEY = gql`
             sentiment
             improvement
             attachment {
+                id
                 media
             }
             category {
@@ -78,6 +79,7 @@ export const CREATE_HAPPENING_SURVEY = gql`
                 sentiment
                 improvement
                 attachment {
+                    id
                     media
                 }
                 category {
@@ -87,6 +89,7 @@ export const CREATE_HAPPENING_SURVEY = gql`
                 createdBy {
                     id
                 }
+                createdAt
             }
         }
     }
@@ -114,7 +117,9 @@ export const UPDATE_HAPPENING_SURVEY = gql`
                     coordinates
                 }
                 sentiment
+                improvement
                 attachment {
+                    id
                     media
                 }
                 category {
@@ -125,6 +130,7 @@ export const UPDATE_HAPPENING_SURVEY = gql`
                 createdBy {
                     id
                 }
+                createdAt
             }
         }
     }
