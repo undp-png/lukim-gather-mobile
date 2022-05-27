@@ -98,11 +98,10 @@ const OnBoarding = () => {
                 style={styles.backgroundImage}>
                 <View style={styles.contentContainer}>
                     <View style={styles.titleWrapper}>
-                        <Image source={require('assets/icons/logo.png')} />
-                        <View>
-                            <Text style={styles.title} title={_('Lukim')} />
-                            <Text style={styles.title} title={_('Gather')} />
-                        </View>
+                        <Image
+                            style={styles.logo}
+                            source={require('assets/icons/logo.png')}
+                        />
                     </View>
                     <View>
                         <FlatList
