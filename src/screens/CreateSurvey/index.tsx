@@ -21,9 +21,11 @@ import CategoryListModal from 'components/CategoryListModal';
 import SurveySentiment from 'components/SurveySentiment';
 import SurveyReview from 'components/SurveyReview';
 
+import SurveyCategory from 'services/data/surveyCategory';
 import {_} from 'services/i18n';
 import {setLocation} from 'store/slices/survey';
 import {checkLocation} from 'utils/location';
+import useCategoryIcon from 'hooks/useCategoryIcon';
 
 import {
     CreateHappeningSurveyMutation,
@@ -65,6 +67,8 @@ const CreateHappeningSurvey = () => {
     const [confirmPublish, setConfirmPublish] = useState<boolean>(false);
     const [isAnonymous, setIsAnonymous] = useState<boolean>(false);
     const [locationDetail, setLocationDetail] = useState<string>('');
+
+    const [categoryIcon] = useCategoryIcon(SurveyCategory, Number(category.id));
 
     const handleFeel = useCallback(feel => {
         setActiveFeel(feel);
@@ -286,13 +290,7 @@ const CreateHappeningSurvey = () => {
                 />
                 <ModalLoader loading={processing} />
                 <View style={styles.category}>
-                    <Image
-                        source={
-                            route.params.categoryItem.icon ||
-                            require('assets/images/category-placeholder.png')
-                        }
-                        style={styles.categoryIcon}
-                    />
+                    <Image source={categoryIcon} style={styles.categoryIcon} />
                     <Text style={styles.field} title={category.name} />
                 </View>
                 <TouchableOpacity onPress={toggleOpenCategory}>

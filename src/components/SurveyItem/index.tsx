@@ -29,6 +29,9 @@ const SurveyItem = ({item, onPress}: SurveyItemProps) => {
         navigation.navigate('SurveyItem', {item});
     }, [item, navigation, onPress]);
 
+    const dateFormat = new Date(item.createdAt);
+    const formatted = dateFormat.toString();
+
     return (
         <TouchableOpacity onPress={onPressItem} style={styles.item}>
             <View>
@@ -45,7 +48,13 @@ const SurveyItem = ({item, onPress}: SurveyItemProps) => {
                 </View>
             </View>
             <View style={styles.rightData}>
-                <Text style={styles.date} title={item.createdAt} />
+                <Text
+                    style={styles.date}
+                    title={`${formatted.substring(
+                        4,
+                        7,
+                    )} ${dateFormat.getDate()}, ${dateFormat.getFullYear()}`}
+                />
             </View>
         </TouchableOpacity>
     );

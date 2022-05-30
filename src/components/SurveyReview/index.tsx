@@ -10,6 +10,7 @@ import styles from './styles';
 interface Props {
     name: string;
     activeReview?: string;
+    reviewItem?: boolean;
     onPress?(emo: string): void;
     icon?: string;
 }
@@ -25,7 +26,12 @@ function useSurveyReviewIcon(improvementName: string) {
     }
 }
 
-const SurveyReview: React.FC<Props> = ({name, activeReview, onPress}) => {
+const SurveyReview: React.FC<Props> = ({
+    name,
+    activeReview,
+    reviewItem,
+    onPress,
+}) => {
     const icon = useSurveyReviewIcon(name);
 
     const handlePress = useCallback(() => {
@@ -34,10 +40,11 @@ const SurveyReview: React.FC<Props> = ({name, activeReview, onPress}) => {
 
     return (
         <Pressable
-            style={cs(styles.feeelWrapper, [
-                styles.activeFeel,
-                name === activeReview,
-            ])}
+            style={cs(
+                styles.feeelWrapper,
+                [styles.activeFeel, name === activeReview],
+                [styles.activeReviewItem, reviewItem],
+            )}
             onPress={handlePress}>
             <View
                 style={cs(styles.checked, [

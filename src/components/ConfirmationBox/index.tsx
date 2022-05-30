@@ -3,6 +3,8 @@ import {View, Text, Dimensions} from 'react-native';
 import Modal from 'react-native-modal';
 
 import Button from 'components/Button';
+import cs from '@rna/utils/cs';
+
 import {_} from 'services/i18n';
 
 import styles from './styles';
@@ -16,6 +18,7 @@ interface BoxProps {
     onPositive(): void;
     negativeText?: string;
     onNegative?(): void;
+    isLogoutBox?: boolean;
 }
 
 const deviceHeight = Dimensions.get('window').height;
@@ -29,6 +32,7 @@ export const ConfirmBox: React.FC<BoxProps> = ({
     onPositive,
     negativeText,
     onNegative,
+    isLogoutBox,
 }) => {
     return (
         <Modal
@@ -49,14 +53,23 @@ export const ConfirmBox: React.FC<BoxProps> = ({
                             style={styles.buttonNegative}
                         />
                     )}
-                    <View style={styles.buttonsRight}>
+                    <View
+                        style={cs(styles.buttonsRight, [
+                            styles.logoutButtonWrapper,
+                            isLogoutBox,
+                        ])}>
                         <Button
                             title={positiveText}
                             onPress={onPositive}
-                            style={styles.buttonPositive}
+                            style={
+                                isLogoutBox
+                                    ? styles.logoutButton
+                                    : styles.buttonPositive
+                            }
                         />
                         {onCancel && (
                             <Button
+                                style={cs(isLogoutBox && styles.logoutButton)}
                                 title={_('Cancel')}
                                 onPress={onCancel}
                                 outline

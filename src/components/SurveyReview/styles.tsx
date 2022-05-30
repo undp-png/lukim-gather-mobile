@@ -13,7 +13,11 @@ export default StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
     },
+    activeReviewItem: {
+        backgroundColor: '#F0F3F7',
+    },
     activeFeel: {
+        backgroundColor: '#F0F3F7',
         borderColor: COLORS.secondary,
     },
     checked: {
