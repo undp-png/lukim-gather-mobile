@@ -1,4 +1,4 @@
-import React, {useEffect, useCallback, useState} from 'react';
+import React, {useEffect, useCallback, useState, useMemo} from 'react';
 import {
     RefreshControl,
     View,
@@ -6,12 +6,14 @@ import {
     TouchableOpacity,
     FlatList,
 } from 'react-native';
+import {RootStateOrAny, useSelector} from 'react-redux';
 import {useNavigation, useFocusEffect} from '@react-navigation/native';
 import {Icon} from 'react-native-eva-icons';
 
 import Text from 'components/Text';
 import SurveyItem from 'components/SurveyItem';
 import EmptyListMessage from 'components/EmptyListMessage';
+import SurveyListTab from 'components/SurveyListTab';
 
 import useQuery from 'hooks/useQuery';
 
@@ -25,8 +27,11 @@ const keyExtractor: KeyExtractor = item => item.id.toString();
 
 const Surveys = () => {
     const navigation = useNavigation();
+    const {user} = useSelector((state: RootStateOrAny) => state.auth);
 
     const {loading, data, refetch} = useQuery(GET_HAPPENING_SURVEY);
+
+    const [selectedTab, setSelectedTab] = useState('all');
 
     const handleRefresh = useCallback(() => {
         refetch();
@@ -69,6 +74,17 @@ const Surveys = () => {
         });
     }, [navigation, onMapPress, onSearchPress]);
 
+    const selectedData = useMemo(
+        () =>
+            selectedTab === 'myentries'
+                ? data?.happeningSurveys.filter(
+                      (el: HappeningSurveyType) =>
+                          el.createdBy?.id && el.createdBy?.id === user?.id,
+                  )
+                : data?.happeningSurveys,
+        [data, selectedTab, user?.id],
+    );
+
     const renderItem: ListRenderItem<HappeningSurveyType> = useCallback(
         ({item}: {item: HappeningSurveyType}) => <SurveyItem item={item} />,
         [],
@@ -76,8 +92,12 @@ const Surveys = () => {
 
     return (
         <View style={styles.container}>
+            <SurveyListTab
+                selectedTab={selectedTab}
+                setSelectedTab={setSelectedTab}
+            />
             <FlatList
-                data={data?.happeningSurveys || []}
+                data={selectedData || []}
                 renderItem={renderItem}
                 refreshControl={
                     <RefreshControl

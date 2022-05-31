@@ -2,16 +2,16 @@ import React, {useCallback} from 'react';
 import {View, Image, Pressable, Dimensions} from 'react-native';
 import {FlatList} from 'react-native-gesture-handler';
 import Modal from 'react-native-modal';
+import {Icon} from 'react-native-eva-icons';
 
 import Text from 'components/Text';
 
 import {_} from 'services/i18n';
+import COLORS from 'utils/colors';
 
 import surveyCategory from 'services/data/surveyCategory';
 
 import styles from './styles';
-import {Icon} from 'react-native-eva-icons';
-import COLORS from 'utils/colors';
 
 const keyExtractor = (item: {id: any}) => item.id;
 

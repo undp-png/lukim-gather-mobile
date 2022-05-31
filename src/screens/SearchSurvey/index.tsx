@@ -9,12 +9,12 @@ import {RootStateOrAny, useSelector} from 'react-redux';
 import {useNavigation} from '@react-navigation/native';
 import {FlatList, TouchableOpacity} from 'react-native-gesture-handler';
 import {Icon} from 'react-native-eva-icons';
-import Toast from 'react-native-simple-toast';
 
 import SurveyItem from 'components/SurveyItem';
 import Text from 'components/Text';
 import {Loader} from 'components/Loader';
 import EmptyListMessage from 'components/EmptyListMessage';
+import SurveyListTab from 'components/SurveyListTab';
 
 import useQuery from 'hooks/useQuery';
 
@@ -29,39 +29,9 @@ import styles from './styles';
 type KeyExtractor = (item: HappeningSurveyType, index: number) => string;
 const keyExtractor: KeyExtractor = item => item.id.toString();
 
-const TabItem = ({
-    onPress,
-    title,
-    activeTab,
-    name,
-}: {
-    onPress(): void;
-    title: string;
-    activeTab: string;
-    name: string;
-}) => {
-    const {width} = useWindowDimensions();
-    const tabWidth = useMemo(() => {
-        return {width: width / 2 - 22};
-    }, [width]);
-    return (
-        <TouchableOpacity
-            style={cs(
-                styles.tabItem,
-                [styles.activeTabItem, activeTab === name],
-                tabWidth,
-            )}
-            onPress={onPress}>
-            <Text style={styles.tabTitle} title={title} />
-        </TouchableOpacity>
-    );
-};
-
 const SearchSurvey = () => {
     const {width} = useWindowDimensions();
-    const {user, isAuthenticated} = useSelector(
-        (state: RootStateOrAny) => state.auth,
-    );
+    const {user} = useSelector((state: RootStateOrAny) => state.auth);
     const [searchQuery, setSearchQuery] = useState('');
     const [selectedTab, setSelectedTab] = useState('all');
     const navigation = useNavigation();
@@ -136,30 +106,12 @@ const SearchSurvey = () => {
         [searchedSurveys, selectedTab, user],
     );
 
-    const handleAllTabSelect = useCallback(() => setSelectedTab('all'), []);
-    const handleMyTabSelect = useCallback(() => {
-        if (!isAuthenticated) {
-            return Toast.show(_('You are not logged in!'));
-        }
-        setSelectedTab('myentries');
-    }, [isAuthenticated]);
-
     return (
         <View style={styles.container}>
-            <View style={styles.tabWrapper}>
-                <TabItem
-                    name="all"
-                    activeTab={selectedTab}
-                    title="All"
-                    onPress={handleAllTabSelect}
-                />
-                <TabItem
-                    name="myentries"
-                    activeTab={selectedTab}
-                    title="My Entries"
-                    onPress={handleMyTabSelect}
-                />
-            </View>
+            <SurveyListTab
+                selectedTab={selectedTab}
+                setSelectedTab={setSelectedTab}
+            />
             <FlatList
                 data={selectedData}
                 renderItem={renderItem}
