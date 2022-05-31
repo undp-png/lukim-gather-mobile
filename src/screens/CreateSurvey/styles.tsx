@@ -29,8 +29,10 @@ export default StyleSheet.create({
         lineHeight: 29.05,
         fontFamily: 'Inter-SemiBold',
         color: COLORS.blueTextAlt,
+        width: '70%',
     },
     change: {
+        padding: 10,
         fontSize: 14,
         lineHeight: 20,
         fontFamily: 'Inter-Regular',

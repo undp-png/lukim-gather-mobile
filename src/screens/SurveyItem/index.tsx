@@ -192,7 +192,10 @@ const SurveyItem = () => {
                 <>
                     <Header title="Improvement" />
                     <View style={styles.content}>
-                        <SurveyReview name={surveyData.improvement} />
+                        <SurveyReview
+                            name={surveyData.improvement}
+                            reviewItem={true}
+                        />
                     </View>
                 </>
             )}

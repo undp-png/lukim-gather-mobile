@@ -52,6 +52,7 @@ export const GET_HAPPENING_SURVEY = gql`
             createdBy {
                 id
             }
+            createdAt
         }
     }
 `;

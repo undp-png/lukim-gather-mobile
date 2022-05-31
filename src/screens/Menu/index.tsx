@@ -60,6 +60,7 @@ const Menu = () => {
     return (
         <View style={styles.container}>
             <ConfirmBox
+                isLogoutBox={true}
                 headerText={_('Log out', selectedLanguage)}
                 descriptionText={_(
                     'Are you sure you want to log out?',

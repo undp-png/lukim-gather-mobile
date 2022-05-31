@@ -249,7 +249,10 @@ const _ImagePicker: React.FC<ImagePickerProps> = ({
                 {(multiple || images.length !== 1) && (
                     <Animated.View
                         style={cs(styles.imgPickerWrapper, {flex: iconFlex})}>
-                        <TouchableOpacity onPress={open} disabled={disabled}>
+                        <TouchableOpacity
+                            style={images.length < 1 && styles.emptyAddWrapper}
+                            onPress={open}
+                            disabled={disabled}>
                             <Icon
                                 name="plus-circle"
                                 height={40}

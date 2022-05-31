@@ -15,7 +15,7 @@ export default StyleSheet.create({
     },
     activeFeel: {
         backgroundColor: '#F0F3F6',
-        borderColor: COLORS.primary,
+        borderColor: COLORS.secondary,
     },
     checked: {
         position: 'absolute',

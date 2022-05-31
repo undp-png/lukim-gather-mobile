@@ -111,6 +111,7 @@ const SearchCategory = () => {
                         style={cs(styles.searchInput, inputWidth)}
                         value={searchQuery}
                         onChangeText={handleSearchChange}
+                        autoFocus={true}
                     />
                     {searchQuery.length > 0 && (
                         <TouchableOpacity onPress={onClearSearch}>

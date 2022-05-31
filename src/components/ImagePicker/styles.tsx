@@ -11,6 +11,15 @@ export default StyleSheet.create({
         height: '100%',
         justifyContent: 'center',
     },
+    emptyAddWrapper: {
+        justifyContent: 'center',
+        alignItems: 'center',
+        height: 122,
+        width: 122,
+        borderWidth: 1,
+        borderColor: COLORS.border,
+        borderRadius: 8,
+    },
     options: {
         backgroundColor: 'white',
         flexDirection: 'row',

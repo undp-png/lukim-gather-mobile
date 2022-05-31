@@ -41,6 +41,12 @@ export default StyleSheet.create({
         flexDirection: 'row-reverse',
         flex: 1,
     },
+    logoutButtonWrapper: {
+        justifyContent: 'space-between',
+    },
+    logoutButton: {
+        width: '47%',
+    },
     buttonPositive: {
         marginLeft: 8,
         minWidth: '35%',

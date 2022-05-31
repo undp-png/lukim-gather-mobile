@@ -6,7 +6,7 @@ const COLORS = {
     backgroundLight: 'rgb(227, 227, 227)',
     backgroundGradient: ['#050505', '#202020'],
     accent: 'rgb(234,99,25)',
-    border: '#CFD5DC',
+    border: '#CEDCEC',
 
     /* Text color */
     blueText: '#2263AA',
