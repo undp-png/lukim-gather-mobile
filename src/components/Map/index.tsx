@@ -22,6 +22,7 @@ import {HappeningSurveyType} from '@generated/types';
 
 import styleJSON from 'assets/map/style.json';
 
+import {UserLocation} from './UserLocation';
 import OfflineLayers from './OfflineLayers';
 import DrawPolygonIcon from './Icon/DrawPolygon';
 import MarkerIcon from './Icon/Marker';
@@ -89,7 +90,6 @@ const Map: React.FC<Props> = ({
     }, [manageOffline]);
 
     const mapRef = useRef() as React.MutableRefObject<MapboxGL.MapView>;
-    const locationRef = useRef() as React.RefObject<MapboxGL.UserLocation>;
     const shapeSourceRef =
         useRef() as React.MutableRefObject<MapboxGL.ShapeSource>;
 
@@ -101,7 +101,7 @@ const Map: React.FC<Props> = ({
     const [mapCameraProps, setMapCameraProps] = useState<object | null>({});
     const [polygonPoint, setPolygonPoint] = useState<number[][]>([]);
 
-    const handleLocationCheck = useCallback(() => {
+    const handleLocationPress = useCallback(() => {
         checkLocation().then(result => {
             if (result) {
                 Geolocation.getCurrentPosition(
@@ -128,8 +128,8 @@ const Map: React.FC<Props> = ({
     }, []);
 
     useEffect(() => {
-        handleLocationCheck();
-    }, [handleLocationCheck]);
+        handleLocationPress();
+    }, [handleLocationPress]);
 
     useEffect(() => {
         if (netInfo.isInternetReachable) {
@@ -142,7 +142,7 @@ const Map: React.FC<Props> = ({
             case 'Use my current location':
                 setDrawPolygon(false);
                 setPolygonPoint([]);
-                handleLocationCheck();
+                handleLocationPress();
                 onLocationPick && onLocationPick?.(currentLocation);
                 break;
             case 'Set on a map':
@@ -156,7 +156,7 @@ const Map: React.FC<Props> = ({
                 setDrawPolygon(false);
                 setPolygonPoint([]);
         }
-    }, [pickLocation, currentLocation, handleLocationCheck, onLocationPick]);
+    }, [pickLocation, currentLocation, handleLocationPress, onLocationPick]);
 
     const onRegionDidChange = useCallback(() => {
         setMapCameraProps({});
@@ -367,9 +367,11 @@ const Map: React.FC<Props> = ({
 
     const handleMapPress = useCallback(
         mapEvent => {
-            if (pickLocation) {
-                setCurrentLocation(mapEvent.geometry.coordinates);
-                if (drawPolygon) {
+            switch (pickLocation) {
+                case 'Set on a map':
+                    setCurrentLocation(mapEvent.geometry.coordinates);
+                    break;
+                case 'Draw polygon':
                     setPolygonPoint([
                         ...polygonPoint,
                         mapEvent.geometry.coordinates,
@@ -379,10 +381,12 @@ const Map: React.FC<Props> = ({
                             ...polygonPoint,
                             mapEvent.geometry.coordinates,
                         ]);
-                }
+                    break;
+                default:
+                    break;
             }
         },
-        [polygonPoint, drawPolygon, pickLocation, onLocationPick],
+        [polygonPoint, pickLocation, onLocationPick],
     );
 
     const handleDrawTool = useCallback(() => {
@@ -409,13 +413,7 @@ const Map: React.FC<Props> = ({
                         {...mapCameraProps}
                     />
                     {isOffline && <OfflineLayers />}
-                    <MapboxGL.UserLocation
-                        visible
-                        ref={locationRef}
-                        renderMode="native"
-                        androidRenderMode="compass"
-                        showsUserHeadingIndicator
-                    />
+                    <UserLocation visible={true} />
                     {showMarker && renderAnnotation()}
                     {pickLocation === 'Draw polygon' && renderPolygon()}
                     {showCluster && renderCluster()}
@@ -424,7 +422,7 @@ const Map: React.FC<Props> = ({
             <View style={cs(styles.locationBar, locationBarStyle)}>
                 <TouchableOpacity
                     style={styles.locationWrapper}
-                    onPress={handleLocationCheck}>
+                    onPress={handleLocationPress}>
                     <Image
                         source={require('assets/images/locate.png')}
                         style={styles.icon}
