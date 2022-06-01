@@ -43,7 +43,7 @@ const Surveys = () => {
         [navigation],
     );
     const onMapPress = useCallback(
-        () => navigation.navigate('Home'),
+        () => navigation.navigate('HomeScreen'),
         [navigation],
     );
 
@@ -67,10 +67,6 @@ const Surveys = () => {
                     <Text style={styles.title} title="Map" />
                 </TouchableOpacity>
             ),
-            headerStyle: {
-                backgroundColor: '#E7ECF2',
-                shadowColor: 'transparent',
-            },
         });
     }, [navigation, onMapPress, onSearchPress]);
 

@@ -1,7 +1,7 @@
 import React from 'react';
 import {createStackNavigator} from '@react-navigation/stack';
 import {RootStateOrAny, useSelector} from 'react-redux';
-import {useQuery} from '@apollo/client';
+import useQuery from 'hooks/useQuery';
 
 import AuthNavigator from './auth';
 import TabNavigator from './tab';
@@ -14,7 +14,6 @@ import ForgotPassword from 'screens/ForgotPassword';
 import VerifyEmail from 'screens/VerifyEmail';
 import CreateNewPassword from 'screens/CreateNewPassword';
 import ChangeLocation from 'screens/ChangeLocation';
-import ChooseCategory from 'screens/ChooseCategory';
 import SearchCategory from 'screens/SearchCategory';
 import EditSurvey from 'screens/EditSurvey';
 import CreateSurvey from 'screens/CreateSurvey';
@@ -49,7 +48,6 @@ export type StackParamList = {
         onChange?: (value: any) => void;
         surveyData?: HappeningSurveyType;
     };
-    ChooseCategory: undefined;
     SearchCategory: undefined;
     CreateSurvey: undefined;
     EditSurvey: undefined;
@@ -210,13 +208,6 @@ const AppNavigator = () => {
                     headerLeft: () => <CloseButton />,
                     headerTitle: _('Entries'),
                     presentation: 'modal',
-                }}
-            />
-            <Stack.Screen
-                name="ChooseCategory"
-                component={ChooseCategory}
-                options={{
-                    headerTitle: _('Choose a category'),
                 }}
             />
             <Stack.Screen

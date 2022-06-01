@@ -98,8 +98,8 @@ const TabBar = ({
                 styles.safeArea,
                 [
                     styles.containerHidden,
-                    state.index ===
-                        state.routes.findIndex(rt => rt.name === 'Menu'),
+                    state.index !==
+                        state.routes.findIndex(rt => rt.name === 'Home'),
                 ],
                 {width},
             )}>
@@ -136,7 +136,9 @@ const TabBar = ({
                     </Defs>
                 </Svg>
                 {state.index !==
-                    state.routes.findIndex(rt => rt.name === 'Menu') && (
+                    state.routes.findIndex(
+                        (rt: {name: string}) => rt.name === 'Menu',
+                    ) && (
                     <Svg height={height} width={width}>
                         <Path
                             d={`${leftTabBar} ${centerTabBar} ${rightTabBar}`}
@@ -160,7 +162,7 @@ const TabBar = ({
                         case 'Menu':
                             iconName = getIconName('grid', isFocused);
                             break;
-                        case 'Surveys':
+                        case 'ChooseCategory':
                             iconName = getIconName('plus', isFocused);
                             break;
                         default:
@@ -201,12 +203,14 @@ const TabBar = ({
                             }
                             testID={options.tabBarTestID}
                             onPress={
-                                route.name === 'Surveys' ? onPlusPress : onPress
+                                route.name === 'ChooseCategory'
+                                    ? onPlusPress
+                                    : onPress
                             }
                             onLongPress={onLongPress}
                             style={styles.tabBar}
                             key={route.key}>
-                            {route.name === 'Surveys' ? (
+                            {route.name === 'ChooseCategory' ? (
                                 <View style={styles.plusButton}>
                                     <Icon
                                         name={iconName}
