@@ -172,6 +172,7 @@ const CreateHappeningSurvey = () => {
                             id: user?.id || '',
                             __typename: 'UserType',
                         },
+                        createdAt: new Date().toISOString(),
                     },
                 },
             },
@@ -199,6 +200,9 @@ const CreateHappeningSurvey = () => {
                             happeningSurveys: mergedSurveys,
                         },
                     });
+                    Toast.show(_('Survey has been recorded'), Toast.LONG, [
+                        'RCTModalHostVIewController',
+                    ]);
                     navigation.navigate('Feed');
                 } catch (e) {
                     console.log('error on happening survey', e);

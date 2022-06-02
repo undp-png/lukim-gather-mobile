@@ -96,7 +96,7 @@ const SurveyItem = () => {
 
     const togggleEditPress = useCallback(() => {
         setIsOpenActions(false);
-        navigation.navigate('EditSurvey', {categoryItem: surveyData});
+        navigation.navigate('EditSurvey', {surveyItem: surveyData});
     }, [navigation, surveyData]);
 
     const toggleDeleteModal = useCallback(() => {
@@ -120,7 +120,7 @@ const SurveyItem = () => {
                     errors: null,
                 },
             },
-            update: (cache, {data}) => {
+            update: cache => {
                 try {
                     const readData: any =
                         cache.readQuery({
@@ -148,7 +148,7 @@ const SurveyItem = () => {
     useEffect(() => {
         navigation.setOptions({
             headerRight: () =>
-                surveyData.createdBy?.id == user?.id ? (
+                surveyData.createdBy?.id === user?.id ? (
                     <OptionIcon onOptionPress={togggleOpenActions} />
                 ) : null,
         });

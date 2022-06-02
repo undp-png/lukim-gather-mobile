@@ -1,5 +1,5 @@
-import React, {useCallback, useEffect, useRef, useState} from 'react';
-import {Animated, Image, ScrollView, View, Platform} from 'react-native';
+import React, {useCallback, useEffect, useState, useMemo} from 'react';
+import {Image, ScrollView, View, Platform} from 'react-native';
 import {RootStateOrAny, useSelector} from 'react-redux';
 import {useMutation} from '@apollo/client';
 import {ReactNativeFile} from 'apollo-upload-client';
@@ -25,17 +25,14 @@ import useCategoryIcon from 'hooks/useCategoryIcon';
 import {
     UPDATE_HAPPENING_SURVEY,
     GET_HAPPENING_SURVEY,
-    UPLOAD_IMAGE,
 } from 'services/gql/queries';
 
 import {getErrorMessage} from 'utils/error';
-
 import {
     HappeningSurveyType,
-    UploadMediaMutation,
-    UploadMediaMutationVariables,
     UpdateHappeningSurveyMutation,
     UpdateHappeningSurveyMutationVariables,
+    Improvement,
 } from '@generated/types';
 
 import styles from './styles';
@@ -48,31 +45,29 @@ const EditHappeningSurvey = () => {
     const [openCategory, setOpenCategory] = useState<boolean>(false);
     const [processing, setProcessing] = useState<boolean>(false);
 
-    const [title, setTitle] = useState<string>(
-        route.params?.categoryItem?.title,
-    );
+    const [title, setTitle] = useState<string>(route.params?.surveyItem?.title);
     const [activeFeel, setActiveFeel] = useState<string>(
-        route.params?.categoryItem?.sentiment,
+        route.params?.surveyItem?.sentiment,
     );
-    const [activeReview, setActiveReview] = useState<string | null>(
-        route.params?.categoryItem?.improvement,
+    const [activeReview, setActiveReview] = useState<Improvement | undefined>(
+        route.params?.surveyItem?.improvement,
     );
     const [images, setImages] = useState<ImageObj[]>(
-        route?.params?.categoryItem.attachment,
+        route?.params?.surveyItem.attachment,
     );
     const [description, setDescription] = useState<string>(
-        route.params?.categoryItem.description || '',
+        route.params?.surveyItem.description || '',
     );
-    const [categoryItem, setCategoryItem] = useState<{
-        id: number;
-        name: string;
+    const [surveyCategory, setSurveyCategory] = useState<{
+        id: string;
+        title: string;
     }>({
-        id: route.params?.categoryItem?.category.id,
-        name: route.params?.categoryItem?.category.title,
+        id: route.params?.surveyItem?.category.id,
+        title: route.params?.surveyItem?.category.title,
     });
     const [categoryIcon] = useCategoryIcon(
         SurveyCategory,
-        Number(categoryItem.id),
+        Number(surveyCategory.id),
     );
     const [attachment, setAttachment] = useState<any>([]);
     const [confirmPublish, setConfirmPublish] = useState<boolean>(false);
@@ -81,8 +76,18 @@ const EditHappeningSurvey = () => {
         point: string;
     } | null>(null);
     const [locationDetail, setLocationDetail] = useState<string>(
-        route.params?.categoryItem?.location?.coordinates,
+        route.params?.surveyItem?.location?.coordinates,
     );
+
+    const allImages = useMemo(() => {
+        if (images?.length > -1) {
+            if (attachment?.length > -1) {
+                return [...attachment, ...images];
+            }
+            return images;
+        }
+        return [];
+    }, [images, attachment]);
 
     const handleFeel = useCallback(feel => {
         setActiveFeel(feel);
@@ -98,7 +103,6 @@ const EditHappeningSurvey = () => {
     >(UPDATE_HAPPENING_SURVEY, {
         onCompleted: () => {
             Toast.show('Survey updated Sucessfully !');
-            navigation.navigate('Feed');
             setProcessing(loading);
         },
         onError: err => {
@@ -111,29 +115,33 @@ const EditHappeningSurvey = () => {
     });
 
     const handlePublish = useCallback(async () => {
-        setProcessing(true);
         let surveyInput = {
-            categoryId: +categoryItem?.id,
             title: title,
             description: description,
             sentiment: activeFeel,
             improvement: activeReview,
             attachment: attachment,
-            location: location.point
-                ? {type: 'Point', coordinates: location?.point}
-                : null,
-            boundary: location.polygon
-                ? {
-                      type: 'MultiPolygon',
-                      coordinates: [[location?.polygon]],
-                  }
-                : null,
+            attachmentLink: images.map(img => Number(img.id)),
         };
 
+        if (location.point) {
+            surveyInput.location = {
+                type: 'Point',
+                coordinates: location.point,
+            };
+        }
+        if (location.polygon) {
+            surveyInput.boundary = {
+                type: 'MultiPolygon',
+                coordinates: [[location.polygon]],
+            };
+        }
+
+        setProcessing(true);
         await updateHappeningSurvey({
             variables: {
-                input: {...surveyInput},
-                id: route.params?.categoryItem.id,
+                input: {...surveyInput, categoryId: Number(surveyCategory.id)},
+                id: route.params?.surveyItem.id,
             },
             optimisticResponse: {
                 updateHappeningSurvey: {
@@ -141,17 +149,25 @@ const EditHappeningSurvey = () => {
                     errors: [],
                     ok: null,
                     result: {
-                        id: route.params?.categoryItem.id,
-                        category: {
-                            id: categoryItem.id,
-                            title: categoryItem?.name,
-                            __typename: 'ProtectedAreaCategoryType',
-                        },
                         ...surveyInput,
                         createdBy: {
                             id: user?.id || '',
                             __typename: 'UserType',
                         },
+                        id: route.params?.surveyItem.id,
+                        attachment: allImages.map(img => {
+                            if (img?.name) {
+                                return {
+                                    media: img.uri,
+                                };
+                            }
+                            return img;
+                        }),
+                        category: {
+                            __typename: 'ProtectedAreaCategoryType',
+                            ...surveyCategory,
+                        },
+                        createdAt: new Date().toISOString(),
                     },
                 },
             },
@@ -164,12 +180,12 @@ const EditHappeningSurvey = () => {
                     let updatedHappeningSurvey = readData.happeningSurveys.map(
                         (obj: HappeningSurveyType) => {
                             if (
-                                data.updateHappeningSurvey.result.id === obj.id
+                                data?.updateHappeningSurvey?.result?.id ===
+                                obj.id
                             ) {
                                 return {
-                                    __typename: obj.__typename,
+                                    ...obj,
                                     ...data.updateHappeningSurvey.result,
-                                    createdBy: obj.createdBy,
                                 };
                             }
                             return obj;
@@ -191,7 +207,7 @@ const EditHappeningSurvey = () => {
         setProcessing(false);
         setConfirmPublish(!confirmPublish);
     }, [
-        categoryItem,
+        surveyCategory,
         title,
         description,
         activeFeel,
@@ -200,9 +216,11 @@ const EditHappeningSurvey = () => {
         updateHappeningSurvey,
         confirmPublish,
         location,
-        route.params?.categoryItem.id,
+        route.params?.surveyItem.id,
         navigation,
         user?.id,
+        allImages,
+        images,
     ]);
 
     const handleImages = useCallback(
@@ -210,7 +228,6 @@ const EditHappeningSurvey = () => {
             if (response?.path) {
                 response = [response];
             }
-            setImages([...response, ...images]);
             response.forEach(async (res: ImageObj) => {
                 const image = {
                     name: res.path.substring(res.path.lastIndexOf('/') + 1),
@@ -228,12 +245,34 @@ const EditHappeningSurvey = () => {
                 setAttachment([media, ...attachment]);
             });
         },
-        [images, attachment],
+        [attachment],
     );
 
+    const handleRemoveImages = useCallback(newImages => {
+        if (newImages?.length) {
+            const {newImgs, newAttachment} = newImages.reduce(
+                (acc, currentImage) => {
+                    if (currentImage?.name) {
+                        acc.newAttachment.push(currentImage);
+                    } else {
+                        acc.newImgs.push(currentImage);
+                    }
+                    return acc;
+                },
+                {newImgs: [], newAttachment: []},
+            );
+            setImages(newImgs);
+            return setAttachment(newAttachment);
+        }
+        setImages([]);
+        setAttachment([]);
+    }, []);
+
     const handleChangeLocation = useCallback(() => {
-        navigation.navigate('ChangeLocation');
-    }, [navigation]);
+        navigation.navigate('ChangeLocation', {
+            surveyData: route.params?.surveyItem,
+        });
+    }, [navigation, route]);
 
     useEffect(() => {
         navigation.setOptions({
@@ -252,16 +291,14 @@ const EditHappeningSurvey = () => {
             setLocationDetail('Boundaries');
         } else if (coordinates && coordinates.point) {
             setLocationDetail(`${coordinates?.point}`);
-        } else if (route.params?.categoryItem?.location?.coordinates) {
-            setLocationDetail(route.params.categoryItem.location.coordinates);
+        } else if (route.params?.surveyItem?.location?.coordinates) {
+            setLocationDetail(route.params.surveyItem.location.coordinates);
+        } else if (route.params?.surveyItem?.boundary?.coordinates) {
+            setLocationDetail('Boundaries');
         } else {
             setLocationDetail('Choose the location');
         }
-    }, [
-        location,
-        coordinates,
-        route.params?.categoryItem?.location?.coordinates,
-    ]);
+    }, [location, coordinates, route.params?.surveyItem]);
 
     return (
         <ScrollView
@@ -271,7 +308,7 @@ const EditHappeningSurvey = () => {
                 <ModalLoader loading={processing} />
                 <View style={styles.category}>
                     <Image source={categoryIcon} style={styles.categoryIcon} />
-                    <Text style={styles.field} title={categoryItem?.name} />
+                    <Text style={styles.field} title={surveyCategory?.title} />
                 </View>
                 <TouchableOpacity onPress={toggleOpenCategory}>
                     <Text style={styles.change} title="Change" />
@@ -287,15 +324,25 @@ const EditHappeningSurvey = () => {
             <Text style={styles.title} title="Add Images" />
             <ImagePicker
                 onChange={handleImages}
-                onRemoveImage={setImages}
-                images={images}
+                onRemoveImage={handleRemoveImages}
+                images={allImages}
                 multiple
             />
             <Text style={styles.title} title="Location" />
             <View style={styles.locationCont}>
                 <View style={styles.locationWrapper}>
                     <Icon name="pin" height={20} width={20} fill={'#80A8C5'} />
-                    <Text style={styles.countyName} title={locationDetail} />
+                    <Text
+                        style={styles.countyName}
+                        title={
+                            locationDetail
+                                ? locationDetail
+                                : route.params?.surveyItem?.boundary
+                                      ?.coordinates
+                                ? 'Boundaries'
+                                : ''
+                        }
+                    />
                 </View>
                 <TouchableOpacity onPress={handleChangeLocation}>
                     <Text style={styles.change} title="Change" />
@@ -354,7 +401,7 @@ const EditHappeningSurvey = () => {
                 placeholder="What’s happening here?"
             />
             <CategoryListModal
-                setCategory={setCategoryItem}
+                setCategory={setSurveyCategory}
                 setOpenCategory={setOpenCategory}
                 onToggleModal={toggleOpenCategory}
                 isOpen={openCategory}

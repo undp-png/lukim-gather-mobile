@@ -1,4 +1,4 @@
-import React, {useState, useCallback, useEffect} from 'react';
+import React, {useState, useCallback, useEffect, useMemo} from 'react';
 import {FlatList, View} from 'react-native';
 import {useNavigation, useRoute} from '@react-navigation/native';
 import type {RouteProp} from '@react-navigation/native';
@@ -33,12 +33,22 @@ const ChangeLocation = () => {
     const navigation = useNavigation();
     const {params = {}} = useRoute<ChangeLocationScreenRouteProp>();
 
-    const [selectedMethod, setSelectedMethod] = useState<string>(
-        'Use my current location',
-    );
     const [selectedCoordinate, setSelectedCoordinate] = useState<
         number[] | number[][]
     >([]);
+
+    const [touched, setTouched] = useState(false);
+
+    const initialData = useMemo(() => {
+        if (params.surveyData) {
+            return [params.surveyData];
+        }
+        return [];
+    }, [params]);
+
+    const [selectedMethod, setSelectedMethod] = useState<string | undefined>(
+        params.surveyData ? undefined : 'Use my current location',
+    );
 
     const handleSubmit = useCallback(() => {
         if (selectedMethod) {
@@ -83,7 +93,9 @@ const ChangeLocation = () => {
 
     const handleSelectedMethod = useCallback(
         (label: string) => {
+            setTouched(true);
             if (selectedMethod === label) {
+                setTouched(false);
                 setSelectedMethod('');
             } else {
                 setSelectedMethod(label);
@@ -124,18 +136,21 @@ const ChangeLocation = () => {
                     editable={false}
                 />
                 <FlatList
-                    data={params.polygonDisabled ? Labels.slice(0, -1) : Labels}
+                    data={Labels}
                     renderItem={renderItem}
                     keyExtractor={keyExtractor}
                 />
             </View>
             <View style={styles.mapContainer}>
                 <Map
+                    showCluster={!touched}
+                    isStatic
                     hideHeader
                     showMarker={selectedMethod === 'Set on a map'}
                     locationBarStyle={styles.locationBar}
                     onLocationPick={handleLocationPick}
                     pickLocation={selectedMethod}
+                    surveyData={initialData}
                 />
             </View>
         </View>

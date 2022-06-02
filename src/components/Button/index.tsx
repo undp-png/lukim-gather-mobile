@@ -9,6 +9,7 @@ import styles from './styles';
 
 interface Props extends PressableProps {
     style?: object;
+    textStyle?: object;
     title: string;
     dark?: boolean;
     light?: boolean;
@@ -23,6 +24,7 @@ const _Button: React.FC<Props> = ({
     light = false,
     blue = false,
     outline = false,
+    textStyle,
     ...buttonProps
 }) => {
     return (
@@ -44,6 +46,7 @@ const _Button: React.FC<Props> = ({
                     [styles.textDark, dark],
                     [styles.textLight, light],
                     [styles.textWhite, blue],
+                    textStyle,
                 )}
                 title={title}
             />

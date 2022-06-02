@@ -19,6 +19,7 @@ interface BoxProps {
     negativeText?: string;
     onNegative?(): void;
     isLogoutBox?: boolean;
+    vertical?: boolean;
 }
 
 const deviceHeight = Dimensions.get('window').height;
@@ -30,6 +31,7 @@ export const ConfirmBox: React.FC<BoxProps> = ({
     onCancel,
     positiveText,
     onPositive,
+    vertical,
     negativeText,
     onNegative,
     isLogoutBox,
@@ -39,6 +41,7 @@ export const ConfirmBox: React.FC<BoxProps> = ({
             animationInTiming={150}
             isVisible={isOpen}
             backdropOpacity={0.5}
+            onBackdropPress={onCancel}
             style={styles.modal}
             statusBarTranslucent={true}
             deviceHeight={deviceHeight}>
@@ -46,34 +49,44 @@ export const ConfirmBox: React.FC<BoxProps> = ({
                 <Text style={styles.heading}>{headerText}</Text>
                 <Text style={styles.message}>{descriptionText}</Text>
                 <View style={styles.buttonsWrapper}>
-                    {!!negativeText && (
-                        <Button
-                            title={negativeText}
-                            onPress={onNegative}
-                            style={styles.buttonNegative}
-                        />
-                    )}
                     <View
-                        style={cs(styles.buttonsRight, [
-                            styles.logoutButtonWrapper,
-                            isLogoutBox,
-                        ])}>
+                        style={cs(
+                            styles.buttonsRight,
+                            [styles.logoutButtonWrapper, isLogoutBox],
+                            [styles.buttonsRightVertical, vertical],
+                        )}>
                         <Button
                             title={positiveText}
                             onPress={onPositive}
-                            style={
-                                isLogoutBox
-                                    ? styles.logoutButton
-                                    : styles.buttonPositive
-                            }
+                            style={cs(
+                                [styles.logoutButton, isLogoutBox],
+                                [styles.buttonPositive, !vertical],
+                                [styles.buttonPositiveVertical, vertical],
+                            )}
                         />
+                        {!!negativeText && (
+                            <Button
+                                outline
+                                title={negativeText}
+                                onPress={onNegative}
+                                style={styles.buttonNegative}
+                                textStyle={styles.buttonNegativeText}
+                            />
+                        )}
                         {onCancel && (
                             <Button
-                                style={cs(isLogoutBox && styles.logoutButton)}
+                                style={cs(
+                                    isLogoutBox && styles.logoutButton,
+                                    styles.cancel,
+                                )}
                                 title={_('Cancel')}
                                 onPress={onCancel}
                                 outline
-                                dark
+                                textStyle={
+                                    isLogoutBox
+                                        ? styles.logoutText
+                                        : styles.cancelText
+                                }
                             />
                         )}
                     </View>

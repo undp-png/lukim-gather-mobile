@@ -47,7 +47,7 @@ export type StackParamList = {
     ChangePassword: undefined;
     ChangeLocation: {
         onChange?: (value: any) => void;
-        polygonDisabled?: boolean;
+        surveyData?: HappeningSurveyType;
     };
     ChooseCategory: undefined;
     SearchCategory: undefined;

@@ -7,6 +7,7 @@ import {
 
 import {setContext} from '@apollo/client/link/context';
 import {onError} from '@apollo/client/link/error';
+import {cacheFirstNetworkErrorLink} from 'apollo-link-network-error';
 import {
     persistCache,
     MMKVStorageWrapper as MMKVCacheStorageWrapper,
@@ -41,76 +42,69 @@ export const getApolloClient = async (queueLink: any) => {
         pendingRequests = [];
     };
 
-    const errorLink = onError(
-        ({graphQLErrors, networkError, operation, forward}) => {
-            if (graphQLErrors) {
-                for (let err of graphQLErrors) {
-                    const {
-                        auth: {refreshToken},
-                    } = store.getState();
-                    if (
-                        err?.message?.toLowerCase() ===
-                            'error decoding signature' &&
-                        refreshToken
-                    ) {
-                        let _forward;
-                        if (!isRefreshing) {
-                            isRefreshing = true;
-                            _forward = fromPromise(
-                                client
-                                    .mutate({
-                                        mutation: REFRESH_TOKEN,
-                                        variables: {
-                                            refreshToken: refreshToken,
-                                        },
-                                    })
-                                    .then(
-                                        ({data: {refreshToken: refToken}}) => {
-                                            if (refToken) {
-                                                dispatch(
-                                                    setToken(refToken.token),
-                                                );
-                                                dispatch(
-                                                    setRefreshToken(
-                                                        refToken.refreshToken,
-                                                    ),
-                                                );
-                                            }
-                                            return true;
-                                        },
-                                    )
-                                    .then(() => {
-                                        resolvePendingRequests();
-                                        return true;
-                                    })
-                                    .catch(() => {
-                                        pendingRequests = [];
-                                        return false;
-                                    })
-                                    .finally(() => {
-                                        isRefreshing = false;
-                                    }),
-                            );
-                        } else {
-                            _forward = fromPromise(
-                                new Promise(resolve => {
-                                    pendingRequests.push(resolve);
+    const errorIgnoreLink = cacheFirstNetworkErrorLink(cache);
+
+    const errorLink = onError(({graphQLErrors, operation, forward}) => {
+        if (graphQLErrors) {
+            for (let err of graphQLErrors) {
+                const {
+                    auth: {refreshToken},
+                } = store.getState();
+                if (
+                    err?.message?.toLowerCase() ===
+                        'error decoding signature' &&
+                    refreshToken
+                ) {
+                    let _forward;
+                    if (!isRefreshing) {
+                        isRefreshing = true;
+                        _forward = fromPromise(
+                            client
+                                .mutate({
+                                    mutation: REFRESH_TOKEN,
+                                    variables: {
+                                        refreshToken: refreshToken,
+                                    },
+                                })
+                                .then(({data: {refreshToken: refToken}}) => {
+                                    if (refToken) {
+                                        dispatch(setToken(refToken.token));
+                                        dispatch(
+                                            setRefreshToken(
+                                                refToken.refreshToken,
+                                            ),
+                                        );
+                                    }
+                                    return true;
+                                })
+                                .then(() => {
+                                    resolvePendingRequests();
+                                    return true;
+                                })
+                                .catch(() => {
+                                    pendingRequests = [];
+                                    return false;
+                                })
+                                .finally(() => {
+                                    isRefreshing = false;
                                 }),
-                            );
-                        }
-                        return _forward.flatMap(() => forward(operation));
+                        );
                     } else {
-                        console.log(
-                            `[GraphQL error]: Message: ${err.message}, Location: ${err.locations}, Path: ${err.path}`,
+                        _forward = fromPromise(
+                            new Promise(resolve => {
+                                pendingRequests.push(resolve);
+                            }),
                         );
                     }
+                    return _forward.flatMap(() => forward(operation));
+                } else {
+                    console.log(
+                        `[GraphQL error]: Message: ${err.message}, Location: ${err.locations}, Path: ${err.path}`,
+                    );
                 }
             }
-            if (networkError) {
-                console.log(`[Network error]: ${networkError}`);
-            }
-        },
-    );
+        }
+    });
 
     const authLink = setContext((operation, {headers}) => {
         const {
@@ -128,7 +122,13 @@ export const getApolloClient = async (queueLink: any) => {
         };
     });
 
-    const link = ApolloLink.from([queueLink, errorLink, authLink, httpLink]);
+    const link = ApolloLink.from([
+        queueLink,
+        errorLink,
+        errorIgnoreLink,
+        authLink,
+        httpLink,
+    ]);
 
     await persistCache({
         cache: cache,

@@ -48,8 +48,9 @@ const WebViewForm: React.FC = () => {
 
     const navigation = useNavigation();
     const [uri, setUri] = useState<string | undefined>();
+    const [processing, setProcessing] = useState<boolean>(false);
 
-    const FORM_KEY = `survey_data__${formObj.id}`;
+    const FORM_KEY = useMemo(() => `survey_data__${formObj.id}`, [formObj]);
 
     const initializeData = useMemo(() => {
         let model = formObj.xform.model;
@@ -70,10 +71,18 @@ const WebViewForm: React.FC = () => {
         CreateWritableSurveyMutation,
         CreateWritableSurveyMutationVariables
     >(CREATE_WRITABLE_SURVEY, {
+        onCompleted: () => {
+            Toast.show(_('Survey has been created successfully!'), Toast.LONG, [
+                'RCTModalHostViewController',
+            ]);
+            setProcessing(loading);
+        },
         onError: err => {
             Toast.show(getErrorMessage(err), Toast.LONG, [
                 'RCTModalHostViewController',
             ]);
+            setProcessing(loading);
+            console.log('[Create Survey Error]: ', err);
         },
     });
 
@@ -107,12 +116,13 @@ const WebViewForm: React.FC = () => {
     }, []);
 
     const handleSubmit = useCallback(async () => {
+        setProcessing(true);
         const answerData = formState[FORM_KEY];
         const parser = new XMLParser({
             attributeNamePrefix: '_',
         });
         const title = formObj.title;
-        const {data, errors} = await createWritableSurvey({
+        await createWritableSurvey({
             variables: {
                 input: {
                     title,
@@ -128,31 +138,15 @@ const WebViewForm: React.FC = () => {
                     title,
                 },
             },
+            update: () => {
+                navigation.navigate('Forms');
+                dispatch(resetForm(FORM_KEY));
+                Toast.show(_('Survey form has been submitted!'), Toast.LONG, [
+                    'RCTModalHostViewController',
+                ]);
+            },
         });
-
-        if (
-            (errors && errors?.length > 0) ||
-            (data?.createWritableSurvey?.errors &&
-                data?.createWritableSurvey?.errors.length > 0)
-        ) {
-            return Toast.show(
-                _('There was an error during submission'),
-                Toast.LONG,
-                ['RCTModalHostViewController'],
-            );
-        }
-        if (!data?.createWritableSurvey?.id) {
-            return;
-        }
-
-        dispatch(resetForm(FORM_KEY));
-
-        Toast.show(
-            _('Survey form has been submitted successfully!'),
-            Toast.LONG,
-            ['RCTModalHostViewController'],
-        );
-        navigation.goBack();
+        setProcessing(false);
     }, [
         createWritableSurvey,
         navigation,
@@ -197,7 +191,7 @@ const WebViewForm: React.FC = () => {
                     geolocationEnabled={true}
                 />
             )}
-            <Loader loading={loading || !uri} />
+            <Loader loading={processing || !uri} />
         </>
     );
 };
