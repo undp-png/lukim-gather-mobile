@@ -8,6 +8,9 @@ export default StyleSheet.create({
         paddingHorizontal: 20,
         backgroundColor: COLORS.white,
     },
+    contentContainer: {
+        paddingBottom: 50,
+    },
     categoryCont: {
         flexDirection: 'row',
         justifyContent: 'space-between',
@@ -72,21 +75,24 @@ export default StyleSheet.create({
     },
     textarea: {
         height: 156,
-        marginBottom: 50,
+        marginBottom: 20,
     },
-    feeelWrapper: {
+    optionItem: {
+        flex: 1,
         position: 'relative',
         height: 56,
-        width: '32%',
         borderWidth: 1,
         borderColor: COLORS.border,
         borderRadius: 8,
+        flexDirection: 'row',
         justifyContent: 'center',
         alignItems: 'center',
     },
-    activeFeel: {
-        backgroundColor: '#F0F3F6',
+    activeOptionItem: {
         borderColor: COLORS.secondary,
+    },
+    spaceLeft: {
+        marginLeft: 10,
     },
     checked: {
         position: 'absolute',
@@ -96,7 +102,28 @@ export default StyleSheet.create({
     hide: {
         display: 'none',
     },
+    optionText: {
+        fontSize: 16,
+        fontFamily: 'Inter-Medium',
+        lineHeight: 19,
+        color: COLORS.greyTextDark,
+        marginLeft: 6,
+    },
+    optionTextActive: {
+        color: COLORS.accent,
+    },
     feelIcon: {
         fontSize: 20,
+    },
+    anonymousInput: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+    },
+    titleText: {
+        fontSize: 16,
+        fontFamily: 'Inter-Medium',
+        lineHeight: 19,
+        color: '#70747E',
     },
 });

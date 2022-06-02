@@ -40,11 +40,10 @@ const SurveyReview: React.FC<Props> = ({
 
     return (
         <Pressable
-            style={cs(
-                styles.feeelWrapper,
-                [styles.activeFeel, name === activeReview],
-                [styles.activeReviewItem, reviewItem],
-            )}
+            style={cs(styles.feelWrapper, [
+                styles.activeReviewItem,
+                name === activeReview,
+            ])}
             onPress={handlePress}>
             <View
                 style={cs(styles.checked, [
