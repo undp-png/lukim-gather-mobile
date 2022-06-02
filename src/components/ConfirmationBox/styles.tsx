@@ -49,6 +49,7 @@ export default StyleSheet.create({
     },
     logoutButton: {
         width: '47%',
+        borderColor: '#F9D3BE',
     },
     buttonsRightVertical: {
         flexDirection: 'column',

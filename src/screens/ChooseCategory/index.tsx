@@ -114,6 +114,12 @@ const ChooseCategory = () => {
         [navigation],
     );
 
+    const handleViewableItemsChanged = useCallback(({viewableItems}) => {
+        if (viewableItems?.length > 0) {
+            setActiveCategory(viewableItems[0].item.id);
+        }
+    }, []);
+
     return (
         <View style={styles.container}>
             <FlatList
@@ -128,6 +134,10 @@ const ChooseCategory = () => {
                 ref={categoryListRef}
                 data={surveyCategory}
                 renderItem={renderCategory}
+                onViewableItemsChanged={handleViewableItemsChanged}
+                viewabilityConfig={{
+                    itemVisiblePercentThreshold: 75,
+                }}
                 showsVerticalScrollIndicator={false}
                 keyExtractor={keyExtractor}
             />

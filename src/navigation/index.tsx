@@ -74,6 +74,7 @@ const AppNavigator = () => {
     const {isAuthenticated} = useSelector(
         (state: RootStateOrAny) => state.auth,
     );
+    useSelector(state => state.locale); // To re-render on any change in locale state
     const {data} = useQuery(GET_LEGAL_DOCUMENT);
 
     dispatchInfo(data?.legalDocument);
@@ -102,7 +103,11 @@ const AppNavigator = () => {
                 name="Feed"
                 component={TabNavigator}
             />
-            <Stack.Screen name="Settings" component={Settings} />
+            <Stack.Screen
+                name="Settings"
+                component={Settings}
+                options={{headerTitle: _('Settings')}}
+            />
             <Stack.Screen
                 name="AccountSettings"
                 component={AccountSettings}
@@ -152,9 +157,21 @@ const AppNavigator = () => {
                     presentation: 'modal',
                 }}
             />
-            <Stack.Screen name="About" component={About} />
-            <Stack.Screen name="Feedback" component={Feedbacks} />
-            <Stack.Screen name="Help" component={Help} />
+            <Stack.Screen
+                name="About"
+                component={About}
+                options={{headerTitle: _('About')}}
+            />
+            <Stack.Screen
+                name="Feedback"
+                component={Feedbacks}
+                options={{headerTitle: _('Feedback')}}
+            />
+            <Stack.Screen
+                name="Help"
+                component={Help}
+                options={{headerTitle: _('Help')}}
+            />
             <Stack.Screen
                 name="TermsAndCondition"
                 component={TermsAndCondition}
@@ -227,7 +244,11 @@ const AppNavigator = () => {
                 component={AuthNavigator}
                 options={{headerShown: false}}
             />
-            <Stack.Screen name="Forms" component={Forms} />
+            <Stack.Screen
+                name="Forms"
+                component={Forms}
+                options={{headerTitle: _('Forms')}}
+            />
             <Stack.Screen
                 name="WebViewForm"
                 component={WebViewForm}

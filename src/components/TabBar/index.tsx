@@ -58,21 +58,21 @@ const TabBar = ({
                 .y(d => d.y)
                 .curve(shape.curveBundle)([
                 {x: 1.75 * tabWidth - 10, y: 0},
-                {x: 1.85 * tabWidth, y: 1.5},
-                {x: 2 * tabWidth, y: 11},
-                {x: 2.05 * tabWidth, y: 22},
+                {x: 1.9 * tabWidth, y: 0},
+                {x: 2 * tabWidth, y: 7},
+                {x: 2.1 * tabWidth, y: 24},
                 {x: 2.15 * tabWidth, y: 32},
-                {x: 2.25 * tabWidth, y: 39},
-                {x: 2.35 * tabWidth, y: 42},
-                {x: 2.45 * tabWidth, y: 44},
-                {x: 2.55 * tabWidth, y: 44},
-                {x: 2.65 * tabWidth, y: 42},
-                {x: 2.75 * tabWidth, y: 39},
+                {x: 2.25 * tabWidth, y: 40},
+                {x: 2.35 * tabWidth, y: 45},
+                {x: 2.45 * tabWidth, y: 47},
+                {x: 2.55 * tabWidth, y: 47},
+                {x: 2.65 * tabWidth, y: 45},
+                {x: 2.75 * tabWidth, y: 40},
                 {x: 2.85 * tabWidth, y: 32},
-                {x: 2.95 * tabWidth, y: 22},
-                {x: 3 * tabWidth + 10, y: 0},
-                {x: 3.25 * tabWidth, y: 0},
-                {x: 3.5 * tabWidth, y: 0},
+                {x: 2.9 * tabWidth, y: 24},
+                {x: 3 * tabWidth, y: 7},
+                {x: 3.1 * tabWidth, y: 0},
+                {x: 3.25 * tabWidth + 10, y: 0},
             ]),
         [tabWidth],
     );
@@ -135,9 +135,9 @@ const TabBar = ({
                         </SVGLinearGradient>
                     </Defs>
                 </Svg>
-                {state.index !==
+                {state.index ===
                     state.routes.findIndex(
-                        (rt: {name: string}) => rt.name === 'Menu',
+                        (rt: {name: string}) => rt.name === 'Home',
                     ) && (
                     <Svg height={height} width={width}>
                         <Path
