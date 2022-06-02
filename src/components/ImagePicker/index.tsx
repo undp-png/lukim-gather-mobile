@@ -3,15 +3,15 @@ import {
     Pressable,
     Text,
     TouchableOpacity,
-    Dimensions,
     View,
     Animated,
     Image,
     FlatList,
 } from 'react-native';
 import ImagePicker, {Image as ImageType} from 'react-native-image-crop-picker';
-import Modal from 'react-native-modal';
 import {Icon} from 'react-native-eva-icons';
+
+import Modal from 'components/Modal';
 
 import cs from '@rna/utils/cs';
 
@@ -43,8 +43,6 @@ interface ImagePickerModalProps {
     isVisible: boolean;
     onBackdropPress(): void;
 }
-
-const deviceHeight = Dimensions.get('window').height;
 
 const Photo: React.FC<PhotoProps> = ({item, index, onCloseIconPress}) => {
     const handleCloseIconPress = useCallback(() => {
@@ -141,9 +139,6 @@ export const ImagePickerModal: React.FC<ImagePickerModalProps> = ({
         <Modal
             isVisible={isVisible}
             onBackdropPress={onBackdropPress}
-            backdropTransitionOutTiming={10}
-            statusBarTranslucent={true}
-            deviceHeight={deviceHeight}
             style={styles.modal}>
             <View style={styles.options}>
                 <Pressable style={styles.option} onPress={handleGallery}>

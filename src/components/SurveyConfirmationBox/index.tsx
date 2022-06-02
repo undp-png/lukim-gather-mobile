@@ -1,7 +1,7 @@
 import React from 'react';
-import {View, Dimensions, Text} from 'react-native';
-import Modal from 'react-native-modal';
+import {View, Text} from 'react-native';
 
+import Modal from 'components/Modal';
 import Button from 'components/Button';
 
 import {Localize} from '@rna/components/I18n';
@@ -15,8 +15,6 @@ interface BoxProps {
     onSubmit(): void;
 }
 
-const deviceHeight = Dimensions.get('window').height;
-
 export const SurveyConfirmBox: React.FC<BoxProps> = ({
     isOpen,
     onCancel,
@@ -24,12 +22,9 @@ export const SurveyConfirmBox: React.FC<BoxProps> = ({
 }) => {
     return (
         <Modal
-            animationInTiming={150}
             isVisible={isOpen}
-            backdropOpacity={0.5}
             style={styles.modal}
-            statusBarTranslucent={true}
-            deviceHeight={deviceHeight}>
+            onBackdropPress={onCancel}>
             <View style={styles.boxContent}>
                 <Text style={styles.heading}>
                     <Localize>Publish Survey?</Localize>

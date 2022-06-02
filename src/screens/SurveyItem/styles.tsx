@@ -13,8 +13,8 @@ export default StyleSheet.create({
         alignItems: 'center',
     },
     categoryIcon: {
-        height: 24,
-        width: 24,
+        height: 30,
+        width: 30,
         resizeMode: 'contain',
         marginRight: 10,
     },

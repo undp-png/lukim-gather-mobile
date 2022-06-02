@@ -114,7 +114,7 @@ const EditProfile = () => {
     return (
         <View style={styles.container}>
             <ModalLoader loading={loading} />
-            <KeyboardAwareScrollView>
+            <KeyboardAwareScrollView showsVerticalScrollIndicator={false}>
                 <TouchableOpacity
                     onPress={toggleImagePickerModal}
                     style={styles.imageWrapper}>
