@@ -1,5 +1,12 @@
 import React, {useCallback, useEffect, useState} from 'react';
-import {Image, ScrollView, View, Platform} from 'react-native';
+import {
+    Image,
+    ScrollView,
+    View,
+    Platform,
+    Switch,
+    Pressable,
+} from 'react-native';
 import {RootStateOrAny, useSelector, useDispatch} from 'react-redux';
 import {useMutation} from '@apollo/client';
 import {ReactNativeFile} from 'apollo-upload-client';
@@ -37,8 +44,59 @@ import {
     GET_HAPPENING_SURVEY,
 } from 'services/gql/queries';
 import {getErrorMessage} from 'utils/error';
+import cs from '@rna/utils/cs';
+
+import COLORS from 'utils/colors';
 
 import styles from './styles';
+
+interface OptionItemProps {
+    iconName?: string;
+    text?: string;
+    onPress?: (arg0: any) => void;
+    isActive?: boolean;
+    style?: object;
+}
+
+const OptionItem: React.FC<OptionItemProps> = ({
+    iconName,
+    text,
+    isActive,
+    onPress,
+    style,
+}) => {
+    return (
+        <Pressable
+            style={cs(
+                styles.optionItem,
+                [styles.activeOptionItem, isActive],
+                style,
+            )}
+            onPress={onPress}>
+            <View style={cs(styles.checked, [styles.hide, !isActive])}>
+                <Icon
+                    name="checkmark-circle-2"
+                    height={18}
+                    width={18}
+                    fill={'#196297'}
+                />
+            </View>
+            <Icon
+                width={20}
+                height={20}
+                name={iconName}
+                fill={isActive ? COLORS.accent : COLORS.greyTextDark}
+            />
+            <Text
+                style={cs(styles.optionText, [
+                    styles.optionTextActive,
+                    isActive,
+                ])}
+                title={text}
+            />
+        </Pressable>
+    );
+};
 
 const CreateHappeningSurvey = () => {
     const route = useRoute<any>();
@@ -64,8 +122,17 @@ const CreateHappeningSurvey = () => {
         icon: string;
     }>(route.params?.categoryItem);
     const [attachment, setAttachment] = useState<any>([]);
-    const [confirmPublish, setConfirmPublish] = useState<boolean>(false);
     const [isAnonymous, setIsAnonymous] = useState<boolean>(false);
+
+    const [isPublic, setPublic] = useState<boolean>(true);
+    const [isTest, setTest] = useState<boolean>(false);
+
+    const handlePublicPress = useCallback(() => setPublic(true), []);
+    const handleNotPublicPress = useCallback(() => setPublic(false), []);
+
+    const handleTestPress = useCallback(() => setTest(true), []);
+    const handleNotTestPress = useCallback(() => setTest(false), []);
+
     const [locationDetail, setLocationDetail] = useState<string>('');
 
     const [categoryIcon] = useCategoryIcon(SurveyCategory, Number(category.id));
@@ -143,6 +210,8 @@ const CreateHappeningSurvey = () => {
                       coordinates: [[location?.polygon]],
                   }
                 : null,
+            isPublic,
+            isTest,
         };
 
         await createHappeningSurvey({
@@ -210,13 +279,11 @@ const CreateHappeningSurvey = () => {
             },
         });
         setProcessing(false);
-        setConfirmPublish(!confirmPublish);
     }, [
         title,
         description,
         category,
         createHappeningSurvey,
-        confirmPublish,
         activeFeel,
         activeReview,
         attachment,
@@ -224,6 +291,8 @@ const CreateHappeningSurvey = () => {
         isAnonymous,
         navigation,
         user?.id,
+        isPublic,
+        isTest,
     ]);
 
     const handleImages = useCallback(
@@ -256,12 +325,8 @@ const CreateHappeningSurvey = () => {
         if (!title) {
             return Toast.show(_('Please enter a title for the survey'));
         }
-        setConfirmPublish(!confirmPublish);
-    }, [title, confirmPublish]);
-
-    const handleCancel = useCallback(() => {
-        setConfirmPublish(!confirmPublish);
-    }, [confirmPublish]);
+        handlePublish();
+    }, [title, handlePublish]);
 
     useEffect(() => {
         navigation.setOptions({
@@ -274,24 +339,19 @@ const CreateHappeningSurvey = () => {
         [openCategory],
     );
 
-    const updateAnonymousStatus = useCallback(
-        anonymous => {
-            setIsAnonymous(anonymous);
-        },
-        [setIsAnonymous],
-    );
+    const toggleAnonymousValue = useCallback(() => {
+        if (!isAnonymous) {
+            setPublic(true);
+        }
+        setIsAnonymous(prev => !prev);
+    }, [isAnonymous]);
 
     return (
         <ScrollView
             style={styles.container}
-            showsVerticalScrollIndicator={false}>
+            showsVerticalScrollIndicator={false}
+            contentContainerStyle={styles.contentContainer}>
             <View style={styles.categoryCont}>
-                <SurveyConfirmBox
-                    updateAnonymousStatus={updateAnonymousStatus}
-                    isOpen={confirmPublish}
-                    onCancel={handleCancel}
-                    onSubmit={handlePublish}
-                />
                 <ModalLoader loading={processing} />
                 <View style={styles.category}>
                     <Image source={categoryIcon} style={styles.categoryIcon} />
@@ -377,6 +437,63 @@ const CreateHappeningSurvey = () => {
                 value={description}
                 placeholder="What’s happening here?"
             />
+            <View style={styles.anonymousInput}>
+                <Text
+                    style={styles.titleText}
+                    title="I want to publish anonymously"
+                />
+                <Switch
+                    trackColor={{
+                        true: COLORS.accent,
+                        false: '#B7BABF',
+                    }}
+                    thumbColor={isAnonymous ? COLORS.white : '#EAEAEA'}
+                    onValueChange={toggleAnonymousValue}
+                    value={isAnonymous}
+                />
+            </View>
+            {!isAnonymous && (
+                <>
+                    <Text
+                        style={styles.title}
+                        title="Who can see this survey?"
+                    />
+                    <View style={styles.feelings}>
+                        <OptionItem
+                            text={_('Only me')}
+                            iconName="lock-outline"
+                            isActive={!isPublic}
+                            onPress={handleNotPublicPress}
+                        />
+                        <OptionItem
+                            text={_('Everyone')}
+                            isActive={isPublic}
+                            iconName="people-outline"
+                            style={styles.spaceLeft}
+                            onPress={handlePublicPress}
+                        />
+                    </View>
+                </>
+            )}
+            <Text
+                style={styles.title}
+                title="Is this real data or a test point?"
+            />
+            <View style={styles.feelings}>
+                <OptionItem
+                    isActive={!isTest}
+                    text={_('Real data')}
+                    iconName="checkmark-circle-outline"
+                    onPress={handleNotTestPress}
+                />
+                <OptionItem
+                    isActive={isTest}
+                    text={_('Test data')}
+                    iconName="funnel-outline"
+                    style={styles.spaceLeft}
+                    onPress={handleTestPress}
+                />
+            </View>
             <CategoryListModal
                 setCategory={setCategory}
                 setOpenCategory={setOpenCategory}

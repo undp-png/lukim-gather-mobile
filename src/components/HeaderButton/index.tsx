@@ -14,8 +14,8 @@ export const BackButton = () => {
         <TouchableOpacity onPress={onBackPress} style={styles.headerIcon}>
             <Icon
                 name="arrow-ios-back-outline"
-                height={27}
-                width={27}
+                height={30}
+                width={30}
                 fill={COLORS.tertiary}
             />
         </TouchableOpacity>
@@ -29,8 +29,8 @@ export const CloseButton = () => {
         <TouchableOpacity onPress={onBackPress} style={styles.headerIcon}>
             <Icon
                 name="close-outline"
-                height={27}
-                width={27}
+                height={30}
+                width={30}
                 fill={COLORS.tertiary}
             />
         </TouchableOpacity>
@@ -42,8 +42,8 @@ export const SaveButton = ({onSavePress}: {onSavePress(): void}) => {
         <TouchableOpacity onPress={onSavePress} style={styles.headerIcon}>
             <Icon
                 name="checkmark-circle-2"
-                height={27}
-                width={27}
+                height={30}
+                width={30}
                 fill={COLORS.accent}
             />
         </TouchableOpacity>
@@ -55,8 +55,8 @@ export const OptionIcon = ({onOptionPress}: {onOptionPress(): void}) => {
         <TouchableOpacity onPress={onOptionPress} style={styles.headerIcon}>
             <Icon
                 name="more-horizontal-outline"
-                height={27}
-                width={27}
+                height={30}
+                width={30}
                 fill={'#000'}
             />
         </TouchableOpacity>
@@ -68,8 +68,8 @@ export const SearchIcon = ({onSearchPress}: {onSearchPress(): void}) => {
         <TouchableOpacity onPress={onSearchPress} style={styles.headerIcon}>
             <Icon
                 name="search-outline"
-                height={27}
-                width={27}
+                height={30}
+                width={30}
                 fill={'#888C94'}
             />
         </TouchableOpacity>
