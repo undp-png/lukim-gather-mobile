@@ -9,6 +9,8 @@ import Home from 'screens/Home';
 import Surveys from 'screens/Surveys';
 import ChooseCategory from 'screens/ChooseCategory';
 
+import {_} from 'services/i18n';
+
 import {BackButton} from 'components/HeaderButton';
 
 import COLORS from 'utils/colors';
@@ -75,6 +77,7 @@ export default function TabNavigator() {
                 options={{
                     headerLeft: () => <BackButton />,
                     headerShown: true,
+                    headerTitle: _('Choose Category'),
                     headerTitleAlign: 'center',
                     headerStyle: {
                         backgroundColor: COLORS.white,

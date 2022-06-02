@@ -33,7 +33,7 @@ export default StyleSheet.create({
         height: Math.min(height, width) / 6.5,
         width: Math.min(height, width) / 6.5,
         borderRadius: width / 13,
-        bottom: 35,
+        bottom: 32,
         justifyContent: 'center',
         alignItems: 'center',
         backgroundColor: COLORS.blueTextAlt,
