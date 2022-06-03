@@ -27,7 +27,7 @@ export default StyleSheet.create({
     title: {
         color: COLORS.white,
         fontSize: 10,
-        marginTop: 6,
+        marginTop: 4,
     },
     plusButton: {
         height: Math.min(height, width) / 6.5,
@@ -40,6 +40,6 @@ export default StyleSheet.create({
     },
     iconWrapper: {
         alignItems: 'center',
-        marginBottom: 10,
+        marginBottom: 8,
     },
 });

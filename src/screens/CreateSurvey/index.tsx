@@ -22,7 +22,6 @@ import Text from 'components/Text';
 import InputField from 'components/InputField';
 import ImagePicker from 'components/ImagePicker';
 import {SaveButton} from 'components/HeaderButton';
-import {SurveyConfirmBox} from 'components/SurveyConfirmationBox';
 import {ModalLoader} from 'components/Loader';
 import CategoryListModal from 'components/CategoryListModal';
 import SurveySentiment from 'components/SurveySentiment';
@@ -37,6 +36,7 @@ import useCategoryIcon from 'hooks/useCategoryIcon';
 import {
     CreateHappeningSurveyMutation,
     CreateHappeningSurveyMutationVariables,
+    Improvement,
 } from '@generated/types';
 
 import {
@@ -105,13 +105,15 @@ const CreateHappeningSurvey = () => {
     const dispatch = useDispatch();
 
     const {location} = useSelector((state: RootStateOrAny) => state.survey);
-    const {user} = useSelector((state: RootStateOrAny) => state.auth);
+    const {user, isAuthenticated} = useSelector(
+        (state: RootStateOrAny) => state.auth,
+    );
     const [openCategory, setOpenCategory] = useState<boolean>(false);
     const [processing, setProcessing] = useState<boolean>(false);
 
     const [title, setTitle] = useState<string>('');
     const [activeFeel, setActiveFeel] = useState<string>('');
-    const [activeReview, setActiveReview] = useState<string | undefined>(
+    const [activeReview, setActiveReview] = useState<Improvement | undefined>(
         undefined,
     );
     const [images, setImages] = useState<ImageObj[]>([]);
@@ -194,8 +196,18 @@ const CreateHappeningSurvey = () => {
     }, [location, locationDetail, initializeLocation]);
 
     const handlePublish = useCallback(async () => {
+        if (!isAuthenticated) {
+            return Toast.show(
+                _(
+                    'You do not have permission to perform this action. Please login.',
+                ),
+                Toast.LONG,
+                ['RCTModalHostViewController'],
+            );
+        }
         setProcessing(true);
         let surveyInput = {
+            id: uuid.v4(),
             title: title,
             description: description,
             sentiment: activeFeel,
@@ -225,7 +237,6 @@ const CreateHappeningSurvey = () => {
                     errors: [],
                     ok: null,
                     result: {
-                        id: uuid.v4(),
                         category: {
                             id: category.id,
                             title: category.name,
@@ -293,6 +304,7 @@ const CreateHappeningSurvey = () => {
         user?.id,
         isPublic,
         isTest,
+        isAuthenticated,
     ]);
 
     const handleImages = useCallback(
