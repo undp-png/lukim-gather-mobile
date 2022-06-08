@@ -6,6 +6,7 @@ import {Icon} from 'react-native-eva-icons';
 
 import Text from 'components/Text';
 
+import {_} from 'services/i18n';
 import cs from '@rna/utils/cs';
 
 import data from 'services/data/surveyCategory';
@@ -51,7 +52,7 @@ const Category = ({
                         }
                         style={styles.categoryIcon}
                     />
-                    <Text style={styles.categoryName} title={item.name} />
+                    <Text style={styles.categoryName} title={_(item.name)} />
                 </View>
                 <Icon
                     name="arrow-ios-forward-outline"

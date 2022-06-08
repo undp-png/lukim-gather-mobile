@@ -48,7 +48,7 @@ const Category: React.FC<CategoryProps> = props => {
                 </View>
                 <Text
                     style={cs(styles.categoryName, itemWidth)}
-                    title={item.name}
+                    title={_(item.name)}
                 />
             </Pressable>
         ),
@@ -57,7 +57,7 @@ const Category: React.FC<CategoryProps> = props => {
     return (
         <View>
             <View style={styles.header}>
-                <Text style={styles.headerTitle} title={category.title} />
+                <Text style={styles.headerTitle} title={_(category.title)} />
             </View>
             <FlatList
                 style={styles.subCategoryList}
@@ -111,7 +111,10 @@ const CategoryListModal: React.FC<BoxProps> = ({
                             fill={COLORS.tertiary}
                         />
                     </Pressable>
-                    <Text style={styles.heading} title="Select the Category" />
+                    <Text
+                        style={styles.heading}
+                        title={_('Select the Category')}
+                    />
                 </View>
                 <FlatList
                     data={surveyCategory}

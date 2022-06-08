@@ -90,13 +90,13 @@ const VerifyEmail = () => {
             <ModalLoader loading={loading || resendLoading} />
             <Text
                 style={styles.title}
-                title={_(
-                    `Please enter the 6 digit code sent to your email: ${route?.params?.email.toLowerCase()}`,
-                )}
+                title={`${_(
+                    'Please enter the 6 digit code sent to your email:',
+                )} ${route?.params?.email.toLowerCase()}`}
             />
             <OtpInput setCode={setPin} length={6} />
             <Button
-                title="Verify"
+                title={_('Verify')}
                 style={styles.button}
                 onPress={handleEmailVerify}
                 disabled={pin.length < 6}

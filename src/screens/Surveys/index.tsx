@@ -17,6 +17,7 @@ import SurveyListTab from 'components/SurveyListTab';
 
 import useQuery from 'hooks/useQuery';
 
+import {_} from 'services/i18n';
 import {GET_HAPPENING_SURVEY} from 'services/gql/queries';
 import {HappeningSurveyType} from '@generated/types';
 
@@ -64,7 +65,7 @@ const Surveys = () => {
             headerRight: () => (
                 <TouchableOpacity onPress={onMapPress} style={styles.menuBar}>
                     <Icon name="map" height={22} width={22} fill={'#0D4979'} />
-                    <Text style={styles.title} title="Map" />
+                    <Text style={styles.title} title={_('Map')} />
                 </TouchableOpacity>
             ),
         });
