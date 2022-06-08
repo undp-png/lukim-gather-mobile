@@ -23,6 +23,7 @@ export default StyleSheet.create({
         backgroundColor: COLORS.white,
         borderTopWidth: 10,
         borderTopColor: '#F0F3F6',
+        paddingBottom: 20,
     },
     subCategoryList: {
         padding: 20,

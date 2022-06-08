@@ -179,15 +179,19 @@ const SurveyItem = () => {
             <View style={styles.photosWrapper}>
                 <Photos photos={surveyData?.attachment} />
             </View>
-            <Header title="Feels" />
-            <View style={styles.content}>
-                <View style={styles.feeelWrapper}>
-                    <Text
-                        style={styles.feelIcon}
-                        title={surveyData?.sentiment}
-                    />
-                </View>
-            </View>
+            {surveyData?.sentiment.length > 0 && (
+                <>
+                    <Header title="Feels" />
+                    <View style={styles.content}>
+                        <View style={styles.feeelWrapper}>
+                            <Text
+                                style={styles.feelIcon}
+                                title={surveyData?.sentiment}
+                            />
+                        </View>
+                    </View>
+                </>
+            )}
             {surveyData?.improvement && (
                 <>
                     <Header title="Improvement" />

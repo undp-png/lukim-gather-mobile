@@ -1,6 +1,7 @@
 import React from 'react';
-import {View, Text, Dimensions} from 'react-native';
-import Modal from 'react-native-modal';
+import {View, Text} from 'react-native';
+
+import Modal from 'components/Modal';
 
 import Button from 'components/Button';
 import cs from '@rna/utils/cs';
@@ -22,8 +23,6 @@ interface BoxProps {
     vertical?: boolean;
 }
 
-const deviceHeight = Dimensions.get('window').height;
-
 export const ConfirmBox: React.FC<BoxProps> = ({
     isOpen,
     headerText,
@@ -38,13 +37,9 @@ export const ConfirmBox: React.FC<BoxProps> = ({
 }) => {
     return (
         <Modal
-            animationInTiming={150}
             isVisible={isOpen}
-            backdropOpacity={0.5}
             onBackdropPress={onCancel}
-            style={styles.modal}
-            statusBarTranslucent={true}
-            deviceHeight={deviceHeight}>
+            style={styles.modal}>
             <View style={styles.boxContent}>
                 <Text style={styles.heading}>{headerText}</Text>
                 <Text style={styles.message}>{descriptionText}</Text>

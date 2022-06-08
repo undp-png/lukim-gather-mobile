@@ -1,6 +1,4 @@
-import {StyleSheet, Dimensions} from 'react-native';
-
-const {width} = Dimensions.get('window');
+import {StyleSheet} from 'react-native';
 
 import COLORS from 'utils/colors';
 
@@ -11,7 +9,6 @@ export default StyleSheet.create({
         backgroundColor: '#10182870',
     },
     boxContent: {
-        width: width - 40,
         height: '70%',
         alignSelf: 'center',
         backgroundColor: COLORS.white,
@@ -58,7 +55,6 @@ export default StyleSheet.create({
     iconWrapper: {
         borderRadius: 12,
         height: 70,
-        width: (width - 100) / 3,
         borderWidth: 1,
         borderColor: COLORS.primaryLightAlt,
         justifyContent: 'center',
@@ -70,7 +66,6 @@ export default StyleSheet.create({
         resizeMode: 'contain',
     },
     categoryName: {
-        width: (width - 100) / 3,
         marginTop: 3,
         fontSize: 13,
         fontFamily: 'Inter-Medium',

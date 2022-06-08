@@ -1,6 +1,7 @@
 import React from 'react';
-import {View, ActivityIndicator, StyleSheet, Dimensions} from 'react-native';
-import Modal from 'react-native-modal';
+import {View, ActivityIndicator, StyleSheet} from 'react-native';
+
+import Modal from 'components/Modal';
 
 import COLORS from 'utils/colors';
 
@@ -30,20 +31,12 @@ export const Loader: React.FC<LoaderProps> = ({
     );
 };
 
-const deviceHeight = Dimensions.get('window').height;
-
 export const ModalLoader: React.FC<LoaderProps> = ({
     loading,
     color = COLORS.secondary,
 }) => {
     return (
-        <Modal
-            animationInTiming={150}
-            isVisible={loading}
-            backdropOpacity={0.5}
-            style={styles.modal}
-            statusBarTranslucent={true}
-            deviceHeight={deviceHeight}>
+        <Modal isVisible={loading} style={styles.modal}>
             <View style={styles.activityIndicatorWrapper}>
                 <ActivityIndicator
                     animating={loading}

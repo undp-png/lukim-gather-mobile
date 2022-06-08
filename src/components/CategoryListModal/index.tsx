@@ -1,13 +1,15 @@
-import React, {useCallback} from 'react';
-import {View, Image, Pressable, Dimensions} from 'react-native';
+import React, {useCallback, useMemo} from 'react';
+import {View, Image, Pressable, useWindowDimensions} from 'react-native';
 import {FlatList} from 'react-native-gesture-handler';
-import Modal from 'react-native-modal';
 import {Icon} from 'react-native-eva-icons';
 
+import Modal from 'components/Modal';
 import Text from 'components/Text';
 
 import {_} from 'services/i18n';
 import COLORS from 'utils/colors';
+
+import cs from '@rna/utils/cs';
 
 import surveyCategory from 'services/data/surveyCategory';
 
@@ -21,10 +23,12 @@ interface CategoryProps {
     setOpenCategory(arg0: boolean): void;
 }
 
-const deviceHeight = Dimensions.get('window').height;
-
 const Category: React.FC<CategoryProps> = props => {
     const {category, setOpenCategory} = props;
+    const {width} = useWindowDimensions();
+    const itemWidth = useMemo(() => {
+        return {width: (width - 100) / 3};
+    }, [width]);
     const renderSubCategory = useCallback(
         ({item}: {item: {icon: string; name: string; id: number}}) => (
             <Pressable
@@ -33,7 +37,7 @@ const Category: React.FC<CategoryProps> = props => {
                     setOpenCategory(false);
                 }}
                 style={styles.subCategory}>
-                <View style={styles.iconWrapper}>
+                <View style={cs(styles.iconWrapper, itemWidth)}>
                     <Image
                         source={
                             item.icon ||
@@ -42,10 +46,13 @@ const Category: React.FC<CategoryProps> = props => {
                         style={styles.categoryIcon}
                     />
                 </View>
-                <Text style={styles.categoryName} title={item.name} />
+                <Text
+                    style={cs(styles.categoryName, itemWidth)}
+                    title={item.name}
+                />
             </Pressable>
         ),
-        [props, setOpenCategory],
+        [props, setOpenCategory, itemWidth],
     );
     return (
         <View>
@@ -89,12 +96,9 @@ const CategoryListModal: React.FC<BoxProps> = ({
     );
     return (
         <Modal
-            animationInTiming={150}
             isVisible={isOpen}
-            backdropOpacity={0.5}
             style={styles.modal}
-            statusBarTranslucent={true}
-            deviceHeight={deviceHeight}>
+            onBackdropPress={onToggleModal}>
             <View style={styles.boxContent}>
                 <View style={styles.modalHeader}>
                     <Pressable

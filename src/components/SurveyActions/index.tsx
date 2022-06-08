@@ -1,8 +1,8 @@
 import React from 'react';
 import {Pressable, View, Text} from 'react-native';
-import Modal from 'react-native-modal';
 import {Icon} from 'react-native-eva-icons';
 
+import Modal from 'components/Modal';
 import Button from 'components/Button';
 import {_} from 'services/i18n';
 
@@ -32,7 +32,6 @@ const SurveyActions: React.FC<Props> = ({
         <Modal
             isVisible={isOpenActions}
             onBackdropPress={onBackdropPress}
-            backdropTransitionOutTiming={10}
             style={
                 isConfirmDeleteOpen ? styles.confirmModal : styles.actionModal
             }>

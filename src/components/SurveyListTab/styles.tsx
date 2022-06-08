@@ -5,7 +5,7 @@ import COLORS from 'utils/colors';
 export default StyleSheet.create({
     tabWrapper: {
         flexDirection: 'row',
-        backgroundColor: COLORS.border,
+        backgroundColor: '#DCE3E9',
         padding: 2,
         borderRadius: 8,
         marginBottom: 20,
