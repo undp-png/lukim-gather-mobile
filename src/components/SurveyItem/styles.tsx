@@ -30,6 +30,9 @@ export default StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-between',
     },
+    leftData: {
+        flex: 3,
+    },
     title: {
         fontSize: 16,
         lineHeight: 19.36,
@@ -54,6 +57,7 @@ export default StyleSheet.create({
         color: COLORS.blueText,
     },
     rightData: {
+        flex: 1,
         justifyContent: 'flex-end',
     },
     date: {
@@ -61,6 +65,7 @@ export default StyleSheet.create({
         lineHeight: 16,
         fontFamily: 'Inter-Regular',
         color: COLORS.inputText,
+        textAlign: 'right',
     },
     tabWrapper: {
         flexDirection: 'row',

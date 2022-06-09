@@ -4,6 +4,7 @@ import {useNavigation} from '@react-navigation/native';
 
 import Text from 'components/Text';
 
+import {_} from 'services/i18n';
 import SurveyCategory from 'services/data/surveyCategory';
 import useCategoryIcon from 'hooks/useCategoryIcon';
 
@@ -34,7 +35,7 @@ const SurveyItem = ({item, onPress}: SurveyItemProps) => {
 
     return (
         <TouchableOpacity onPress={onPressItem} style={styles.item}>
-            <View>
+            <View style={styles.leftData}>
                 <Text style={styles.title} title={item.title} />
                 <View style={styles.category}>
                     <Image
@@ -44,7 +45,10 @@ const SurveyItem = ({item, onPress}: SurveyItemProps) => {
                         }
                         style={styles.categoryIcon}
                     />
-                    <Text style={styles.field} title={item?.category?.title} />
+                    <Text
+                        style={styles.field}
+                        title={_(item?.category?.title)}
+                    />
                 </View>
             </View>
             <View style={styles.rightData}>

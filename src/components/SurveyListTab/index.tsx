@@ -64,13 +64,13 @@ const SurveyListTab: React.FC<ListProps> = props => {
             <TabItem
                 name="all"
                 activeTab={selectedTab}
-                title="All"
+                title={_('All')}
                 onPress={handleAllEntriesSelect}
             />
             <TabItem
                 name="myentries"
                 activeTab={selectedTab}
-                title="My Entries"
+                title={_('My Entries')}
                 onPress={handleMyEntriesSelect}
             />
         </View>

@@ -367,39 +367,39 @@ const CreateHappeningSurvey = () => {
                 <ModalLoader loading={processing} />
                 <View style={styles.category}>
                     <Image source={categoryIcon} style={styles.categoryIcon} />
-                    <Text style={styles.field} title={category.name} />
+                    <Text style={styles.field} title={_(category.name)} />
                 </View>
                 <TouchableOpacity onPress={toggleOpenCategory}>
-                    <Text style={styles.change} title="Change" />
+                    <Text style={styles.change} title={_('Change')} />
                 </TouchableOpacity>
             </View>
             <InputField
-                title="Name"
+                title={_('Name')}
                 titleDark
                 onChangeText={setTitle}
                 value={title}
-                placeholder="Enter survey name"
+                placeholder={_('Enter survey name')}
             />
-            <Text style={styles.title} title="Add Images" />
+            <Text style={styles.title} title={_('Add Images')} />
             <ImagePicker
                 onChange={handleImages}
                 onRemoveImage={setImages}
                 images={images}
                 multiple
             />
-            <Text style={styles.title} title="Location" />
+            <Text style={styles.title} title={_('Location')} />
             <View style={styles.locationCont}>
                 <View style={styles.locationWrapper}>
                     <Icon name="pin" height={20} width={20} fill={'#80A8C5'} />
                     <Text style={styles.countyName} title={locationDetail} />
                 </View>
                 <TouchableOpacity onPress={handleChangeLocation}>
-                    <Text style={styles.change} title="Change" />
+                    <Text style={styles.change} title={_('Change')} />
                 </TouchableOpacity>
             </View>
             <Text
                 style={styles.title}
-                title="How do you feel about this feature?"
+                title={_('How do you feel about this feature?')}
             />
             <View style={styles.feelings}>
                 <SurveySentiment
@@ -420,7 +420,9 @@ const CreateHappeningSurvey = () => {
             </View>
             <Text
                 style={styles.title}
-                title="Is the condition of this feature improving, staying the same, or decreasing?"
+                title={_(
+                    'Is the condition of this feature improving, staying the same, or decreasing?',
+                )}
             />
             <View style={styles.feelings}>
                 <SurveyReview
@@ -440,19 +442,19 @@ const CreateHappeningSurvey = () => {
                 />
             </View>
             <InputField
-                title="Description"
+                title={_('Description')}
                 titleDark
                 multiline
                 textAlignVertical="top"
                 inputStyle={styles.textarea}
                 onChangeText={setDescription}
                 value={description}
-                placeholder="What’s happening here?"
+                placeholder={_('What’s happening here?')}
             />
             <View style={styles.anonymousInput}>
                 <Text
                     style={styles.titleText}
-                    title="I want to publish anonymously"
+                    title={_('I want to publish anonymously')}
                 />
                 <Switch
                     trackColor={{
@@ -468,7 +470,7 @@ const CreateHappeningSurvey = () => {
                 <>
                     <Text
                         style={styles.title}
-                        title="Who can see this survey?"
+                        title={_('Who can see this survey?')}
                     />
                     <View style={styles.feelings}>
                         <OptionItem
@@ -489,7 +491,7 @@ const CreateHappeningSurvey = () => {
             )}
             <Text
                 style={styles.title}
-                title="Is this real data or a test point?"
+                title={_('Is this real data or a test point?')}
             />
             <View style={styles.feelings}>
                 <OptionItem

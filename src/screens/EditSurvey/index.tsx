@@ -308,27 +308,30 @@ const EditHappeningSurvey = () => {
                 <ModalLoader loading={processing} />
                 <View style={styles.category}>
                     <Image source={categoryIcon} style={styles.categoryIcon} />
-                    <Text style={styles.field} title={surveyCategory?.title} />
+                    <Text
+                        style={styles.field}
+                        title={_(surveyCategory?.title)}
+                    />
                 </View>
                 <TouchableOpacity onPress={toggleOpenCategory}>
-                    <Text style={styles.change} title="Change" />
+                    <Text style={styles.change} title={_('Change')} />
                 </TouchableOpacity>
             </View>
             <InputField
-                title="Name"
+                title={_('Name')}
                 titleDark
                 onChangeText={setTitle}
                 value={title}
-                placeholder="Enter survey name"
+                placeholder={_('Enter survey name')}
             />
-            <Text style={styles.title} title="Add Images" />
+            <Text style={styles.title} title={_('Add Images')} />
             <ImagePicker
                 onChange={handleImages}
                 onRemoveImage={handleRemoveImages}
                 images={allImages}
                 multiple
             />
-            <Text style={styles.title} title="Location" />
+            <Text style={styles.title} title={_('Location')} />
             <View style={styles.locationCont}>
                 <View style={styles.locationWrapper}>
                     <Icon name="pin" height={20} width={20} fill={'#80A8C5'} />
@@ -345,12 +348,12 @@ const EditHappeningSurvey = () => {
                     />
                 </View>
                 <TouchableOpacity onPress={handleChangeLocation}>
-                    <Text style={styles.change} title="Change" />
+                    <Text style={styles.change} title={_('Change')} />
                 </TouchableOpacity>
             </View>
             <Text
                 style={styles.title}
-                title="How do you feel about this feature?"
+                title={_('How do you feel about this feature?')}
             />
             <View style={styles.feelings}>
                 <SurveySentiment
@@ -371,7 +374,9 @@ const EditHappeningSurvey = () => {
             </View>
             <Text
                 style={styles.title}
-                title="Is the condition of this feature improving, staying the same, or decreasing?"
+                title={_(
+                    'Is the condition of this feature improving, staying the same, or decreasing?',
+                )}
             />
             <View style={styles.feelings}>
                 <SurveyReview
@@ -391,14 +396,14 @@ const EditHappeningSurvey = () => {
                 />
             </View>
             <InputField
-                title="Description"
+                title={_('Description')}
                 titleDark
                 multiline
                 textAlignVertical="top"
                 inputStyle={styles.textarea}
                 onChangeText={setDescription}
                 value={description}
-                placeholder="What’s happening here?"
+                placeholder={_('What’s happening here?')}
             />
             <CategoryListModal
                 setCategory={setSurveyCategory}

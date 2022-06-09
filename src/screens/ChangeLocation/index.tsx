@@ -8,6 +8,8 @@ import Map from 'components/Map';
 import RadioInput from 'components/RadioInput';
 import {SaveButton} from 'components/HeaderButton';
 
+import {_} from 'services/i18n';
+
 import {store} from 'store';
 import {setLocation} from 'store/slices/survey';
 import {StackParamList} from 'navigation';
@@ -108,7 +110,7 @@ const ChangeLocation = () => {
         ({item}) => {
             return (
                 <RadioInput
-                    label={item.label}
+                    label={_(item.label)}
                     onPress={handleSelectedMethod}
                     selected={selectedMethod === item.label}
                 />

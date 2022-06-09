@@ -6,6 +6,8 @@ import {useNavigation} from '@react-navigation/native';
 
 import Text from 'components/Text';
 
+import {_} from 'services/i18n';
+
 import styles from './styles';
 
 const HomeHeader = () => {
@@ -35,7 +37,7 @@ const HomeHeader = () => {
                     width={22}
                     fill={'#0D4979'}
                 />
-                <Text style={styles.title} title="List" />
+                <Text style={styles.title} title={_('List')} />
             </TouchableOpacity>
         </View>
     );

@@ -168,20 +168,20 @@ const SurveyItem = () => {
                 />
                 <Text
                     style={styles.field}
-                    title={surveyData?.category?.title}
+                    title={_(surveyData?.category?.title)}
                 />
             </View>
-            <Header title="Name" />
+            <Header title={_('Name')} />
             <View style={styles.content}>
                 <Text style={styles.name} title={surveyData?.title} />
             </View>
-            <Header title="Photos" />
+            <Header title={_('Photos')} />
             <View style={styles.photosWrapper}>
                 <Photos photos={surveyData?.attachment} />
             </View>
             {surveyData?.sentiment.length > 0 && (
                 <>
-                    <Header title="Feels" />
+                    <Header title={_('Feels')} />
                     <View style={styles.content}>
                         <View style={styles.feeelWrapper}>
                             <Text
@@ -194,7 +194,7 @@ const SurveyItem = () => {
             )}
             {surveyData?.improvement && (
                 <>
-                    <Header title="Improvement" />
+                    <Header title={_('Improvement')} />
                     <View style={styles.content}>
                         <SurveyReview
                             name={surveyData.improvement}
@@ -203,7 +203,7 @@ const SurveyItem = () => {
                     </View>
                 </>
             )}
-            <Header title="Description" />
+            <Header title={_('Description')} />
             <View style={styles.content}>
                 <Text
                     style={styles.description}

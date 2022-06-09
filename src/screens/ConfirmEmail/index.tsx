@@ -90,7 +90,7 @@ const ConfirmEmail = () => {
             />
             <OtpInput setCode={setPin} length={6} />
             <Button
-                title="Verify"
+                title={_('Verify')}
                 style={styles.button}
                 onPress={handleEmailConfirmVerify}
                 disabled={pin.length < 6}

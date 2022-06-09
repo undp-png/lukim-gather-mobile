@@ -91,6 +91,7 @@ export default function TabNavigator() {
                 name="Menu"
                 component={Menu}
                 options={{
+                    title: _('Menu'),
                     headerLeft: () => <BackButton />,
                     headerShown: true,
                     headerTitleAlign: 'center',
