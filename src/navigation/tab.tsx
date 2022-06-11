@@ -38,7 +38,10 @@ function HomeNavigator() {
                 options={{
                     title: 'Points',
                     headerShown: true,
-                    headerTitleAlign: 'center',
+                    headerTitleAlign: 'left',
+                    headerTitleStyle: {
+                        marginLeft: 5,
+                    },
                     headerLeft: () => null,
                     headerStyle: {
                         backgroundColor: '#E7ECF2',

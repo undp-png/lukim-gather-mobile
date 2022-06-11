@@ -24,12 +24,12 @@ export default StyleSheet.create({
     menuBar: {
         marginRight: 20,
         backgroundColor: COLORS.white,
-        height: 40,
         borderRadius: 20,
         flexDirection: 'row',
         justifyContent: 'center',
         alignItems: 'center',
-        padding: 12,
+        paddingVertical: 7,
+        paddingHorizontal: 10,
     },
     title: {
         marginLeft: 5,
@@ -37,5 +37,20 @@ export default StyleSheet.create({
         lineHeight: 16,
         fontFamily: 'Inter-Regular',
         color: COLORS.greyText,
+    },
+    searchWrapper: {
+        marginBottom: 15,
+        flexDirection: 'row',
+        alignItems: 'center',
+        backgroundColor: '#E7ECF2',
+        borderWidth: 1,
+        borderColor: COLORS.primaryAlt,
+        borderRadius: 8,
+        paddingHorizontal: 10,
+    },
+    searchInput: {
+        height: 40,
+        fontFamily: 'Inter-Medium',
+        color: COLORS.inputText,
     },
 });
