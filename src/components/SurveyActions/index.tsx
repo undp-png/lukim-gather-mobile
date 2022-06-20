@@ -1,12 +1,11 @@
 import React from 'react';
-import {Pressable, View, Text} from 'react-native';
+import {Pressable, View} from 'react-native';
 import {Icon} from 'react-native-eva-icons';
 
+import Text from 'components/Text';
 import Modal from 'components/Modal';
 import Button from 'components/Button';
 import {_} from 'services/i18n';
-
-import {Localize} from '@rna/components/I18n';
 
 import styles from './styles';
 
@@ -37,14 +36,14 @@ const SurveyActions: React.FC<Props> = ({
             }>
             {isConfirmDeleteOpen ? (
                 <View style={styles.boxContent}>
-                    <Text style={styles.heading}>
-                        <Localize>Delete the entry?</Localize>
-                    </Text>
-                    <Text style={styles.message}>
-                        <Localize>
-                            Are you sure you want to delete the entry.
-                        </Localize>
-                    </Text>
+                    <Text
+                        style={styles.heading}
+                        title={_('Delete the entry?')}
+                    />
+                    <Text
+                        style={styles.message}
+                        title={_('Are you sure you want to delete the entry.')}
+                    />
                     <View style={styles.buttonsWrapper}>
                         <Button
                             title={_('Cancel')}
@@ -69,9 +68,7 @@ const SurveyActions: React.FC<Props> = ({
                             width={25}
                             fill={'#888C94'}
                         />
-                        <Text style={styles.title}>
-                            <Localize>Edit</Localize>
-                        </Text>
+                        <Text style={styles.title} title={_('Edit')} />
                     </Pressable>
                     <Pressable style={styles.option} onPress={onDeletePress}>
                         <Icon
@@ -80,9 +77,7 @@ const SurveyActions: React.FC<Props> = ({
                             width={25}
                             fill={'#888C94'}
                         />
-                        <Text style={styles.title}>
-                            <Localize>Delete</Localize>
-                        </Text>
+                        <Text style={styles.title} title={_('Delete')} />
                     </Pressable>
                 </View>
             )}

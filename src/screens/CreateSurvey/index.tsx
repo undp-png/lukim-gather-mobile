@@ -152,7 +152,7 @@ const CreateHappeningSurvey = () => {
         CreateHappeningSurveyMutationVariables
     >(CREATE_HAPPENING_SURVEY, {
         onCompleted: () => {
-            Toast.show('Survey Created Sucessfully !');
+            Toast.show('Survey Created Successfully !');
             navigation.navigate('Feed');
             setProcessing(loading);
         },

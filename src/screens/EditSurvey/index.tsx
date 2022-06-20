@@ -102,7 +102,7 @@ const EditHappeningSurvey = () => {
         UpdateHappeningSurveyMutationVariables
     >(UPDATE_HAPPENING_SURVEY, {
         onCompleted: () => {
-            Toast.show('Survey updated Sucessfully !');
+            Toast.show('Survey updated Successfully !');
             setProcessing(loading);
         },
         onError: err => {

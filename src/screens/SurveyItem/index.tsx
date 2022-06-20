@@ -79,7 +79,7 @@ const SurveyItem = () => {
         DeleteHappeningSurveyMutationVariables
     >(DELETE_HAPPENING_SURVEY, {
         onCompleted: () => {
-            Toast.show('Happening survey deleted sucessfully !');
+            Toast.show('Happening survey deleted successfully !');
         },
         onError: err => {
             Toast.show(getErrorMessage(err), Toast.LONG, [

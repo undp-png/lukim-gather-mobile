@@ -12,6 +12,7 @@ import ImagePicker, {Image as ImageType} from 'react-native-image-crop-picker';
 import {Icon} from 'react-native-eva-icons';
 
 import Modal from 'components/Modal';
+import {_} from 'services/i18n';
 
 import cs from '@rna/utils/cs';
 
@@ -148,7 +149,7 @@ export const ImagePickerModal: React.FC<ImagePickerModalProps> = ({
                         width={25}
                         fill={'#284362'}
                     />
-                    <Text style={styles.optionText}>Gallery</Text>
+                    <Text style={styles.optionText}>{_('Gallery')}</Text>
                 </Pressable>
                 <Pressable style={styles.option} onPress={handleCamera}>
                     <Icon
@@ -157,7 +158,7 @@ export const ImagePickerModal: React.FC<ImagePickerModalProps> = ({
                         width={25}
                         fill={'#284362'}
                     />
-                    <Text style={styles.optionText}>Camera</Text>
+                    <Text style={styles.optionText}>{_('Camera')}</Text>
                 </Pressable>
             </View>
         </Modal>

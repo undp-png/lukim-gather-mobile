@@ -63,7 +63,7 @@ const Category = ({category, navigation}: {category: any; navigation: any}) => {
     return (
         <View>
             <View style={styles.header}>
-                <Text style={styles.headerTitle} title={category.title} />
+                <Text style={styles.headerTitle} title={_(category.title)} />
             </View>
             <FlatList
                 style={styles.subCategoryList}
