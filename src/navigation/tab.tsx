@@ -41,17 +41,7 @@ function HomeNavigator() {
                 name="Surveys"
                 component={Surveys}
                 options={{
-                    title: 'Points',
-                    headerShown: true,
-                    headerTitleAlign: 'left',
-                    headerTitleStyle: {
-                        marginLeft: 5,
-                    },
-                    headerLeft: () => null,
-                    headerStyle: {
-                        backgroundColor: '#E7ECF2',
-                        shadowColor: 'transparent',
-                    },
+                    headerShown: false,
                 }}
             />
         </Stack.Navigator>

@@ -16,25 +16,43 @@ const TabItem = ({
     title,
     activeTab,
     name,
+    activeTabStyle,
+    activeTabTitle,
+    isHomeTab,
 }: {
     onPress(): void;
     title: string;
     activeTab: string;
     name: string;
+    activeTabStyle?: object;
+    activeTabTitle?: object;
+    isHomeTab?: boolean;
 }) => {
     const {width} = useWindowDimensions();
     const tabWidth = useMemo(() => {
-        return {width: width / 2 - 22};
-    }, [width]);
+        if (isHomeTab) {
+            return {width: width / 4 - 5};
+        } else {
+            return {width: width / 2 - 22};
+        }
+    }, [isHomeTab, width]);
     return (
         <TouchableOpacity
             style={cs(
                 styles.tabItem,
                 [styles.activeTabItem, activeTab === name],
+                [activeTabStyle, activeTab === name],
                 tabWidth,
             )}
             onPress={onPress}>
-            <Text style={styles.tabTitle} title={title} />
+            <Text
+                style={cs(
+                    styles.tabTitle,
+                    [activeTabTitle, activeTab === name],
+                    [styles.homeTabTitle, isHomeTab],
+                )}
+                title={title}
+            />
         </TouchableOpacity>
     );
 };
@@ -42,10 +60,13 @@ const TabItem = ({
 interface ListProps {
     selectedTab: string;
     setSelectedTab(selectedTab: string): void;
+    tabStyle?: object;
+    activeTabStyle?: object;
+    activeTabTitle?: object;
 }
 
 const SurveyListTab: React.FC<ListProps> = props => {
-    const {selectedTab, setSelectedTab} = props;
+    const {selectedTab, setSelectedTab, tabStyle, ...tabItemProps} = props;
     const {isAuthenticated} = useSelector(
         (state: RootStateOrAny) => state.auth,
     );
@@ -60,18 +81,20 @@ const SurveyListTab: React.FC<ListProps> = props => {
         setSelectedTab('myentries');
     }, [isAuthenticated, setSelectedTab]);
     return (
-        <View style={styles.tabWrapper}>
+        <View style={cs(styles.tabWrapper, tabStyle)}>
             <TabItem
                 name="all"
                 activeTab={selectedTab}
                 title={_('All')}
                 onPress={handleAllEntriesSelect}
+                {...tabItemProps}
             />
             <TabItem
                 name="myentries"
                 activeTab={selectedTab}
                 title={_('My Entries')}
                 onPress={handleMyEntriesSelect}
+                {...tabItemProps}
             />
         </View>
     );

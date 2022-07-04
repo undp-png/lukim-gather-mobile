@@ -8,6 +8,7 @@ import {useNetInfo} from '@react-native-community/netinfo';
 import Geolocation from 'react-native-geolocation-service';
 
 import HomeHeader from 'components/HomeHeader';
+import ExportActions from 'components/ExportActions';
 
 import cs from '@rna/utils/cs';
 import surveyCategory from 'services/data/surveyCategory';
@@ -55,6 +56,12 @@ const Map: React.FC<Props> = ({
     const navigation = useNavigation();
 
     const [isOffline, setIsOffline] = useState(true);
+
+    const [isOpenExport, setIsOpenExport] = useState(false);
+
+    const toggleExportModal = useCallback(() => {
+        setIsOpenExport(!isOpenExport);
+    }, [isOpenExport]);
 
     const manageOffline = useCallback(
         async packName => {
@@ -417,9 +424,18 @@ const Map: React.FC<Props> = ({
         setDrawPolygon(!drawPolygon);
     }, [drawPolygon]);
 
+    const [selectedTab, setSelectedTab] = useState('all');
+
     return (
         <View style={styles.page}>
-            {!hideHeader && <HomeHeader />}
+            {!hideHeader && (
+                <HomeHeader
+                    selectedTab={selectedTab}
+                    setSelectedTab={setSelectedTab}
+                    homeScreen
+                    onExportPress={toggleExportModal}
+                />
+            )}
             <View style={styles.container}>
                 <MapboxGL.MapView
                     ref={mapRef}
@@ -472,6 +488,13 @@ const Map: React.FC<Props> = ({
                     </TouchableOpacity>
                 </View>
             )}
+            <ExportActions
+                isOpenExport={isOpenExport}
+                onBackdropPress={toggleExportModal}
+                onClickExportPDF={() => {}}
+                onClickExportImage={() => {}}
+                onClickExportCSV={() => {}}
+            />
         </View>
     );
 };
