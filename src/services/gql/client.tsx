@@ -8,6 +8,7 @@ import {
 import {setContext} from '@apollo/client/link/context';
 import {onError} from '@apollo/client/link/error';
 import {cacheFirstNetworkErrorLink} from 'apollo-link-network-error';
+import SerializingLink from 'apollo-link-serialize';
 import {
     persistCache,
     MMKVStorageWrapper as MMKVCacheStorageWrapper,
@@ -30,6 +31,7 @@ const {dispatch} = store;
 
 export const getApolloClient = async (queueLink: any) => {
     const cache = new InMemoryCache();
+    const serializeLink = new SerializingLink();
     const httpLink = createUploadLink({
         uri: BASE_URL,
     });
@@ -127,6 +129,7 @@ export const getApolloClient = async (queueLink: any) => {
         errorLink,
         errorIgnoreLink,
         authLink,
+        serializeLink,
         httpLink,
     ]);
 

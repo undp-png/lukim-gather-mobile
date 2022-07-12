@@ -129,12 +129,16 @@ const EditHappeningSurvey = () => {
                 type: 'Point',
                 coordinates: location.point,
             };
+        } else {
+            surveyInput.location = null;
         }
         if (location.polygon) {
             surveyInput.boundary = {
                 type: 'MultiPolygon',
                 coordinates: [[location.polygon]],
             };
+        } else {
+            surveyInput.boundary = null;
         }
 
         setProcessing(true);
@@ -155,10 +159,11 @@ const EditHappeningSurvey = () => {
                             __typename: 'UserType',
                         },
                         id: route.params?.surveyItem.id,
-                        attachment: allImages.map(img => {
+                        attachment: allImages.map((img, i) => {
                             if (img?.name) {
                                 return {
                                     media: img.uri,
+                                    id: i,
                                 };
                             }
                             return img;
@@ -223,12 +228,12 @@ const EditHappeningSurvey = () => {
         images,
     ]);
 
-    const handleImages = useCallback(
+    const handleAddImages = useCallback(
         async response => {
             if (response?.path) {
                 response = [response];
             }
-            response.forEach(async (res: ImageObj) => {
+            const medias = response.map(async (res: ImageObj) => {
                 const image = {
                     name: res.path.substring(res.path.lastIndexOf('/') + 1),
                     type: res.mime,
@@ -237,13 +242,13 @@ const EditHappeningSurvey = () => {
                             ? res.path.replace('file://', '')
                             : res.path,
                 };
-                const media = new ReactNativeFile({
+                return new ReactNativeFile({
                     uri: image.uri,
                     name: image.name,
                     type: image.type,
                 });
-                setAttachment([media, ...attachment]);
             });
+            setAttachment([...medias, ...attachment]);
         },
         [attachment],
     );
@@ -326,7 +331,7 @@ const EditHappeningSurvey = () => {
             />
             <Text style={styles.title} title={_('Add Images')} />
             <ImagePicker
-                onChange={handleImages}
+                onAddImage={handleAddImages}
                 onRemoveImage={handleRemoveImages}
                 images={allImages}
                 multiple

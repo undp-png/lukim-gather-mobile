@@ -68,8 +68,8 @@ const Map: React.FC<Props> = ({
                         return MapboxGL.offlineManager.createPack({
                             name: packName,
                             styleURL: 'mapbox://styles/mapbox/streets-v11',
-                            minZoom: 10,
-                            maxZoom: 14,
+                            minZoom: 0,
+                            maxZoom: 10,
                             bounds: [
                                 [156.4715, -1.5917],
                                 [140.7927, -12.1031],

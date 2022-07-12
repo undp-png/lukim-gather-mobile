@@ -31,7 +31,7 @@ interface PhotosProps {
 
 interface ImagePickerProps {
     images: ImageType[];
-    onChange: (file: ImageType) => void;
+    onAddImage: (file: ImageType) => void;
     onRemoveImage: (images: ImageType[]) => void;
     multiple?: boolean;
     disabled?: boolean;
@@ -167,7 +167,7 @@ export const ImagePickerModal: React.FC<ImagePickerModalProps> = ({
 
 const _ImagePicker: React.FC<ImagePickerProps> = ({
     images,
-    onChange: onChangeCallback,
+    onAddImage: onChangeCallback,
     multiple,
     onRemoveImage: onRemoveCallback,
     disabled,

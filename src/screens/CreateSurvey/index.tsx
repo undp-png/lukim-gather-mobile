@@ -113,9 +113,7 @@ const CreateHappeningSurvey = () => {
 
     const [title, setTitle] = useState<string>('');
     const [activeFeel, setActiveFeel] = useState<string>('');
-    const [activeReview, setActiveReview] = useState<Improvement | undefined>(
-        undefined,
-    );
+    const [activeReview, setActiveReview] = useState<Improvement | null>(null);
     const [images, setImages] = useState<ImageObj[]>([]);
     const [description, setDescription] = useState<string>('');
     const [category, setCategory] = useState<{
@@ -244,8 +242,9 @@ const CreateHappeningSurvey = () => {
                         },
                         ...surveyInput,
                         attachment: [
-                            ...surveyInput.attachment.map(file => ({
+                            ...surveyInput.attachment.map((file, i) => ({
                                 media: file.uri,
+                                id: i,
                             })),
                         ],
                         createdBy: {
@@ -258,13 +257,12 @@ const CreateHappeningSurvey = () => {
             },
             update: (cache, {data}) => {
                 try {
-                    const readData: any =
-                        cache.readQuery({
-                            query: GET_HAPPENING_SURVEY,
-                        }) || [];
+                    const readData: any = cache.readQuery({
+                        query: GET_HAPPENING_SURVEY,
+                    }) || {happeningSurveys: []};
                     let mergedSurveys = [];
 
-                    if (readData.happeningSurveys.length <= 0) {
+                    if (readData.happeningSurveys?.length <= 0) {
                         mergedSurveys = [data.createHappeningSurvey.result];
                     } else {
                         mergedSurveys = [
@@ -382,7 +380,7 @@ const CreateHappeningSurvey = () => {
             />
             <Text style={styles.title} title={_('Add Images')} />
             <ImagePicker
-                onChange={handleImages}
+                onAddImage={handleImages}
                 onRemoveImage={setImages}
                 images={images}
                 multiple
