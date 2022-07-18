@@ -1,4 +1,5 @@
 import React, {useCallback} from 'react';
+import {Image} from 'react-native';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import {Icon} from 'react-native-eva-icons';
 import {useNavigation} from '@react-navigation/native';
@@ -72,6 +73,34 @@ export const SearchIcon = ({onSearchPress}: {onSearchPress(): void}) => {
                 width={30}
                 fill={'#888C94'}
             />
+        </TouchableOpacity>
+    );
+};
+
+export const NotificationIcon = ({
+    onNotificationPress,
+    unRead,
+}: {
+    onNotificationPress(): void;
+    unRead: boolean;
+}) => {
+    return (
+        <TouchableOpacity
+            onPress={onNotificationPress}
+            style={styles.headerIcon}>
+            {unRead ? (
+                <Image
+                    style={styles.notificationIcon}
+                    source={require('assets/images/active-notification.png')}
+                />
+            ) : (
+                <Icon
+                    name="bell-outline"
+                    height={30}
+                    width={30}
+                    fill={'#101828'}
+                />
+            )}
         </TouchableOpacity>
     );
 };
