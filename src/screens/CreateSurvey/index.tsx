@@ -244,7 +244,7 @@ const CreateHappeningSurvey = () => {
                         attachment: [
                             ...surveyInput.attachment.map((file, i) => ({
                                 media: file.uri,
-                                id: i,
+                                id: file.name,
                             })),
                         ],
                         createdBy: {
@@ -313,7 +313,7 @@ const CreateHappeningSurvey = () => {
             setImages([...response, ...images]);
             response.forEach(async (res: ImageObj) => {
                 const image = {
-                    name: res.path.substring(res.path.lastIndexOf('/') + 1),
+                    name: uuid.v4(),
                     type: res.mime,
                     uri:
                         Platform.OS === 'ios'
