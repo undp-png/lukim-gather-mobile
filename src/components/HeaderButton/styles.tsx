@@ -8,4 +8,9 @@ export default StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
     },
+    notificationIcon: {
+        height: 30,
+        width: 30,
+        resizeMode: 'contain',
+    },
 });

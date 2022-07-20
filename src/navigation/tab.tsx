@@ -1,5 +1,8 @@
-import React from 'react';
+import React, {useCallback, useState} from 'react';
+import {RootStateOrAny, useSelector} from 'react-redux';
+import {useLazyQuery} from '@apollo/client';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
+import {useFocusEffect, useNavigation} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
 
 import TabBar from 'components/TabBar';
@@ -12,8 +15,10 @@ import ChooseCategory from 'screens/ChooseCategory';
 import {_} from 'services/i18n';
 
 import {BackButton} from 'components/HeaderButton';
+import {NotificationIcon} from 'components/HeaderButton';
 
 import COLORS from 'utils/colors';
+import {GET_NOTIFICATIONS_UNREAD_COUNT} from 'services/gql/queries';
 
 import styles from './styles';
 
@@ -54,6 +59,22 @@ function HomeNavigator() {
 }
 
 export default function TabNavigator() {
+    const {isAuthenticated} = useSelector(
+        (state: RootStateOrAny) => state.auth,
+    );
+    const navigation = useNavigation();
+    const [getUnreadCount] = useLazyQuery(GET_NOTIFICATIONS_UNREAD_COUNT, {
+        fetchPolicy: 'network-only',
+    });
+    const [unRead, setUnRead] = useState<boolean>(false);
+
+    const handleRefresh = useCallback(() => {
+        getUnreadCount().then(({data}) =>
+            setUnRead(data?.notificationUnreadCount > 0),
+        );
+    }, [getUnreadCount]);
+    useFocusEffect(handleRefresh);
+
     return (
         <Tab.Navigator
             screenOptions={{
@@ -96,6 +117,15 @@ export default function TabNavigator() {
                 options={{
                     title: _('Menu'),
                     headerLeft: () => <BackButton />,
+                    headerRight: () =>
+                        isAuthenticated && (
+                            <NotificationIcon
+                                onNotificationPress={() =>
+                                    navigation.navigate('Notifications')
+                                }
+                                unRead={unRead}
+                            />
+                        ),
                     headerShown: true,
                     headerTitleAlign: 'center',
                     headerStyle: {

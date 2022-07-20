@@ -27,6 +27,7 @@ import Forms from 'screens/Forms';
 import TermsAndCondition from 'screens/TermsAndCondition';
 import PrivacyPolicy from 'screens/PrivacyPolicy';
 import WebViewForm from 'screens/Webviewform';
+import Notifications from 'screens/Notification';
 
 import type {FormDataType} from 'screens/WebViewForm';
 
@@ -66,6 +67,10 @@ export type StackParamList = {
     WebViewForm: {form?: FormType; data?: FormDataType};
     TermsAndCondition: undefined;
     PrivacyPolicy: undefined;
+    Notifications: {
+        onNotificationPress?: () => void;
+        unRead?: boolean;
+    };
 };
 
 const Stack = createStackNavigator<StackParamList>();
@@ -259,6 +264,11 @@ const AppNavigator = () => {
                     animationEnabled: false,
                     stackAnimation: 'none',
                 })}
+            />
+            <Stack.Screen
+                name="Notifications"
+                component={Notifications}
+                options={{headerTitle: _('Notifications')}}
             />
         </Stack.Navigator>
     );

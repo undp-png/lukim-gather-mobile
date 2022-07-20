@@ -27,8 +27,8 @@ export const REFRESH_TOKEN = gql`
 `;
 
 export const GET_HAPPENING_SURVEY = gql`
-    query {
-        happeningSurveys {
+    query HappeningSurveys($id: UUID) {
+        happeningSurveys(id: $id) {
             id
             title
             description
@@ -270,6 +270,33 @@ export const CREATE_FEEDBACK = gql`
     mutation CreateFeedback($input: FeedbackMutationInput!) {
         createFeedback(input: $input) {
             id
+        }
+    }
+`;
+
+export const GET_NOTIFICATIONS = gql`
+    {
+        notifications {
+            actionObjectObjectId
+            id
+            createdAt
+            description
+            hasRead
+            notificationType
+        }
+    }
+`;
+
+export const GET_NOTIFICATIONS_UNREAD_COUNT = gql`
+    {
+        notificationUnreadCount
+    }
+`;
+
+export const MARK_AS_READ = gql`
+    mutation MarkAsRead($id: Int) {
+        markAsRead(pk: $id) {
+            detail
         }
     }
 `;
