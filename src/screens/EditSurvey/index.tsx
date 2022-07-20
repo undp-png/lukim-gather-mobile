@@ -8,6 +8,7 @@ import {TouchableOpacity} from 'react-native-gesture-handler';
 import {Image as ImageObj} from 'react-native-image-crop-picker';
 import {Icon} from 'react-native-eva-icons';
 import Toast from 'react-native-simple-toast';
+import uuid from 'react-native-uuid';
 
 import Text from 'components/Text';
 import InputField from 'components/InputField';
@@ -37,6 +38,14 @@ import {
 
 import styles from './styles';
 
+const responseToRNF = res => {
+    const image = {
+        name: res.name,
+        type: res.mime,
+        uri: Platform.OS === 'ios' ? res.path.replace('file://', '') : res.path,
+    };
+    return new ReactNativeFile(image);
+};
 const EditHappeningSurvey = () => {
     const route = useRoute<any>();
     const navigation = useNavigation<any>();
@@ -52,7 +61,7 @@ const EditHappeningSurvey = () => {
     const [activeReview, setActiveReview] = useState<Improvement | undefined>(
         route.params?.surveyItem?.improvement,
     );
-    const [images, setImages] = useState<ImageObj[]>(
+    const [imageLinks, setImageLinks] = useState<ImageObj[]>(
         route?.params?.surveyItem.attachment,
     );
     const [description, setDescription] = useState<string>(
@@ -80,14 +89,14 @@ const EditHappeningSurvey = () => {
     );
 
     const allImages = useMemo(() => {
-        if (images?.length > -1) {
+        if (imageLinks?.length > -1) {
             if (attachment?.length > -1) {
-                return [...attachment, ...images];
+                return [...attachment, ...imageLinks];
             }
-            return images;
+            return imageLinks;
         }
         return [];
-    }, [images, attachment]);
+    }, [imageLinks, attachment]);
 
     const handleFeel = useCallback(feel => {
         setActiveFeel(feel);
@@ -120,8 +129,8 @@ const EditHappeningSurvey = () => {
             description: description,
             sentiment: activeFeel,
             improvement: activeReview,
-            attachment: attachment,
-            attachmentLink: images.map(img => Number(img.id)),
+            attachment: attachment.map(res => responseToRNF(res)),
+            attachmentLink: imageLinks.map(img => img.id),
         };
 
         if (location.point) {
@@ -129,12 +138,16 @@ const EditHappeningSurvey = () => {
                 type: 'Point',
                 coordinates: location.point,
             };
+        } else {
+            surveyInput.location = null;
         }
         if (location.polygon) {
             surveyInput.boundary = {
                 type: 'MultiPolygon',
                 coordinates: [[location.polygon]],
             };
+        } else {
+            surveyInput.boundary = null;
         }
 
         setProcessing(true);
@@ -155,10 +168,11 @@ const EditHappeningSurvey = () => {
                             __typename: 'UserType',
                         },
                         id: route.params?.surveyItem.id,
-                        attachment: allImages.map(img => {
+                        attachment: allImages.map((img, i) => {
                             if (img?.name) {
                                 return {
-                                    media: img.uri,
+                                    media: img.path || img.uri,
+                                    id: img.name || i,
                                 };
                             }
                             return img;
@@ -220,30 +234,16 @@ const EditHappeningSurvey = () => {
         navigation,
         user?.id,
         allImages,
-        images,
+        imageLinks,
     ]);
 
-    const handleImages = useCallback(
+    const handleAddImages = useCallback(
         async response => {
             if (response?.path) {
                 response = [response];
             }
-            response.forEach(async (res: ImageObj) => {
-                const image = {
-                    name: res.path.substring(res.path.lastIndexOf('/') + 1),
-                    type: res.mime,
-                    uri:
-                        Platform.OS === 'ios'
-                            ? res.path.replace('file://', '')
-                            : res.path,
-                };
-                const media = new ReactNativeFile({
-                    uri: image.uri,
-                    name: image.name,
-                    type: image.type,
-                });
-                setAttachment([media, ...attachment]);
-            });
+            response.forEach(res => (res.name = uuid.v4()));
+            setAttachment([...response, ...attachment]);
         },
         [attachment],
     );
@@ -261,10 +261,10 @@ const EditHappeningSurvey = () => {
                 },
                 {newImgs: [], newAttachment: []},
             );
-            setImages(newImgs);
+            setImageLinks(newImgs);
             return setAttachment(newAttachment);
         }
-        setImages([]);
+        setImageLinks([]);
         setAttachment([]);
     }, []);
 
@@ -326,7 +326,7 @@ const EditHappeningSurvey = () => {
             />
             <Text style={styles.title} title={_('Add Images')} />
             <ImagePicker
-                onChange={handleImages}
+                onAddImage={handleAddImages}
                 onRemoveImage={handleRemoveImages}
                 images={allImages}
                 multiple

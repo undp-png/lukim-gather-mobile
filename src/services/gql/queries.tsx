@@ -59,7 +59,8 @@ export const GET_HAPPENING_SURVEY = gql`
 `;
 
 export const CREATE_HAPPENING_SURVEY = gql`
-    mutation CreateHappeningSurvey($input: HappeningSurveyInput!) {
+    mutation CreateHappeningSurvey($input: HappeningSurveyInput!)
+    @serialize(key: ["createupdatedeletesurvey"]) {
         createHappeningSurvey(data: $input) {
             __typename
             errors
@@ -99,7 +100,7 @@ export const UPDATE_HAPPENING_SURVEY = gql`
     mutation UpdateHappeningSurvey(
         $input: UpdateHappeningSurveyInput!
         $id: UUID!
-    ) {
+    ) @serialize(key: ["createupdatedeletesurvey"]) {
         updateHappeningSurvey(data: $input, id: $id) {
             __typename
             errors
@@ -137,7 +138,8 @@ export const UPDATE_HAPPENING_SURVEY = gql`
 `;
 
 export const DELETE_HAPPENING_SURVEY = gql`
-    mutation DeleteHappeningSurvey($id: UUID!) {
+    mutation DeleteHappeningSurvey($id: UUID!)
+    @serialize(key: ["createupdatedeletesurvey"]) {
         deleteHappeningSurvey(id: $id) {
             ok
             errors
