@@ -3,6 +3,18 @@ import {StyleSheet} from 'react-native';
 import COLORS from 'utils/colors';
 
 export default StyleSheet.create({
+    rightBar: {
+        flexDirection: 'row',
+        alignItems: 'center',
+    },
+    rightMargin: {
+        marginRight: 20,
+    },
+    exportIcon: {
+        height: 30,
+        width: 30,
+        resizeMode: 'contain',
+    },
     container: {
         height: '100%',
         backgroundColor: COLORS.white,
@@ -46,7 +58,7 @@ export default StyleSheet.create({
         lineHeight: 19.36,
         color: COLORS.tertiary,
     },
-    feeelWrapper: {
+    feelWrapper: {
         backgroundColor: '#F0F3F7',
         borderWidth: 1,
         borderColor: '#B3CBDC',

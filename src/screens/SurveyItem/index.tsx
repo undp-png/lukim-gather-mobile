@@ -1,15 +1,24 @@
-import React, {useEffect, useCallback, useState} from 'react';
-import {View, Image} from 'react-native';
+import React, {useEffect, useCallback, useState, useRef} from 'react';
+import {
+    View,
+    Image,
+    Platform,
+    PermissionsAndroid,
+    TouchableOpacity,
+} from 'react-native';
 import {FlatList, ScrollView} from 'react-native-gesture-handler';
 import {useMutation} from '@apollo/client';
 import {useNavigation, useRoute} from '@react-navigation/native';
 import Toast from 'react-native-simple-toast';
 import {RootStateOrAny, useSelector} from 'react-redux';
+import ViewShot from 'react-native-view-shot';
+import CameraRoll from '@react-native-community/cameraroll';
 
 import Text from 'components/Text';
 import {OptionIcon} from 'components/HeaderButton';
 import SurveyActions from 'components/SurveyActions';
 import SurveyReview from 'components/SurveyReview';
+import ExportActions from 'components/ExportActions';
 
 import useCategoryIcon from 'hooks/useCategoryIcon';
 import {_} from 'services/i18n';
@@ -25,8 +34,11 @@ import type {
     DeleteHappeningSurveyMutationVariables,
 } from '@generated/types';
 
-import styles from './styles';
 import {getErrorMessage} from 'utils/error';
+
+import cs from '@rna/utils/cs';
+
+import styles from './styles';
 
 const Header = ({title}: {title: string}) => {
     return (
@@ -60,11 +72,13 @@ const Photos = ({photos}: {photos: {media: string}[]}) => {
 };
 
 const SurveyItem = () => {
+    const viewShotRef = useRef<any>();
     const route = useRoute<any>();
     const navigation = useNavigation<any>();
 
     const [isOpenActions, setIsOpenActions] = useState(false);
     const [isOpenDelete, setIsOpenDelete] = useState(false);
+    const [isOpenExport, setIsOpenExport] = useState(false);
 
     const surveyData = route?.params?.item;
     const [categoryIcon] = useCategoryIcon(
@@ -89,12 +103,12 @@ const SurveyItem = () => {
         },
     });
 
-    const togggleOpenActions = useCallback(() => {
+    const toggleOpenActions = useCallback(() => {
         setIsOpenActions(!isOpenActions);
         setIsOpenDelete(false);
     }, [isOpenActions]);
 
-    const togggleEditPress = useCallback(() => {
+    const toggleEditPress = useCallback(() => {
         setIsOpenActions(false);
         navigation.navigate('EditSurvey', {surveyItem: surveyData});
     }, [navigation, surveyData]);
@@ -145,80 +159,149 @@ const SurveyItem = () => {
         });
     }, [deleteHappeningSurvey, navigation, surveyData?.id]);
 
+    const toggleExportModal = useCallback(() => {
+        setIsOpenExport(!isOpenExport);
+    }, [isOpenExport]);
+
+    const getPermissionAndroid = useCallback(async () => {
+        try {
+            const granted = await PermissionsAndroid.request(
+                PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
+                {
+                    title: _('Image export permission'),
+                    message: _('Your permission is required to save image'),
+                    buttonNegative: _('Cancel'),
+                    buttonPositive: _('OK'),
+                },
+            );
+            if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+                return true;
+            }
+            Toast.show(_('Permission required'));
+        } catch (err) {
+            console.log('Error' + err);
+        }
+    }, []);
+
+    const onClickExportImage = useCallback(async () => {
+        try {
+            await viewShotRef.current.capture().then((uri: any) => {
+                console.log(uri);
+                if (Platform.OS === 'android') {
+                    const granted = getPermissionAndroid();
+                    if (!granted) {
+                        return;
+                    }
+                }
+                CameraRoll.save(uri, {
+                    type: 'photo',
+                    album: 'Lukim Gather',
+                });
+                Toast.show(_('Saved image in gallery!'));
+                return setIsOpenExport(false);
+            });
+        } catch (error) {
+            console.log(error);
+        }
+    }, [getPermissionAndroid]);
+
     useEffect(() => {
         navigation.setOptions({
-            headerRight: () =>
-                surveyData.createdBy?.id === user?.id ? (
-                    <OptionIcon onOptionPress={togggleOpenActions} />
-                ) : null,
+            headerRight: () => (
+                <View style={styles.rightBar}>
+                    <TouchableOpacity
+                        onPress={toggleExportModal}
+                        style={cs(
+                            surveyData.createdBy?.id !== user?.id &&
+                                styles.rightMargin,
+                        )}>
+                        <Image
+                            source={require('assets/images/export.png')}
+                            style={styles.exportIcon}
+                        />
+                    </TouchableOpacity>
+                    {surveyData.createdBy?.id === user?.id ? (
+                        <OptionIcon onOptionPress={toggleOpenActions} />
+                    ) : null}
+                </View>
+            ),
         });
-    }, [navigation, togggleOpenActions, surveyData, user]);
+    }, [navigation, surveyData, user, toggleOpenActions, toggleExportModal]);
 
     return (
         <ScrollView
             style={styles.container}
             showsVerticalScrollIndicator={false}>
-            <View style={styles.category}>
-                <Image
-                    source={
-                        categoryIcon ||
-                        require('assets/images/category-placeholder.png')
-                    }
-                    style={styles.categoryIcon}
-                />
-                <Text
-                    style={styles.field}
-                    title={_(surveyData?.category?.title)}
-                />
-            </View>
-            <Header title={_('Name')} />
-            <View style={styles.content}>
-                <Text style={styles.name} title={surveyData?.title} />
-            </View>
-            <Header title={_('Photos')} />
-            <View style={styles.photosWrapper}>
-                <Photos photos={surveyData?.attachment} />
-            </View>
-            {surveyData?.sentiment.length > 0 && (
-                <>
-                    <Header title={_('Feels')} />
-                    <View style={styles.content}>
-                        <View style={styles.feeelWrapper}>
-                            <Text
-                                style={styles.feelIcon}
-                                title={surveyData?.sentiment}
+            <ViewShot ref={viewShotRef} style={styles.container}>
+                <View style={styles.category}>
+                    <Image
+                        source={
+                            categoryIcon ||
+                            require('assets/images/category-placeholder.png')
+                        }
+                        style={styles.categoryIcon}
+                    />
+                    <Text
+                        style={styles.field}
+                        title={_(surveyData?.category?.title)}
+                    />
+                </View>
+                <Header title={_('Name')} />
+                <View style={styles.content}>
+                    <Text style={styles.name} title={surveyData?.title} />
+                </View>
+                <Header title={_('Photos')} />
+                <View style={styles.photosWrapper}>
+                    <Photos photos={surveyData?.attachment} />
+                </View>
+                {surveyData?.sentiment.length > 0 && (
+                    <>
+                        <Header title={_('Feels')} />
+                        <View style={styles.content}>
+                            <View style={styles.feelWrapper}>
+                                <Text
+                                    style={styles.feelIcon}
+                                    title={surveyData?.sentiment}
+                                />
+                            </View>
+                        </View>
+                    </>
+                )}
+                {surveyData?.improvement && (
+                    <>
+                        <Header title={_('Improvement')} />
+                        <View style={styles.content}>
+                            <SurveyReview
+                                name={surveyData.improvement}
+                                reviewItem={true}
                             />
                         </View>
-                    </View>
-                </>
-            )}
-            {surveyData?.improvement && (
-                <>
-                    <Header title={_('Improvement')} />
-                    <View style={styles.content}>
-                        <SurveyReview
-                            name={surveyData.improvement}
-                            reviewItem={true}
-                        />
-                    </View>
-                </>
-            )}
-            <Header title={_('Description')} />
-            <View style={styles.content}>
-                <Text
-                    style={styles.description}
-                    title={surveyData?.description}
+                    </>
+                )}
+                <Header title={_('Description')} />
+                <View style={styles.content}>
+                    <Text
+                        style={styles.description}
+                        title={surveyData?.description}
+                    />
+                </View>
+                <SurveyActions
+                    isOpenActions={isOpenActions}
+                    onEditPress={toggleEditPress}
+                    onDeletePress={toggleDeleteModal}
+                    onBackdropPress={toggleActionsModal}
+                    isConfirmDeleteOpen={isOpenDelete}
+                    toggleCancelDelete={toggleActionsModal}
+                    toggleConfirmDelete={toggleConfirmDelete}
                 />
-            </View>
-            <SurveyActions
-                isOpenActions={isOpenActions}
-                onEditPress={togggleEditPress}
-                onDeletePress={toggleDeleteModal}
-                onBackdropPress={toggleActionsModal}
-                isConfirmDeleteOpen={isOpenDelete}
-                toggleCancelDelete={toggleActionsModal}
-                toggleConfirmDelete={toggleConfirmDelete}
-            />
+                <ExportActions
+                    isOpenExport={isOpenExport}
+                    onBackdropPress={toggleExportModal}
+                    onClickExportPDF={() => {}}
+                    onClickExportImage={onClickExportImage}
+                    onClickExportCSV={() => {}}
+                />
+            </ViewShot>
         </ScrollView>
     );
 };
