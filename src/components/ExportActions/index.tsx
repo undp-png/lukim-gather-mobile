@@ -31,14 +31,12 @@ const ActionItem = ({
 interface Props {
     isOpenExport: boolean;
     onBackdropPress(): void;
-    onClickExportPDF(): void;
     onClickExportImage(): void;
     onClickExportCSV(): void;
 }
 const ExportActions: React.FC<Props> = ({
     isOpenExport,
     onBackdropPress,
-    onClickExportPDF,
     onClickExportImage,
     onClickExportCSV,
 }) => {
@@ -48,11 +46,6 @@ const ExportActions: React.FC<Props> = ({
             onBackdropPress={onBackdropPress}
             style={styles.actionModal}>
             <View style={styles.options}>
-                <ActionItem
-                    title={_('Export as PDF')}
-                    onPress={onClickExportPDF}
-                    icon={pdfIcon}
-                />
                 <ActionItem
                     title={_('Export as Image (PNG)')}
                     onPress={onClickExportImage}

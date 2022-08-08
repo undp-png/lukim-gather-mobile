@@ -1,78 +1,51 @@
-import React, {useCallback, useEffect, useState, useRef, useMemo} from 'react';
-import {View, Image, Alert, PermissionsAndroid, Platform} from 'react-native';
+import React, {useCallback, useEffect, useState, useRef} from 'react';
+import {View, Image, Alert} from 'react-native';
+import {Icon} from 'react-native-eva-icons';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import MapboxGL from '@react-native-mapbox-gl/maps';
-import {useNavigation} from '@react-navigation/native';
 import {useNetInfo} from '@react-native-community/netinfo';
 import Geolocation from 'react-native-geolocation-service';
-import ViewShot from 'react-native-view-shot';
-import CameraRoll from '@react-native-community/cameraroll';
-import Toast from 'react-native-simple-toast';
-import RNFetchBlob from 'rn-fetch-blob';
-import {RootStateOrAny, useSelector} from 'react-redux';
-
-import HomeHeader from 'components/HomeHeader';
-import ExportActions from 'components/ExportActions';
 
 import cs from '@rna/utils/cs';
 import surveyCategory from 'services/data/surveyCategory';
 import {MAPBOX_ACCESS_TOKEN} from '@env';
 import {checkLocation} from 'utils/location';
-import {jsonToCSV} from 'utils';
-import {_} from 'services/i18n';
+import COLORS from 'utils/colors';
 
 import {HappeningSurveyType} from '@generated/types';
 
 import styleJSON from 'assets/map/style.json';
 
-import {UserLocation} from './UserLocation';
-import OfflineLayers from './OfflineLayers';
+import {UserLocation} from '../Map/UserLocation';
+import OfflineLayers from '../Map/OfflineLayers';
+import DrawPolygonIcon from '../Map/Icon/DrawPolygon';
+import MarkerIcon from '../Map/Icon/Marker';
 import styles, {mapStyles} from './styles';
 
 MapboxGL.setAccessToken(MAPBOX_ACCESS_TOKEN);
 
 interface Props {
     showCluster?: boolean;
-    hideHeader?: boolean;
+    showMarker?: boolean;
     locationBarStyle?: object;
+    onLocationPick?: (location: number[] | number[][] | undefined) => void;
+    pickLocation?: string;
     surveyData?: HappeningSurveyType[];
-    isStatic?: boolean;
 }
 
 const mapViewStyles = JSON.stringify(styleJSON);
 
 const Map: React.FC<Props> = ({
     showCluster = false,
-    hideHeader = false,
+    showMarker = false,
+    onLocationPick,
     locationBarStyle,
+    pickLocation = null,
     surveyData = [],
-    isStatic = false,
 }) => {
     const netInfo = useNetInfo();
 
-    const navigation = useNavigation();
-    const {user} = useSelector((state: RootStateOrAny) => state.auth);
-
     const [isOffline, setIsOffline] = useState(true);
-
-    const [isOpenExport, setIsOpenExport] = useState(false);
-
-    const toggleExportModal = useCallback(() => {
-        setIsOpenExport(!isOpenExport);
-    }, [isOpenExport]);
-
-    const [selectedTab, setSelectedTab] = useState('all');
-
-    const selectedData = useMemo(
-        () =>
-            selectedTab === 'myentries'
-                ? surveyData.filter(
-                      (el: HappeningSurveyType) =>
-                          el.createdBy?.id && el.createdBy?.id === user?.id,
-                  )
-                : surveyData,
-        [selectedTab, surveyData, user?.id],
-    );
 
     const manageOffline = useCallback(
         async packName => {
@@ -105,29 +78,27 @@ const Map: React.FC<Props> = ({
     );
 
     const mapRef = useRef() as React.MutableRefObject<MapboxGL.MapView>;
-    const viewShotRef = useRef<any>();
     const mapCameraRef = useRef() as React.MutableRefObject<MapboxGL.Camera>;
     const shapeSourceRef =
         useRef() as React.MutableRefObject<MapboxGL.ShapeSource>;
-
     const [currentLocation, setCurrentLocation] = useState<
         number[] | undefined
     >([147.17972, -9.44314]);
 
+    const [drawPolygon, setDrawPolygon] = useState<boolean>(false);
     const [mapCameraProps, setMapCameraProps] = useState<object | null>({});
+    const [polygonPoint, setPolygonPoint] = useState<number[][]>([]);
 
     const handleLocationPress = useCallback(() => {
         if (
-            isStatic &&
-            selectedData?.length === 1 &&
-            (selectedData[0].location || selectedData[0].boundary)
+            surveyData?.length === 1 &&
+            (surveyData[0].location || surveyData[0].boundary)
         ) {
             let coordinates = [];
-            if (selectedData[0].location) {
-                coordinates = selectedData[0].location.coordinates;
-            } else if (selectedData[0].boundary) {
-                coordinates =
-                    selectedData[0].boundary.coordinates?.[0]?.[0]?.[0];
+            if (surveyData[0].location) {
+                coordinates = surveyData[0].location.coordinates;
+            } else if (surveyData[0].boundary) {
+                coordinates = surveyData[0].boundary.coordinates?.[0]?.[0]?.[0];
             }
             if (coordinates?.length) {
                 mapCameraRef.current.setCamera({
@@ -160,7 +131,7 @@ const Map: React.FC<Props> = ({
                 );
             }
         });
-    }, [isStatic, selectedData]);
+    }, [surveyData]);
 
     const handleFinishMapLoad = useCallback(() => {
         manageOffline('png_14_20');
@@ -173,78 +144,79 @@ const Map: React.FC<Props> = ({
         }
     }, [netInfo.isInternetReachable]);
 
+    useEffect(() => {
+        switch (pickLocation) {
+            case 'Use my current location':
+                setDrawPolygon(false);
+                setPolygonPoint([]);
+                Geolocation.getCurrentPosition(position => {
+                    const coordinates = [
+                        position.coords.longitude,
+                        position.coords.latitude,
+                    ];
+                    onLocationPick && onLocationPick?.(coordinates);
+                });
+                break;
+            case 'Set on a map':
+                setDrawPolygon(false);
+                setPolygonPoint([]);
+                break;
+            case 'Draw polygon':
+                break;
+            default:
+                setDrawPolygon(false);
+                setPolygonPoint([]);
+        }
+    }, [pickLocation, onLocationPick]);
+
     const onRegionDidChange = useCallback(() => {
         setMapCameraProps({});
     }, []);
 
-    const handleSurveyPolyShapePress = useCallback(
-        shape => {
-            if (isStatic) {
-                return;
-            }
-            if (shape?.features?.length === 1) {
-                const feature = shape.features[0];
-                if (feature?.properties?.surveyItem) {
-                    return navigation.navigate('SurveyItem', {
-                        item: feature.properties.surveyItem,
-                    });
-                }
-            } else if (shape?.features?.length > 1) {
-                const feature = shape.features[shape.features.length - 1];
-                if (feature?.properties?.surveyItem) {
-                    return navigation.navigate('SurveyItem', {
-                        item: feature.properties.surveyItem,
-                    });
-                }
-            }
-        },
-        [navigation, isStatic],
-    );
+    const renderAnnotation = useCallback(() => {
+        return (
+            <MapboxGL.PointAnnotation id="marker" coordinate={currentLocation}>
+                <View style={styles.markerContainer}>
+                    <MarkerIcon />
+                    <View style={styles.markerLine} />
+                    <View style={styles.markerDotOuter}>
+                        <View style={styles.markerDotInner} />
+                    </View>
+                </View>
+            </MapboxGL.PointAnnotation>
+        );
+    }, [currentLocation]);
 
-    const handleSurveyShapePress = useCallback(
-        async shape => {
-            if (isStatic) {
-                return;
-            }
-            if (shape?.features?.length === 1) {
-                const feature = shape.features[0];
-                if (feature?.properties?.surveyItem) {
-                    return navigation.navigate('SurveyItem', {
-                        item: feature.properties.surveyItem,
-                    });
-                }
-            } else if (shape?.features?.length > 1) {
-                try {
-                    const feature = shape.features[0];
-                    const currentZoom = await mapRef.current.getZoom();
-                    if (currentZoom > 19 && feature?.properties?.surveyItem) {
-                        return navigation.navigate('SurveyItem', {
-                            item: feature.properties.surveyItem,
-                        });
-                    }
-                    const zoom =
-                        await shapeSourceRef.current.getClusterExpansionZoom(
-                            feature,
-                        );
-                    if (zoom) {
-                        setMapCameraProps({
-                            zoomLevel: zoom,
-                            animationMode: 'flyTo',
-                            animationDuration: 1000,
-                            centerCoordinate: feature.geometry.coordinates,
-                        });
-                    }
-                } catch (error) {
-                    console.log(error);
-                }
-            }
-        },
-        [navigation, isStatic],
-    );
+    const renderPolygon = useCallback(() => {
+        const polygonGeoJSON = {
+            type: 'Feature',
+            geometry: {
+                type: 'LineString',
+                coordinates: [...polygonPoint],
+            },
+        };
+
+        return (
+            <MapboxGL.ShapeSource id="polygonSource" shape={polygonGeoJSON}>
+                <MapboxGL.FillLayer
+                    id="polygonFill"
+                    style={styles.polygonFill}
+                />
+                {polygonPoint &&
+                    polygonPoint.map((_, index) => (
+                        <MapboxGL.CircleLayer
+                            key={index}
+                            id={'point-' + index}
+                            style={styles.pointCircle}
+                        />
+                    ))}
+            </MapboxGL.ShapeSource>
+        );
+    }, [polygonPoint]);
 
     const renderCluster = useCallback(() => {
         const shape =
-            selectedData
+            surveyData
                 .filter((survey: HappeningSurveyType) => survey.location)
                 .map((survey: HappeningSurveyType) => ({
                     type: 'Feature',
@@ -262,7 +234,7 @@ const Map: React.FC<Props> = ({
             features: [...shape],
         };
         const polyShape =
-            selectedData
+            surveyData
                 .filter((survey: HappeningSurveyType) => survey.boundary)
                 .map((survey: HappeningSurveyType) => ({
                     type: 'Feature',
@@ -294,7 +266,6 @@ const Map: React.FC<Props> = ({
                 <MapboxGL.Images images={categoryIcons} />
                 <MapboxGL.ShapeSource
                     id="surveyPolySource"
-                    onPress={handleSurveyPolyShapePress}
                     shape={surveyPolyGeoJSON}>
                     <MapboxGL.SymbolLayer
                         id="polyTitle"
@@ -312,7 +283,6 @@ const Map: React.FC<Props> = ({
                     ref={shapeSourceRef}
                     id="surveySource"
                     cluster
-                    onPress={handleSurveyShapePress}
                     shape={surveyGeoJSON}>
                     <MapboxGL.SymbolLayer
                         id="pointCount"
@@ -334,88 +304,52 @@ const Map: React.FC<Props> = ({
                 </MapboxGL.ShapeSource>
             </>
         );
-    }, [selectedData, handleSurveyShapePress, handleSurveyPolyShapePress]);
+    }, [surveyData]);
 
-    const getPermissionAndroid = useCallback(async () => {
-        try {
-            const granted = await PermissionsAndroid.request(
-                PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
-                {
-                    title: _('Image export permission'),
-                    message: _('Your permission is required to save image'),
-                    buttonNegative: _('Cancel'),
-                    buttonPositive: _('OK'),
-                },
-            );
-            if (granted === PermissionsAndroid.RESULTS.GRANTED) {
-                return true;
-            }
-            Toast.show(_('Permission required'));
-        } catch (err) {
-            console.log('Error' + err);
-        }
+    const handleRemovePolygon = useCallback(() => {
+        setPolygonPoint([]);
     }, []);
 
-    const onClickExportImage = useCallback(async () => {
-        try {
-            await viewShotRef.current.capture().then((uri: any) => {
-                console.log(uri);
-                if (Platform.OS === 'android') {
-                    const granted = getPermissionAndroid();
-                    if (!granted) {
-                        return;
-                    }
-                }
-                CameraRoll.save(uri, {
-                    type: 'photo',
-                    album: 'Lukim Gather',
-                });
-                Toast.show(_('Saved image in gallery!'));
-                return setIsOpenExport(false);
-            });
-        } catch (error) {
-            console.log(error);
-        }
-    }, [getPermissionAndroid]);
+    const handleMapPress = useCallback(
+        mapEvent => {
+            switch (pickLocation) {
+                case 'Set on a map':
+                    setCurrentLocation(mapEvent.geometry.coordinates);
+                    onLocationPick?.(mapEvent.geometry.coordinates);
+                    break;
+                case 'Draw polygon':
+                    setPolygonPoint([
+                        ...polygonPoint,
+                        mapEvent.geometry.coordinates,
+                    ]);
+                    onLocationPick &&
+                        onLocationPick?.([
+                            ...polygonPoint,
+                            mapEvent.geometry.coordinates,
+                        ]);
+                    break;
+                default:
+                    break;
+            }
+        },
+        [polygonPoint, pickLocation, onLocationPick],
+    );
 
-    const onClickExportCSV = useCallback(async () => {
-        const config = [
-            {title: 'id', dataKey: 'id'},
-            {title: _('Title'), dataKey: 'title'},
-            {title: _('Description'), dataKey: 'description'},
-            {title: _('Category'), dataKey: 'category.title'},
-            {title: _('Sentiment'), dataKey: 'sentiment'},
-            {title: _('Improvement'), dataKey: 'improvement'},
-            {title: _('Location'), dataKey: 'location.coordinates'},
-            {title: _('Boundary'), dataKey: 'boundary.coordinates'},
-        ];
-        const csv = jsonToCSV(selectedData, config);
-        const path = `${
-            RNFetchBlob.fs.dirs.DownloadDir
-        }/surveys_${Date.now()}.csv`;
-        RNFetchBlob.fs.writeFile(path, csv, 'utf8');
-        Toast.show('Saved CSV in Downloads folder!');
-        setIsOpenExport(false);
-    }, [selectedData]);
+    const handleDrawTool = useCallback(() => {
+        setDrawPolygon(!drawPolygon);
+    }, [drawPolygon]);
 
     return (
         <View style={styles.page}>
-            {!hideHeader && (
-                <HomeHeader
-                    selectedTab={selectedTab}
-                    setSelectedTab={setSelectedTab}
-                    homeScreen
-                    onExportPress={toggleExportModal}
-                />
-            )}
-            <ViewShot ref={viewShotRef} style={styles.container}>
+            <View style={styles.container}>
                 <MapboxGL.MapView
                     ref={mapRef}
                     style={styles.map}
                     onRegionDidChange={onRegionDidChange}
                     onDidFinishLoadingStyle={handleFinishMapLoad}
                     styleJSON={isOffline ? mapViewStyles : ''}
-                    compassViewMargins={{x: 30, y: 150}}>
+                    compassViewMargins={{x: 30, y: 150}}
+                    onPress={handleMapPress}>
                     <MapboxGL.Camera
                         defaultSettings={{
                             centerCoordinate: currentLocation,
@@ -426,9 +360,11 @@ const Map: React.FC<Props> = ({
                     />
                     {isOffline && <OfflineLayers />}
                     <UserLocation visible={true} />
+                    {showMarker && renderAnnotation()}
+                    {pickLocation === 'Draw polygon' && renderPolygon()}
                     {showCluster && renderCluster()}
                 </MapboxGL.MapView>
-            </ViewShot>
+            </View>
             <View style={cs(styles.locationBar, locationBarStyle)}>
                 <TouchableOpacity
                     style={styles.locationWrapper}
@@ -439,12 +375,24 @@ const Map: React.FC<Props> = ({
                     />
                 </TouchableOpacity>
             </View>
-            <ExportActions
-                isOpenExport={isOpenExport}
-                onBackdropPress={toggleExportModal}
-                onClickExportImage={onClickExportImage}
-                onClickExportCSV={onClickExportCSV}
-            />
+            {pickLocation === 'Draw polygon' && (
+                <View style={cs(styles.drawPolygon, locationBarStyle)}>
+                    <TouchableOpacity
+                        style={styles.locationWrapper}
+                        onPress={handleDrawTool}>
+                        <DrawPolygonIcon active={drawPolygon} />
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                        style={styles.locationWrapper}
+                        onPress={handleRemovePolygon}>
+                        <Icon
+                            name="trash-2-outline"
+                            fill={COLORS.blueText}
+                            style={styles.icon}
+                        />
+                    </TouchableOpacity>
+                </View>
+            )}
         </View>
     );
 };

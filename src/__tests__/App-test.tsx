@@ -211,6 +211,18 @@ jest.mock('react-native-fs', () => {
     };
 });
 
+jest.mock('react-native-view-shot', () => {
+    return {};
+});
+
+jest.mock('rn-fetch-blob', () => {
+    return {
+        fs: {
+            DocumentDir: '',
+        },
+    };
+});
+
 it('renders correctly', () => {
     renderer.create(<App />);
 });
