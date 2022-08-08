@@ -13,6 +13,7 @@ import Toast from 'react-native-simple-toast';
 import {RootStateOrAny, useSelector} from 'react-redux';
 import ViewShot from 'react-native-view-shot';
 import CameraRoll from '@react-native-community/cameraroll';
+import RNFetchBlob from 'rn-fetch-blob';
 
 import Text from 'components/Text';
 import {OptionIcon} from 'components/HeaderButton';
@@ -20,6 +21,7 @@ import SurveyActions from 'components/SurveyActions';
 import SurveyReview from 'components/SurveyReview';
 import ExportActions from 'components/ExportActions';
 
+import {jsonToCSV} from 'utils';
 import useCategoryIcon from 'hooks/useCategoryIcon';
 import {_} from 'services/i18n';
 import SurveyCategory from 'services/data/surveyCategory';
@@ -205,6 +207,17 @@ const SurveyItem = () => {
         }
     }, [getPermissionAndroid]);
 
+    const onClickExportCSV = useCallback(async () => {
+        const config = [{title: _('Title'), dataKey: 'title'}];
+        const csv = jsonToCSV([surveyData], config);
+        const path = `${
+            RNFetchBlob.fs.dirs.DownloadDir
+        }/survey_${Date.now()}.csv`;
+        RNFetchBlob.fs.writeFile(path, csv, 'utf8');
+        Toast.show('Saved CSV in Downloads folder!');
+        setIsOpenExport(false);
+    }, [surveyData]);
+
     useEffect(() => {
         navigation.setOptions({
             headerRight: () => (
@@ -297,9 +310,8 @@ const SurveyItem = () => {
                 <ExportActions
                     isOpenExport={isOpenExport}
                     onBackdropPress={toggleExportModal}
-                    onClickExportPDF={() => {}}
                     onClickExportImage={onClickExportImage}
-                    onClickExportCSV={() => {}}
+                    onClickExportCSV={onClickExportCSV}
                 />
             </ViewShot>
         </ScrollView>

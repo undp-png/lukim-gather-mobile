@@ -23,6 +23,9 @@ module.exports = {
             '|react-native-webview' +
             '|react-native-dropdown-picker' +
             '|react-native-code-push' +
+            '|react-native-view-shot' +
+            '|@react-native-community/cameraroll' +
+            '|rn-fetch-blob' +
             ')/)',
     ],
     testPathIgnorePatterns: ['src/vendor', 'node_modules'],

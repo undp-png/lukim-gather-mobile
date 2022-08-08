@@ -151,7 +151,7 @@ const CreateHappeningSurvey = () => {
     >(CREATE_HAPPENING_SURVEY, {
         onCompleted: () => {
             Toast.show('Survey Created Successfully !');
-            navigation.navigate('Feed');
+            navigation.navigate('Feed', {screen: 'Home'});
             setProcessing(loading);
         },
         onError: err => {

@@ -4,7 +4,7 @@ import {useNavigation, useRoute} from '@react-navigation/native';
 import type {RouteProp} from '@react-navigation/native';
 
 import InputField from 'components/InputField';
-import Map from 'components/Map';
+import Map from 'components/DrawableMap';
 import RadioInput from 'components/RadioInput';
 import {SaveButton} from 'components/HeaderButton';
 
@@ -146,8 +146,6 @@ const ChangeLocation = () => {
             <View style={styles.mapContainer}>
                 <Map
                     showCluster={!touched}
-                    isStatic
-                    hideHeader
                     showMarker={selectedMethod === 'Set on a map'}
                     locationBarStyle={styles.locationBar}
                     onLocationPick={handleLocationPick}
