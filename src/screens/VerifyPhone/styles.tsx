@@ -8,29 +8,25 @@ export default StyleSheet.create({
         paddingHorizontal: 20,
         backgroundColor: COLORS.white,
     },
-    infoWrapper: {
-        marginTop: 10,
-        alignItems: 'flex-end',
-    },
-    info: {
+    title: {
+        marginTop: 24,
         fontSize: 16,
-        fontFamily: 'Inter-Medium',
-        color: COLORS.blueText,
+        fontFamily: 'Inter-Regular',
+        lineHeight: 24,
+        color: COLORS.tertiary,
     },
     button: {
         marginTop: 32,
     },
-    signUp: {
-        marginVertical: 20,
-        paddingVertical: 10,
-        alignItems: 'center',
+    resendWrapper: {
+        marginTop: 'auto',
+        marginBottom: 40,
     },
     text: {
         color: COLORS.blueTextAlt,
+        textAlign: 'center',
         fontSize: 14,
+        fontWeight: '400',
         fontFamily: 'Inter-Regular',
-    },
-    tabStyle: {
-        marginTop: 20,
     },
 });

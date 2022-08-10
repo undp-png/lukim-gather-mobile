@@ -183,6 +183,32 @@ export const EMAIL_CONFIRM_VERIFY = gql`
     }
 `;
 
+export const PHONE_NUMBER_CONFIRM = gql`
+    mutation PhoneNumberConfirm($data: PhoneNumberConfirmInput!) {
+        phoneNumberConfirm(data: $data) {
+            ok
+            errors
+        }
+    }
+`;
+
+export const PHONE_NUMBER_CONFIRM_VERIFY = gql`
+    mutation PhoneNumberConfirmVerify($data: PhoneNumberConfirmInput!) {
+        phoneNumberVerify(data: $data) {
+            token
+            refreshToken
+            user {
+                id
+                firstName
+                lastName
+                email
+                organization
+                avatar
+            }
+        }
+    }
+`;
+
 export const UPDATE_USER = gql`
     mutation UpdateUser($data: UserInput!) {
         updateUser(data: $data) {

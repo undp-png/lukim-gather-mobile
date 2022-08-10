@@ -51,4 +51,7 @@ export default StyleSheet.create({
         fontSize: 14,
         fontFamily: 'Inter-Regular',
     },
+    tabStyle: {
+        marginTop: 20,
+    },
 });

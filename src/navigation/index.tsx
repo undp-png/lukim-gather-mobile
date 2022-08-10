@@ -12,6 +12,7 @@ import Language from 'screens/Language';
 import ChangePassword from 'screens/ChangePassword';
 import ForgotPassword from 'screens/ForgotPassword';
 import VerifyEmail from 'screens/VerifyEmail';
+import VerifyPhone from 'screens/VerifyPhone';
 import CreateNewPassword from 'screens/CreateNewPassword';
 import ChangeLocation from 'screens/ChangeLocation';
 import SearchCategory from 'screens/SearchCategory';
@@ -59,6 +60,7 @@ export type StackParamList = {
     Settings: undefined;
     ForgotPassword: undefined;
     VerifyEmail: undefined;
+    VerifyPhone: undefined;
     CreateNewPassword: undefined;
     Help: undefined;
     SearchSurvey: undefined;
@@ -147,6 +149,11 @@ const AppNavigator = () => {
                 name="VerifyEmail"
                 component={VerifyEmail}
                 options={{headerTitle: _('Verify your email')}}
+            />
+            <Stack.Screen
+                name="VerifyPhone"
+                component={VerifyPhone}
+                options={{headerTitle: _('Verify your phone')}}
             />
             <Stack.Screen
                 name="CreateNewPassword"
