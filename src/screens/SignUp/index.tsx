@@ -4,10 +4,12 @@ import {TouchableOpacity, View} from 'react-native';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import Toast from 'react-native-simple-toast';
 import {useNavigation} from '@react-navigation/native';
+import parsePhoneNumber from 'libphonenumber-js'
 
 import Text from 'components/Text';
 import InputField from 'components/InputField';
 import Button from 'components/Button';
+import AuthTypeTab from 'components/AuthTypeTab';
 import {ModalLoader} from 'components/Loader';
 
 import {_} from 'services/i18n';
@@ -21,13 +23,21 @@ const SignUp = () => {
     const [firstName, setFirstName] = useState<string>('');
     const [lastName, setLastName] = useState<string>('');
     const [email, setEmail] = useState<string>('');
+    const [phone, setPhone] = useState<string>('');
     const [password, setPassword] = useState<string>('');
+    const [selectedTab, setSelectedTab] = useState<string>('email');
 
     const [signup, {loading}] = useMutation(SIGNUP, {
         onCompleted: () => {
-            Toast.show('Your account has been successfully created !!');
-            // navigation.navigate('ConfirmEmail', {email}); to confirm email
-            navigation.navigate('Login');
+            if(selectedTab === 'email') {
+                Toast.show('Your account has been successfully created !!');
+                // navigation.navigate('ConfirmEmail', {email}); to confirm email
+                navigation.navigate('Login');
+            } else {
+                const ph = parsePhoneNumber(phone, 'PG');
+                const phoneNumber = ph?.formatInternational().replace(/\s/g, '');
+                navigation.navigate('VerifyPhone', {phone: phoneNumber});
+            }
         },
         onError: err => {
             Toast.show(getErrorMessage(err), Toast.LONG, [
@@ -38,16 +48,30 @@ const SignUp = () => {
     });
 
     const handleSignUp = useCallback(async () => {
+        const data = {
+            firstName,
+            lastName,
+            password,
+            rePassword: password,
+        };
+
+        if(selectedTab === 'email') {
+            data.email = email.toLowerCase();
+            data.username = email.toLowerCase();
+        } else {
+            const ph = parsePhoneNumber(phone, 'PG');
+            const phoneNumber = ph?.formatInternational().replace(/\s/g, '');
+            if(!ph?.isValid()) {
+                return Toast.show('Invalid Phone number.', Toast.LONG, [
+                    'RCTModalHostViewController',
+                ]);
+            }
+            data.username = phoneNumber;
+            data.phoneNumber = phoneNumber;
+        }
         await signup({
             variables: {
-                data: {
-                    firstName,
-                    lastName,
-                    email: email.toLowerCase(),
-                    password,
-                    rePassword: password,
-                    username: email.toLowerCase(),
-                },
+                data,
             },
         });
     }, [email, firstName, lastName, password, signup]);
@@ -69,15 +93,28 @@ const SignUp = () => {
             showsVerticalScrollIndicator={false}
             style={styles.container}>
             <ModalLoader loading={loading} />
-            <InputField
-                input={email}
-                onChangeText={setEmail}
-                title={_('Email or Phone')}
-                placeholder="johndoe@example.com"
+            <AuthTypeTab
+                selectedTab={selectedTab}
+                setSelectedTab={setSelectedTab}
+                tabStyle={styles.tabStyle}
             />
+            {selectedTab === 'email' ? (
+                <InputField
+                    value={email}
+                    onChangeText={setEmail}
+                    title={_('Email')}
+                    placeholder="johndoe@example.com"
+                />
+            ):(
+                <InputField
+                    value={phone}
+                    onChangeText={setPhone}
+                    title={_('Phone(with country code)')}
+                    placeholder="Enter phone number"
+                />
+            )}
             <View style={styles.name}>
                 <InputField
-                    input={firstName}
                     value={firstName}
                     onChangeText={setFirstName}
                     title={_('First name')}
@@ -85,7 +122,6 @@ const SignUp = () => {
                     containerStyle={styles.fullName}
                 />
                 <InputField
-                    input={lastName}
                     value={lastName}
                     onChangeText={setLastName}
                     title={_('Surname')}
@@ -93,14 +129,15 @@ const SignUp = () => {
                     containerStyle={styles.surName}
                 />
             </View>
-            <InputField
-                onChangeText={setPassword}
-                title={_('Password')}
-                placeholder={_('Enter password')}
-                input={password}
-                value={password}
-                password
-            />
+            {selectedTab === 'email' && (
+                <InputField
+                    onChangeText={setPassword}
+                    title={_('Password')}
+                    placeholder={_('Enter password')}
+                    value={password}
+                    password
+                />
+            )}
             <View style={styles.infoWrapper}>
                 <Text
                     style={styles.info}
@@ -124,7 +161,11 @@ const SignUp = () => {
                 title={_('Create an account')}
                 style={styles.button}
                 onPress={handleSignUp}
-                disabled={!email || !firstName || !lastName || !password}
+                disabled={
+                    selectedTab === 'email'?
+                        !(email && firstName && lastName && password) :
+                        !(phone && firstName && lastName)
+                }
             />
             <TouchableOpacity onPress={handleGoLogin} style={styles.login}>
                 <Text
