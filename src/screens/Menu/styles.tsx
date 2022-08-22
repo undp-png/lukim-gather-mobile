@@ -43,7 +43,7 @@ export default StyleSheet.create({
         lineHeight: 21.78,
         color: COLORS.tertiary,
     },
-    userOrg: {
+    userInfo: {
         fontSize: 14,
         fontFamily: 'Inter-Regular',
         lineHeight: 20,

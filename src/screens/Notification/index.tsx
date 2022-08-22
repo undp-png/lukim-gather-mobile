@@ -5,6 +5,7 @@ import {TouchableOpacity} from 'react-native-gesture-handler';
 import {Icon} from 'react-native-eva-icons';
 import {useLazyQuery, useMutation} from '@apollo/client';
 import {useFocusEffect, useNavigation} from '@react-navigation/native';
+import WebView from 'react-native-webview';
 
 import EmptyListMessage from 'components/EmptyListMessage';
 import Text from 'components/Text';
@@ -52,13 +53,15 @@ const Notifications = () => {
     const handleNotificationPress = useCallback(
         item => {
             markAsRead({variables: {id: Number(item.id)}});
-            getHappeningSurvey({
-                variables: {id: item.actionObjectObjectId.toString()},
-            }).then(({data: surveyItem}) =>
-                navigation.navigate('SurveyItem', {
-                    item: surveyItem?.happeningSurveys[0],
-                }),
-            );
+            if (item?.notificationType.startsWith('happening_survey')) {
+                getHappeningSurvey({
+                    variables: {id: item.actionObjectObjectId.toString()},
+                }).then(({data: surveyItem}) =>
+                    navigation.navigate('SurveyItem', {
+                        item: surveyItem?.happeningSurveys[0],
+                    }),
+                );
+            }
         },
         [getHappeningSurvey, markAsRead, navigation],
     );
@@ -68,7 +71,7 @@ const Notifications = () => {
             <TouchableOpacity
                 onPress={() => handleNotificationPress(item)}
                 style={cs(styles.notificationContainer, [
-                    styles.notificationContainerUnread,
+                    styles.notificationUnread,
                     !item.hasRead,
                 ])}>
                 <View style={styles.iconContainer}>
@@ -83,7 +86,21 @@ const Notifications = () => {
                     />
                 </View>
                 <View style={styles.notificationWrapper}>
-                    <Text style={styles.description} title={item.description} />
+                    <WebView
+                        style={cs(styles.description, [
+                            styles.notificationUnread,
+                            !item.hasRead,
+                        ])}
+                        scrollEnabled={false}
+                        scalesPageToFit={false}
+                        showsVerticalScrollIndicator={false}
+                        showsHorizontalScrollIndicator={false}
+                        source={{
+                            html: `<body style="margin: 0 !important;padding: 0 !important; font-size: 16px; line-height: 24px;
+
+                        ">${item?.description}</body>`,
+                        }}
+                    />
                     <Text
                         style={styles.date}
                         title={formatDistanceToNow(new Date(item.createdAt))}

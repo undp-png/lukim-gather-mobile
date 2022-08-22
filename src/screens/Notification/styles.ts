@@ -1,4 +1,4 @@
-import {Dimensions, StyleSheet} from 'react-native';
+import {StyleSheet} from 'react-native';
 
 import COLORS from 'utils/colors';
 
@@ -16,7 +16,7 @@ export default StyleSheet.create({
         borderRadius: 8,
         marginBottom: 2,
     },
-    notificationContainerUnread: {
+    notificationUnread: {
         backgroundColor: '#F0F3F7',
     },
     iconContainer: {
@@ -34,11 +34,7 @@ export default StyleSheet.create({
         paddingRight: 6,
     },
     description: {
-        fontSize: 16,
-        fontFamily: 'Inter-Regular',
-        lineHeight: 24,
-        color: '#585D69',
-        marginBottom: 4,
+        flex: 1,
     },
     date: {
         fontSize: 12,
