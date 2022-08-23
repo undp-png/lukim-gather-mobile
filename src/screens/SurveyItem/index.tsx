@@ -298,6 +298,27 @@ const SurveyItem = () => {
                         title={surveyData?.description}
                     />
                 </View>
+                <Header title={_('Published Anonymously')} />
+                <View style={styles.content}>
+                    <Text
+                        style={styles.description}
+                        title={surveyData?.createdBy ? _('No'): _('Yes')}
+                    />
+                </View>
+                <Header title={_('Public Information')} />
+                <View style={styles.content}>
+                    <Text
+                        style={styles.description}
+                        title={surveyData?.isPublic ? _('Yes'): _('No')}
+                    />
+                </View>
+                <Header title={_('Test Data')} />
+                <View style={styles.content}>
+                    <Text
+                        style={styles.description}
+                        title={surveyData?.isTest ? _('Yes'): _('No')}
+                    />
+                </View>
                 <SurveyActions
                     isOpenActions={isOpenActions}
                     onEditPress={toggleEditPress}
