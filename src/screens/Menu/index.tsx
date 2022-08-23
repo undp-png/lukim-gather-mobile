@@ -95,7 +95,11 @@ const Menu = () => {
                                     }
                                 />
                                 <Text
-                                    style={styles.userOrg}
+                                    style={styles.userInfo}
+                                    title={user?.email}
+                                />
+                                <Text
+                                    style={styles.userInfo}
                                     title={user?.organization}
                                 />
                             </View>
