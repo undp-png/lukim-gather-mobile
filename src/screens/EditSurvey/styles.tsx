@@ -70,6 +70,11 @@ export default StyleSheet.create({
     },
     textarea: {
         height: 156,
-        marginBottom: 50,
     },
+    spaceLeft: {
+        marginLeft: 10,
+    },
+    isTest: {
+        marginBottom: 50,
+    }
 });

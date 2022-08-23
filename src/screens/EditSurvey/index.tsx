@@ -20,8 +20,10 @@ import SurveySentiment from 'components/SurveySentiment';
 import SurveyReview from 'components/SurveyReview';
 
 import SurveyCategory from 'services/data/surveyCategory';
+import cs from '@rna/utils/cs';
 import {_} from 'services/i18n';
 import useCategoryIcon from 'hooks/useCategoryIcon';
+import {OptionItem} from 'screens/CreateSurvey';
 
 import {
     UPDATE_HAPPENING_SURVEY,
@@ -87,6 +89,12 @@ const EditHappeningSurvey = () => {
     const [locationDetail, setLocationDetail] = useState<string>(
         route.params?.surveyItem?.location?.coordinates,
     );
+    const [isPublic, setIsPublic] = useState<boolean>(
+        route.params?.surveyItem?.isPublic,
+    );
+    const [isTest, setIsTest] = useState<boolean>(
+        route.params?.surveyItem?.isTest,
+    );
 
     const allImages = useMemo(() => {
         if (imageLinks?.length > -1) {
@@ -129,6 +137,8 @@ const EditHappeningSurvey = () => {
             description: description,
             sentiment: activeFeel,
             improvement: activeReview,
+            isTest: isTest,
+            isPublic: isPublic,
             attachment: attachment.map(res => responseToRNF(res)),
             attachmentLink: imageLinks.map(img => img.id),
         };
@@ -199,7 +209,7 @@ const EditHappeningSurvey = () => {
                             ) {
                                 return {
                                     ...obj,
-                                    ...data.updateHappeningSurvey.result,
+                                    ...data?.updateHappeningSurvey?.result,
                                 };
                             }
                             return obj;
@@ -226,6 +236,8 @@ const EditHappeningSurvey = () => {
         description,
         activeFeel,
         activeReview,
+        isPublic,
+        isTest,
         attachment,
         updateHappeningSurvey,
         confirmPublish,
@@ -299,6 +311,12 @@ const EditHappeningSurvey = () => {
             setLocationDetail('Choose the location');
         }
     }, [location, coordinates, route.params?.surveyItem]);
+
+    const handlePublicPress = useCallback(() => setIsPublic(true), []);
+    const handleNotPublicPress = useCallback(() => setIsPublic(false), []);
+
+    const handleTestPress = useCallback(() => setIsTest(true), []);
+    const handleNotTestPress = useCallback(() => setIsTest(false), []);
 
     return (
         <ScrollView
@@ -405,6 +423,41 @@ const EditHappeningSurvey = () => {
                 value={description}
                 placeholder={_('What’s happening here?')}
             />
+            <Text style={styles.title} title={_('Who can see this survey?')} />
+            <View style={styles.feelings}>
+                <OptionItem
+                    text={_('Only me')}
+                    iconName="lock-outline"
+                    isActive={!isPublic}
+                    onPress={handleNotPublicPress}
+                />
+                <OptionItem
+                    text={_('Everyone')}
+                    isActive={isPublic}
+                    iconName="people-outline"
+                    style={styles.spaceLeft}
+                    onPress={handlePublicPress}
+                />
+            </View>
+            <Text
+                style={styles.title}
+                title={_('Is this real data or a test point?')}
+            />
+            <View style={cs(styles.feelings, styles.isTest)}>
+                <OptionItem
+                    isActive={!isTest}
+                    text={_('Real data')}
+                    iconName="checkmark-circle-outline"
+                    onPress={handleNotTestPress}
+                />
+                <OptionItem
+                    isActive={isTest}
+                    text={_('Test data')}
+                    iconName="funnel-outline"
+                    style={styles.spaceLeft}
+                    onPress={handleTestPress}
+                />
+            </View>
             <CategoryListModal
                 setCategory={setSurveyCategory}
                 setOpenCategory={setOpenCategory}

@@ -58,7 +58,7 @@ interface OptionItemProps {
     style?: object;
 }
 
-const OptionItem: React.FC<OptionItemProps> = ({
+export const OptionItem: React.FC<OptionItemProps> = ({
     iconName,
     text,
     isActive,

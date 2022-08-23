@@ -42,6 +42,8 @@ export const GET_HAPPENING_SURVEY = gql`
             }
             sentiment
             improvement
+            isTest
+            isPublic
             attachment {
                 id
                 media
@@ -119,6 +121,8 @@ export const UPDATE_HAPPENING_SURVEY = gql`
                 }
                 sentiment
                 improvement
+                isTest
+                isPublic
                 attachment {
                     id
                     media
