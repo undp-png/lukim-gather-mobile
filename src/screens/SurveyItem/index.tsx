@@ -14,6 +14,7 @@ import {RootStateOrAny, useSelector} from 'react-redux';
 import ViewShot from 'react-native-view-shot';
 import CameraRoll from '@react-native-community/cameraroll';
 import RNFetchBlob from 'rn-fetch-blob';
+import {Icon} from 'react-native-eva-icons';
 
 import Text from 'components/Text';
 import {OptionIcon} from 'components/HeaderButton';
@@ -258,6 +259,16 @@ const SurveyItem = () => {
                         style={styles.field}
                         title={_(surveyData?.category?.title)}
                     />
+                    {surveyData?.isOffline && (
+                        <View style={styles.offlineIndicator}>
+                            <Icon
+                                name="wifi-off-outline"
+                                height={14}
+                                width={14}
+                                fill="#fff"
+                            />
+                        </View>
+                    )}
                 </View>
                 <Header title={_('Name')} />
                 <View style={styles.content}>
@@ -302,21 +313,21 @@ const SurveyItem = () => {
                 <View style={styles.content}>
                     <Text
                         style={styles.description}
-                        title={surveyData?.createdBy ? _('No'): _('Yes')}
+                        title={surveyData?.createdBy ? _('No') : _('Yes')}
                     />
                 </View>
                 <Header title={_('Public Information')} />
                 <View style={styles.content}>
                     <Text
                         style={styles.description}
-                        title={surveyData?.isPublic ? _('Yes'): _('No')}
+                        title={surveyData?.isPublic ? _('Yes') : _('No')}
                     />
                 </View>
                 <Header title={_('Test Data')} />
                 <View style={styles.content}>
                     <Text
                         style={styles.description}
-                        title={surveyData?.isTest ? _('Yes'): _('No')}
+                        title={surveyData?.isTest ? _('Yes') : _('No')}
                     />
                 </View>
                 <SurveyActions

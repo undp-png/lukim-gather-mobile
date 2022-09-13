@@ -27,11 +27,14 @@ export default StyleSheet.create({
         borderRadius: 8,
         padding: 12,
         marginBottom: 8,
-        flexDirection: 'row',
-        justifyContent: 'space-between',
+        flexDirection: 'column',
+        position: 'relative',
     },
-    leftData: {
-        flex: 3,
+    bottomData: {
+        display: 'flex',
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-between',
     },
     title: {
         fontSize: 16,
@@ -55,10 +58,6 @@ export default StyleSheet.create({
         lineHeight: 20,
         fontFamily: 'Inter-Regular',
         color: COLORS.blueText,
-    },
-    rightData: {
-        flex: 1,
-        justifyContent: 'flex-end',
     },
     date: {
         fontSize: 12,
@@ -89,5 +88,17 @@ export default StyleSheet.create({
         fontFamily: 'Inter-Medium',
         color: COLORS.tertiary,
         textAlign: 'center',
+    },
+    offlineIndicator: {
+        position: 'absolute',
+        backgroundColor: COLORS.accent,
+        width: 20,
+        height: 20,
+        borderRadius: 10,
+        right: 10,
+        top: 10,
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
     },
 });

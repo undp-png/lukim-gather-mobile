@@ -1,6 +1,7 @@
 import React, {useCallback} from 'react';
 import {View, Image, TouchableOpacity} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
+import {Icon} from 'react-native-eva-icons';
 
 import Text from 'components/Text';
 
@@ -35,8 +36,8 @@ const SurveyItem = ({item, onPress}: SurveyItemProps) => {
 
     return (
         <TouchableOpacity onPress={onPressItem} style={styles.item}>
-            <View style={styles.leftData}>
-                <Text style={styles.title} title={item.title} />
+            <Text style={styles.title} title={item.title} />
+            <View style={styles.bottomData}>
                 <View style={styles.category}>
                     <Image
                         source={
@@ -50,8 +51,6 @@ const SurveyItem = ({item, onPress}: SurveyItemProps) => {
                         title={_(item?.category?.title)}
                     />
                 </View>
-            </View>
-            <View style={styles.rightData}>
                 <Text
                     style={styles.date}
                     title={`${formatted.substring(
@@ -60,6 +59,16 @@ const SurveyItem = ({item, onPress}: SurveyItemProps) => {
                     )} ${dateFormat.getDate()}, ${dateFormat.getFullYear()}`}
                 />
             </View>
+            {item.isOffline && (
+                <View style={styles.offlineIndicator}>
+                    <Icon
+                        name="wifi-off-outline"
+                        height={14}
+                        width={14}
+                        fill="#fff"
+                    />
+                </View>
+            )}
         </TouchableOpacity>
     );
 };

@@ -4,7 +4,7 @@ import {TouchableOpacity, View} from 'react-native';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import Toast from 'react-native-simple-toast';
 import {useNavigation} from '@react-navigation/native';
-import parsePhoneNumber from 'libphonenumber-js'
+import parsePhoneNumber from 'libphonenumber-js';
 
 import Text from 'components/Text';
 import InputField from 'components/InputField';
@@ -29,13 +29,15 @@ const SignUp = () => {
 
     const [signup, {loading}] = useMutation(SIGNUP, {
         onCompleted: () => {
-            if(selectedTab === 'email') {
+            if (selectedTab === 'email') {
                 Toast.show('Your account has been successfully created !!');
                 // navigation.navigate('ConfirmEmail', {email}); to confirm email
                 navigation.navigate('Login');
             } else {
                 const ph = parsePhoneNumber(phone, 'PG');
-                const phoneNumber = ph?.formatInternational().replace(/\s/g, '');
+                const phoneNumber = ph
+                    ?.formatInternational()
+                    .replace(/\s/g, '');
                 navigation.navigate('VerifyPhone', {phone: phoneNumber});
             }
         },
@@ -55,13 +57,13 @@ const SignUp = () => {
             rePassword: password,
         };
 
-        if(selectedTab === 'email') {
-            data.email = email.toLowerCase();
-            data.username = email.toLowerCase();
+        if (selectedTab === 'email') {
+            data.email = email.trim().toLowerCase();
+            data.username = email.trim().toLowerCase();
         } else {
             const ph = parsePhoneNumber(phone, 'PG');
             const phoneNumber = ph?.formatInternational().replace(/\s/g, '');
-            if(!ph?.isValid()) {
+            if (!ph?.isValid()) {
                 return Toast.show('Invalid Phone number.', Toast.LONG, [
                     'RCTModalHostViewController',
                 ]);
@@ -74,7 +76,7 @@ const SignUp = () => {
                 data,
             },
         });
-    }, [email, firstName, lastName, password, signup]);
+    }, [email, firstName, lastName, password, signup, phone, selectedTab]);
 
     const handleGoLogin = useCallback(() => {
         navigation.navigate('Login');
@@ -105,7 +107,7 @@ const SignUp = () => {
                     title={_('Email')}
                     placeholder="johndoe@example.com"
                 />
-            ):(
+            ) : (
                 <InputField
                     value={phone}
                     onChangeText={setPhone}
@@ -162,9 +164,9 @@ const SignUp = () => {
                 style={styles.button}
                 onPress={handleSignUp}
                 disabled={
-                    selectedTab === 'email'?
-                        !(email && firstName && lastName && password) :
-                        !(phone && firstName && lastName)
+                    selectedTab === 'email'
+                        ? !(email && firstName && lastName && password)
+                        : !(phone && firstName && lastName)
                 }
             />
             <TouchableOpacity onPress={handleGoLogin} style={styles.login}>

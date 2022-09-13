@@ -56,6 +56,7 @@ export const GET_HAPPENING_SURVEY = gql`
                 id
             }
             createdAt
+            isOffline
         }
     }
 `;
@@ -81,6 +82,8 @@ export const CREATE_HAPPENING_SURVEY = gql`
                 }
                 sentiment
                 improvement
+                isTest
+                isPublic
                 attachment {
                     id
                     media
@@ -93,6 +96,7 @@ export const CREATE_HAPPENING_SURVEY = gql`
                     id
                 }
                 createdAt
+                isOffline
             }
         }
     }
@@ -136,6 +140,7 @@ export const UPDATE_HAPPENING_SURVEY = gql`
                     id
                 }
                 createdAt
+                isOffline
             }
         }
     }

@@ -126,4 +126,10 @@ export default StyleSheet.create({
         lineHeight: 19,
         color: '#70747E',
     },
+    message: {
+        fontSize: 12,
+        fontFamily: 'Inter-Regular',
+        marginTop: 4,
+        color: '#70747E',
+    },
 });
