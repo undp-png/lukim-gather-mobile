@@ -4,7 +4,7 @@ import {TouchableOpacity, View} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import Toast from 'react-native-simple-toast';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
-import parsePhoneNumber from 'libphonenumber-js'
+import parsePhoneNumber from 'libphonenumber-js';
 
 import Text from 'components/Text';
 import InputField from 'components/InputField';
@@ -70,9 +70,9 @@ const Login = () => {
     });
 
     const handleLogin = useCallback(async () => {
-        if(selectedTab === 'email') {
+        if (selectedTab === 'email') {
             const loginPayload = await login({
-                variables: {username: username.toLowerCase(), password},
+                variables: {username: username.trim().toLowerCase(), password},
             });
             if (loginPayload && !loginPayload.errors) {
                 navigation.navigate('Feed');
@@ -80,18 +80,26 @@ const Login = () => {
         } else {
             const ph = parsePhoneNumber(phone, 'PG');
             const phoneNumber = ph?.formatInternational().replace(/\s/g, '');
-            if(!ph?.isValid()) {
+            if (!ph?.isValid()) {
                 return Toast.show('Invalid Phone number.', Toast.LONG, [
                     'RCTModalHostViewController',
                 ]);
             }
             await phone_confirm({
                 variables: {
-                    data: {username: phoneNumber}
+                    data: {username: phoneNumber},
                 },
             });
         }
-    }, [username, password, phone, login, navigation]);
+    }, [
+        username,
+        password,
+        phone,
+        login,
+        navigation,
+        phone_confirm,
+        selectedTab,
+    ]);
 
     const handleForgotPassword = useCallback(() => {
         navigation.navigate('ForgotPassword');
@@ -109,7 +117,7 @@ const Login = () => {
             <AuthTypeTab
                 selectedTab={selectedTab}
                 setSelectedTab={setSelectedTab}
-                tabStyle={styles.tabStyle} 
+                tabStyle={styles.tabStyle}
             />
             {selectedTab === 'email' ? (
                 <>
@@ -137,7 +145,7 @@ const Login = () => {
                         </TouchableOpacity>
                     </View>
                 </>
-            ):(
+            ) : (
                 <>
                     <InputField
                         title={_('Phone (with country code)')}
@@ -149,7 +157,9 @@ const Login = () => {
             )}
             <Button
                 title={_('Login')}
-                disabled={selectedTab==='email'?!(username && password):!phone}
+                disabled={
+                    selectedTab === 'email' ? !(username && password) : !phone
+                }
                 style={styles.button}
                 onPress={handleLogin}
             />

@@ -192,6 +192,7 @@ const EditHappeningSurvey = () => {
                             ...surveyCategory,
                         },
                         createdAt: new Date().toISOString(),
+                        isOffline: true,
                     },
                 },
             },

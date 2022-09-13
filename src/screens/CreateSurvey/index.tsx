@@ -252,6 +252,7 @@ const CreateHappeningSurvey = () => {
                             __typename: 'UserType',
                         },
                         createdAt: new Date().toISOString(),
+                        isOffline: true,
                     },
                 },
             },
@@ -262,11 +263,14 @@ const CreateHappeningSurvey = () => {
                     }) || {happeningSurveys: []};
                     let mergedSurveys = [];
 
+                    const addedSurvey = {
+                        ...data.createHappeningSurvey.result,
+                    };
                     if (readData.happeningSurveys?.length <= 0) {
-                        mergedSurveys = [data.createHappeningSurvey.result];
+                        mergedSurveys = [addedSurvey];
                     } else {
                         mergedSurveys = [
-                            data.createHappeningSurvey.result,
+                            addedSurvey,
                             ...readData.happeningSurveys,
                         ];
                     }
@@ -506,6 +510,14 @@ const CreateHappeningSurvey = () => {
                     onPress={handleTestPress}
                 />
             </View>
+            {isTest && (
+                <Text
+                    style={styles.message}
+                    title={_(
+                        'Please note that test data will be deleted periodically by administrator.',
+                    )}
+                />
+            )}
             <CategoryListModal
                 setCategory={setCategory}
                 setOpenCategory={setOpenCategory}

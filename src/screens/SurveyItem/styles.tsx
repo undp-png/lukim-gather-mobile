@@ -36,6 +36,18 @@ export default StyleSheet.create({
         fontFamily: 'Inter-SemiBold',
         color: COLORS.blueTextAlt,
     },
+    offlineIndicator: {
+        position: 'absolute',
+        backgroundColor: COLORS.accent,
+        width: 20,
+        height: 20,
+        borderRadius: 10,
+        right: 10,
+        top: 10,
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
     header: {
         paddingHorizontal: 20,
         paddingVertical: 8,
