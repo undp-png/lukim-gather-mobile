@@ -8513,10 +8513,10 @@ react-native-keyboard-aware-scroll-view@^0.9.5:
     prop-types "^15.6.2"
     react-native-iphone-x-helper "^1.0.3"
 
-react-native-mmkv@^2.1.0:
-  version "2.3.3"
-  resolved "https://registry.yarnpkg.com/react-native-mmkv/-/react-native-mmkv-2.3.3.tgz#ca0916e3dfb3e420fa27de526e53d9e391e3c9a1"
-  integrity sha512-bfBsIivEnr+OAxS2tWRqzyaDLlw9ZBGrbiuifO7wRtq1J5rNwkiKfSwTYBNLe23dzpl8pvSIUYgDrvmRnXTAhA==
+react-native-mmkv@^2.4.3:
+  version "2.4.3"
+  resolved "https://registry.yarnpkg.com/react-native-mmkv/-/react-native-mmkv-2.4.3.tgz#6bb4c2d5e328513da11faab1371d056a189adbd0"
+  integrity sha512-0hYNOTbsjJ5j5cpX+qjwReGIxuYE9MWRsyPQ72fTOvzmEjYXCF4Wr2VQoqx8R6W1/Uinekvln7dGvJ4RExmHhQ==
 
 react-native-modal@^13.0.1:
   version "13.0.1"
@@ -8554,9 +8554,9 @@ react-native-splash-screen@^3.3.0:
   resolved "https://registry.yarnpkg.com/react-native-splash-screen/-/react-native-splash-screen-3.3.0.tgz#3af71ed17afe50fee69590a45aec399d071ead02"
   integrity sha512-rGjt6HkoSXxMqH4SQUJ1gnPQlPJV8+J47+4yhgTIan4bVvAwJhEeJH7wWt9hXSdH4+VfwTS0GTaflj1Tw83IhA==
 
-react-native-static-server@futurepress/react-native-static-server.git#master:
-  version "0.5.0"
-  resolved "https://codeload.github.com/futurepress/react-native-static-server/tar.gz/d0c4cb0feae233634ef26fc33118f258192c7b7d"
+react-native-static-server@birdofpreyru/react-native-static-server.git#master:
+  version "0.5.5"
+  resolved "https://codeload.github.com/birdofpreyru/react-native-static-server/tar.gz/4a273091991bece77c1fbfc7c77617257ff06613"
 
 react-native-svg@^12.1.1:
   version "12.3.0"
