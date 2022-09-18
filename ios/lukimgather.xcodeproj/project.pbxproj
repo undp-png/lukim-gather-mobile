@@ -8,24 +8,25 @@
 
 /* Begin PBXBuildFile section */
 		00E356F31AD99517003FC87E /* lukimgatherTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* lukimgatherTests.m */; };
+		030ADB66DE594DAD937C7239 /* index.html in Resources */ = {isa = PBXBuildFile; fileRef = 8037CC8B06EA404CB23A33ED /* index.html */; };
 		13B07FBC1A68108700A75B9A /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.m */; };
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
+		1EDB551B74FE40B2B26F1858 /* grid.css in Resources */ = {isa = PBXBuildFile; fileRef = D628B1C669864A75B7657046 /* grid.css */; };
 		243C15825B01E7697BDCEC45 /* libPods-lukimgather.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 1FA315DA5F08F0EBCD2A5451 /* libPods-lukimgather.a */; };
+		28DADAF04B8B46DBB33D90B3 /* formhub.css in Resources */ = {isa = PBXBuildFile; fileRef = FDBE1F38D84B4444AB6EB057 /* formhub.css */; };
+		3945B405AF1E450A91CE3211 /* plain.css in Resources */ = {isa = PBXBuildFile; fileRef = 76877F14EE2E407EA1872333 /* plain.css */; };
+		495E237CB1EC427C9FF208F9 /* index.js in Resources */ = {isa = PBXBuildFile; fileRef = 7B0605E9E30E4EE2A5566B49 /* index.js */; };
+		501D03F865A54ECF9453CF9A /* formhub-print.css in Resources */ = {isa = PBXBuildFile; fileRef = DDA30970B3E64C0595023323 /* formhub-print.css */; };
 		5525EC6791D14253B296CD4B /* Inter-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 1D31323E29794A06B3D3F605 /* Inter-Medium.ttf */; };
+		59806AEA520C460A84ACB0A2 /* plain-print.css in Resources */ = {isa = PBXBuildFile; fileRef = 127CEA87FAF8431594FFD541 /* plain-print.css */; };
 		5A3C09523BC814C7993BF16E /* libPods-lukimgather-lukimgatherTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4ED566A97F9B3D2A13C9013E /* libPods-lukimgather-lukimgatherTests.a */; };
 		810311D9CEEF4100948ACA94 /* Inter-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A35BE9BE164E4BBBA99DAD01 /* Inter-Regular.ttf */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
-		DA9099200376486B8FD446D7 /* Inter-SemiBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = EF8F24F1435B4447825FF945 /* Inter-SemiBold.ttf */; };
-		030ADB66DE594DAD937C7239 /* index.html in Resources */ = {isa = PBXBuildFile; fileRef = 8037CC8B06EA404CB23A33ED /* index.html */; };
-		495E237CB1EC427C9FF208F9 /* index.js in Resources */ = {isa = PBXBuildFile; fileRef = 7B0605E9E30E4EE2A5566B49 /* index.js */; };
-		E93D024888434159B58AFFD1 /* app.js in Resources */ = {isa = PBXBuildFile; fileRef = 375319C21D9C4F37865D023F /* app.js */; };
-		501D03F865A54ECF9453CF9A /* formhub-print.css in Resources */ = {isa = PBXBuildFile; fileRef = DDA30970B3E64C0595023323 /* formhub-print.css */; };
-		28DADAF04B8B46DBB33D90B3 /* formhub.css in Resources */ = {isa = PBXBuildFile; fileRef = FDBE1F38D84B4444AB6EB057 /* formhub.css */; };
 		9CE922B49E9C4321B539B997 /* grid-print.css in Resources */ = {isa = PBXBuildFile; fileRef = FF54AC9F73EF481D899454E0 /* grid-print.css */; };
-		1EDB551B74FE40B2B26F1858 /* grid.css in Resources */ = {isa = PBXBuildFile; fileRef = D628B1C669864A75B7657046 /* grid.css */; };
-		59806AEA520C460A84ACB0A2 /* plain-print.css in Resources */ = {isa = PBXBuildFile; fileRef = 127CEA87FAF8431594FFD541 /* plain-print.css */; };
-		3945B405AF1E450A91CE3211 /* plain.css in Resources */ = {isa = PBXBuildFile; fileRef = 76877F14EE2E407EA1872333 /* plain.css */; };
+		DA9099200376486B8FD446D7 /* Inter-SemiBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = EF8F24F1435B4447825FF945 /* Inter-SemiBold.ttf */; };
+		DD28B07A28E67D6000BBE943 /* xforms in Resources */ = {isa = PBXBuildFile; fileRef = DD28B07928E67D6000BBE943 /* xforms */; };
+		E93D024888434159B58AFFD1 /* app.js in Resources */ = {isa = PBXBuildFile; fileRef = 375319C21D9C4F37865D023F /* app.js */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -42,6 +43,7 @@
 		00E356EE1AD99517003FC87E /* lukimgatherTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = lukimgatherTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		00E356F11AD99517003FC87E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		00E356F21AD99517003FC87E /* lukimgatherTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = lukimgatherTests.m; sourceTree = "<group>"; };
+		127CEA87FAF8431594FFD541 /* plain-print.css */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "plain-print.css"; path = "../src/assets/xforms/plain-print.css"; sourceTree = "<group>"; };
 		13B07F961A680F5B00A75B9A /* lukimgather.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = lukimgather.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		13B07FAF1A68108700A75B9A /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppDelegate.h; path = lukimgather/AppDelegate.h; sourceTree = "<group>"; };
 		13B07FB01A68108700A75B9A /* AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AppDelegate.m; path = lukimgather/AppDelegate.m; sourceTree = "<group>"; };
@@ -51,26 +53,26 @@
 		1D31323E29794A06B3D3F605 /* Inter-Medium.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Inter-Medium.ttf"; path = "../src/assets/fonts/Inter-Medium.ttf"; sourceTree = "<group>"; };
 		1FA315DA5F08F0EBCD2A5451 /* libPods-lukimgather.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-lukimgather.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		21F5F7F96F48BCBE5A7872C7 /* Pods-lukimgather.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-lukimgather.debug.xcconfig"; path = "Target Support Files/Pods-lukimgather/Pods-lukimgather.debug.xcconfig"; sourceTree = "<group>"; };
+		375319C21D9C4F37865D023F /* app.js */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = app.js; path = ../src/assets/xforms/app.js; sourceTree = "<group>"; };
 		4ED566A97F9B3D2A13C9013E /* libPods-lukimgather-lukimgatherTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-lukimgather-lukimgatherTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		5DB9F8AE36144CDAAD48BD7B /* grid-print.css */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "grid-print.css"; path = "../src/assets/xforms/css/grid-print.css"; sourceTree = "<group>"; };
+		76877F14EE2E407EA1872333 /* plain.css */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = plain.css; path = ../src/assets/xforms/plain.css; sourceTree = "<group>"; };
+		7B0605E9E30E4EE2A5566B49 /* index.js */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = index.js; path = ../src/assets/xforms/src/index.js; sourceTree = "<group>"; };
+		8037CC8B06EA404CB23A33ED /* index.html */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = index.html; path = ../src/assets/xforms/index.html; sourceTree = "<group>"; };
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = lukimgather/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		8C7A6E5F22554DE6B6687EA9 /* plain-print.css */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "plain-print.css"; path = "../src/assets/xforms/css/plain-print.css"; sourceTree = "<group>"; };
 		9DD6EFF70E95F57DFFA4299D /* Pods-lukimgather-lukimgatherTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-lukimgather-lukimgatherTests.debug.xcconfig"; path = "Target Support Files/Pods-lukimgather-lukimgatherTests/Pods-lukimgather-lukimgatherTests.debug.xcconfig"; sourceTree = "<group>"; };
 		A35BE9BE164E4BBBA99DAD01 /* Inter-Regular.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Inter-Regular.ttf"; path = "../src/assets/fonts/Inter-Regular.ttf"; sourceTree = "<group>"; };
 		CA9EDCAA304B0C440DEDCA95 /* Pods-lukimgather-lukimgatherTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-lukimgather-lukimgatherTests.release.xcconfig"; path = "Target Support Files/Pods-lukimgather-lukimgatherTests/Pods-lukimgather-lukimgatherTests.release.xcconfig"; sourceTree = "<group>"; };
+		D628B1C669864A75B7657046 /* grid.css */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = grid.css; path = ../src/assets/xforms/grid.css; sourceTree = "<group>"; };
+		DD28B07928E67D6000BBE943 /* xforms */ = {isa = PBXFileReference; lastKnownFileType = folder; name = xforms; path = ../src/assets/xforms; sourceTree = "<group>"; };
+		DDA30970B3E64C0595023323 /* formhub-print.css */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "formhub-print.css"; path = "../src/assets/xforms/formhub-print.css"; sourceTree = "<group>"; };
+		E6820A605CE146389C20B499 /* formhub-print.css */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "formhub-print.css"; path = "../src/assets/xforms/css/formhub-print.css"; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 		EF8F24F1435B4447825FF945 /* Inter-SemiBold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Inter-SemiBold.ttf"; path = "../src/assets/fonts/Inter-SemiBold.ttf"; sourceTree = "<group>"; };
 		F0E2ED2F30AF31BDA659642A /* Pods-lukimgather.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-lukimgather.release.xcconfig"; path = "Target Support Files/Pods-lukimgather/Pods-lukimgather.release.xcconfig"; sourceTree = "<group>"; };
-		E6820A605CE146389C20B499 /* formhub-print.css */ = {isa = PBXFileReference; name = "formhub-print.css"; path = "../src/assets/xforms/css/formhub-print.css"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
-		5DB9F8AE36144CDAAD48BD7B /* grid-print.css */ = {isa = PBXFileReference; name = "grid-print.css"; path = "../src/assets/xforms/css/grid-print.css"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
-		8C7A6E5F22554DE6B6687EA9 /* plain-print.css */ = {isa = PBXFileReference; name = "plain-print.css"; path = "../src/assets/xforms/css/plain-print.css"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
-		8037CC8B06EA404CB23A33ED /* index.html */ = {isa = PBXFileReference; name = "index.html"; path = "../src/assets/xforms/index.html"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
-		7B0605E9E30E4EE2A5566B49 /* index.js */ = {isa = PBXFileReference; name = "index.js"; path = "../src/assets/xforms/src/index.js"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
-		375319C21D9C4F37865D023F /* app.js */ = {isa = PBXFileReference; name = "app.js"; path = "../src/assets/xforms/app.js"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
-		DDA30970B3E64C0595023323 /* formhub-print.css */ = {isa = PBXFileReference; name = "formhub-print.css"; path = "../src/assets/xforms/formhub-print.css"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
-		FDBE1F38D84B4444AB6EB057 /* formhub.css */ = {isa = PBXFileReference; name = "formhub.css"; path = "../src/assets/xforms/formhub.css"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
-		FF54AC9F73EF481D899454E0 /* grid-print.css */ = {isa = PBXFileReference; name = "grid-print.css"; path = "../src/assets/xforms/grid-print.css"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
-		D628B1C669864A75B7657046 /* grid.css */ = {isa = PBXFileReference; name = "grid.css"; path = "../src/assets/xforms/grid.css"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
-		127CEA87FAF8431594FFD541 /* plain-print.css */ = {isa = PBXFileReference; name = "plain-print.css"; path = "../src/assets/xforms/plain-print.css"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
-		76877F14EE2E407EA1872333 /* plain.css */ = {isa = PBXFileReference; name = "plain.css"; path = "../src/assets/xforms/plain.css"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		FDBE1F38D84B4444AB6EB057 /* formhub.css */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = formhub.css; path = ../src/assets/xforms/formhub.css; sourceTree = "<group>"; };
+		FF54AC9F73EF481D899454E0 /* grid-print.css */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "grid-print.css"; path = "../src/assets/xforms/grid-print.css"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -124,6 +126,7 @@
 		13B07FAE1A68108700A75B9A /* lukimgather */ = {
 			isa = PBXGroup;
 			children = (
+				DD28B07928E67D6000BBE943 /* xforms */,
 				13B07FAF1A68108700A75B9A /* AppDelegate.h */,
 				13B07FB01A68108700A75B9A /* AppDelegate.m */,
 				13B07FB51A68108700A75B9A /* Images.xcassets */,
@@ -292,14 +295,12 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				DD28B07A28E67D6000BBE943 /* xforms in Resources */,
 				81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 				5525EC6791D14253B296CD4B /* Inter-Medium.ttf in Resources */,
 				810311D9CEEF4100948ACA94 /* Inter-Regular.ttf in Resources */,
 				DA9099200376486B8FD446D7 /* Inter-SemiBold.ttf in Resources */,
-				1B302BAE6336412F82398DA1 /* formhub-print.css in Resources */,
-				45FCF6B3F31A4F60AC3E437A /* grid-print.css in Resources */,
-				7503160A7C0048F986E0287C /* plain-print.css in Resources */,
 				030ADB66DE594DAD937C7239 /* index.html in Resources */,
 				495E237CB1EC427C9FF208F9 /* index.js in Resources */,
 				E93D024888434159B58AFFD1 /* app.js in Resources */,
@@ -548,7 +549,10 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
-				CURRENT_PROJECT_VERSION = 1;
+				CODE_SIGN_IDENTITY = "iPhone Distribution";
+				CODE_SIGN_STYLE = Manual;
+				CURRENT_PROJECT_VERSION = 6;
+				DEVELOPMENT_TEAM = 556BT62THH;
 				ENABLE_BITCODE = NO;
 				EXCLUDED_ARCHS = "";
 				INFOPLIST_FILE = lukimgather/Info.plist;
@@ -563,6 +567,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = org.lukimgather;
 				PRODUCT_NAME = lukimgather;
+				PROVISIONING_PROFILE_SPECIFIER = "match AppStore org.lukimgather";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
@@ -575,7 +580,10 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
-				CURRENT_PROJECT_VERSION = 1;
+				CODE_SIGN_IDENTITY = "iPhone Distribution";
+				CODE_SIGN_STYLE = Manual;
+				CURRENT_PROJECT_VERSION = 6;
+				DEVELOPMENT_TEAM = 556BT62THH;
 				EXCLUDED_ARCHS = "";
 				INFOPLIST_FILE = lukimgather/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -589,6 +597,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = org.lukimgather;
 				PRODUCT_NAME = lukimgather;
+				PROVISIONING_PROFILE_SPECIFIER = "match AppStore org.lukimgather";
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
 			};
