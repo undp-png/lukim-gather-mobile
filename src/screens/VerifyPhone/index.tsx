@@ -12,7 +12,10 @@ import OtpInput from 'components/OtpInput';
 import {dispatchLogin} from 'services/dispatch';
 
 import {_} from 'services/i18n';
-import {PHONE_NUMBER_CONFIRM, PHONE_NUMBER_CONFIRM_VERIFY} from 'services/gql/queries';
+import {
+    PHONE_NUMBER_CONFIRM,
+    PHONE_NUMBER_CONFIRM_VERIFY,
+} from 'services/gql/queries';
 import {getErrorMessage} from 'utils/error';
 import {
     PhoneNumberConfirm,

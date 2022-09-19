@@ -33,10 +33,10 @@ const TabItem = ({
             )}
             onPress={onPress}>
             <Text
-                style={cs(
-                    styles.tabTitle,
-                    [activeTabTitle, activeTab === name],
-                )}
+                style={cs(styles.tabTitle, [
+                    activeTabTitle,
+                    activeTab === name,
+                ])}
                 title={title}
             />
         </TouchableOpacity>

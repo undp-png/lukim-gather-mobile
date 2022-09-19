@@ -76,5 +76,5 @@ export default StyleSheet.create({
     },
     isTest: {
         marginBottom: 50,
-    }
+    },
 });
