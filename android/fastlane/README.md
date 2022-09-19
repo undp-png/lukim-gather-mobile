@@ -31,6 +31,14 @@ Runs all the tests
 
 Submit a new Beta Build
 
+### android build
+
+```sh
+[bundle exec] fastlane android build
+```
+
+Build APK file
+
 ### android deploy
 
 ```sh

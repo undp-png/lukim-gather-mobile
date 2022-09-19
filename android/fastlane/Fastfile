@@ -56,6 +56,23 @@ platform :android do
     # You can also use other beta testing services here
   end
 
+  desc "Build APK file"
+  lane :build do
+    gradle(
+       task: "clean assemble",
+       build_type: "Release",
+       properties: {
+         "android.injected.signing.store.file" => ENV['SIGNING_STORE_FILE'],
+         "android.injected.signing.store.password" => ENV['SIGNING_STORE_PASSWORD'],
+         "android.injected.signing.key.alias" => ENV['SIGNING_KEY_ALIAS'],
+         "android.injected.signing.key.password" => ENV['SIGNING_KEY_PASSWORD'],
+       }
+    )
+
+    # sh "your_script.sh"
+    # You can also use other beta testing services here
+  end
+
   desc "Deploy a new version to the Google Play"
   lane :deploy do
     increment_version_code
@@ -72,6 +89,8 @@ platform :android do
     upload_to_play_store(skip_upload_apk: true)
     slack(
         message: "Android app update has been uploaded to production! It should be available after a review period.",
+        channel: "#deployments",
+        username: "Lukim Gather App",
         slack_url: ENV['SLACK_URL'],
         success: true,
         fail_on_error: false,
