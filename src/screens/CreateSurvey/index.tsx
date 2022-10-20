@@ -58,6 +58,15 @@ interface OptionItemProps {
     style?: object;
 }
 
+const responseToRNF = res => {
+    const image = {
+        name: uuid.v4(),
+        type: res.mime,
+        uri: Platform.OS === 'ios' ? res.path.replace('file://', '') : res.path,
+    };
+    return new ReactNativeFile(image);
+};
+
 export const OptionItem: React.FC<OptionItemProps> = ({
     iconName,
     text,
@@ -121,7 +130,6 @@ const CreateHappeningSurvey = () => {
         name: string;
         icon: string;
     }>(route.params?.categoryItem);
-    const [attachment, setAttachment] = useState<any>([]);
     const [isAnonymous, setIsAnonymous] = useState<boolean>(false);
 
     const [isPublic, setPublic] = useState<boolean>(true);
@@ -210,7 +218,7 @@ const CreateHappeningSurvey = () => {
             description: description,
             sentiment: activeFeel,
             improvement: activeReview,
-            attachment: attachment,
+            attachment: images.map(responseToRNF),
             location: location.point
                 ? {type: 'Point', coordinates: location?.point}
                 : null,
@@ -293,13 +301,13 @@ const CreateHappeningSurvey = () => {
         });
         setProcessing(false);
     }, [
+        images,
         title,
         description,
         category,
         createHappeningSurvey,
         activeFeel,
         activeReview,
-        attachment,
         location,
         isAnonymous,
         navigation,
@@ -315,20 +323,8 @@ const CreateHappeningSurvey = () => {
                 response = [response];
             }
             setImages([...response, ...images]);
-            response.forEach(async (res: ImageObj) => {
-                const image = {
-                    name: uuid.v4(),
-                    type: res.mime,
-                    uri:
-                        Platform.OS === 'ios'
-                            ? res.path.replace('file://', '')
-                            : res.path,
-                };
-                const media = new ReactNativeFile(image);
-                setAttachment([media, ...attachment]);
-            });
         },
-        [images, attachment],
+        [images],
     );
 
     const handleChangeLocation = useCallback(() => {
