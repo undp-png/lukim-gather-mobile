@@ -139,7 +139,7 @@ const EditHappeningSurvey = () => {
             improvement: activeReview,
             isTest: isTest,
             isPublic: isPublic,
-            attachment: attachment.map(res => responseToRNF(res)),
+            attachment: attachment.map(responseToRNF),
             attachmentLink: imageLinks.map(img => img.id),
         };
 
