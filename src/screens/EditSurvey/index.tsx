@@ -52,7 +52,6 @@ const EditHappeningSurvey = () => {
     const route = useRoute<any>();
     const navigation = useNavigation<any>();
     const {user} = useSelector((state: RootStateOrAny) => state.auth);
-    const {location} = useSelector((state: RootStateOrAny) => state.survey);
     const [openCategory, setOpenCategory] = useState<boolean>(false);
     const [processing, setProcessing] = useState<boolean>(false);
 
@@ -83,8 +82,8 @@ const EditHappeningSurvey = () => {
     const [attachment, setAttachment] = useState<any>([]);
     const [confirmPublish, setConfirmPublish] = useState<boolean>(false);
     const [coordinates, setCoordinates] = useState<{
-        polygon: string;
-        point: string;
+        polygon: number[];
+        point: number[];
     } | null>(null);
     const [locationDetail, setLocationDetail] = useState<string>(
         route.params?.surveyItem?.location?.coordinates,
@@ -143,21 +142,28 @@ const EditHappeningSurvey = () => {
             attachmentLink: imageLinks.map(img => img.id),
         };
 
-        if (location.point) {
-            surveyInput.location = {
-                type: 'Point',
-                coordinates: location.point,
-            };
+        if (coordinates) {
+            surveyInput.location = coordinates.point
+                ? {
+                      __typename: 'GeometryObjectType',
+                      type: 'Point',
+                      coordinates: coordinates.point,
+                  }
+                : null;
+            surveyInput.boundary = coordinates.polygon
+                ? {
+                      __typename: 'GeometryObjectType',
+                      type: 'MultiPolygon',
+                      coordinates: [[coordinates.polygon]],
+                  }
+                : null;
         } else {
-            surveyInput.location = null;
-        }
-        if (location.polygon) {
-            surveyInput.boundary = {
-                type: 'MultiPolygon',
-                coordinates: [[location.polygon]],
-            };
-        } else {
-            surveyInput.boundary = null;
+            surveyInput.location = route.params?.surveyItem?.location
+                ? route.params.surveyItem.location
+                : null;
+            surveyInput.boundary = route.params?.surveyItem?.boundary
+                ? route.params.surveyItem.boundary
+                : null;
         }
 
         setProcessing(true);
@@ -232,6 +238,7 @@ const EditHappeningSurvey = () => {
         setProcessing(false);
         setConfirmPublish(!confirmPublish);
     }, [
+        coordinates,
         surveyCategory,
         title,
         description,
@@ -242,8 +249,9 @@ const EditHappeningSurvey = () => {
         attachment,
         updateHappeningSurvey,
         confirmPublish,
-        location,
         route.params?.surveyItem.id,
+        route.params?.surveyItem.location,
+        route.params?.surveyItem.boundary,
         navigation,
         user?.id,
         allImages,
@@ -281,11 +289,19 @@ const EditHappeningSurvey = () => {
         setAttachment([]);
     }, []);
 
+    const handleCoordinatesChange = useCallback(
+        (coords: {polygon: number[]; point: number[]}) => {
+            setCoordinates(coords);
+        },
+        [],
+    );
+
     const handleChangeLocation = useCallback(() => {
         navigation.navigate('ChangeLocation', {
             surveyData: route.params?.surveyItem,
+            onChange: handleCoordinatesChange,
         });
-    }, [navigation, route]);
+    }, [navigation, route, handleCoordinatesChange]);
 
     useEffect(() => {
         navigation.setOptions({
@@ -299,19 +315,20 @@ const EditHappeningSurvey = () => {
     );
 
     useEffect(() => {
-        setCoordinates(location);
         if (coordinates && coordinates.polygon) {
             setLocationDetail('Boundaries');
         } else if (coordinates && coordinates.point) {
-            setLocationDetail(`${coordinates?.point}`);
+            setLocationDetail(`${coordinates.point.join(', ')}`);
         } else if (route.params?.surveyItem?.location?.coordinates) {
-            setLocationDetail(route.params.surveyItem.location.coordinates);
+            setLocationDetail(
+                route.params.surveyItem.location.coordinates.join(', '),
+            );
         } else if (route.params?.surveyItem?.boundary?.coordinates) {
             setLocationDetail('Boundaries');
         } else {
             setLocationDetail('Choose the location');
         }
-    }, [location, coordinates, route.params?.surveyItem]);
+    }, [coordinates, route.params?.surveyItem]);
 
     const handlePublicPress = useCallback(() => setIsPublic(true), []);
     const handleNotPublicPress = useCallback(() => setIsPublic(false), []);
