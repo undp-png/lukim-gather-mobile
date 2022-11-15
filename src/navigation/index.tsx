@@ -10,6 +10,7 @@ import About from 'screens/About';
 import AccountSettings from 'screens/AccountSettings';
 import Language from 'screens/Language';
 import ChangePassword from 'screens/ChangePassword';
+import AccountDeletion from 'screens/AccountDeletion';
 import ForgotPassword from 'screens/ForgotPassword';
 import VerifyEmail from 'screens/VerifyEmail';
 import VerifyPhone from 'screens/VerifyPhone';
@@ -137,6 +138,15 @@ const AppNavigator = () => {
                 options={{
                     headerLeft: () => <CloseButton />,
                     headerTitle: _('Change Password'),
+                    presentation: 'modal',
+                }}
+            />
+            <Stack.Screen
+                name="AccountDeletion"
+                component={AccountDeletion}
+                options={{
+                    headerLeft: () => <CloseButton />,
+                    headerTitle: _('Delete Account'),
                     presentation: 'modal',
                 }}
             />

@@ -172,7 +172,7 @@ const CreateHappeningSurvey = () => {
     });
 
     const initializeLocation = useCallback(() => {
-        checkLocation(true).then(result => {
+        checkLocation().then(result => {
             if (result) {
                 Geolocation.getCurrentPosition(position => {
                     dispatch(
