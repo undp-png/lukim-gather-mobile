@@ -1,19 +1,15 @@
-name: Android Build Release
+name: IOS Build Release
 
 concurrency:
-  group: build-android-${{ github.ref }}
+  group: build-ios-${{ github.ref }}
   cancel-in-progress: true
 
 on:
-    pull_request:
-    push:
-        branches:
-            - 'develop'
-    workflow_dispatch:
+    deployment
 
 jobs:
     build:
-        runs-on: ubuntu-latest
+        runs-on: macOS-11
         environment: production
 
         steps:
@@ -26,36 +22,28 @@ jobs:
               with:
                 secrets: ${{ toJSON(secrets) }}
 
-            - name: Decrypt secret files
-              env:
-                INPUT_FILES: ./android/release.keystore.gpg
-              run: |
-                  for encrypted_file in ${INPUT_FILES//,/ }
-                  do
-                    gpg --quiet --batch --yes --decrypt --passphrase="$GPG_PASSPHRASE" --output "${encrypted_file%.*}" "$encrypted_file"
-                  done
-
             - name: Get React Native Arsenal
               run: |
                   git clone https://gitlab.com/nepware-internals/react-native-arsenal.git src/vendor/react-native-arsenal
 
-            - name: Gradle Wrapper Validation
-              uses: gradle/wrapper-validation-action@v1
-
             - name: Cache Ruby gems
               uses: actions/cache@v3
               with:
-                  path: android/vendor/bundle
+                  path: ios/vendor/bundle
                   key: ${{ runner.os }}-gems-${{ hashFiles('**/Gemfile.lock') }}
                   restore-keys: |
                       ${{ runner.os }}-gems-
 
-            - name: Set up JDK
-              uses: actions/setup-java@v3
+            - name: Cache Pods
+              uses: actions/cache@v3
               with:
-                  distribution: 'temurin'
-                  java-version: '11'
-                  cache: 'gradle'
+                path: |
+                  ios/Pods
+                  ~/Library/Caches/CocoaPods
+                  ~/.cocoapods
+                key: ${{ runner.os }}-pods-${{ hashFiles('ios/Podfile.lock') }}
+                restore-keys: |
+                  ${{ runner.os }}-pods-
 
             - name: Setup node
               uses: actions/setup-node@v2
@@ -67,22 +55,16 @@ jobs:
             - name: Install Dependencies
               run: |
                   yarn install --non-interactive
-                  echo MAPBOX_DOWNLOADS_TOKEN=$MAPBOX_DOWNLOADS_TOKEN >> ./android/gradle.properties
+
+            - name: Install Pods
+              run: cd ios && pod install --repo-update && cd ..
 
             - name: Run Fastlane
               uses: maierj/fastlane-action@v2.2.0
               with:
                   skip-tracking: true
-                  lane: 'build'
-                  subdirectory: 'android'
+                  lane: 'beta'
+                  subdirectory: 'ios'
                   bundle-install-path: vendor/bundle
               env:
                   FASTLANE_HIDE_CHANGELOG: true
-
-            - name: Archive production artifacts
-              uses: actions/upload-artifact@v3
-              with:
-                  name: apk
-                  path: |
-                    android/app/build/outputs/apk/release
-                  retention-days: 14

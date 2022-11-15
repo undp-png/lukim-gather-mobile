@@ -23,6 +23,7 @@ DerivedData
 *.hmap
 *.ipa
 *.xcuserstate
+lukimgather.app.dSYM.zip
 
 # Android/IntelliJ
 #

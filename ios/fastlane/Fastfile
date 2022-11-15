@@ -1,0 +1,45 @@
+# This file contains the fastlane.tools configuration
+# You can find the documentation at https://docs.fastlane.tools
+#
+# For a list of all available actions, check out
+#
+#     https://docs.fastlane.tools/actions
+#
+# For a list of all available plugins, check out
+#
+#     https://docs.fastlane.tools/plugins/available-plugins
+#
+
+# Uncomment the line if you want fastlane to automatically update itself
+# update_fastlane
+
+default_platform(:ios)
+
+platform :ios do
+  desc "Push a new beta build to TestFlight"
+  lane :beta do
+   setup_ci
+   increment_build_number(xcodeproj: "lukimgather.xcodeproj")
+   sync_code_signing(
+     type: "appstore",
+     readonly: true,
+   )
+   build_app(
+     workspace: "lukimgather.xcworkspace",
+     scheme: "lukimgather",
+   )
+   upload_to_testflight(
+     skip_waiting_for_build_processing: true,
+     apple_id: "6443612199",
+   )
+   slack(
+     message: "New iOS production build has been uploaded to testflight! It should be available for testing after a short processing time.",
+     channel: "#deployments",
+     username: "Lukim Gather App",
+     slack_url: ENV['SLACK_URL'],
+     success: true,
+     icon_url: "https://fastlane.tools/assets/img/fastlane_icon.png",
+     fail_on_error: false,
+   )
+  end
+end

@@ -1,4 +1,5 @@
 import React, {useEffect, useState, useMemo, useCallback} from 'react';
+import {Platform} from 'react-native';
 import {useRoute, useNavigation} from '@react-navigation/native';
 import {useDispatch, useSelector, RootStateOrAny} from 'react-redux';
 
@@ -89,21 +90,26 @@ const WebViewForm: React.FC = () => {
     useEffect((): any => {
         let server: StaticServer;
         const startServer = async () => {
-            const exists = await RNFS.exists(
-                RNFS.DocumentDirectoryPath + '/custom',
-            );
-            if (__DEV__ || !exists) {
-                await RNFS.mkdir(RNFS.DocumentDirectoryPath + '/custom');
+            if (Platform.OS === 'android') {
+                const exists = await RNFS.exists(
+                    RNFS.DocumentDirectoryPath + '/custom',
+                );
+                if (__DEV__ || !exists) {
+                    await RNFS.mkdir(RNFS.DocumentDirectoryPath + '/custom');
 
-                const assetfiles = await RNFS.readDirAssets('custom');
-                for (const file of assetfiles) {
-                    await RNFS.copyFileAssets(
-                        file.path,
-                        `${RNFS.DocumentDirectoryPath}/${file.path}`,
-                    );
+                    const assetfiles = await RNFS.readDirAssets('custom');
+                    for (const file of assetfiles) {
+                        await RNFS.copyFileAssets(
+                            file.path,
+                            `${RNFS.DocumentDirectoryPath}/${file.path}`,
+                        );
+                    }
                 }
             }
-            const path = RNFS.DocumentDirectoryPath + '/custom/';
+            const path =
+                Platform.OS === 'ios'
+                    ? RNFS.MainBundlePath + '/xforms'
+                    : RNFS.DocumentDirectoryPath + '/custom/';
             server = new StaticServer(8080, path, {
                 keepAlive: true,
                 localOnly: true,
@@ -186,12 +192,13 @@ const WebViewForm: React.FC = () => {
                     source={{
                         uri: `${uri}/?xform=${formObj.id}`,
                     }}
+                    nestedScrollEnabled
                     injectedJavaScriptBeforeContentLoaded={initializeData}
                     onMessage={handleMessage}
                     geolocationEnabled={true}
                 />
             )}
-            <Loader loading={processing || !uri} />
+            {(processing || !uri) && <Loader loading />}
         </>
     );
 };

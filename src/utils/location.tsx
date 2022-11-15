@@ -3,7 +3,7 @@ import {request, PERMISSIONS, RESULTS} from 'react-native-permissions';
 
 import {_} from 'services/i18n';
 
-export const checkLocation = async () => {
+export const checkLocation = async (force = false) => {
     const permission =
         Platform.OS === 'ios'
             ? PERMISSIONS.IOS.LOCATION_WHEN_IN_USE
@@ -14,7 +14,10 @@ export const checkLocation = async () => {
             return true;
         } else if (__DEV__ && result === RESULTS.UNAVAILABLE) {
             return false;
-        } else if (result === RESULTS.DENIED || result === RESULTS.BLOCKED) {
+        } else if (
+            result === RESULTS.DENIED ||
+            (result === RESULTS.BLOCKED && force)
+        ) {
             Alert.alert(
                 _('Location permission denied'),
                 _('Please go to app settings and allow location permission.'),

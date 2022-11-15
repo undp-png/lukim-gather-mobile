@@ -16,7 +16,6 @@ target 'lukimgather' do
 
   pod 'react-native-splash-screen', :path => '../node_modules/react-native-splash-screen'
   # `SSZipArchive` already in use
-  pod 'CodePush', :path => '../node_modules/react-native-code-push', :subspecs => ['Core', 'JWT', 'Base64']
 
   pre_install do |installer|
     $RNMBGL.pre_install(installer)

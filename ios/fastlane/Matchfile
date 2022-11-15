@@ -1,0 +1,8 @@
+git_url("https://github.com/nepware-dev/lukim-gather-certificates.git")
+
+storage_mode("git")
+
+type("appstore") # The default type, can be: appstore, adhoc, enterprise or development
+
+app_identifier(["org.lukimgather"])
+username("bishal@datafriendlyspace.org") # Your Apple Developer Portal username
