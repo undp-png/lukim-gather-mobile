@@ -15,6 +15,10 @@ const AccountSettings = () => {
                     label={_('Change password')}
                     linkTo="ChangePassword"
                 />
+                <MenuItem
+                    title={_('Delete Account')}
+                    linkTo="AccountDeletion"
+                />
             </View>
         </View>
     );

@@ -156,6 +156,14 @@ export const DELETE_HAPPENING_SURVEY = gql`
     }
 `;
 
+export const DELETE_ACCOUNT = gql`
+    mutation DeleteAccount($data: AccountDeletionRequestMutationInput!) {
+        deleteAccount(input: $data) {
+            reason
+        }
+    }
+`;
+
 export const UPLOAD_IMAGE = gql`
     mutation UploadMedia($title: String!, $type: String!, $media: Upload) {
         uploadMedia(title: $title, type: $type, media: $media) {

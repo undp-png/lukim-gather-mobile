@@ -21,7 +21,7 @@
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleVersion</key>
-	<string>6</string>
+	<string>7</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NSAppTransportSecurity</key>
@@ -36,11 +36,11 @@
 		</dict>
 	</dict>
 	<key>NSCameraUsageDescription</key>
-	<string>$(PRODUCT_NAME) would like to use your camera to take photos of the Entry.</string>
+	<string>Access to camera is required to let you take photos of the Entry or profile image.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>$(PRODUCT_NAME) would like to use your GPS to obtain the location of the Entry/Survey you are creating.</string>
+	<string>We don't send your location data to our server without your consent and use your location to show your position in the Map. The location data is only send to the server when you create any new Entry/Survey voluntarily.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
-	<string>$(PRODUCT_NAME) would like access to your photo gallery to upload photos of the Entry.</string>
+	<string>Access to your Photo Gallery is required to upload photos of the Entry or to change profile image. You can delete the photos you uploaded anytime later.</string>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>UIRequiredDeviceCapabilities</key>
