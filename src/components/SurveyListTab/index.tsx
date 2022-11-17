@@ -63,6 +63,7 @@ interface ListProps {
     tabStyle?: object;
     activeTabStyle?: object;
     activeTabTitle?: object;
+    isHomeTab?: boolean;
 }
 
 const SurveyListTab: React.FC<ListProps> = props => {

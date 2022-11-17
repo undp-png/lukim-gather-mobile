@@ -21,9 +21,11 @@ import {checkLocation} from 'utils/location';
 import {jsonToCSV} from 'utils';
 import {_} from 'services/i18n';
 
-import {HappeningSurveyType} from '@generated/types';
+import type {HappeningSurveyType} from '@generated/types';
+import type {FeatureCollection, Geometry, GeoJsonProperties} from 'geojson';
 
 import styleJSON from 'assets/map/style.json';
+import markerIcon from 'assets/icons/markers.png';
 
 import {UserLocation} from './UserLocation';
 import OfflineLayers from './OfflineLayers';
@@ -37,6 +39,7 @@ interface Props {
     locationBarStyle?: object;
     surveyData?: HappeningSurveyType[];
     isStatic?: boolean;
+    onSurveyEntryPress?: (survey: HappeningSurveyType) => void;
 }
 
 const mapViewStyles = JSON.stringify(styleJSON);
@@ -47,6 +50,7 @@ const Map: React.FC<Props> = ({
     locationBarStyle,
     surveyData = [],
     isStatic = false,
+    onSurveyEntryPress,
 }) => {
     const netInfo = useNetInfo();
 
@@ -179,12 +183,17 @@ const Map: React.FC<Props> = ({
 
     const handleSurveyPolyShapePress = useCallback(
         shape => {
-            if (isStatic) {
+            if (isStatic && !onSurveyEntryPress) {
                 return;
             }
             if (shape?.features?.length === 1) {
                 const feature = shape.features[0];
                 if (feature?.properties?.surveyItem) {
+                    if (onSurveyEntryPress) {
+                        return onSurveyEntryPress(
+                            feature.properties.surveyItem,
+                        );
+                    }
                     return navigation.navigate('SurveyItem', {
                         item: feature.properties.surveyItem,
                     });
@@ -192,32 +201,47 @@ const Map: React.FC<Props> = ({
             } else if (shape?.features?.length > 1) {
                 const feature = shape.features[shape.features.length - 1];
                 if (feature?.properties?.surveyItem) {
+                    if (onSurveyEntryPress) {
+                        return onSurveyEntryPress(
+                            feature.properties.surveyItem,
+                        );
+                    }
                     return navigation.navigate('SurveyItem', {
                         item: feature.properties.surveyItem,
                     });
                 }
             }
         },
-        [navigation, isStatic],
+        [navigation, isStatic, onSurveyEntryPress],
     );
 
     const handleSurveyShapePress = useCallback(
         async shape => {
-            if (isStatic) {
+            if (isStatic && !onSurveyEntryPress) {
                 return;
             }
-            if (shape?.features?.length === 1) {
+            if (shape?.features?.[0]?.properties?.surveyItem) {
                 const feature = shape.features[0];
                 if (feature?.properties?.surveyItem) {
+                    if (onSurveyEntryPress) {
+                        return onSurveyEntryPress(
+                            feature.properties.surveyItem,
+                        );
+                    }
                     return navigation.navigate('SurveyItem', {
                         item: feature.properties.surveyItem,
                     });
                 }
-            } else if (shape?.features?.length > 1) {
+            } else if (shape?.features?.[0]?.properties?.cluster) {
                 try {
                     const feature = shape.features[0];
                     const currentZoom = await mapRef.current.getZoom();
                     if (currentZoom > 19 && feature?.properties?.surveyItem) {
+                        if (onSurveyEntryPress) {
+                            return onSurveyEntryPress(
+                                feature.properties.surveyItem,
+                            );
+                        }
                         return navigation.navigate('SurveyItem', {
                             item: feature.properties.surveyItem,
                         });
@@ -239,7 +263,7 @@ const Map: React.FC<Props> = ({
                 }
             }
         },
-        [navigation, isStatic],
+        [navigation, isStatic, onSurveyEntryPress],
     );
 
     const renderCluster = useCallback(() => {
@@ -252,8 +276,8 @@ const Map: React.FC<Props> = ({
                         surveyItem: survey,
                     },
                     geometry: {
-                        type: survey.location.type,
-                        coordinates: survey.location.coordinates,
+                        type: survey.location?.type,
+                        coordinates: survey.location?.coordinates,
                     },
                 })) || [];
 
@@ -283,7 +307,7 @@ const Map: React.FC<Props> = ({
                 category.childs.map(child => ({[child.id]: child.icon})),
             )
             .flat();
-        let categoryIcons = Object.assign({}, ...icons);
+        let categoryIcons = Object.assign({marker: markerIcon}, ...icons);
 
         if (!shape) {
             return;
@@ -295,7 +319,12 @@ const Map: React.FC<Props> = ({
                 <MapboxGL.ShapeSource
                     id="surveyPolySource"
                     onPress={handleSurveyPolyShapePress}
-                    shape={surveyPolyGeoJSON}>
+                    shape={
+                        surveyPolyGeoJSON as FeatureCollection<
+                            Geometry,
+                            GeoJsonProperties
+                        >
+                    }>
                     <MapboxGL.SymbolLayer
                         id="polyTitle"
                         style={mapStyles.polyTitle}
@@ -313,7 +342,12 @@ const Map: React.FC<Props> = ({
                     id="surveySource"
                     cluster
                     onPress={handleSurveyShapePress}
-                    shape={surveyGeoJSON}>
+                    shape={
+                        surveyGeoJSON as FeatureCollection<
+                            Geometry,
+                            GeoJsonProperties
+                        >
+                    }>
                     <MapboxGL.SymbolLayer
                         id="pointCount"
                         style={mapStyles.pointCount}
@@ -330,6 +364,12 @@ const Map: React.FC<Props> = ({
                         style={mapStyles.singlePoint}
                         filter={['!', ['has', 'point_count']]}
                         belowLayerID="circles"
+                    />
+                    <MapboxGL.SymbolLayer
+                        id="iconBackground"
+                        style={mapStyles.marker}
+                        filter={['!', ['has', 'point_count']]}
+                        belowLayerID="singlePoint"
                     />
                 </MapboxGL.ShapeSource>
             </>
@@ -415,7 +455,7 @@ const Map: React.FC<Props> = ({
                     onRegionDidChange={onRegionDidChange}
                     onDidFinishLoadingStyle={handleFinishMapLoad}
                     styleJSON={isOffline ? mapViewStyles : ''}
-                    compassViewMargins={{x: 30, y: 150}}>
+                    compassViewMargins={{x: 20, y: hideHeader ? 20 : 170}}>
                     <MapboxGL.Camera
                         defaultSettings={{
                             centerCoordinate: currentLocation,

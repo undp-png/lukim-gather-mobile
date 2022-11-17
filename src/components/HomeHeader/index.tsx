@@ -8,14 +8,17 @@ import Text from 'components/Text';
 import SurveyListTab from 'components/SurveyListTab';
 
 import cs from '@rna/utils/cs';
-
 import {_} from 'services/i18n';
+
+import type {StackNavigationProp} from '@react-navigation/stack';
+import type {StackParamList} from 'navigation';
+import type {HomeNavParamList} from 'navigation/tab';
 
 import styles from './styles';
 
 interface Props {
     selectedTab?: string;
-    setSelectedTab?(selectedTab: string): void;
+    setSelectedTab(selectedTab: string): void;
     homeScreen?: boolean;
     onExportPress?(): void;
 }
@@ -27,7 +30,8 @@ const HomeHeader: React.FC<Props> = props => {
         homeScreen,
         onExportPress,
     } = props;
-    const navigation = useNavigation();
+    const navigation =
+        useNavigation<StackNavigationProp<StackParamList & HomeNavParamList>>();
     const onSearchPress = useCallback(
         () => navigation.navigate('SearchSurvey'),
         [navigation],

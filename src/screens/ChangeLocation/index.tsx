@@ -2,6 +2,7 @@ import React, {useState, useCallback, useEffect, useMemo} from 'react';
 import {FlatList, View} from 'react-native';
 import {useNavigation, useRoute} from '@react-navigation/native';
 import type {RouteProp} from '@react-navigation/native';
+import Toast from 'react-native-simple-toast';
 
 import InputField from 'components/InputField';
 import Map from 'components/DrawableMap';
@@ -69,17 +70,26 @@ const ChangeLocation = () => {
                     }),
                 );
             } else {
+                const polygonValue = [
+                    ...selectedCoordinate,
+                    selectedCoordinate[0],
+                ];
+                if (polygonValue.length < 4) {
+                    return Toast.show(
+                        _('Please add at least 3 points for the polygon!'),
+                    );
+                }
                 if (params.onChange) {
                     params.onChange({
                         point: null,
-                        polygon: [...selectedCoordinate, selectedCoordinate[0]],
+                        polygon: polygonValue,
                     });
                     return navigation.goBack();
                 }
                 dispatch(
                     setLocation({
                         point: null,
-                        polygon: [...selectedCoordinate, selectedCoordinate[0]],
+                        polygon: polygonValue,
                     }),
                 );
             }

@@ -6,7 +6,7 @@ import {StatusBar, Platform, LogBox} from 'react-native';
 import {NavigationContainer} from '@react-navigation/native';
 import {useNetInfo} from '@react-native-community/netinfo';
 import {ApolloProvider} from '@apollo/client';
-import {NormalizedCacheObject} from 'apollo-cache-inmemory';
+import type {NormalizedCacheObject} from 'apollo-cache-inmemory';
 import {QueueLink} from 'vendor/apollo-link-queue-persist';
 import {Provider} from 'react-redux';
 import {PersistGate} from 'redux-persist/integration/react';

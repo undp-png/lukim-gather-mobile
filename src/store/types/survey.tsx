@@ -1,6 +1,6 @@
 export interface SurveyState {
     location: {
-        point: number[] | null;
-        polygon: number[][] | null;
+        point?: number[] | null;
+        polygon?: number[][] | null;
     };
 }

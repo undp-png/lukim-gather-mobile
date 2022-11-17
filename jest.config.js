@@ -9,6 +9,7 @@ module.exports = {
         'node_modules/(?!(@react-native|react-native' +
             '|@react-navigation' +
             '|react-native-gesture-handler' +
+            '|react-native-linear-gradient' +
             '|@react-native-mapbox-gl' +
             '|react-native-image-crop-picker' +
             '|react-native-reanimated' +

@@ -8,7 +8,6 @@ import StaticServer from 'react-native-static-server';
 import RNFS from 'react-native-fs';
 import Toast from 'react-native-simple-toast';
 import {useMutation} from '@apollo/client';
-import uuid from 'react-native-uuid';
 import {XMLParser} from 'fast-xml-parser';
 
 import {setFormData, setFormMedia, resetForm} from 'store/slices/form';
@@ -88,7 +87,7 @@ const WebViewForm: React.FC = () => {
     });
 
     useEffect((): any => {
-        let server: StaticServer;
+        let server: typeof StaticServer;
         const startServer = async () => {
             if (Platform.OS === 'android') {
                 const exists = await RNFS.exists(
@@ -139,8 +138,7 @@ const WebViewForm: React.FC = () => {
                 createWritableSurvey: {
                     __typename: 'WritableSurveyMutationPayload',
                     errors: [],
-                    ok: null,
-                    id: uuid.v4(),
+                    id: Math.floor(Math.random() * 32), // This is not uuid. So uses random integer upto 31
                     title,
                 },
             },

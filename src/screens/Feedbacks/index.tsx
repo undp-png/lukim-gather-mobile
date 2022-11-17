@@ -81,6 +81,8 @@ const Feedbacks = () => {
                     style={styles.picker}
                     textStyle={styles.textStyle}
                     labelStyle={styles.labelStyle}
+                    placeholder={_('Select an issue')}
+                    listMode="SCROLLVIEW"
                 />
                 <InputField
                     title={_('Explain the issue')}

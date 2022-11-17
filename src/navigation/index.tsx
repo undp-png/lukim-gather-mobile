@@ -17,8 +17,10 @@ import VerifyPhone from 'screens/VerifyPhone';
 import CreateNewPassword from 'screens/CreateNewPassword';
 import ChangeLocation from 'screens/ChangeLocation';
 import SearchCategory from 'screens/SearchCategory';
+import UpdateSurvey from 'screens/UpdateSurvey';
 import EditSurvey from 'screens/EditSurvey';
 import CreateSurvey from 'screens/CreateSurvey';
+import ExistingEntries from 'screens/ExistingEntries';
 import EditProfile from 'screens/EditProfile';
 import Feedbacks from 'screens/Feedbacks';
 import Help from 'screens/Help';
@@ -37,7 +39,11 @@ import {BackButton, CloseButton} from 'components/HeaderButton';
 
 import {GET_LEGAL_DOCUMENT} from 'services/gql/queries';
 import {dispatchInfo} from 'services/dispatch';
-import type {HappeningSurveyType, FormType} from '@generated/types';
+import type {
+    HappeningSurveyType,
+    FormType,
+    ProtectedAreaCategoryType,
+} from '@generated/types';
 import COLORS from 'utils/colors';
 import {_} from 'services/i18n';
 
@@ -52,8 +58,18 @@ export type StackParamList = {
         surveyData?: HappeningSurveyType;
     };
     SearchCategory: undefined;
-    CreateSurvey: undefined;
-    EditSurvey: undefined;
+    CreateSurvey: {
+        categoryItem: ProtectedAreaCategoryType;
+    };
+    ExistingEntries: {
+        existingSurveys: HappeningSurveyType[];
+    };
+    EditSurvey: {
+        surveyItem: HappeningSurveyType;
+    };
+    UpdateSurvey: {
+        surveyItem: HappeningSurveyType;
+    };
     EditProfile: undefined;
     Feed: undefined;
     Feedback: undefined;
@@ -61,7 +77,9 @@ export type StackParamList = {
     Settings: undefined;
     ForgotPassword: undefined;
     VerifyEmail: undefined;
-    VerifyPhone: undefined;
+    VerifyPhone: {
+        phone?: string;
+    };
     CreateNewPassword: undefined;
     Help: undefined;
     SearchSurvey: undefined;
@@ -82,12 +100,15 @@ const AppNavigator = () => {
     const {isAuthenticated} = useSelector(
         (state: RootStateOrAny) => state.auth,
     );
-    useSelector(state => state.locale); // To re-render on any change in locale state
+    const {currentLanguage} = useSelector(
+        (state: RootStateOrAny) => state.locale,
+    );
     const {data} = useQuery(GET_LEGAL_DOCUMENT);
 
     dispatchInfo(data?.legalDocument);
     return (
         <Stack.Navigator
+            key={currentLanguage} // To re-render on any change in locale state
             initialRouteName={isAuthenticated ? 'Feed' : 'Auth'}
             screenOptions={{
                 headerLeft: () => <BackButton />,
@@ -218,12 +239,32 @@ const AppNavigator = () => {
                 }}
             />
             <Stack.Screen
+                name="ExistingEntries"
+                component={ExistingEntries}
+                options={{
+                    headerLeft: () => <BackButton />,
+                    headerTitle: _('Existing entries'),
+                    headerStyle: {
+                        backgroundColor: COLORS.white,
+                        borderBottomWidth: 0,
+                    },
+                }}
+            />
+            <Stack.Screen
                 name="EditSurvey"
                 component={EditSurvey}
                 options={{
                     headerLeft: () => <CloseButton />,
                     headerTitle: _('Edit Details'),
                     presentation: 'modal',
+                }}
+            />
+            <Stack.Screen
+                name="UpdateSurvey"
+                component={UpdateSurvey}
+                options={{
+                    headerLeft: () => <BackButton />,
+                    headerTitle: _('Update details'),
                 }}
             />
             <Stack.Screen

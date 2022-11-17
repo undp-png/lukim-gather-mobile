@@ -18,6 +18,10 @@ const COLORS = {
     /** Greys **/
     greyLight: '#B7BABF',
     greyLightAlt: '#888C94',
+    grey200: '#404653',
+    grey300: '#585D69',
+    grey400: '#70747E',
+    grey600: '#9FA3A9',
 
     /** Primary and Secondary colors **/
     primary: '#6AA12A',

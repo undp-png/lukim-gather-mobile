@@ -3,11 +3,16 @@ import {StyleSheet} from 'react-native';
 import COLORS from 'utils/colors';
 
 export default StyleSheet.create({
-    tabBar: {
+    container: {
+        flex: 1,
         backgroundColor: COLORS.white,
-        minHeight: 70,
+        padding: 16,
     },
-    header: {
-        backgroundColor: COLORS.background,
+    map: {
+        borderRadius: 12,
+        overflow: 'hidden',
+    },
+    locationBar: {
+        bottom: 20,
     },
 });

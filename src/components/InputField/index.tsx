@@ -30,6 +30,7 @@ const InputField: React.FC<Props> = ({
     inputStyle,
     multiline,
     hints,
+    editable = true,
     ...inputProps
 }) => {
     const [focused, setFocused] = useState(false);
@@ -87,6 +88,7 @@ const InputField: React.FC<Props> = ({
                         [styles.password, password],
                         [styles.search, searchInput],
                         [styles.textarea, multiline],
+                        [styles.disabled, !editable],
                         inputStyle,
                     )}
                     secureTextEntry={hideText ? true : false}
@@ -97,6 +99,7 @@ const InputField: React.FC<Props> = ({
                     value={value}
                     onBlur={handleBlur}
                     onFocus={handleFocus}
+                    editable={editable}
                     {...inputProps}
                 />
                 {password && (

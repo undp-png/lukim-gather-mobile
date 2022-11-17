@@ -8,18 +8,20 @@ import Text from 'components/Text';
 
 import {_} from 'services/i18n';
 import COLORS from 'utils/colors';
-
 import cs from '@rna/utils/cs';
+import surveyCategory, {
+    type LocalCategoryType,
+} from 'services/data/surveyCategory';
 
-import surveyCategory from 'services/data/surveyCategory';
+import type {ProtectedAreaCategoryType} from '@generated/types';
 
 import styles from './styles';
 
 const keyExtractor = (item: {id: any}) => item.id;
 
 interface CategoryProps {
-    category: any;
-    setCategory(item: {icon: string; name: string; id: number}): void;
+    category: {id: number; title: string; childs: LocalCategoryType[]};
+    setCategory(item: ProtectedAreaCategoryType): void;
     setOpenCategory(arg0: boolean): void;
 }
 
@@ -30,10 +32,13 @@ const Category: React.FC<CategoryProps> = props => {
         return {width: (width - 100) / 3};
     }, [width]);
     const renderSubCategory = useCallback(
-        ({item}: {item: {icon: string; name: string; id: number}}) => (
+        ({item}: {item: LocalCategoryType}) => (
             <Pressable
                 onPress={() => {
-                    props.setCategory(item);
+                    props.setCategory({
+                        id: String(item.id),
+                        title: item.name,
+                    } as ProtectedAreaCategoryType);
                     setOpenCategory(false);
                 }}
                 style={styles.subCategory}>
@@ -71,21 +76,21 @@ const Category: React.FC<CategoryProps> = props => {
     );
 };
 
-interface BoxProps {
+interface CategoryListModalProps {
     isOpen: boolean;
     onToggleModal(): void;
-    setOpenCategory(): void;
-    setCategory(): void;
+    setOpenCategory: CategoryProps['setOpenCategory'];
+    setCategory: CategoryProps['setCategory'];
 }
 
-const CategoryListModal: React.FC<BoxProps> = ({
+const CategoryListModal: React.FC<CategoryListModalProps> = ({
     isOpen,
     onToggleModal,
     setCategory,
     setOpenCategory,
 }) => {
     const renderCategory = useCallback(
-        ({item}: {item: object}) => (
+        ({item}: {item: CategoryProps['category']}) => (
             <Category
                 setCategory={setCategory}
                 setOpenCategory={setOpenCategory}

@@ -34,7 +34,7 @@ const Settings = () => {
                 )}
                 <MenuItem
                     title={_('Language')}
-                    label={_(lan?.title)}
+                    label={_(lan?.title as string)}
                     onPress={toggleLanguageModal}
                 />
                 {isAuthenticated && (

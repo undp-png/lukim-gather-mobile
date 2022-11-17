@@ -12,6 +12,7 @@ import SerializingLink from 'apollo-link-serialize';
 import {
     persistCache,
     MMKVStorageWrapper as MMKVCacheStorageWrapper,
+    PersistentStorage,
 } from 'apollo3-cache-persist';
 import {
     persistQueue,
@@ -28,6 +29,8 @@ import {setToken, setRefreshToken} from 'store/slices/auth';
 import {REFRESH_TOKEN} from './queries';
 
 const {dispatch} = store;
+
+const noop = () => {};
 
 export const getApolloClient = async (queueLink: any) => {
     const cache = new InMemoryCache();
@@ -144,9 +147,14 @@ export const getApolloClient = async (queueLink: any) => {
 
     await persistQueue({
         queueLink,
-        storage: new MMKVQueueStorageWrapper(queueStorage),
+        storage: new MMKVQueueStorageWrapper(queueStorage) as PersistentStorage<
+            string | null
+        >,
         client,
         debug: __DEV__,
+        beforeRestore: noop,
+        onCompleted: noop,
+        onError: console.log,
     });
 
     return client;

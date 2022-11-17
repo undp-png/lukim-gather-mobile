@@ -1,16 +1,13 @@
-import React, {useCallback, useEffect, useState} from 'react';
-import {
-    Image,
-    ScrollView,
-    View,
-    Platform,
-    Switch,
-    Pressable,
-} from 'react-native';
+import React, {useCallback, useEffect, useState, useMemo} from 'react';
+import {Image, ScrollView, View, Platform, Switch} from 'react-native';
 import {RootStateOrAny, useSelector, useDispatch} from 'react-redux';
+import {
+    useNavigation,
+    useRoute,
+    type RouteProp,
+} from '@react-navigation/native';
 import {useMutation} from '@apollo/client';
 import {ReactNativeFile} from 'apollo-upload-client';
-import {useNavigation, useRoute} from '@react-navigation/native';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import {Image as ImageObj} from 'react-native-image-crop-picker';
 import {Icon} from 'react-native-eva-icons';
@@ -18,47 +15,58 @@ import Toast from 'react-native-simple-toast';
 import uuid from 'react-native-uuid';
 import Geolocation from 'react-native-geolocation-service';
 
+import turfDistance from '@turf/distance';
+import turfCentroid from '@turf/centroid';
+import turfPoint from 'turf-point';
+import turfPolygon from 'turf-polygon';
+
 import Text from 'components/Text';
 import InputField from 'components/InputField';
 import ImagePicker from 'components/ImagePicker';
 import {SaveButton} from 'components/HeaderButton';
 import {ModalLoader} from 'components/Loader';
 import CategoryListModal from 'components/CategoryListModal';
-import SurveySentiment from 'components/SurveySentiment';
-import SurveyReview from 'components/SurveyReview';
+import ProjectInput from 'components/ProjectInput';
+import SurveySentimentInput from 'components/SurveySentiment/input';
+import SurveyReviewInput from 'components/SurveyReview/input';
+import SurveyOptionInput, {
+    projectVisibilityOptions,
+    visibilityOptions,
+    testSurveyOptions,
+} from 'components/SurveyOptionInput';
 
 import SurveyCategory from 'services/data/surveyCategory';
 import {_} from 'services/i18n';
 import {setLocation} from 'store/slices/survey';
 import {checkLocation} from 'utils/location';
 import useCategoryIcon from 'hooks/useCategoryIcon';
-
-import {
-    CreateHappeningSurveyMutation,
-    CreateHappeningSurveyMutationVariables,
-    Improvement,
-} from '@generated/types';
-
 import {
     CREATE_HAPPENING_SURVEY,
     GET_HAPPENING_SURVEY,
+    GET_USER_PROJECTS,
 } from 'services/gql/queries';
+import useQuery from 'hooks/useQuery';
 import {getErrorMessage} from 'utils/error';
-import cs from '@rna/utils/cs';
+
+import {
+    HappeningSurveyType,
+    HappeningSurveyInput,
+    CreateHappeningSurveyMutation,
+    CreateHappeningSurveyMutationVariables,
+    SurveyHappeningSurveyImprovementChoices,
+    ProjectType,
+    ProtectedAreaCategoryType,
+    InputMaybe,
+    Improvement,
+} from '@generated/types';
+import type {StackParamList} from 'navigation';
 
 import COLORS from 'utils/colors';
+import {CLOSENESS_DISTANCE_THRESHOLD} from 'utils/config';
 
 import styles from './styles';
 
-interface OptionItemProps {
-    iconName?: string;
-    text?: string;
-    onPress?: (arg0: any) => void;
-    isActive?: boolean;
-    style?: object;
-}
-
-const responseToRNF = res => {
+const responseToRNF = (res: ImageObj) => {
     const image = {
         name: uuid.v4(),
         type: res.mime,
@@ -67,51 +75,27 @@ const responseToRNF = res => {
     return new ReactNativeFile(image);
 };
 
-export const OptionItem: React.FC<OptionItemProps> = ({
-    iconName,
-    text,
-    isActive,
-    onPress,
-    style,
-}) => {
-    return (
-        <Pressable
-            style={cs(
-                styles.optionItem,
-                [styles.activeOptionItem, isActive],
-                style,
-            )}
-            onPress={onPress}>
-            <View style={cs(styles.checked, [styles.hide, !isActive])}>
-                <Icon
-                    name="checkmark-circle-2"
-                    height={18}
-                    width={18}
-                    fill={'#196297'}
-                />
-            </View>
-            <Icon
-                width={20}
-                height={20}
-                name={iconName}
-                fill={isActive ? COLORS.accent : COLORS.greyTextDark}
-            />
-            <Text
-                style={cs(styles.optionText, [
-                    styles.optionTextActive,
-                    isActive,
-                ])}
-                title={text}
-            />
-        </Pressable>
-    );
-};
+type CreateSurveyRouteProp = RouteProp<StackParamList, 'CreateSurvey'>;
 
 const CreateHappeningSurvey = () => {
-    const route = useRoute<any>();
+    const route = useRoute<CreateSurveyRouteProp>();
     const navigation = useNavigation<any>();
 
     const dispatch = useDispatch();
+
+    const {data} = useQuery<{happeningSurveys: HappeningSurveyType[]}>(
+        GET_HAPPENING_SURVEY,
+    );
+    const surveyData = useMemo(() => {
+        return (data?.happeningSurveys || []) as HappeningSurveyType[];
+    }, [data]);
+
+    const {data: projectData} = useQuery<{me: {projects: ProjectType[]}}>(
+        GET_USER_PROJECTS,
+    );
+    const projects = useMemo(() => {
+        return (projectData?.me?.projects || []) as ProjectType[];
+    }, [projectData]);
 
     const {location} = useSelector((state: RootStateOrAny) => state.survey);
     const {user, isAuthenticated} = useSelector(
@@ -122,36 +106,22 @@ const CreateHappeningSurvey = () => {
 
     const [title, setTitle] = useState<string>('');
     const [activeFeel, setActiveFeel] = useState<string>('');
-    const [activeReview, setActiveReview] = useState<Improvement | null>(null);
+    const [activeReview, setActiveReview] =
+        useState<SurveyHappeningSurveyImprovementChoices | null>(null);
     const [images, setImages] = useState<ImageObj[]>([]);
     const [description, setDescription] = useState<string>('');
-    const [category, setCategory] = useState<{
-        id: number;
-        name: string;
-        icon: string;
-    }>(route.params?.categoryItem);
+    const [category, setCategory] = useState<ProtectedAreaCategoryType>(
+        route.params.categoryItem,
+    );
+    const [project, setProject] = useState<ProjectType | null>(null);
     const [isAnonymous, setIsAnonymous] = useState<boolean>(false);
 
     const [isPublic, setPublic] = useState<boolean>(true);
     const [isTest, setTest] = useState<boolean>(false);
 
-    const handlePublicPress = useCallback(() => setPublic(true), []);
-    const handleNotPublicPress = useCallback(() => setPublic(false), []);
-
-    const handleTestPress = useCallback(() => setTest(true), []);
-    const handleNotTestPress = useCallback(() => setTest(false), []);
-
     const [locationDetail, setLocationDetail] = useState<string>('');
 
     const [categoryIcon] = useCategoryIcon(SurveyCategory, Number(category.id));
-
-    const handleFeel = useCallback(feel => {
-        setActiveFeel(feel);
-    }, []);
-
-    const handleReview = useCallback(review => {
-        setActiveReview(review);
-    }, []);
 
     const [createHappeningSurvey, {loading}] = useMutation<
         CreateHappeningSurveyMutation,
@@ -212,12 +182,12 @@ const CreateHappeningSurvey = () => {
             );
         }
         setProcessing(true);
-        let surveyInput = {
+        let surveyInput: HappeningSurveyInput = {
             id: uuid.v4(),
             title: title,
             description: description,
             sentiment: activeFeel,
-            improvement: activeReview,
+            improvement: activeReview as InputMaybe<Improvement>,
             attachment: images.map(responseToRNF),
             location: location.point
                 ? {type: 'Point', coordinates: location?.point}
@@ -230,11 +200,15 @@ const CreateHappeningSurvey = () => {
                 : null,
             isPublic,
             isTest,
+            categoryId: Number(category.id),
         };
+        if (project) {
+            surveyInput.projectId = Number(project.id);
+        }
 
         await createHappeningSurvey({
             variables: {
-                input: {...surveyInput, categoryId: category.id},
+                input: surveyInput,
                 anonymous: isAnonymous,
             },
             optimisticResponse: {
@@ -244,36 +218,46 @@ const CreateHappeningSurvey = () => {
                     ok: null,
                     result: {
                         category: {
-                            id: category.id,
-                            title: category.name,
+                            ...category,
                             __typename: 'ProtectedAreaCategoryType',
                         },
                         ...surveyInput,
-                        attachment: [
-                            ...surveyInput.attachment.map((file, i) => ({
-                                media: file.uri,
-                                id: file.name,
-                            })),
-                        ],
+                        id: surveyInput.id,
+                        improvement:
+                            surveyInput.improvement as HappeningSurveyType['improvement'],
+                        isTest: surveyInput.isTest as HappeningSurveyType['isTest'],
+                        isPublic:
+                            surveyInput.isPublic as HappeningSurveyType['isPublic'],
+                        attachment: surveyInput.attachment
+                            ? [
+                                  ...surveyInput.attachment.map(file => ({
+                                      media: file.uri,
+                                      id: file.name,
+                                  })),
+                              ]
+                            : [],
                         createdBy: {
                             id: user?.id || '',
                             __typename: 'UserType',
                         },
                         createdAt: new Date().toISOString(),
+                        modifiedAt: new Date().toISOString(),
                         isOffline: true,
                     },
                 },
             },
-            update: (cache, {data}) => {
+            update: (cache, {data: cacheData}) => {
                 try {
                     const readData: any = cache.readQuery({
                         query: GET_HAPPENING_SURVEY,
                     }) || {happeningSurveys: []};
                     let mergedSurveys = [];
 
-                    const addedSurvey = {
-                        ...data.createHappeningSurvey.result,
-                    };
+                    const addedSurvey = cacheData?.createHappeningSurvey
+                        ? {
+                              ...cacheData.createHappeningSurvey.result,
+                          }
+                        : {};
                     if (readData.happeningSurveys?.length <= 0) {
                         mergedSurveys = [addedSurvey];
                     } else {
@@ -301,6 +285,7 @@ const CreateHappeningSurvey = () => {
         });
         setProcessing(false);
     }, [
+        project,
         images,
         title,
         description,
@@ -356,21 +341,109 @@ const CreateHappeningSurvey = () => {
         setIsAnonymous(prev => !prev);
     }, [isAnonymous]);
 
+    const closeEntries = useMemo(() => {
+        if (
+            (location?.point || location?.polygon?.[0]) &&
+            surveyData.length > 0
+        ) {
+            return surveyData.filter(sd => {
+                if (sd?.category && sd.category.title !== category?.title) {
+                    return false;
+                }
+                if (sd.boundary?.coordinates?.[0]?.length > 4 || sd.location) {
+                    let from = location.point
+                        ? turfPoint(location.point)
+                        : turfCentroid(turfPolygon([location.polygon]));
+                    let to = sd.location
+                        ? turfPoint(sd.location.coordinates)
+                        : turfCentroid(
+                              turfPolygon(sd?.boundary?.coordinates?.[0]),
+                          );
+                    if (from && to) {
+                        const distance = turfDistance(from, to);
+                        if (distance <= CLOSENESS_DISTANCE_THRESHOLD) {
+                            return true;
+                        }
+                    }
+                    return false;
+                }
+                return false;
+            });
+        }
+        return [];
+    }, [location, surveyData, category]);
+
+    const handleExistingEntriesPress = useCallback(() => {
+        navigation.navigate('ExistingEntries', {existingSurveys: closeEntries});
+    }, [navigation, closeEntries]);
+
     return (
         <ScrollView
             style={styles.container}
             showsVerticalScrollIndicator={false}
             contentContainerStyle={styles.contentContainer}>
+            {closeEntries.length > 0 && (
+                <>
+                    <View style={styles.existingContainer}>
+                        <Icon
+                            style={styles.infoIcon}
+                            name="alert-circle-outline"
+                            width={22}
+                            height={24}
+                            fill={COLORS.grey200}
+                        />
+                        <Text
+                            style={styles.existingText}
+                            title={`There is already ${
+                                closeEntries.length
+                            } existing ${
+                                closeEntries.length === 1 ? 'entry' : 'entries'
+                            } with same category and location. Check ${
+                                closeEntries.length === 1
+                                    ? 'the entry'
+                                    : 'those entries'
+                            } to prevent duplication.`}
+                        />
+                        <View style={styles.goIconContainer}>
+                            <TouchableOpacity
+                                style={styles.goIconTouchable}
+                                onPress={handleExistingEntriesPress}>
+                                <Icon
+                                    style={styles.goIcon}
+                                    name="chevron-right-outline"
+                                    width={12}
+                                    height={12}
+                                    fill={COLORS.blueTextAlt}
+                                />
+                            </TouchableOpacity>
+                        </View>
+                    </View>
+                    <View style={styles.header}>
+                        <Text
+                            style={styles.headerText}
+                            title={_('CREATE A NEW ENTRY')}
+                        />
+                    </View>
+                </>
+            )}
             <View style={styles.categoryCont}>
                 <ModalLoader loading={processing} />
                 <View style={styles.category}>
                     <Image source={categoryIcon} style={styles.categoryIcon} />
-                    <Text style={styles.field} title={_(category.name)} />
+                    <Text style={styles.field} title={_(category.title)} />
                 </View>
                 <TouchableOpacity onPress={toggleOpenCategory}>
                     <Text style={styles.change} title={_('Change')} />
                 </TouchableOpacity>
             </View>
+            {projects.length > 0 && (
+                <ProjectInput
+                    style={styles.projectInput}
+                    projects={projects}
+                    activeProject={project}
+                    onChange={setProject}
+                />
+            )}
             <InputField
                 title={_('Name')}
                 titleDark
@@ -399,46 +472,22 @@ const CreateHappeningSurvey = () => {
                 style={styles.title}
                 title={_('How do you feel about this feature?')}
             />
-            <View style={styles.feelings}>
-                <SurveySentiment
-                    feel="🙁"
-                    activeFeel={activeFeel}
-                    onPress={handleFeel}
-                />
-                <SurveySentiment
-                    feel="🙂"
-                    activeFeel={activeFeel}
-                    onPress={handleFeel}
-                />
-                <SurveySentiment
-                    feel="😐"
-                    activeFeel={activeFeel}
-                    onPress={handleFeel}
-                />
-            </View>
+            <SurveySentimentInput
+                activeFeel={activeFeel}
+                onChange={setActiveFeel}
+                style={styles.feelings}
+            />
             <Text
                 style={styles.title}
                 title={_(
                     'Is the condition of this feature improving, staying the same, or decreasing?',
                 )}
             />
-            <View style={styles.feelings}>
-                <SurveyReview
-                    name="INCREASING"
-                    activeReview={activeReview}
-                    onPress={handleReview}
-                />
-                <SurveyReview
-                    name="SAME"
-                    activeReview={activeReview}
-                    onPress={handleReview}
-                />
-                <SurveyReview
-                    name="DECREASING"
-                    activeReview={activeReview}
-                    onPress={handleReview}
-                />
-            </View>
+            <SurveyReviewInput
+                activeReview={activeReview}
+                onChange={setActiveReview}
+                style={styles.feelings}
+            />
             <InputField
                 title={_('Description')}
                 titleDark
@@ -470,42 +519,28 @@ const CreateHappeningSurvey = () => {
                         style={styles.title}
                         title={_('Who can see this survey?')}
                     />
-                    <View style={styles.feelings}>
-                        <OptionItem
-                            text={_('Only me')}
-                            iconName="lock-outline"
-                            isActive={!isPublic}
-                            onPress={handleNotPublicPress}
-                        />
-                        <OptionItem
-                            text={_('Everyone')}
-                            isActive={isPublic}
-                            iconName="people-outline"
-                            style={styles.spaceLeft}
-                            onPress={handlePublicPress}
-                        />
-                    </View>
+                    <SurveyOptionInput
+                        options={
+                            project
+                                ? projectVisibilityOptions
+                                : visibilityOptions
+                        }
+                        style={styles.feelings}
+                        value={isPublic}
+                        onChange={setPublic}
+                    />
                 </>
             )}
             <Text
                 style={styles.title}
                 title={_('Is this real data or a test point?')}
             />
-            <View style={styles.feelings}>
-                <OptionItem
-                    isActive={!isTest}
-                    text={_('Real data')}
-                    iconName="checkmark-circle-outline"
-                    onPress={handleNotTestPress}
-                />
-                <OptionItem
-                    isActive={isTest}
-                    text={_('Test data')}
-                    iconName="funnel-outline"
-                    style={styles.spaceLeft}
-                    onPress={handleTestPress}
-                />
-            </View>
+            <SurveyOptionInput
+                options={testSurveyOptions}
+                style={styles.feelings}
+                value={isTest}
+                onChange={setTest}
+            />
             {isTest && (
                 <Text
                     style={styles.message}

@@ -20,7 +20,10 @@ const Category = ({category, navigation}: {category: any; navigation: any}) => {
     const handleCategoryPress = useCallback(
         categoryItem => {
             navigation.navigate('CreateSurvey', {
-                categoryItem,
+                categoryItem: {
+                    id: String(categoryItem.id),
+                    title: categoryItem.name,
+                },
             });
         },
         [navigation],

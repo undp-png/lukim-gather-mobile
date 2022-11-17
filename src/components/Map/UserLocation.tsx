@@ -1,4 +1,4 @@
-import React, {useRef} from 'react';
+import React from 'react';
 import MapboxGL from '@react-native-mapbox-gl/maps';
 
 interface UserLocationProps {

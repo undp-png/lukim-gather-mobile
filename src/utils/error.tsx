@@ -1,4 +1,4 @@
-export const getErrorMessage = error => {
+export const getErrorMessage = (error: any) => {
     if (error.detail) {
         return error.detail;
     }
@@ -11,7 +11,7 @@ export const getErrorMessage = error => {
         }
         for (const [key, value] of Object.entries(error)) {
             return `${
-                key === 'username' ? 'email' : key.replaceAll('_', ' ')
+                key === 'username' ? 'email' : key.replace(/_/g, ' ')
             }: ${value}`;
         }
     }

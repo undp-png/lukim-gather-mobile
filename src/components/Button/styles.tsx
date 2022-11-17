@@ -33,6 +33,9 @@ export default StyleSheet.create({
     buttonDisabled: {
         opacity: 0.8,
     },
+    icon: {
+        marginRight: 4,
+    },
     buttonText: {
         color: COLORS.white,
         fontSize: 16,

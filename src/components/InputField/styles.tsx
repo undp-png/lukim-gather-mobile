@@ -58,4 +58,7 @@ export default StyleSheet.create({
     textarea: {
         height: 156,
     },
+    disabled: {
+        backgroundColor: '#E7ECF2',
+    },
 });

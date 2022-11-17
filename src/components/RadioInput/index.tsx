@@ -1,5 +1,5 @@
 import React, {useCallback} from 'react';
-import {Text, TouchableOpacity, View} from 'react-native';
+import {Text, TouchableOpacity} from 'react-native';
 import {Icon} from 'react-native-eva-icons';
 
 import styles from './styles';

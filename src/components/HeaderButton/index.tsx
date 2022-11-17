@@ -71,7 +71,7 @@ export const SearchIcon = ({onSearchPress}: {onSearchPress(): void}) => {
                 name="search-outline"
                 height={30}
                 width={30}
-                fill={'#888C94'}
+                fill={COLORS.greyTextDark}
             />
         </TouchableOpacity>
     );
