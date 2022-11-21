@@ -21,9 +21,13 @@ export default StyleSheet.create({
     },
     textStyle: {
         color: COLORS.inputText,
+        fontSize: 16,
+        fontFamily: 'Inter-Regular',
     },
     labelStyle: {
         color: COLORS.greyText,
+        fontSize: 16,
+        fontFamily: 'Inter-Regular',
     },
     button: {
         marginVertical: 32,

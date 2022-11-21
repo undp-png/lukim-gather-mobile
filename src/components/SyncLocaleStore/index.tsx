@@ -1,4 +1,4 @@
-import {useEffect} from 'react';
+import React, {useEffect} from 'react';
 import {useDispatch} from 'react-redux';
 
 import {useI18nContext} from '@rna/components/I18n';
@@ -10,7 +10,7 @@ import {
     setLanguages,
 } from 'store/slices/locale';
 
-const SyncLocaleStore = ({children}) => {
+const SyncLocaleStore: React.FC<{children: React.ReactNode}> = ({children}) => {
     const {languages, selectedLanguage} = useI18nContext();
     const dispatch = useDispatch();
 
@@ -23,7 +23,7 @@ const SyncLocaleStore = ({children}) => {
         dispatch(setCurrentLanguage(selectedLanguage));
     }, [dispatch, selectedLanguage, languages]);
 
-    return children;
+    return <>{children}</>;
 };
 
 export default SyncLocaleStore;

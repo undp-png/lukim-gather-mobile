@@ -5,8 +5,11 @@ import COLORS from 'utils/colors';
 export default StyleSheet.create({
     container: {
         height: '100%',
-        paddingHorizontal: 20,
+        paddingHorizontal: 16,
         backgroundColor: COLORS.white,
+    },
+    contentContainer: {
+        paddingBottom: 50,
     },
     categoryCont: {
         flexDirection: 'row',
@@ -14,7 +17,7 @@ export default StyleSheet.create({
         alignItems: 'center',
     },
     category: {
-        paddingVertical: 20,
+        marginTop: 20,
         flexDirection: 'row',
         alignItems: 'center',
     },
@@ -24,11 +27,16 @@ export default StyleSheet.create({
         resizeMode: 'contain',
         marginRight: 10,
     },
+    projectInput: {
+        marginTop: 20,
+    },
     field: {
         fontSize: 24,
         lineHeight: 29.05,
         fontFamily: 'Inter-SemiBold',
         color: COLORS.blueTextAlt,
+        flexShrink: 1,
+        flexWrap: 'wrap',
     },
     change: {
         fontSize: 14,

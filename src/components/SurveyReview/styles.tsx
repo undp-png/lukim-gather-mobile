@@ -15,6 +15,7 @@ export default StyleSheet.create({
     },
     activeReviewItem: {
         borderColor: COLORS.secondary,
+        backgroundColor: '#F0F3F6',
     },
     checked: {
         position: 'absolute',

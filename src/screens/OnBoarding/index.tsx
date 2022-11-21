@@ -15,7 +15,7 @@ import Text from 'components/Text';
 import Button from 'components/Button';
 import content from 'services/data/onBoarding.json';
 
-import {useI18nContext, Localize} from '@rna/components/I18n';
+import {useI18nContext} from '@rna/components/I18n';
 import {_} from 'services/i18n';
 import cs from '@rna/utils/cs';
 
@@ -48,7 +48,7 @@ const OnBoarding = () => {
     const Pagination = useCallback(() => {
         return (
             <View style={styles.dotsWrapper}>
-                {content.map((placeholder, i) => {
+                {content.map((_, i) => {
                     const inputRange = [
                         (i - 1) * width,
                         i * width,

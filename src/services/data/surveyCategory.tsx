@@ -1,3 +1,15 @@
+export type LocalCategoryType = {
+    id: number;
+    name: string;
+    icon: string;
+};
+
+export type SurveyCategoryTree = {
+    id: number;
+    title: string;
+    childs: LocalCategoryType[];
+};
+
 const SurveyCategory = [
     {
         id: 1,

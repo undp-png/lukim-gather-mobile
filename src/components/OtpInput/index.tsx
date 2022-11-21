@@ -45,7 +45,9 @@ const Input = forwardRef<TextInput, InputProps>(
                 style={[
                     styles.textInput,
                     {
-                        borderColor: focused ? COLORS.primaryAlt : COLORS.grey,
+                        borderColor: focused
+                            ? COLORS.primaryAlt
+                            : COLORS.border,
                     },
                 ]}
             />

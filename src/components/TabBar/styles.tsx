@@ -17,6 +17,10 @@ export default StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'flex-end',
     },
+    shadowContainer: {
+        position: 'absolute',
+        bottom: 10,
+    },
     containerHidden: {
         display: 'none',
     },
@@ -28,6 +32,7 @@ export default StyleSheet.create({
         color: COLORS.white,
         fontSize: 10,
         marginTop: 4,
+        fontFamily: 'Inter-Regular',
     },
     plusButton: {
         height: Math.min(height, width) / 6.5,
@@ -36,7 +41,6 @@ export default StyleSheet.create({
         bottom: 32,
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: COLORS.blueTextAlt,
     },
     iconWrapper: {
         alignItems: 'center',

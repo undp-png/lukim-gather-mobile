@@ -20,7 +20,7 @@ const _Modal = ({
 }: Props) => {
     const {height, width} = useWindowDimensions();
     const statusBarHeight =
-        Platform.OS === 'android' ? StatusBar.currentHeight : 0;
+        Platform.OS === 'android' ? (StatusBar.currentHeight as number) : 0;
     return (
         <Modal
             statusBarTranslucent={statusBarTranslucent}

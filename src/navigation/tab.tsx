@@ -3,7 +3,10 @@ import {RootStateOrAny, useSelector} from 'react-redux';
 import {useLazyQuery} from '@apollo/client';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {useFocusEffect, useNavigation} from '@react-navigation/native';
-import {createStackNavigator} from '@react-navigation/stack';
+import {
+    createStackNavigator,
+    type StackNavigationProp,
+} from '@react-navigation/stack';
 
 import TabBar from 'components/TabBar';
 
@@ -20,18 +23,22 @@ import {NotificationIcon} from 'components/HeaderButton';
 import COLORS from 'utils/colors';
 import {GET_NOTIFICATIONS_UNREAD_COUNT} from 'services/gql/queries';
 
-import styles from './styles';
+import type {StackParamList} from './index';
 
 const Tab = createBottomTabNavigator();
 
 export type TabParamList = {
-    Surveys: undefined;
     Menu: undefined;
-    HomeScreen: undefined;
+    Home: undefined;
     ChooseCategory: undefined;
 };
 
-const Stack = createStackNavigator<TabParamList>();
+export type HomeNavParamList = {
+    HomeScreen: undefined;
+    Surveys: undefined;
+};
+
+const Stack = createStackNavigator<HomeNavParamList>();
 
 function HomeNavigator() {
     return (
@@ -52,7 +59,7 @@ export default function TabNavigator() {
     const {isAuthenticated} = useSelector(
         (state: RootStateOrAny) => state.auth,
     );
-    const navigation = useNavigation();
+    const navigation = useNavigation<StackNavigationProp<StackParamList>>();
     const [getUnreadCount] = useLazyQuery(GET_NOTIFICATIONS_UNREAD_COUNT, {
         fetchPolicy: 'network-only',
     });
@@ -81,7 +88,6 @@ export default function TabNavigator() {
                     {...tabBarProps}
                     activeColor={COLORS.blueTextAlt}
                     inActiveColor={COLORS.primaryLight}
-                    style={styles.tabBar}
                 />
             )}>
             <Tab.Screen name="Home" component={HomeNavigator} />
@@ -111,7 +117,7 @@ export default function TabNavigator() {
                         isAuthenticated && (
                             <NotificationIcon
                                 onNotificationPress={() =>
-                                    navigation.navigate('Notifications')
+                                    navigation.navigate('Notifications', {})
                                 }
                                 unRead={unRead}
                             />

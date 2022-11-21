@@ -8,8 +8,9 @@ import Text from 'components/Text';
 
 import {_} from 'services/i18n';
 import cs from '@rna/utils/cs';
+import COLORS from 'utils/colors';
 
-import data from 'services/data/surveyCategory';
+import data, {type LocalCategoryType} from 'services/data/surveyCategory';
 
 import styles from './styles';
 
@@ -26,7 +27,7 @@ const Category = ({
 }) => {
     const searchedCategory = useMemo(
         () =>
-            category?.childs.filter(el =>
+            category?.childs.filter((el: LocalCategoryType) =>
                 `${el.name}`.toLowerCase().includes(searchQuery.toLowerCase()),
             ),
         [category?.childs, searchQuery],
@@ -127,7 +128,7 @@ const SearchCategory = () => {
                 </View>
             ),
             headerStyle: {
-                backgroundColor: '#E7ECF2',
+                backgroundColor: COLORS.white,
                 shadowColor: 'transparent',
             },
         });

@@ -1,16 +1,19 @@
 import {createSlice, PayloadAction} from '@reduxjs/toolkit';
 
-import SurveyState from 'store/types/survey';
+import {SurveyState} from 'store/types/survey';
 
 const initialState: SurveyState = {
-    location: [],
+    location: {},
 };
 
 const surveySlice = createSlice({
     name: 'survey',
     initialState,
     reducers: {
-        setLocation: (state, {payload}: PayloadAction<SurveyState>) => {
+        setLocation: (
+            state,
+            {payload}: PayloadAction<SurveyState['location']>,
+        ) => {
             state.location = payload;
         },
     },

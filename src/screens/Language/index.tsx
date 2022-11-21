@@ -14,7 +14,7 @@ import COLORS from 'utils/colors';
 
 import styles from './styles';
 
-const codeExtractor = item => item.code;
+const codeExtractor = (item: {title: string; code: string}) => item.code;
 
 const Option = ({
     selected,

@@ -1,19 +1,31 @@
 import {createSlice, PayloadAction} from '@reduxjs/toolkit';
 
-const initialState = {};
+import type {FormDataType} from 'screens/Webviewform';
+
+type FormState = {
+    [key: string]: FormDataType;
+};
+
+const initialState: FormState = {};
 
 const formSlice = createSlice({
     name: 'lukimInfo',
     initialState,
     reducers: {
-        setFormData: (state, {payload}: PayloadAction<object>) => {
+        setFormData: (
+            state,
+            {payload}: PayloadAction<{key: string; value: string}>,
+        ) => {
             if (state[payload.key]) {
                 state[payload.key].data = payload.value;
             } else {
                 state[payload.key] = {data: payload.value};
             }
         },
-        setFormMedia: (state, {payload}: PayloadAction<object>) => {
+        setFormMedia: (
+            state,
+            {payload}: PayloadAction<{key: string; value: string}>,
+        ) => {
             if (state[payload.key]) {
                 state[payload.key].media = payload.value;
             } else {

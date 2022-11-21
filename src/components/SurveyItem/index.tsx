@@ -48,7 +48,7 @@ const SurveyItem = ({item, onPress}: SurveyItemProps) => {
                     />
                     <Text
                         style={styles.field}
-                        title={_(item?.category?.title)}
+                        title={_(item?.category?.title as string)}
                     />
                 </View>
                 <Text

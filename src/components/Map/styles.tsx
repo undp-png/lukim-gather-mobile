@@ -1,5 +1,7 @@
 import {StyleSheet} from 'react-native';
 
+import type {Expression, Anchor} from '@react-native-mapbox-gl/maps';
+
 import COLORS from 'utils/colors';
 
 export default StyleSheet.create({
@@ -63,32 +65,36 @@ export default StyleSheet.create({
         borderRadius: 14,
         backgroundColor: COLORS.blueTextAlt,
     },
-    polygonFill: {
-        fillOpacity: 0.7,
-        fillAntialias: true,
-        fillColor: 'rgba(64, 88, 116, 0.31)',
-        fillOutlineColor: COLORS.blueText,
-    },
-    pointCircle: {
-        circleRadius: 10,
-        circleColor: COLORS.white,
-    },
 });
 
 export const mapStyles = {
     pointCount: {
-        textColor: 'white',
-        textField: ['get', 'point_count_abbreviated'],
-        textSize: 16,
+        textColor: '#0A52A1',
+        textField: ['get', 'point_count_abbreviated'] as Expression,
+        textSize: 18,
     },
     clusterPoints: {
-        circleColor: '#5486BD',
+        circleColor: '#E7EEF6',
+        circleStrokeWidth: 1,
+        circleStrokeColor: '#85A9D0',
         circleRadius: 20,
     },
     singlePoint: {
-        iconImage: ['get', 'id', ['get', 'category', ['get', 'surveyItem']]],
+        iconImage: [
+            'get',
+            'id',
+            ['get', 'category', ['get', 'surveyItem']],
+        ] as Expression,
         iconAllowOverlap: true,
-        iconSize: 0.6,
+        iconSize: 0.45,
+        iconAnchor: 'bottom' as Anchor,
+        iconOffset: [-6, -58],
+    },
+    marker: {
+        iconImage: 'marker',
+        iconAllowOverlap: true,
+        iconAnchor: 'bottom' as Anchor,
+        iconSize: 1,
     },
     polygon: {
         fillOpacity: 0.7,
@@ -97,7 +103,7 @@ export const mapStyles = {
     },
     polyTitle: {
         textColor: '#0033cc',
-        textField: ['get', 'title'],
+        textField: ['get', 'title'] as Expression,
         textSize: 16,
     },
 };

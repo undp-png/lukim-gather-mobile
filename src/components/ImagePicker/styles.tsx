@@ -52,6 +52,9 @@ export default StyleSheet.create({
         backgroundColor: '#ffc',
         marginRight: 10,
     },
+    surveyImageStatic: {
+        opacity: 0.4,
+    },
     closeIcon: {
         position: 'absolute',
         right: 18,

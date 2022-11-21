@@ -16,6 +16,8 @@ import {_} from 'services/i18n';
 import {getErrorMessage} from 'utils/error';
 import {SIGNUP} from 'services/gql/queries';
 
+import type {RegisterUserInput} from '@generated/types';
+
 import styles from './styles';
 
 const SignUp = () => {
@@ -50,7 +52,8 @@ const SignUp = () => {
     });
 
     const handleSignUp = useCallback(async () => {
-        const data = {
+        const data: RegisterUserInput = {
+            username: '',
             firstName,
             lastName,
             password,
@@ -68,8 +71,8 @@ const SignUp = () => {
                     'RCTModalHostViewController',
                 ]);
             }
-            data.username = phoneNumber;
-            data.phoneNumber = phoneNumber;
+            data.username = phoneNumber as string;
+            data.phoneNumber = phoneNumber as string;
         }
         await signup({
             variables: {

@@ -1,8 +1,15 @@
-export const searchTree = (tree, value, key = 'id', reverse = false) => {
+export const searchTree = (
+    tree: any,
+    value: string | number,
+    key = 'id',
+    reverse = false,
+) => {
     const stack = [...tree];
     while (stack.length) {
-        const node = stack[reverse ? 'pop' : 'shift']();
-        if (node[key] === value) {
+        const node: {childs?: any[]; [key: string]: any} = stack[
+            reverse ? 'pop' : 'shift'
+        ]() as any;
+        if (node?.[key as keyof typeof node] === value) {
             return node;
         }
         node.childs && stack.push(...node.childs);
@@ -37,6 +44,7 @@ const getDescendantPropValue = (obj: any, dataKey: string) => {
     for (var i = 0; i < arr.length; i++) {
         val = val?.[arr[i]];
     }
-    const replacer = (key, value) => (value === null ? '' : value);
+    const replacer = (_: string, value: string | null) =>
+        value === null ? '' : value;
     return JSON.stringify(val, replacer, 0);
 };

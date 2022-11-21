@@ -12,6 +12,8 @@ export default StyleSheet.create({
         marginTop: 48,
         marginBottom: 20,
         flex: 1,
+        borderRadius: 12,
+        overflow: 'hidden',
     },
     locationBar: {
         bottom: 20,

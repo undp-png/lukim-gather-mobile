@@ -13,6 +13,12 @@ import {checkLocation} from 'utils/location';
 import COLORS from 'utils/colors';
 
 import {HappeningSurveyType} from '@generated/types';
+import type {
+    Feature,
+    FeatureCollection,
+    Geometry,
+    GeoJsonProperties,
+} from 'geojson';
 
 import styleJSON from 'assets/map/style.json';
 
@@ -175,7 +181,10 @@ const Map: React.FC<Props> = ({
 
     const renderAnnotation = useCallback(() => {
         return (
-            <MapboxGL.PointAnnotation id="marker" coordinate={currentLocation}>
+            <MapboxGL.PointAnnotation
+                id="marker"
+                coordinate={currentLocation as number[]}
+                anchor={{x: 0.5, y: 0.9}}>
                 <View style={styles.markerContainer}>
                     <MarkerIcon />
                     <View style={styles.markerLine} />
@@ -197,17 +206,19 @@ const Map: React.FC<Props> = ({
         };
 
         return (
-            <MapboxGL.ShapeSource id="polygonSource" shape={polygonGeoJSON}>
+            <MapboxGL.ShapeSource
+                id="polygonSource"
+                shape={polygonGeoJSON as Feature<Geometry, GeoJsonProperties>}>
                 <MapboxGL.FillLayer
                     id="polygonFill"
-                    style={styles.polygonFill}
+                    style={mapStyles.polygonFill}
                 />
                 {polygonPoint &&
                     polygonPoint.map((_, index) => (
                         <MapboxGL.CircleLayer
                             key={index}
                             id={'point-' + index}
-                            style={styles.pointCircle}
+                            style={mapStyles.pointCircle}
                         />
                     ))}
             </MapboxGL.ShapeSource>
@@ -224,8 +235,8 @@ const Map: React.FC<Props> = ({
                         surveyItem: survey,
                     },
                     geometry: {
-                        type: survey.location.type,
-                        coordinates: survey.location.coordinates,
+                        type: survey.location?.type,
+                        coordinates: survey.location?.coordinates,
                     },
                 })) || [];
 
@@ -266,7 +277,12 @@ const Map: React.FC<Props> = ({
                 <MapboxGL.Images images={categoryIcons} />
                 <MapboxGL.ShapeSource
                     id="surveyPolySource"
-                    shape={surveyPolyGeoJSON}>
+                    shape={
+                        surveyPolyGeoJSON as FeatureCollection<
+                            Geometry,
+                            GeoJsonProperties
+                        >
+                    }>
                     <MapboxGL.SymbolLayer
                         id="polyTitle"
                         style={mapStyles.polyTitle}
@@ -283,7 +299,12 @@ const Map: React.FC<Props> = ({
                     ref={shapeSourceRef}
                     id="surveySource"
                     cluster
-                    shape={surveyGeoJSON}>
+                    shape={
+                        surveyGeoJSON as FeatureCollection<
+                            Geometry,
+                            GeoJsonProperties
+                        >
+                    }>
                     <MapboxGL.SymbolLayer
                         id="pointCount"
                         style={mapStyles.pointCount}
@@ -300,6 +321,12 @@ const Map: React.FC<Props> = ({
                         style={mapStyles.singlePoint}
                         filter={['!', ['has', 'point_count']]}
                         belowLayerID="circles"
+                    />
+                    <MapboxGL.SymbolLayer
+                        id="iconBackground"
+                        style={mapStyles.marker}
+                        filter={['!', ['has', 'point_count']]}
+                        belowLayerID="singlePoint"
                     />
                 </MapboxGL.ShapeSource>
             </>

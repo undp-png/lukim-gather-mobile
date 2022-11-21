@@ -1,4 +1,5 @@
 import {StyleSheet} from 'react-native';
+import {Expression, Anchor} from '@react-native-mapbox-gl/maps';
 
 import COLORS from 'utils/colors';
 
@@ -63,6 +64,9 @@ export default StyleSheet.create({
         borderRadius: 14,
         backgroundColor: COLORS.blueTextAlt,
     },
+});
+
+export const mapStyles = {
     polygonFill: {
         fillOpacity: 0.7,
         fillAntialias: true,
@@ -73,12 +77,9 @@ export default StyleSheet.create({
         circleRadius: 10,
         circleColor: COLORS.white,
     },
-});
-
-export const mapStyles = {
     pointCount: {
         textColor: 'white',
-        textField: ['get', 'point_count_abbreviated'],
+        textField: ['get', 'point_count_abbreviated'] as Expression,
         textSize: 16,
     },
     clusterPoints: {
@@ -86,9 +87,21 @@ export const mapStyles = {
         circleRadius: 20,
     },
     singlePoint: {
-        iconImage: ['get', 'id', ['get', 'category', ['get', 'surveyItem']]],
+        iconImage: [
+            'get',
+            'id',
+            ['get', 'category', ['get', 'surveyItem']],
+        ] as Expression,
         iconAllowOverlap: true,
-        iconSize: 0.6,
+        iconSize: 0.45,
+        iconAnchor: 'bottom' as Anchor,
+        iconOffset: [-6, -58],
+    },
+    marker: {
+        iconImage: 'marker',
+        iconAllowOverlap: true,
+        iconAnchor: 'bottom' as Anchor,
+        iconSize: 1,
     },
     polygon: {
         fillOpacity: 0.7,
@@ -97,7 +110,7 @@ export const mapStyles = {
     },
     polyTitle: {
         textColor: '#0033cc',
-        textField: ['get', 'title'],
+        textField: ['get', 'title'] as Expression,
         textSize: 16,
     },
 };

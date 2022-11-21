@@ -56,15 +56,78 @@ export const GET_HAPPENING_SURVEY = gql`
                 id
             }
             createdAt
+            modifiedAt
             isOffline
+            project {
+                id
+                title
+            }
+        }
+    }
+`;
+
+export const GET_HAPPENING_SURVEY_HISTORY = gql`
+    query GetHappeningSurveysHistory($surveyId: String) {
+        happeningSurveysHistory(objectId: $surveyId) {
+            id
+            serializedData {
+                fields {
+                    modifiedAt
+                }
+            }
+        }
+    }
+`;
+
+export const GET_HAPPENING_SURVEY_HISTORY_ITEM = gql`
+    query GetHappeningSurveysHistoryItem($surveyId: String, $id: Float) {
+        happeningSurveysHistory(objectId: $surveyId, id: $id) {
+            serializedData {
+                fields {
+                    title
+                    description
+                    location {
+                        type
+                        coordinates
+                    }
+                    boundary {
+                        type
+                        coordinates
+                    }
+                    sentiment
+                    improvement
+                    isTest
+                    isPublic
+                    attachment {
+                        id
+                        media
+                    }
+                    category {
+                        id
+                        title
+                    }
+                    createdBy {
+                        id
+                    }
+                    createdAt
+                    modifiedAt
+                    isOffline
+                    project {
+                        id
+                        title
+                    }
+                }
+            }
         }
     }
 `;
 
 export const CREATE_HAPPENING_SURVEY = gql`
-    mutation CreateHappeningSurvey($input: HappeningSurveyInput!)
-    @serialize(key: ["createupdatedeletesurvey"]) {
-        createHappeningSurvey(data: $input) {
+    mutation CreateHappeningSurvey(
+        $anonymous: Boolean!
+        $input: HappeningSurveyInput!
+    ) @serialize(key: ["createupdatedeletesurvey"]) {
+        createHappeningSurvey(data: $input, anonymous: $anonymous) {
             __typename
             errors
             ok
@@ -96,7 +159,61 @@ export const CREATE_HAPPENING_SURVEY = gql`
                     id
                 }
                 createdAt
+                modifiedAt
                 isOffline
+                project {
+                    id
+                    title
+                }
+            }
+        }
+    }
+`;
+
+export const EDIT_HAPPENING_SURVEY = gql`
+    mutation EditHappeningSurvey(
+        $input: UpdateHappeningSurveyInput!
+        $id: UUID!
+    ) @serialize(key: ["createupdatedeletesurvey"]) {
+        editHappeningSurvey(data: $input, id: $id) {
+            __typename
+            errors
+            ok
+            result {
+                id
+                title
+                description
+                location {
+                    type
+                    coordinates
+                }
+                boundary {
+                    type
+                    coordinates
+                }
+                sentiment
+                improvement
+                isTest
+                isPublic
+                attachment {
+                    id
+                    media
+                }
+                category {
+                    __typename
+                    id
+                    title
+                }
+                createdBy {
+                    id
+                }
+                createdAt
+                modifiedAt
+                isOffline
+                project {
+                    id
+                    title
+                }
             }
         }
     }
@@ -106,7 +223,7 @@ export const UPDATE_HAPPENING_SURVEY = gql`
     mutation UpdateHappeningSurvey(
         $input: UpdateHappeningSurveyInput!
         $id: UUID!
-    ) @serialize(key: ["createupdatedeletesurvey"]) {
+    ) {
         updateHappeningSurvey(data: $input, id: $id) {
             __typename
             errors
@@ -140,7 +257,12 @@ export const UPDATE_HAPPENING_SURVEY = gql`
                     id
                 }
                 createdAt
+                modifiedAt
                 isOffline
+                project {
+                    id
+                    title
+                }
             }
         }
     }
@@ -221,6 +343,17 @@ export const PHONE_NUMBER_CONFIRM_VERIFY = gql`
                 email
                 organization
                 avatar
+            }
+        }
+    }
+`;
+
+export const GET_USER_PROJECTS = gql`
+    query GetUserProjects {
+        me {
+            projects {
+                id
+                title
             }
         }
     }

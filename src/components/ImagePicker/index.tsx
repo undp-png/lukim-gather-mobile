@@ -1,4 +1,4 @@
-import React, {useCallback, useRef} from 'react';
+import React, {useCallback, useRef, useMemo} from 'react';
 import {
     Pressable,
     Text,
@@ -16,17 +16,26 @@ import {_} from 'services/i18n';
 
 import cs from '@rna/utils/cs';
 
+import type {GalleryType} from '@generated/types';
+
 import styles from './styles';
 
 interface PhotoProps {
-    item: {path: string};
+    item: {
+        path?: string;
+        isStatic?: boolean;
+        media?: string | null;
+        uri?: string;
+    };
     index: number;
     onCloseIconPress(index: number): void;
+    isStatic?: boolean;
 }
 
 interface PhotosProps {
-    photos: {path: string; media: string}[];
+    photos: PhotoProps['item'][];
     onRemoveImage(index: number): void;
+    isStatic?: boolean;
 }
 
 interface ImagePickerProps {
@@ -35,12 +44,12 @@ interface ImagePickerProps {
     onRemoveImage: (images: ImageType[]) => void;
     multiple?: boolean;
     disabled?: boolean;
+    initialImages?: GalleryType[];
 }
 
 interface ImagePickerModalProps {
     onChange: (file: ImageType) => void;
     multiple?: boolean;
-    disabled?: boolean;
     isVisible: boolean;
     onBackdropPress(): void;
 }
@@ -57,16 +66,23 @@ const Photo: React.FC<PhotoProps> = ({item, index, onCloseIconPress}) => {
                     {uri: item.media || item.path || item.uri} ||
                     require('assets/images/category-placeholder.png')
                 }
-                style={styles.surveyImage}
+                style={cs(styles.surveyImage, [
+                    styles.surveyImageStatic,
+                    item.isStatic,
+                ])}
             />
-            <Pressable style={styles.closeIcon} onPress={handleCloseIconPress}>
-                <Icon
-                    name="close-circle"
-                    height={20}
-                    width={20}
-                    fill={'#fff'}
-                />
-            </Pressable>
+            {!item.isStatic && (
+                <Pressable
+                    style={styles.closeIcon}
+                    onPress={handleCloseIconPress}>
+                    <Icon
+                        name="close-circle"
+                        height={20}
+                        width={20}
+                        fill={'#fff'}
+                    />
+                </Pressable>
+            )}
         </View>
     );
 };
@@ -82,7 +98,7 @@ const Photos: React.FC<PhotosProps> = ({photos, onRemoveImage}) => {
     );
 
     const renderItem = useCallback(
-        ({item, index}: {item: {path: string}; index: number}) => (
+        ({item, index}: {item: PhotoProps['item']; index: number}) => (
             <Photo
                 item={item}
                 index={index}
@@ -171,14 +187,22 @@ const _ImagePicker: React.FC<ImagePickerProps> = ({
     multiple,
     onRemoveImage: onRemoveCallback,
     disabled,
+    initialImages = [],
 }) => {
     const [visible, setVisible] = React.useState(false);
 
+    const allImages = useMemo(() => {
+        return [
+            ...images,
+            ...initialImages.map(ii => ({...ii, isStatic: true})),
+        ];
+    }, [images, initialImages]);
+
     const iconFlex = useRef(
-        new Animated.Value(images.length >= 1 ? 0.2 : 1),
+        new Animated.Value(allImages.length >= 1 ? 0.2 : 1),
     ).current;
     const imgFlex = useRef(
-        new Animated.Value(images.length >= 1 ? 1 : 0),
+        new Animated.Value(allImages.length >= 1 ? 1 : 0),
     ).current;
 
     const close = useCallback(() => {
@@ -191,14 +215,14 @@ const _ImagePicker: React.FC<ImagePickerProps> = ({
 
     const onChange = useCallback(
         response => {
-            if ((multiple && response.length >= 1) || images.length === 1) {
+            if ((multiple && response.length >= 1) || allImages.length === 1) {
                 Animated.timing(iconFlex, {
                     toValue: 0.2,
                     duration: 300,
                     useNativeDriver: false,
                 }).start();
             }
-            if (images.length === 0) {
+            if (allImages.length === 0) {
                 Animated.timing(imgFlex, {
                     toValue: 1,
                     duration: 300,
@@ -208,7 +232,14 @@ const _ImagePicker: React.FC<ImagePickerProps> = ({
             onChangeCallback(response);
             close();
         },
-        [multiple, images.length, onChangeCallback, close, iconFlex, imgFlex],
+        [
+            multiple,
+            allImages.length,
+            onChangeCallback,
+            close,
+            iconFlex,
+            imgFlex,
+        ],
     );
 
     const onRemoveImage = useCallback(
@@ -240,13 +271,15 @@ const _ImagePicker: React.FC<ImagePickerProps> = ({
         <>
             <View style={styles.addImages}>
                 <Animated.View style={cs({flex: imgFlex})}>
-                    <Photos photos={images} onRemoveImage={onRemoveImage} />
+                    <Photos photos={allImages} onRemoveImage={onRemoveImage} />
                 </Animated.View>
-                {(multiple || images.length !== 1) && (
+                {(multiple || allImages.length !== 1) && (
                     <Animated.View
                         style={cs(styles.imgPickerWrapper, {flex: iconFlex})}>
                         <TouchableOpacity
-                            style={images.length < 1 && styles.emptyAddWrapper}
+                            style={
+                                allImages.length < 1 && styles.emptyAddWrapper
+                            }
                             onPress={open}
                             disabled={disabled}>
                             <Icon

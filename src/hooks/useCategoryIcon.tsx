@@ -3,7 +3,12 @@ import surveyCategory from 'services/data/surveyCategory';
 
 import {searchTree} from 'utils';
 
-export const getCategoryIcon = (categories = surveyCategory, categoryId) => {
+import type {SurveyCategoryTree} from 'services/data/surveyCategory';
+
+export const getCategoryIcon = (
+    categories = surveyCategory,
+    categoryId: number,
+) => {
     if (!categoryId) {
         return null;
     }
@@ -11,7 +16,7 @@ export const getCategoryIcon = (categories = surveyCategory, categoryId) => {
     return node?.icon;
 };
 
-const useCategoryIcon = (categories, id) => {
+const useCategoryIcon = (categories: SurveyCategoryTree[], id: number) => {
     const iconSrc = useMemo(
         () => getCategoryIcon(categories, id),
         [categories, id],

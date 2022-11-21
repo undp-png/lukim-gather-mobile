@@ -6,10 +6,57 @@ export default StyleSheet.create({
     container: {
         height: '100%',
         paddingHorizontal: 20,
+        paddingVertical: 16,
         backgroundColor: COLORS.white,
     },
     contentContainer: {
         paddingBottom: 50,
+    },
+    existingContainer: {
+        backgroundColor: '#F0F3F7',
+        marginBottom: 24,
+        paddingVertical: 16,
+        paddingHorizontal: 12,
+        borderRadius: 8,
+        display: 'flex',
+        flexDirection: 'row',
+        alignItems: 'flex-start',
+    },
+    infoIcon: {
+        margin: 2,
+    },
+    goIconContainer: {
+        alignSelf: 'center',
+    },
+    goIconTouchable: {
+        padding: 6,
+        backgroundColor: COLORS.white,
+        borderRadius: 22,
+        elevation: 1,
+    },
+    goIcon: {
+        padding: 16,
+    },
+    existingText: {
+        color: COLORS.greyTextDark,
+        fontFamily: 'Inter-Regular',
+        lineHeight: 20,
+        fontSize: 14,
+        marginHorizontal: 8,
+        flexShrink: 1,
+        paddingRight: 16,
+    },
+    header: {
+        paddingBottom: 12,
+        paddingTop: 8,
+        borderBottomWidth: 1,
+        borderColor: '#E7EEF6',
+        marginBottom: 20,
+    },
+    headerText: {
+        fontSize: 16,
+        fontFamily: 'Inter-Medium',
+        color: COLORS.greyTextDark,
     },
     categoryCont: {
         flexDirection: 'row',
@@ -17,7 +64,6 @@ export default StyleSheet.create({
         alignItems: 'center',
     },
     category: {
-        paddingVertical: 20,
         flexDirection: 'row',
         alignItems: 'center',
     },
@@ -27,6 +73,9 @@ export default StyleSheet.create({
         resizeMode: 'contain',
         marginRight: 10,
     },
+    projectInput: {
+        marginTop: 24,
+    },
     field: {
         fontSize: 24,
         lineHeight: 29.05,
@@ -35,7 +84,7 @@ export default StyleSheet.create({
         width: '70%',
     },
     change: {
-        padding: 10,
+        paddingVertical: 10,
         fontSize: 14,
         lineHeight: 20,
         fontFamily: 'Inter-Regular',
@@ -77,40 +126,8 @@ export default StyleSheet.create({
         height: 156,
         marginBottom: 20,
     },
-    optionItem: {
-        flex: 1,
-        position: 'relative',
-        height: 56,
-        borderWidth: 1,
-        borderColor: COLORS.border,
-        borderRadius: 8,
-        flexDirection: 'row',
-        justifyContent: 'center',
-        alignItems: 'center',
-    },
-    activeOptionItem: {
-        borderColor: COLORS.secondary,
-    },
     spaceLeft: {
         marginLeft: 10,
-    },
-    checked: {
-        position: 'absolute',
-        top: 3,
-        left: 3,
-    },
-    hide: {
-        display: 'none',
-    },
-    optionText: {
-        fontSize: 16,
-        fontFamily: 'Inter-Medium',
-        lineHeight: 19,
-        color: COLORS.greyTextDark,
-        marginLeft: 6,
-    },
-    optionTextActive: {
-        color: COLORS.accent,
     },
     feelIcon: {
         fontSize: 20,

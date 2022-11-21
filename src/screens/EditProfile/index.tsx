@@ -6,7 +6,6 @@ import {useNavigation} from '@react-navigation/native';
 import {Icon} from 'react-native-eva-icons';
 import {useMutation} from '@apollo/client';
 import Toast from 'react-native-simple-toast';
-import {Image as ImageObj} from 'react-native-image-crop-picker';
 import {ReactNativeFile} from 'apollo-upload-client';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 
@@ -24,6 +23,12 @@ import {setUser} from 'store/slices/auth';
 
 import styles from './styles';
 
+type ImageType = {
+    name: string;
+    uri: string;
+    mime: string;
+};
+
 const EditProfile = () => {
     const dispatch = useDispatch();
     const navigation = useNavigation();
@@ -39,7 +44,7 @@ const EditProfile = () => {
         user.firstName ? user.firstName + ' ' + user.lastName : '',
     );
     const [organization, setOrganization] = useState(user?.organization);
-    const [avatar, setAvatar] = useState<ImageObj | undefined>();
+    const [avatar, setAvatar] = useState<ImageType | undefined>();
 
     const [updateUser, {loading}] = useMutation(UPDATE_USER, {
         onCompleted: res => {

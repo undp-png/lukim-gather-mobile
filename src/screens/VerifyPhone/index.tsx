@@ -20,8 +20,9 @@ import {getErrorMessage} from 'utils/error';
 import {
     PhoneNumberConfirm,
     MutationPhoneNumberConfirmArgs,
+    PhoneNumberConfirmVerifyMutation,
+    PhoneNumberConfirmMutationVariables,
     PhoneNumberConfirmVerify,
-    MutationPhoneNumberVerifyArgs,
 } from 'generated/types';
 
 import styles from './styles';
@@ -33,12 +34,13 @@ const VerifyPhone = () => {
     const phone = route?.params?.phone;
 
     const [phone_confirm_verify, {loading: loading}] = useMutation<
-        PhoneNumberConfirmVerify,
-        MutationPhoneNumberVerifyArgs
+        PhoneNumberConfirmVerifyMutation,
+        PhoneNumberConfirmMutationVariables
     >(PHONE_NUMBER_CONFIRM_VERIFY, {
-        onCompleted: ({phoneNumberVerify}) => {
-            const {token, refreshToken, user} = phoneNumberVerify;
-            dispatchLogin(token, refreshToken, user);
+        onCompleted: data => {
+            const {token, refreshToken, user} =
+                data.phoneNumberVerify as PhoneNumberConfirmVerify;
+            dispatchLogin(token as string, refreshToken as string, user);
             Toast.show('Sucessfully verified Phone!!');
             navigation.navigate('Feed');
         },

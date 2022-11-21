@@ -12,18 +12,22 @@ import Button from 'components/Button';
 import AuthTypeTab from 'components/AuthTypeTab';
 import {ModalLoader} from 'components/Loader';
 
-import {TokenAuthMutation, TokenAuthMutationVariables} from '@generated/types';
+import type {
+    TokenAuthMutation,
+    TokenAuthMutationVariables,
+    CustomObtainJsonWebToken,
+    PhoneNumberConfirm,
+    MutationPhoneNumberConfirmArgs,
+} from '@generated/types';
+import type {StackNavigationProp} from '@react-navigation/stack';
+import type {StackParamList} from 'navigation';
+import type {AuthStackParamList} from 'navigation/auth';
 
 import {_} from 'services/i18n';
 import {dispatchLogin} from 'services/dispatch';
 import {LOGIN, PHONE_NUMBER_CONFIRM} from 'services/gql/queries';
 import {getErrorMessage} from 'utils/error';
 
-import {
-    PhoneNumberConfirm,
-    PhoneNumberConfirmInput,
-    MutationPhoneNumberConfirmArgs,
-} from 'generated/types';
 import styles from './styles';
 
 const Login = () => {
@@ -32,14 +36,18 @@ const Login = () => {
     const [password, setPassword] = useState<string>('');
     const [selectedTab, setSelectedTab] = useState<string>('email');
 
-    const navigation = useNavigation();
+    const navigation =
+        useNavigation<
+            StackNavigationProp<StackParamList & AuthStackParamList>
+        >();
 
     const [login, {loading}] = useMutation<
         TokenAuthMutation,
         TokenAuthMutationVariables
     >(LOGIN, {
-        onCompleted: ({tokenAuth}) => {
-            const {token, refreshToken, user} = tokenAuth;
+        onCompleted: data => {
+            const {token, refreshToken, user} =
+                data.tokenAuth as CustomObtainJsonWebToken;
             dispatchLogin(token, refreshToken, user);
             Toast.show(_('Successfully Logged In!'));
         },
@@ -51,9 +59,9 @@ const Login = () => {
         },
     });
 
-    const [phone_confirm, {loading: phoneConfirmLoading}] = useMutation<
+    const [phone_confirm] = useMutation<
         PhoneNumberConfirm,
-        PhoneNumberConfirmInput
+        MutationPhoneNumberConfirmArgs
     >(PHONE_NUMBER_CONFIRM, {
         onCompleted: () => {
             const ph = parsePhoneNumber(phone, 'PG');
@@ -87,7 +95,7 @@ const Login = () => {
             }
             await phone_confirm({
                 variables: {
-                    data: {username: phoneNumber},
+                    data: {username: phoneNumber as string},
                 },
             });
         }
