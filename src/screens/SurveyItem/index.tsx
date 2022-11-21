@@ -37,6 +37,7 @@ import SurveyCategory from 'services/data/surveyCategory';
 import {
     DELETE_HAPPENING_SURVEY,
     GET_HAPPENING_SURVEY,
+    GET_HAPPENING_SURVEY_COMMENTS,
     GET_HAPPENING_SURVEY_HISTORY,
     GET_HAPPENING_SURVEY_HISTORY_ITEM,
 } from 'services/gql/queries';
@@ -46,6 +47,7 @@ import useCategoryIcon from 'hooks/useCategoryIcon';
 import useQuery from 'hooks/useQuery';
 
 import type {
+    CommentType,
     HappeningSurveyType,
     HappeningSurveyHistoryType,
     DeleteHappeningSurveyMutation,
@@ -56,6 +58,7 @@ import {getErrorMessage} from 'utils/error';
 
 import cs from '@rna/utils/cs';
 
+import Comment from './Comment';
 import HistoryTabs from './HistoryTabs';
 import styles from './styles';
 
@@ -102,10 +105,16 @@ const SurveyItem = () => {
     }>(GET_HAPPENING_SURVEY_HISTORY, {
         variables: {surveyId: route?.params?.item?.id},
     });
+    const {data: surveyDataComment, refetch: fetchComment} = useQuery<{
+        comments: CommentType[];
+    }>(GET_HAPPENING_SURVEY_COMMENTS, {
+        variables: {surveyId: route?.params?.item?.id, level: 0},
+    });
     useFocusEffect(
         useCallback(() => {
             refetch();
-        }, [refetch]),
+            fetchComment();
+        }, [refetch, fetchComment]),
     );
 
     const [activeVersionId, setActiveVersionId] = useState<string | number>(
@@ -513,6 +522,18 @@ const SurveyItem = () => {
                             title={surveyData?.isTest ? _('Yes') : _('No')}
                         />
                     </View>
+                    {activeVersionId === 'current' ? (
+                        <View>
+                            <Header title={_('Comments')} />
+                            <View style={styles.content}>
+                                <Comment
+                                    surveyId={route?.params?.item?.id}
+                                    commentItem={surveyDataComment?.comments}
+                                    refetch={fetchComment}
+                                />
+                            </View>
+                        </View>
+                    ) : null}
                     <SurveyActions
                         isOpenActions={isOpenActions}
                         onEditPress={toggleEditPress}

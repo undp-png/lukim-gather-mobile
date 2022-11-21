@@ -2,6 +2,7 @@ const COLORS = {
     /** Colors **/
     black: '#000',
     white: '#fff',
+    orange: '#F4A77C',
     background: '#C4C4C4',
     backgroundLight: 'rgb(227, 227, 227)',
     backgroundGradient: ['#050505', '#202020'],

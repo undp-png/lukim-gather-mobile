@@ -478,3 +478,68 @@ export const MARK_AS_READ = gql`
         }
     }
 `;
+
+export const CREATE_COMMENT = gql`
+    mutation CreateComment($input: CommentMutationInput!) {
+        createComment(input: $input) {
+            id
+            description
+            errors {
+                field
+                messages
+            }
+        }
+    }
+`;
+
+export const LIKE_COMMENT = gql`
+    mutation LikeComment($input: LikeCommentMutationInput!) {
+        likeComment(input: $input) {
+            id
+            errors {
+                field
+                messages
+            }
+        }
+    }
+`;
+
+export const DISLIKE_COMMENT = gql`
+    mutation DislikeComment($id: Int!) {
+        dislikeComment(id: $id) {
+            ok
+            errors
+        }
+    }
+`;
+
+export const GET_HAPPENING_SURVEY_COMMENTS = gql`
+    query Comments($surveyId: String!, $level: Int) {
+        comments(objectId: $surveyId, level: $level) {
+            id
+            createdAt
+            description
+            totalLikes
+            hasLiked
+            user {
+                id
+                firstName
+                lastName
+                avatar
+            }
+            replies {
+                id
+                createdAt
+                description
+                totalLikes
+                hasLiked
+                user {
+                    id
+                    firstName
+                    lastName
+                    avatar
+                }
+            }
+        }
+    }
+`;
