@@ -8,4 +8,7 @@ export default StyleSheet.create({
         backgroundColor: COLORS.white,
         padding: 20,
     },
+    text: {
+        fontFamily: 'Inter-Regular',
+    },
 });

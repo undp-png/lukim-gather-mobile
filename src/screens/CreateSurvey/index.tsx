@@ -201,6 +201,7 @@ const CreateHappeningSurvey = () => {
             isPublic,
             isTest,
             categoryId: Number(category.id),
+            createdAt: new Date().toISOString(),
         };
         if (project) {
             surveyInput.projectId = Number(project.id);
@@ -222,6 +223,12 @@ const CreateHappeningSurvey = () => {
                             __typename: 'ProtectedAreaCategoryType',
                         },
                         ...surveyInput,
+                        project: project
+                            ? {
+                                  id: project.id,
+                                  title: project.title,
+                              }
+                            : null,
                         id: surveyInput.id,
                         improvement:
                             surveyInput.improvement as HappeningSurveyType['improvement'],
@@ -240,8 +247,8 @@ const CreateHappeningSurvey = () => {
                             id: user?.id || '',
                             __typename: 'UserType',
                         },
-                        createdAt: new Date().toISOString(),
-                        modifiedAt: new Date().toISOString(),
+                        createdAt: surveyInput.createdAt,
+                        modifiedAt: surveyInput.createdAt,
                         isOffline: true,
                     },
                 },

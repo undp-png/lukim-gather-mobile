@@ -141,6 +141,7 @@ const UpdateSurvey = () => {
             improvement: activeReview as InputMaybe<Improvement>,
             attachment: newImages.map(responseToRNF),
             description,
+            modifiedAt: new Date().toISOString(),
         };
         setProcessing(true);
         await updateHappeningSurvey({
