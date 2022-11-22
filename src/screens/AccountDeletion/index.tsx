@@ -66,6 +66,7 @@ export default () => {
         <View style={styles.container}>
             <ModalLoader loading={loading} />
             <Text
+                style={styles.text}
                 title={`We\'re sorry to hear you\'d like to delete your account.  When you submit this form, your photos, entries, account and all other data will be removed permanently and will not be recoverable.
                     \n\nOur administrator will delete your account within around 48 hours after you submit this form. A email/sms will be sent to you when the deletion is complete.`}
             />

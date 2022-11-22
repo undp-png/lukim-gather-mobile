@@ -158,6 +158,7 @@ const EditHappeningSurvey = () => {
             isPublic: isPublic,
             attachment: attachment.map(responseToRNF),
             attachmentLink: imageLinks.map(img => img.id),
+            modifiedAt: new Date().toISOString(),
         };
 
         if (coordinates) {
@@ -182,82 +183,97 @@ const EditHappeningSurvey = () => {
 
         if (project) {
             surveyInput.projectId = Number(project.id);
+        } else {
+            surveyInput.projectId = null;
         }
 
-        setProcessing(true);
-        await editHappeningSurvey({
-            variables: {
-                input: {...surveyInput, categoryId: Number(surveyCategory.id)},
-                id: surveyItem.id,
-            },
-            optimisticResponse: {
-                editHappeningSurvey: {
-                    __typename: 'EditHappeningSurvey',
-                    errors: [],
-                    ok: null,
-                    result: {
+        try {
+            setProcessing(true);
+            await editHappeningSurvey({
+                variables: {
+                    input: {
                         ...surveyInput,
-                        improvement:
-                            surveyInput.improvement as HappeningSurveyType['improvement'],
-                        isTest: surveyInput.isTest as HappeningSurveyType['isTest'],
-                        isPublic:
-                            surveyInput.isPublic as HappeningSurveyType['isPublic'],
-                        createdBy: {
-                            id: user?.id || '',
-                            __typename: 'UserType',
+                        categoryId: Number(surveyCategory.id),
+                    },
+                    id: surveyItem.id,
+                },
+                optimisticResponse: {
+                    editHappeningSurvey: {
+                        __typename: 'EditHappeningSurvey',
+                        errors: [],
+                        ok: null,
+                        result: {
+                            ...surveyInput,
+                            project: project
+                                ? {id: project.id, title: project.title}
+                                : null,
+                            improvement:
+                                surveyInput.improvement as HappeningSurveyType['improvement'],
+                            isTest: surveyInput.isTest as HappeningSurveyType['isTest'],
+                            isPublic:
+                                surveyInput.isPublic as HappeningSurveyType['isPublic'],
+                            createdBy: {
+                                id: user?.id || '',
+                                __typename: 'UserType',
+                            },
+                            id: surveyItem.id,
+                            attachment: allImages.map((img, i) => {
+                                if (img?.name) {
+                                    return {
+                                        media: img.path || img.uri,
+                                        id: img.name || i,
+                                    };
+                                }
+                                return img;
+                            }),
+                            category: {
+                                __typename: 'ProtectedAreaCategoryType',
+                                ...surveyCategory,
+                            },
+                            createdAt: surveyItem.createdAt,
+                            modifiedAt: surveyInput.modifiedAt,
+                            isOffline: true,
                         },
-                        id: surveyItem.id,
-                        attachment: allImages.map((img, i) => {
-                            if (img?.name) {
-                                return {
-                                    media: img.path || img.uri,
-                                    id: img.name || i,
-                                };
-                            }
-                            return img;
-                        }),
-                        category: {
-                            __typename: 'ProtectedAreaCategoryType',
-                            ...surveyCategory,
-                        },
-                        createdAt: new Date().toISOString(),
-                        modifiedAt: new Date().toISOString(),
-                        isOffline: true,
                     },
                 },
-            },
-            update: async (cache, {data}) => {
-                try {
-                    const readData: any =
-                        cache.readQuery({
-                            query: GET_HAPPENING_SURVEY,
-                        }) || [];
-                    let updatedHappeningSurvey = readData.happeningSurveys.map(
-                        (obj: HappeningSurveyType) => {
-                            if (
-                                data?.editHappeningSurvey?.result?.id === obj.id
-                            ) {
-                                return {
-                                    ...obj,
-                                    ...data?.editHappeningSurvey?.result,
-                                };
-                            }
-                            return obj;
-                        },
-                    );
+                update: async (cache, {data}) => {
+                    try {
+                        const readData: any =
+                            cache.readQuery({
+                                query: GET_HAPPENING_SURVEY,
+                            }) || [];
+                        let updatedHappeningSurvey =
+                            readData.happeningSurveys.map(
+                                (obj: HappeningSurveyType) => {
+                                    if (
+                                        data?.editHappeningSurvey?.result
+                                            ?.id === obj.id
+                                    ) {
+                                        return {
+                                            ...obj,
+                                            ...data?.editHappeningSurvey
+                                                ?.result,
+                                        };
+                                    }
+                                    return obj;
+                                },
+                            );
 
-                    await cache.writeQuery({
-                        query: GET_HAPPENING_SURVEY,
-                        data: {
-                            happeningSurveys: updatedHappeningSurvey,
-                        },
-                    });
-                    navigation.navigate('Feed');
-                } catch (e) {
-                    console.log('error on happening survey', e);
-                }
-            },
-        });
+                        await cache.writeQuery({
+                            query: GET_HAPPENING_SURVEY,
+                            data: {
+                                happeningSurveys: updatedHappeningSurvey,
+                            },
+                        });
+                        navigation.navigate('Feed');
+                    } catch (e) {
+                        console.log('error on happening survey', e);
+                    }
+                },
+            });
+        } catch (error) {
+            console.log(error);
+        }
         setProcessing(false);
         setConfirmPublish(!confirmPublish);
     }, [
