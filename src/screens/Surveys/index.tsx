@@ -35,7 +35,9 @@ const Surveys = () => {
     const viewShotRef = useRef<any>();
     const {user} = useSelector((state: RootStateOrAny) => state.auth);
 
-    const {loading, data, refetch} = useQuery(GET_HAPPENING_SURVEY);
+    const {loading, data, refetch} = useQuery(GET_HAPPENING_SURVEY, {
+        variables: {ordering: '-modified_at'},
+    });
 
     const [selectedTab, setSelectedTab] = useState('all');
 

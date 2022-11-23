@@ -27,8 +27,8 @@ export const REFRESH_TOKEN = gql`
 `;
 
 export const GET_HAPPENING_SURVEY = gql`
-    query HappeningSurveys($id: UUID) {
-        happeningSurveys(id: $id) {
+    query HappeningSurveys($id: UUID, $ordering: String) {
+        happeningSurveys(id: $id, ordering: $ordering) {
             id
             title
             description

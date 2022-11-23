@@ -21,6 +21,8 @@ import {checkLocation} from 'utils/location';
 import {jsonToCSV} from 'utils';
 import {_} from 'services/i18n';
 
+import type {StackNavigationProp} from '@react-navigation/stack';
+import type {StackParamList} from 'navigation';
 import type {HappeningSurveyType} from '@generated/types';
 import type {FeatureCollection, Geometry, GeoJsonProperties} from 'geojson';
 
@@ -54,7 +56,7 @@ const Map: React.FC<Props> = ({
 }) => {
     const netInfo = useNetInfo();
 
-    const navigation = useNavigation();
+    const navigation = useNavigation<StackNavigationProp<StackParamList>>();
     const {user} = useSelector((state: RootStateOrAny) => state.auth);
 
     const [isOffline, setIsOffline] = useState(true);
