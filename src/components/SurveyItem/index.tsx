@@ -1,4 +1,4 @@
-import React, {useCallback} from 'react';
+import React, {useCallback, useMemo} from 'react';
 import {View, Image, TouchableOpacity} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import {Icon} from 'react-native-eva-icons';
@@ -9,6 +9,8 @@ import {_} from 'services/i18n';
 import SurveyCategory from 'services/data/surveyCategory';
 import useCategoryIcon from 'hooks/useCategoryIcon';
 
+import type {StackNavigationProp} from '@react-navigation/stack';
+import type {StackParamList} from 'navigation';
 import {HappeningSurveyType} from 'generated/types';
 
 import styles from './styles';
@@ -19,7 +21,7 @@ interface SurveyItemProps {
 }
 
 const SurveyItem = ({item, onPress}: SurveyItemProps) => {
-    const navigation = useNavigation();
+    const navigation = useNavigation<StackNavigationProp<StackParamList>>();
     const [categoryIcon] = useCategoryIcon(
         SurveyCategory,
         Number(item?.category?.id),
@@ -31,8 +33,10 @@ const SurveyItem = ({item, onPress}: SurveyItemProps) => {
         navigation.navigate('SurveyItem', {item});
     }, [item, navigation, onPress]);
 
-    const dateFormat = new Date(item.createdAt);
-    const formatted = dateFormat.toString();
+    const [dateFormat, formatted] = useMemo(() => {
+        const date = new Date(item.modifiedAt);
+        return [date, date.toString()];
+    }, [item]);
 
     return (
         <TouchableOpacity onPress={onPressItem} style={styles.item}>
