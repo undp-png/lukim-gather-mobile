@@ -80,7 +80,7 @@ export const GET_HAPPENING_SURVEY_HISTORY = gql`
 `;
 
 export const GET_HAPPENING_SURVEY_HISTORY_ITEM = gql`
-    query GetHappeningSurveysHistoryItem($surveyId: String, $id: Float) {
+    query GetHappeningSurveysHistoryItem($surveyId: String, $id: ID) {
         happeningSurveysHistory(objectId: $surveyId, id: $id) {
             serializedData {
                 fields {
