@@ -13,7 +13,7 @@ interface Props {
     name: string;
     activeReview?: Maybe<SurveyHappeningSurveyImprovementChoices>;
     reviewItem?: boolean;
-    onPress?(emo: string): void;
+    onPress?(emo: string | null): void;
     icon?: string;
 }
 
@@ -62,8 +62,8 @@ export const SurveyReviewIcon = ({name, isActive}: ReviewIconProps) => {
 
 const SurveyReview: React.FC<Props> = ({name, activeReview, onPress}) => {
     const handlePress = useCallback(() => {
-        onPress && onPress(name);
-    }, [name, onPress]);
+        onPress && (name === activeReview ? onPress(null) : onPress(name));
+    }, [name, onPress, activeReview]);
 
     return (
         <Pressable

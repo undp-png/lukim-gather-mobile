@@ -11,13 +11,13 @@ import styles from './styles';
 interface Props {
     feel: string;
     activeFeel: string;
-    onPress(emo: string): void;
+    onPress(emo: string | null): void;
 }
 
 const SurveySentiment: React.FC<Props> = ({feel, activeFeel, onPress}) => {
     const handlePress = useCallback(() => {
-        onPress(feel);
-    }, [feel, onPress]);
+        feel === activeFeel ? onPress(null) : onPress(feel);
+    }, [feel, onPress, activeFeel]);
 
     return (
         <Pressable

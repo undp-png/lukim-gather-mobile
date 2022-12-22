@@ -401,7 +401,6 @@ const Map: React.FC<Props> = ({
     const onClickExportImage = useCallback(async () => {
         try {
             await viewShotRef.current.capture().then((uri: any) => {
-                console.log(uri);
                 if (Platform.OS === 'android') {
                     const granted = getPermissionAndroid();
                     if (!granted) {
@@ -432,10 +431,21 @@ const Map: React.FC<Props> = ({
             {title: _('Boundary'), dataKey: 'boundary.coordinates'},
         ];
         const csv = jsonToCSV(selectedData, config);
-        const path = `${
-            RNFetchBlob.fs.dirs.DownloadDir
-        }/surveys_${Date.now()}.csv`;
-        RNFetchBlob.fs.writeFile(path, csv, 'utf8');
+        const fileName = `surveys_${Date.now()}.csv`;
+        const path = `${RNFetchBlob.fs.dirs.DownloadDir}/${fileName}`;
+        RNFetchBlob.fs.writeFile(path, csv, 'utf8').then(() => {
+            if (Platform.OS === 'android') {
+                RNFetchBlob.android.addCompleteDownload({
+                    title: fileName,
+                    description: 'Download complete!',
+                    mime: 'text/csv',
+                    path: path,
+                    showNotification: true,
+                });
+            } else if (Platform.OS === 'ios') {
+                RNFetchBlob.ios.previewDocument(path);
+            }
+        });
         Toast.show('Saved CSV in Downloads folder!');
         setIsOpenExport(false);
     }, [selectedData]);
