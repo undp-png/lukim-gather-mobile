@@ -41,8 +41,10 @@ export default StyleSheet.create({
     },
     iconWrapper: {
         position: 'absolute',
-        right: 12,
-        top: '40%',
+        right: 0,
+        top: '13%',
+        paddingVertical: 16,
+        paddingHorizontal: 12,
     },
     focused: {
         borderColor: COLORS.primaryAlt,

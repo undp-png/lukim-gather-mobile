@@ -492,6 +492,18 @@ export const CREATE_COMMENT = gql`
     }
 `;
 
+export const UPDATE_COMMENT = gql`
+    mutation UpdateComment($input: UpdateCommentInput!) {
+        updateComment(input: $input) {
+            ok
+            errors {
+                field
+                messages
+            }
+        }
+    }
+`;
+
 export const LIKE_COMMENT = gql`
     mutation LikeComment($input: LikeCommentMutationInput!) {
         likeComment(input: $input) {
@@ -521,6 +533,7 @@ export const GET_HAPPENING_SURVEY_COMMENTS = gql`
             description
             totalLikes
             hasLiked
+            isDeleted
             user {
                 id
                 firstName
@@ -533,12 +546,25 @@ export const GET_HAPPENING_SURVEY_COMMENTS = gql`
                 description
                 totalLikes
                 hasLiked
+                isDeleted
                 user {
                     id
                     firstName
                     lastName
                     avatar
                 }
+            }
+        }
+    }
+`;
+
+export const DELETE_COMMENT = gql`
+    mutation DeleteComment($id: ID!) {
+        deleteComment(id: $id) {
+            ok
+            errors {
+                field
+                messages
             }
         }
     }

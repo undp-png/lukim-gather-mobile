@@ -59,14 +59,16 @@ export default StyleSheet.create({
         marginRight: 14,
     },
     likeCounter: {
-        color: COLORS.grey400,
+        color: COLORS.orange,
         fontFamily: 'Inter-Regular',
         fontSize: 16,
+        marginLeft: 4,
     },
     reply: {
         color: COLORS.grey400,
         fontFamily: 'Inter-Regular',
-        fontSize: 12,
+        fontSize: 14,
+        fontWeight: '600',
     },
     more: {
         color: COLORS.greyText,
