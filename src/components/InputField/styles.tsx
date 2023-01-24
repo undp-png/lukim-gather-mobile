@@ -42,9 +42,9 @@ export default StyleSheet.create({
     iconWrapper: {
         position: 'absolute',
         right: 0,
-        top: '13%',
-        paddingVertical: 16,
-        paddingHorizontal: 12,
+        top: '12%',
+        paddingVertical: 17,
+        paddingHorizontal: 15,
     },
     focused: {
         borderColor: COLORS.primaryAlt,

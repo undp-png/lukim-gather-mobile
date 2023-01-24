@@ -2,6 +2,7 @@ import React, {useCallback, useEffect, useState, useMemo} from 'react';
 import {Image, ScrollView, View, Platform, Switch} from 'react-native';
 import {RootStateOrAny, useSelector, useDispatch} from 'react-redux';
 import {
+    useFocusEffect,
     useNavigation,
     useRoute,
     type RouteProp,
@@ -90,8 +91,13 @@ const CreateHappeningSurvey = () => {
         return (data?.happeningSurveys || []) as HappeningSurveyType[];
     }, [data]);
 
-    const {data: projectData} = useQuery<{me: {projects: ProjectType[]}}>(
-        GET_USER_PROJECTS,
+    const {data: projectData, refetch: refetchProject} = useQuery<{
+        me: {projects: ProjectType[]};
+    }>(GET_USER_PROJECTS);
+    useFocusEffect(
+        useCallback(() => {
+            refetchProject();
+        }, [refetchProject]),
     );
     const projects = useMemo(() => {
         return (projectData?.me?.projects || []) as ProjectType[];
