@@ -342,12 +342,32 @@ const SurveyItem = () => {
     }, [getPermissionAndroid]);
 
     const onClickExportCSV = useCallback(async () => {
-        const config = [{title: _('Title'), dataKey: 'title'}];
+        const config = [
+            {title: 'id', dataKey: 'id'},
+            {title: _('Title'), dataKey: 'title'},
+            {title: _('Description'), dataKey: 'description'},
+            {title: _('Category'), dataKey: 'category.title'},
+            {title: _('Sentiment'), dataKey: 'sentiment'},
+            {title: _('Improvement'), dataKey: 'improvement'},
+            {title: _('Location'), dataKey: 'location.coordinates'},
+            {title: _('Boundary'), dataKey: 'boundary.coordinates'},
+        ];
         const csv = jsonToCSV([surveyData], config);
-        const path = `${
-            RNFetchBlob.fs.dirs.DownloadDir
-        }/survey_${Date.now()}.csv`;
-        RNFetchBlob.fs.writeFile(path, csv, 'utf8');
+        const fileName = `surveys_${Date.now()}.csv`;
+        const path = `${RNFetchBlob.fs.dirs.DownloadDir}/${fileName}`;
+        RNFetchBlob.fs.writeFile(path, csv, 'utf8').then(() => {
+            if (Platform.OS === 'android') {
+                RNFetchBlob.android.addCompleteDownload({
+                    title: fileName,
+                    description: 'Download complete!',
+                    mime: 'text/csv',
+                    path: path,
+                    showNotification: true,
+                });
+            } else if (Platform.OS === 'ios') {
+                RNFetchBlob.ios.previewDocument(path);
+            }
+        });
         Toast.show('Saved CSV in Downloads folder!');
         setIsOpenExport(false);
     }, [surveyData]);
