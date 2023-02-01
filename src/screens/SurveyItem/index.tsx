@@ -6,7 +6,7 @@ import {
     PermissionsAndroid,
     TouchableOpacity,
 } from 'react-native';
-import {FlatList, ScrollView} from 'react-native-gesture-handler';
+import {ScrollView} from 'react-native-gesture-handler';
 import {useMutation} from '@apollo/client';
 import {
     useNavigation,
@@ -24,6 +24,7 @@ import {differenceInDays, formatDistanceToNowStrict, format} from 'date-fns';
 
 import Button from 'components/Button';
 import Text from 'components/Text';
+import ImageView from 'components/ImageView';
 import {Loader} from 'components/Loader';
 import {OptionIcon} from 'components/HeaderButton';
 import ProjectInput from 'components/ProjectInput';
@@ -68,29 +69,6 @@ const Header = ({title}: {title: string}) => {
         <View style={styles.header}>
             <Text style={styles.headerTitle} title={title} />
         </View>
-    );
-};
-
-const Photos = ({photos}: {photos: {media: string}[]}) => {
-    const renderItem = useCallback(
-        ({item}: {item: {media: string}}) => (
-            <Image
-                source={
-                    {uri: item.media} ||
-                    require('assets/images/category-placeholder.png')
-                }
-                style={styles.surveyImage}
-            />
-        ),
-        [],
-    );
-    return (
-        <FlatList
-            data={photos}
-            renderItem={renderItem}
-            horizontal
-            showsHorizontalScrollIndicator={false}
-        />
     );
 };
 
@@ -483,8 +461,8 @@ const SurveyItem = () => {
                     </View>
                     <Header title={_('Photos')} />
                     <View style={styles.photosWrapper}>
-                        <Photos
-                            photos={
+                        <ImageView
+                            images={
                                 surveyData?.attachment
                                     ? [...surveyData.attachment].reverse()
                                     : []
