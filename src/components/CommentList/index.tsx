@@ -143,7 +143,7 @@ const CommentReplyList: React.FC<Props> = ({
             {reply?.map((item: CommentType) => (
                 <CommentItem
                     comment={item}
-                    key={item?.id}
+                    key={'reply-' + item?.id}
                     onLikePress={onLikePress}
                     onReplyPress={onReplyPress}
                     onLongPress={onLongPress}

@@ -10,12 +10,12 @@ import CameraRoll from '@react-native-community/cameraroll';
 import Toast from 'react-native-simple-toast';
 import RNFetchBlob from 'rn-fetch-blob';
 import {RootStateOrAny, useSelector} from 'react-redux';
+import turfCentroid from '@turf/centroid';
 
 import HomeHeader from 'components/HomeHeader';
 import ExportActions from 'components/ExportActions';
 
 import cs from '@rna/utils/cs';
-import surveyCategory from 'services/data/surveyCategory';
 import {MAPBOX_ACCESS_TOKEN} from '@env';
 import {checkLocation} from 'utils/location';
 import {jsonToCSV} from 'utils';
@@ -24,14 +24,13 @@ import {_} from 'services/i18n';
 import type {StackNavigationProp} from '@react-navigation/stack';
 import type {StackParamList} from 'navigation';
 import type {HappeningSurveyType} from '@generated/types';
-import type {FeatureCollection, Geometry, GeoJsonProperties} from 'geojson';
 
 import styleJSON from 'assets/map/style.json';
-import markerIcon from 'assets/icons/markers.png';
 
+import {Cluster} from './Cluster';
 import {UserLocation} from './UserLocation';
 import OfflineLayers from './OfflineLayers';
-import styles, {mapStyles} from './styles';
+import styles from './styles';
 
 MapboxGL.setAccessToken(MAPBOX_ACCESS_TOKEN);
 
@@ -41,6 +40,7 @@ interface Props {
     locationBarStyle?: object;
     surveyData?: HappeningSurveyType[];
     isStatic?: boolean;
+    showUserLocation?: boolean;
     onSurveyEntryPress?: (survey: HappeningSurveyType) => void;
 }
 
@@ -52,6 +52,7 @@ const Map: React.FC<Props> = ({
     locationBarStyle,
     surveyData = [],
     isStatic = false,
+    showUserLocation = false,
     onSurveyEntryPress,
 }) => {
     const netInfo = useNetInfo();
@@ -132,8 +133,8 @@ const Map: React.FC<Props> = ({
             if (selectedData[0].location) {
                 coordinates = selectedData[0].location.coordinates;
             } else if (selectedData[0].boundary) {
-                coordinates =
-                    selectedData[0].boundary.coordinates?.[0]?.[0]?.[0];
+                coordinates = turfCentroid(selectedData[0].boundary)?.geometry
+                    ?.coordinates;
             }
             if (coordinates?.length) {
                 mapCameraRef.current.setCamera({
@@ -268,116 +269,6 @@ const Map: React.FC<Props> = ({
         [navigation, isStatic, onSurveyEntryPress],
     );
 
-    const renderCluster = useCallback(() => {
-        const shape =
-            selectedData
-                .filter((survey: HappeningSurveyType) => survey.location)
-                .map((survey: HappeningSurveyType) => ({
-                    type: 'Feature',
-                    properties: {
-                        surveyItem: survey,
-                    },
-                    geometry: {
-                        type: survey.location?.type,
-                        coordinates: survey.location?.coordinates,
-                    },
-                })) || [];
-
-        let surveyGeoJSON = {
-            type: 'FeatureCollection',
-            features: [...shape],
-        };
-        const polyShape =
-            selectedData
-                .filter((survey: HappeningSurveyType) => survey.boundary)
-                .map((survey: HappeningSurveyType) => ({
-                    type: 'Feature',
-                    properties: {
-                        surveyItem: survey,
-                        title: survey.title,
-                    },
-                    geometry: survey.boundary,
-                })) || [];
-
-        let surveyPolyGeoJSON = {
-            type: 'FeatureCollection',
-            features: [...polyShape],
-        };
-
-        let icons = surveyCategory
-            .map(category =>
-                category.childs.map(child => ({[child.id]: child.icon})),
-            )
-            .flat();
-        let categoryIcons = Object.assign({marker: markerIcon}, ...icons);
-
-        if (!shape) {
-            return;
-        }
-
-        return (
-            <>
-                <MapboxGL.Images images={categoryIcons} />
-                <MapboxGL.ShapeSource
-                    id="surveyPolySource"
-                    onPress={handleSurveyPolyShapePress}
-                    shape={
-                        surveyPolyGeoJSON as FeatureCollection<
-                            Geometry,
-                            GeoJsonProperties
-                        >
-                    }>
-                    <MapboxGL.SymbolLayer
-                        id="polyTitle"
-                        style={mapStyles.polyTitle}
-                        belowLayerID="singlePoint"
-                    />
-                    <MapboxGL.FillLayer
-                        id="polygon"
-                        sourceLayerID="surveyPolySource"
-                        belowLayerID="polyTitle"
-                        style={mapStyles.polygon}
-                    />
-                </MapboxGL.ShapeSource>
-                <MapboxGL.ShapeSource
-                    ref={shapeSourceRef}
-                    id="surveySource"
-                    cluster
-                    onPress={handleSurveyShapePress}
-                    shape={
-                        surveyGeoJSON as FeatureCollection<
-                            Geometry,
-                            GeoJsonProperties
-                        >
-                    }>
-                    <MapboxGL.SymbolLayer
-                        id="pointCount"
-                        style={mapStyles.pointCount}
-                        filter={['has', 'point_count']}
-                    />
-                    <MapboxGL.CircleLayer
-                        id="circles"
-                        style={mapStyles.clusterPoints}
-                        filter={['has', 'point_count']}
-                        belowLayerID="pointCount"
-                    />
-                    <MapboxGL.SymbolLayer
-                        id="singlePoint"
-                        style={mapStyles.singlePoint}
-                        filter={['!', ['has', 'point_count']]}
-                        belowLayerID="circles"
-                    />
-                    <MapboxGL.SymbolLayer
-                        id="iconBackground"
-                        style={mapStyles.marker}
-                        filter={['!', ['has', 'point_count']]}
-                        belowLayerID="singlePoint"
-                    />
-                </MapboxGL.ShapeSource>
-            </>
-        );
-    }, [selectedData, handleSurveyShapePress, handleSurveyPolyShapePress]);
-
     const getPermissionAndroid = useCallback(async () => {
         try {
             const granted = await PermissionsAndroid.request(
@@ -477,8 +368,15 @@ const Map: React.FC<Props> = ({
                         {...mapCameraProps}
                     />
                     {isOffline && <OfflineLayers />}
-                    <UserLocation visible={true} />
-                    {showCluster && renderCluster()}
+                    {showUserLocation && <UserLocation visible={true} />}
+                    {showCluster && (
+                        <Cluster
+                            onPolygonPress={handleSurveyPolyShapePress}
+                            onPointPress={handleSurveyShapePress}
+                            shapeSourceRef={shapeSourceRef}
+                            surveyData={selectedData}
+                        />
+                    )}
                 </MapboxGL.MapView>
             </ViewShot>
             <View style={cs(styles.locationBar, locationBarStyle)}>
