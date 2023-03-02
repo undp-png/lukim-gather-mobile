@@ -15,12 +15,14 @@ import {Icon} from 'react-native-eva-icons';
 import Toast from 'react-native-simple-toast';
 import uuid from 'react-native-uuid';
 import Geolocation from 'react-native-geolocation-service';
+import {RNFetchBlobFile} from 'rn-fetch-blob';
 
 import turfDistance from '@turf/distance';
 import turfCentroid from '@turf/centroid';
 import turfPoint from 'turf-point';
 import turfPolygon from 'turf-polygon';
 
+import AudioPicker from 'components/AudioPicker';
 import Text from 'components/Text';
 import InputField from 'components/InputField';
 import ImagePicker from 'components/ImagePicker';
@@ -124,6 +126,7 @@ const CreateHappeningSurvey = () => {
 
     const [isPublic, setPublic] = useState<boolean>(true);
     const [isTest, setTest] = useState<boolean>(false);
+    const [audio, setAudio] = useState<RNFetchBlobFile | null>(null);
 
     const [locationDetail, setLocationDetail] = useState<string>('');
 
@@ -195,6 +198,7 @@ const CreateHappeningSurvey = () => {
             sentiment: activeFeel,
             improvement: activeReview as InputMaybe<Improvement>,
             attachment: images.map(responseToRNF),
+            audioFile: audio,
             location: location.point
                 ? {type: 'Point', coordinates: location?.point}
                 : null,
@@ -249,6 +253,8 @@ const CreateHappeningSurvey = () => {
                                   })),
                               ]
                             : [],
+                        audioFile:
+                            surveyInput.audioFile as HappeningSurveyType['audioFile'],
                         createdBy: {
                             id: user?.id || '',
                             __typename: 'UserType',
@@ -300,6 +306,7 @@ const CreateHappeningSurvey = () => {
     }, [
         project,
         images,
+        audio,
         title,
         description,
         category,
@@ -324,6 +331,10 @@ const CreateHappeningSurvey = () => {
         },
         [images],
     );
+
+    const handleAudio = useCallback(file => {
+        setAudio(file);
+    }, []);
 
     const handleChangeLocation = useCallback(() => {
         navigation.navigate('ChangeLocation');
@@ -562,6 +573,12 @@ const CreateHappeningSurvey = () => {
                     )}
                 />
             )}
+            <Text style={styles.title} title={_('Add audio description')} />
+            <AudioPicker
+                onAddAudio={handleAudio}
+                onRemoveAudio={setAudio}
+                audio={audio}
+            />
             <CategoryListModal
                 setCategory={setCategory}
                 setOpenCategory={setOpenCategory}

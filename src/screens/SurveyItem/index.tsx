@@ -31,6 +31,7 @@ import ProjectInput from 'components/ProjectInput';
 import SurveyActions from 'components/SurveyActions';
 import SurveyReview from 'components/SurveyReview';
 import ExportActions from 'components/ExportActions';
+import {Audio} from 'components/AudioPicker';
 import Map from 'components/Map';
 
 import {jsonToCSV} from 'utils';
@@ -533,6 +534,14 @@ const SurveyItem = () => {
                             title={surveyData?.isTest ? _('Yes') : _('No')}
                         />
                     </View>
+                    {surveyData?.audioFile && (
+                        <>
+                            <Header title={_('Audio')} />
+                            <View style={styles.content}>
+                                <Audio audio={surveyData?.audioFile} isStatic />
+                            </View>
+                        </>
+                    )}
                     {activeVersionId === 'current' ? (
                         <View>
                             <Header title={_('Comments')} />

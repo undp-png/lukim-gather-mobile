@@ -219,6 +219,9 @@ jest.mock('rn-fetch-blob', () => {
     return {
         fs: {
             DocumentDir: '',
+            dirs: {
+                CacheDir: '',
+            },
         },
     };
 });

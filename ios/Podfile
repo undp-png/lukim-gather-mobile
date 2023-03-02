@@ -17,6 +17,8 @@ target 'lukimgather' do
   pod 'react-native-splash-screen', :path => '../node_modules/react-native-splash-screen'
   # `SSZipArchive` already in use
 
+  pod 'RNAudioRecorderPlayer', :path => '../node_modules/react-native-audio-recorder-player'
+
   pre_install do |installer|
     $RNMBGL.pre_install(installer)
   end

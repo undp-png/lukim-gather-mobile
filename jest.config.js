@@ -27,6 +27,7 @@ module.exports = {
             '|react-native-view-shot' +
             '|@react-native-community/cameraroll' +
             '|rn-fetch-blob' +
+            '|react-native-audio-recorder-player' +
             ')/)',
     ],
     testPathIgnorePatterns: ['src/vendor', 'node_modules'],
