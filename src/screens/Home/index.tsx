@@ -22,7 +22,7 @@ const Home = () => {
 
     return (
         <View>
-            <Map surveyData={surveyData} showCluster />
+            <Map surveyData={surveyData} showCluster showUserLocation />
         </View>
     );
 };

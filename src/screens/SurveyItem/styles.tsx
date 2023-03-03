@@ -169,4 +169,10 @@ export default StyleSheet.create({
         lineHeight: 24,
         color: '#282F3E',
     },
+    mapContainer: {
+        height: 300,
+    },
+    locationBar: {
+        bottom: 12,
+    },
 });

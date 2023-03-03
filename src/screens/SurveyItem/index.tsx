@@ -30,6 +30,7 @@ import ProjectInput from 'components/ProjectInput';
 import SurveyActions from 'components/SurveyActions';
 import SurveyReview from 'components/SurveyReview';
 import ExportActions from 'components/ExportActions';
+import Map from 'components/Map';
 
 import {jsonToCSV} from 'utils';
 import {_} from 'services/i18n';
@@ -520,6 +521,18 @@ const SurveyItem = () => {
                             style={styles.description}
                             title={surveyData?.description}
                         />
+                    </View>
+                    <Header title={_('Location')} />
+                    <View style={styles.content}>
+                        <View style={styles.mapContainer}>
+                            <Map
+                                hideHeader
+                                isStatic
+                                surveyData={[surveyData]}
+                                showCluster
+                                locationBarStyle={styles.locationBar}
+                            />
+                        </View>
                     </View>
                     <Header title={_('Published Anonymously')} />
                     <View style={styles.content}>
