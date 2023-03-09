@@ -28,6 +28,7 @@ import SearchSurvey from 'screens/SearchSurvey';
 import Settings from 'screens/Settings';
 import SurveyItem from 'screens/SurveyItem';
 import Forms from 'screens/Forms';
+import Projects from 'screens/Projects';
 import TermsAndCondition from 'screens/TermsAndCondition';
 import PrivacyPolicy from 'screens/PrivacyPolicy';
 import WebViewForm from 'screens/Webviewform';
@@ -85,6 +86,7 @@ export type StackParamList = {
     SearchSurvey: undefined;
     SurveyItem: {item?: HappeningSurveyType};
     Forms: undefined;
+    Projects: undefined;
     WebViewForm: {form?: FormType; data?: FormDataType};
     TermsAndCondition: undefined;
     PrivacyPolicy: undefined;
@@ -227,6 +229,13 @@ const AppNavigator = () => {
                 component={PrivacyPolicy}
                 options={{
                     headerTitle: _('Privacy Policy'),
+                }}
+            />
+            <Stack.Screen
+                name="Projects"
+                component={Projects}
+                options={{
+                    headerTitle: _('My Projects'),
                 }}
             />
             <Stack.Screen

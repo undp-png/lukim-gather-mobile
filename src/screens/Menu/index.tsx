@@ -130,6 +130,10 @@ const Menu = () => {
                         linkTo="Forms"
                     />
                     <MenuItem
+                        title={_('My Projects', selectedLanguage)}
+                        linkTo="Projects"
+                    />
+                    <MenuItem
                         title={_('Settings', selectedLanguage)}
                         linkTo="Settings"
                     />

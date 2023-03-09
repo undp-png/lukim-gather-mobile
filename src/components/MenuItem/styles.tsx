@@ -12,7 +12,7 @@ export default StyleSheet.create({
     },
     menuTitle: {
         fontSize: 16,
-        fontFamily: 'Inter-Medium',
+        fontFamily: 'Inter-SemiBold',
         lineHeight: 19.36,
         color: COLORS.tertiary,
     },

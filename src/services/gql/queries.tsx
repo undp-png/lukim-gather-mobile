@@ -354,6 +354,7 @@ export const GET_USER_PROJECTS = gql`
             projects {
                 id
                 title
+                description
             }
         }
     }
