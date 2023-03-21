@@ -48,6 +48,7 @@ export const GET_HAPPENING_SURVEY = gql`
                 id
                 media
             }
+            audioFile
             category {
                 id
                 title
@@ -102,6 +103,7 @@ export const GET_HAPPENING_SURVEY_HISTORY_ITEM = gql`
                         id
                         media
                     }
+                    audioFile
                     category {
                         id
                         title
@@ -151,6 +153,7 @@ export const CREATE_HAPPENING_SURVEY = gql`
                     id
                     media
                 }
+                audioFile
                 category {
                     id
                     title
@@ -199,6 +202,7 @@ export const EDIT_HAPPENING_SURVEY = gql`
                     id
                     media
                 }
+                audioFile
                 category {
                     __typename
                     id
@@ -248,6 +252,7 @@ export const UPDATE_HAPPENING_SURVEY = gql`
                     id
                     media
                 }
+                audioFile
                 category {
                     __typename
                     id

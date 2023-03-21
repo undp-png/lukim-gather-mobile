@@ -13,6 +13,7 @@ import {format} from 'date-fns';
 import Toast from 'react-native-simple-toast';
 import uuid from 'react-native-uuid';
 
+import AudioPicker from 'components/AudioPicker';
 import {SaveButton} from 'components/HeaderButton';
 import InputField from 'components/InputField';
 import ImagePicker from 'components/ImagePicker';
@@ -117,6 +118,13 @@ const UpdateSurvey = () => {
         setNewImages(ni => [...response, ...ni]);
     }, []);
 
+    const [audio, setAudio] = useState<HappeningSurveyType['audioFile']>(
+        surveyItem.audioFile,
+    );
+    const handleAudio = useCallback(file => {
+        setAudio(file);
+    }, []);
+
     const [processing, setProcessing] = useState<boolean>(false);
     const [updateHappeningSurvey, {loading}] = useMutation<
         UpdateHappeningSurveyMutation,
@@ -140,6 +148,7 @@ const UpdateSurvey = () => {
             sentiment: activeSentiment,
             improvement: activeReview as InputMaybe<Improvement>,
             attachment: newImages.map(responseToRNF),
+            audioFile: audio,
             description,
             modifiedAt: new Date().toISOString(),
         };
@@ -169,6 +178,8 @@ const UpdateSurvey = () => {
                             })),
                             ...surveyItem.attachment,
                         ],
+                        audioFile:
+                            surveyInput.audioFile as HappeningSurveyType['audioFile'],
                         improvement:
                             surveyInput.improvement as HappeningSurveyType['improvement'],
                         isOffline: true,
@@ -225,6 +236,7 @@ const UpdateSurvey = () => {
         activeSentiment,
         activeReview,
         newImages,
+        audio,
         description,
         surveyItem,
         surveyCategory,
@@ -360,6 +372,12 @@ const UpdateSurvey = () => {
                 style={styles.pressInput}
                 value={surveyItem.isTest}
                 disabled
+            />
+            <Text style={styles.title} title={_('Add audio description')} />
+            <AudioPicker
+                onAddAudio={handleAudio}
+                onRemoveAudio={setAudio}
+                audio={audio}
             />
         </ScrollView>
     );

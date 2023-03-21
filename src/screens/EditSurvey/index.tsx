@@ -13,6 +13,7 @@ import {Icon} from 'react-native-eva-icons';
 import Toast from 'react-native-simple-toast';
 import uuid from 'react-native-uuid';
 
+import AudioPicker from 'components/AudioPicker';
 import Text from 'components/Text';
 import InputField from 'components/InputField';
 import ImagePicker from 'components/ImagePicker';
@@ -120,6 +121,9 @@ const EditHappeningSurvey = () => {
     const [project, setProject] = useState<HappeningSurveyType['project']>(
         surveyItem.project,
     );
+    const [audio, setAudio] = useState<HappeningSurveyType['audioFile']>(
+        surveyItem.audioFile,
+    );
 
     const allImages = useMemo(() => {
         if (imageLinks?.length > -1) {
@@ -158,6 +162,7 @@ const EditHappeningSurvey = () => {
             isPublic: isPublic,
             attachment: attachment.map(responseToRNF),
             attachmentLink: imageLinks.map(img => img.id),
+            audioFile: audio,
             modifiedAt: new Date().toISOString(),
         };
 
@@ -226,6 +231,8 @@ const EditHappeningSurvey = () => {
                                 }
                                 return img;
                             }),
+                            audioFile:
+                                surveyInput?.audioFile as HappeningSurveyType['audioFile'],
                             category: {
                                 __typename: 'ProtectedAreaCategoryType',
                                 ...surveyCategory,
@@ -287,6 +294,7 @@ const EditHappeningSurvey = () => {
         isPublic,
         isTest,
         attachment,
+        audio,
         editHappeningSurvey,
         confirmPublish,
         surveyItem,
@@ -328,6 +336,10 @@ const EditHappeningSurvey = () => {
         }
         setImageLinks([]);
         setAttachment([]);
+    }, []);
+
+    const handleAudio = useCallback(file => {
+        setAudio(file);
     }, []);
 
     const handleCoordinatesChange = useCallback(
@@ -474,6 +486,12 @@ const EditHappeningSurvey = () => {
                 style={styles.feelings}
                 value={isTest}
                 onChange={setIsTest}
+            />
+            <Text style={styles.title} title={_('Add audio description')} />
+            <AudioPicker
+                onAddAudio={handleAudio}
+                onRemoveAudio={setAudio}
+                audio={audio}
             />
             <CategoryListModal
                 setCategory={setSurveyCategory}
