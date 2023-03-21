@@ -10,6 +10,8 @@ import About from 'screens/About';
 import AccountSettings from 'screens/AccountSettings';
 import Language from 'screens/Language';
 import ChangePassword from 'screens/ChangePassword';
+import ChangePhone from 'screens/ChangePhone';
+import ChangePhoneVerify from 'screens/ChangePhoneVerify';
 import AccountDeletion from 'screens/AccountDeletion';
 import ForgotPassword from 'screens/ForgotPassword';
 import VerifyEmail from 'screens/VerifyEmail';
@@ -54,6 +56,10 @@ export type StackParamList = {
     Language: undefined;
     Auth: {screen: string};
     ChangePassword: undefined;
+    ChangePhone: undefined;
+    ChangePhoneVerify: {
+        phone?: string;
+    };
     ChangeLocation: {
         onChange?: (value: any) => void;
         surveyData?: HappeningSurveyType;
@@ -161,6 +167,24 @@ const AppNavigator = () => {
                 options={{
                     headerLeft: () => <CloseButton />,
                     headerTitle: _('Change Password'),
+                    presentation: 'modal',
+                }}
+            />
+            <Stack.Screen
+                name="ChangePhone"
+                component={ChangePhone}
+                options={{
+                    headerLeft: () => <CloseButton />,
+                    headerTitle: _('Change Phone Number'),
+                    presentation: 'modal',
+                }}
+            />
+            <Stack.Screen
+                name="ChangePhoneVerify"
+                component={ChangePhoneVerify}
+                options={{
+                    headerLeft: () => <CloseButton />,
+                    headerTitle: _('Verify Phone Number'),
                     presentation: 'modal',
                 }}
             />

@@ -353,6 +353,24 @@ export const PHONE_NUMBER_CONFIRM_VERIFY = gql`
     }
 `;
 
+export const PHONE_NUMBER_CHANGE = gql`
+    mutation PhoneNumberChange($data: PhoneNumberChangeInput!) {
+        phoneNumberChange(data: $data) {
+            ok
+            errors
+        }
+    }
+`;
+
+export const PHONE_NUMBER_CHANGE_VERIFY = gql`
+    mutation PhoneNumberChangeVerify($data: PhoneNumberChangePinVerifyInput!) {
+        phoneNumberChangeVerify(data: $data) {
+            ok
+            errors
+        }
+    }
+`;
+
 export const GET_USER_PROJECTS = gql`
     query GetUserProjects {
         me {
