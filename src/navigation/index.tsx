@@ -100,6 +100,7 @@ export type StackParamList = {
         onNotificationPress?: () => void;
         unRead?: boolean;
     };
+    AccountDeletion: undefined;
 };
 
 const Stack = createStackNavigator<StackParamList>();

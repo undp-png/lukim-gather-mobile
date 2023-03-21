@@ -151,7 +151,7 @@ export const languages = [
 export const _ = (text: string, lang: string | null = null) => {
     if (!lang) {
         const {
-            locale: {currentLanguage, translations},
+            locale: {currentLanguage},
         } = store.getState();
         lang = currentLanguage;
     }

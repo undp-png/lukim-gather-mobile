@@ -31,6 +31,7 @@
         "noUnusedLocals": true,
         "noUnusedParameters": true
     },
+    "include": ["src", "declaration.d.ts"],
     "exclude": [
         "node_modules",
         "babel.config.js",

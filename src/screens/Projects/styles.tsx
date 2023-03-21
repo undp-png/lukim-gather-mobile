@@ -8,4 +8,13 @@ export default StyleSheet.create({
         padding: 20,
         backgroundColor: COLORS.white,
     },
+    text: {
+        color: COLORS.greyTextDark,
+        fontSize: 14,
+        fontFamily: 'Inter-Regular',
+        textAlign: 'center',
+    },
+    loader: {
+        top: '10%',
+    },
 });

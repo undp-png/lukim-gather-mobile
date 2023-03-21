@@ -41,13 +41,13 @@ interface AudioProps {
         uri: string;
         name: string;
     };
-    onRemoveAudio?(audio: RNFetchBlobFile | null): void;
+    onRemoveAudio?(audio: null): void;
     isStatic?: boolean;
 }
 
 interface AudioPickerProps {
     onAddAudio: (audio: any) => void;
-    onRemoveAudio?(audio: RNFetchBlobFile | null): void;
+    onRemoveAudio?(audio: null): void;
     audio: any;
 }
 
