@@ -12,6 +12,9 @@ import useQuery from 'hooks/useQuery';
 import {GET_SURVEY_FORMS} from 'services/gql/queries';
 import {FormType} from '@generated/types';
 
+import type {StackNavigationProp} from '@react-navigation/stack';
+import type {StackParamList} from 'navigation';
+
 import {resetForm} from 'store/slices/form';
 
 import styles from './styles';
@@ -26,7 +29,7 @@ interface FormMenuItemProps {
 const FormMenuItem: React.FC<FormMenuItemProps> = ({
     item,
 }: FormMenuItemProps) => {
-    const navigation = useNavigation();
+    const navigation = useNavigation<StackNavigationProp<StackParamList>>();
     const dispatch = useDispatch();
 
     const [isResumeModalVisible, setResumeModalVisibility] = useState(false);
