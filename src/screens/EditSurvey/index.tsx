@@ -162,9 +162,11 @@ const EditHappeningSurvey = () => {
             isPublic: isPublic,
             attachment: attachment.map(responseToRNF),
             attachmentLink: imageLinks.map(img => img.id),
-            audioFile: audio,
             modifiedAt: new Date().toISOString(),
         };
+        if (typeof audio !== 'string') {
+            surveyInput.audioFile = audio;
+        }
 
         if (coordinates) {
             surveyInput.location = coordinates.point
@@ -232,7 +234,9 @@ const EditHappeningSurvey = () => {
                                 return img;
                             }),
                             audioFile:
-                                surveyInput?.audioFile as HappeningSurveyType['audioFile'],
+                                typeof audio === 'string'
+                                    ? audio
+                                    : (surveyInput?.audioFile as HappeningSurveyType['audioFile']),
                             category: {
                                 __typename: 'ProtectedAreaCategoryType',
                                 ...surveyCategory,
@@ -405,6 +409,7 @@ const EditHappeningSurvey = () => {
                     projects={projects}
                     activeProject={project}
                     onChange={setProject}
+                    disabled={Boolean(surveyItem?.project)}
                 />
             )}
             <InputField
