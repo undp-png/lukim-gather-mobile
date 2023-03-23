@@ -152,6 +152,9 @@ const UpdateSurvey = () => {
             description,
             modifiedAt: new Date().toISOString(),
         };
+        if (typeof audio !== 'string') {
+            surveyInput.audioFile = audio;
+        }
         setProcessing(true);
         await updateHappeningSurvey({
             variables: {input: surveyInput, id: surveyItem.id},
@@ -179,7 +182,9 @@ const UpdateSurvey = () => {
                             ...surveyItem.attachment,
                         ],
                         audioFile:
-                            surveyInput.audioFile as HappeningSurveyType['audioFile'],
+                            typeof audio === 'string'
+                                ? audio
+                                : (surveyInput?.audioFile as HappeningSurveyType['audioFile']),
                         improvement:
                             surveyInput.improvement as HappeningSurveyType['improvement'],
                         isOffline: true,
