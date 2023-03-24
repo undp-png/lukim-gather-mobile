@@ -276,7 +276,7 @@ const EditHappeningSurvey = () => {
                                 happeningSurveys: updatedHappeningSurvey,
                             },
                         });
-                        navigation.navigate('Feed');
+                        navigation.navigate('Feed', {screen: 'Home'});
                     } catch (e) {
                         console.log('error on happening survey', e);
                     }

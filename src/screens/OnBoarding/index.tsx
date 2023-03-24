@@ -42,7 +42,7 @@ const OnBoarding = () => {
     const netInfo = useNetInfo();
 
     const handleGuestPress = useCallback(() => {
-        navigation.navigate('Feed');
+        navigation.navigate('Feed', {screen: 'Home'});
     }, [navigation]);
 
     const Pagination = useCallback(() => {

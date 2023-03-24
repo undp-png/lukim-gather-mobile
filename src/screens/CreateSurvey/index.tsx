@@ -296,7 +296,7 @@ const CreateHappeningSurvey = () => {
                     Toast.show(_('Survey has been recorded'), Toast.LONG, [
                         'RCTModalHostVIewController',
                     ]);
-                    navigation.navigate('Feed');
+                    navigation.navigate('Feed', {screen: 'Home'});
                 } catch (e) {
                     console.log('error on happening survey', e);
                 }
