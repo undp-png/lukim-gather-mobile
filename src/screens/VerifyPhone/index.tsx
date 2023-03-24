@@ -42,7 +42,7 @@ const VerifyPhone = () => {
                 data.phoneNumberVerify as PhoneNumberConfirmVerify;
             dispatchLogin(token as string, refreshToken as string, user);
             Toast.show('Sucessfully verified Phone!!');
-            navigation.navigate('Feed');
+            navigation.navigate('Feed', {screen: 'Home'});
         },
         onError: err => {
             Toast.show(getErrorMessage(err), Toast.LONG, [

@@ -267,7 +267,7 @@ const SurveyItem = () => {
                             happeningSurveys: happeningSurveys,
                         },
                     });
-                    navigation.navigate('Feed');
+                    navigation.navigate('Feed', {screen: 'Home'});
                 } catch (e) {
                     console.log('Error on deleting happening survey !!!', e);
                 }

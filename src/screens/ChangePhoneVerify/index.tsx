@@ -16,6 +16,8 @@ import {
     PHONE_NUMBER_CHANGE,
 } from 'services/gql/queries';
 
+import {dispatchLogout} from 'services/dispatch';
+
 import styles from './styles';
 
 const ChangePhoneVerify = () => {
@@ -32,7 +34,7 @@ const ChangePhoneVerify = () => {
                     _('Your phone number has been successfully changed!'),
                     Toast.LONG,
                 );
-                navigation.navigate('Menu');
+                dispatchLogout();
             },
             onError: err => {
                 Toast.show(getErrorMessage(err), Toast.LONG, [

@@ -79,12 +79,9 @@ const Login = () => {
 
     const handleLogin = useCallback(async () => {
         if (selectedTab === 'email') {
-            const loginPayload = await login({
+            await login({
                 variables: {username: username.trim().toLowerCase(), password},
             });
-            if (loginPayload && !loginPayload.errors) {
-                navigation.navigate('Feed');
-            }
         } else {
             const ph = parsePhoneNumber(phone, 'PG');
             const phoneNumber = ph?.formatInternational().replace(/\s/g, '');
@@ -99,15 +96,7 @@ const Login = () => {
                 },
             });
         }
-    }, [
-        username,
-        password,
-        phone,
-        login,
-        navigation,
-        phone_confirm,
-        selectedTab,
-    ]);
+    }, [username, password, phone, login, phone_confirm, selectedTab]);
 
     const handleForgotPassword = useCallback(() => {
         navigation.navigate('ForgotPassword');
