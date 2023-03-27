@@ -21,6 +21,16 @@ const SurveyCategory = [
                 icon: require('assets/icons/category/Boundary.png'),
             },
             {
+                id: 3,
+                name: 'Building',
+                icon: require('assets/icons/category/Building.png'),
+            },
+            {
+                id: 4,
+                name: 'Airstrip',
+                icon: require('assets/icons/category/Airstrip.png'),
+            },
+            {
                 id: 5,
                 name: 'Camp',
                 icon: require('assets/icons/category/Camp.png'),
@@ -95,6 +105,11 @@ const SurveyCategory = [
                 id: 19,
                 name: 'Lake',
                 icon: require('assets/icons/category/Lake.png'),
+            },
+            {
+                id: 20,
+                name: 'Stream',
+                icon: require('assets/icons/category/Stream.png'),
             },
             {
                 id: 21,
@@ -239,6 +254,11 @@ const SurveyCategory = [
                 icon: require('assets/icons/category/Earthquake.png'),
             },
             {
+                id: 49,
+                name: 'Tsunami',
+                icon: require('assets/icons/category/Tsunami.png'),
+            },
+            {
                 id: 50,
                 name: 'Landslide',
                 icon: require('assets/icons/category/Landslide.png'),
@@ -266,5 +286,4 @@ const SurveyCategory = [
         ],
     },
 ];
-
 export default SurveyCategory;
