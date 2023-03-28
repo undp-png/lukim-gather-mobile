@@ -18,7 +18,7 @@ interface ImageProps {
 
 interface PhotoProps {
     isVisible: boolean;
-    image: string | null;
+    image: string;
 }
 
 const EmptyImageList = () => (
@@ -27,7 +27,7 @@ const EmptyImageList = () => (
 
 const ImageView: React.FC<ImageProps> = ({images}) => {
     const [openGallery, setOpenGallery] = useState<boolean>(false);
-    const [selectedImage, setSelectedImage] = useState<string | null>(null);
+    const [selectedImage, setSelectedImage] = useState<string>('');
 
     const handleImage = useCallback(
         item => {
@@ -38,7 +38,7 @@ const ImageView: React.FC<ImageProps> = ({images}) => {
     );
 
     const renderImage = useCallback(
-        ({item}: {item: {media: string}}) => (
+        ({item}) => (
             <TouchableWithoutFeedback onPress={() => handleImage(item)}>
                 <Image
                     source={
@@ -73,13 +73,11 @@ const ImageView: React.FC<ImageProps> = ({images}) => {
                         />
                     </TouchableOpacity>
                     <Image
-                        source={{
-                            uri:
-                                image ||
-                                require('assets/images/category-placeholder.png'),
-                        }}
+                        source={
+                            {uri: image} ||
+                            require('assets/images/category-placeholder.png')
+                        }
                         style={styles.image}
-                        resizeMode="contain"
                     />
                 </View>
             </Modal>
@@ -94,6 +92,7 @@ const ImageView: React.FC<ImageProps> = ({images}) => {
                 horizontal
                 showsHorizontalScrollIndicator={false}
                 ListEmptyComponent={EmptyImageList}
+                removeClippedSubviews={true}
             />
             <ImageModal isVisible={openGallery} image={selectedImage} />
         </>

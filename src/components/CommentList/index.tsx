@@ -142,8 +142,8 @@ const CommentReplyList: React.FC<Props> = ({
         <View style={styles.replyContainer}>
             {reply?.map((item: CommentType) => (
                 <CommentItem
+                    key={item?.id}
                     comment={item}
-                    key={'reply-' + item?.id}
                     onLikePress={onLikePress}
                     onReplyPress={onReplyPress}
                     onLongPress={onLongPress}
@@ -172,9 +172,8 @@ const CommentList: React.FC<Props> = ({
         <>
             {comments?.map((item: CommentType) => {
                 return (
-                    <>
+                    <View key={item?.id}>
                         <CommentItem
-                            key={item?.id}
                             comment={item}
                             onLikePress={onLikePress}
                             onReplyPress={onReplyPress}
@@ -189,7 +188,7 @@ const CommentList: React.FC<Props> = ({
                                 onLongPress={onLongPress}
                             />
                         )}
-                    </>
+                    </View>
                 );
             })}
         </>
