@@ -86,20 +86,9 @@ const Notifications = () => {
                     />
                 </View>
                 <View style={styles.notificationWrapper}>
-                    <WebView
-                        style={cs(styles.description, [
-                            styles.notificationUnread,
-                            !item.hasRead,
-                        ])}
-                        scrollEnabled={false}
-                        scalesPageToFit={false}
-                        showsVerticalScrollIndicator={false}
-                        showsHorizontalScrollIndicator={false}
-                        source={{
-                            html: `<body style="margin: 0 !important;padding: 0 !important; font-size: 16px; line-height: 24px;
-
-                        ">${item?.description}</body>`,
-                        }}
+                    <Text
+                        style={styles.description}
+                        title={item?.description}
                     />
                     <Text
                         style={styles.date}
