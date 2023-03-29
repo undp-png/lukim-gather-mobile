@@ -34,7 +34,8 @@ export default StyleSheet.create({
         paddingRight: 6,
     },
     description: {
-        flex: 1,
+        fontSize: 16,
+        lineHeight: 18,
     },
     date: {
         fontSize: 12,
