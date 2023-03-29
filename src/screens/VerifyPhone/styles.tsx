@@ -19,7 +19,7 @@ export default StyleSheet.create({
         marginTop: 32,
     },
     resendWrapper: {
-        marginTop: 'auto',
+        marginTop: 15,
         marginBottom: 40,
     },
     text: {
