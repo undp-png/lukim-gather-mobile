@@ -60,7 +60,7 @@ const Login = () => {
         },
     });
 
-    const [phone_confirm] = useMutation<
+    const [phone_confirm, {loading: phoneConfirmLoading}] = useMutation<
         PhoneNumberConfirm,
         MutationPhoneNumberConfirmArgs
     >(PHONE_NUMBER_CONFIRM, {
@@ -75,6 +75,13 @@ const Login = () => {
                 'RCTModalHostViewController',
             ]);
             console.log(err);
+            if (getErrorMessage(err).includes('been sent')) {
+                const ph = parsePhoneNumber(phone, 'PG');
+                const phoneNumber = ph
+                    ?.formatInternational()
+                    .replace(/\s/g, '');
+                navigation.navigate('VerifyPhone', {phone: phoneNumber});
+            }
         },
     });
 
@@ -111,7 +118,7 @@ const Login = () => {
         <KeyboardAwareScrollView
             showsVerticalScrollIndicator={false}
             style={styles.container}>
-            <ModalLoader loading={loading} />
+            <ModalLoader loading={loading || phoneConfirmLoading} />
             <AuthTypeTab
                 selectedTab={selectedTab}
                 setSelectedTab={setSelectedTab}
