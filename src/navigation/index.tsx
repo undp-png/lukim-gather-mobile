@@ -115,6 +115,7 @@ const AppNavigator = () => {
     const {data} = useQuery(GET_LEGAL_DOCUMENT);
 
     dispatchInfo(data?.legalDocument);
+
     return (
         <Stack.Navigator
             key={currentLanguage} // To re-render on any change in locale state
