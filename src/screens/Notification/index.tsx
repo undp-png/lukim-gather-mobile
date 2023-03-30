@@ -5,7 +5,6 @@ import {TouchableOpacity} from 'react-native-gesture-handler';
 import {Icon} from 'react-native-eva-icons';
 import {useLazyQuery, useMutation} from '@apollo/client';
 import {useFocusEffect, useNavigation} from '@react-navigation/native';
-import WebView from 'react-native-webview';
 
 import EmptyListMessage from 'components/EmptyListMessage';
 import Text from 'components/Text';
