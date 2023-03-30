@@ -12,6 +12,7 @@ export const LOGIN = gql`
                 email
                 organization
                 avatar
+                phoneNumber
             }
         }
     }
@@ -395,6 +396,7 @@ export const UPDATE_USER = gql`
                 email
                 organization
                 avatar
+                phoneNumber
             }
         }
     }

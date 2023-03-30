@@ -12,13 +12,14 @@ const AccountSettings = () => {
     return (
         <View style={styles.container}>
             <View style={styles.menuWrapper}>
-                {user?.email ? (
+                {user?.email !== null && (
                     <MenuItem
                         title={_('Password')}
                         label={_('Change password')}
                         linkTo="ChangePassword"
                     />
-                ) : (
+                )}
+                {user?.phoneNumber !== null && (
                     <MenuItem
                         title={_('Change Phone Number')}
                         label={_('Phone number')}
