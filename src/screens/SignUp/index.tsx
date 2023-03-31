@@ -54,8 +54,8 @@ const SignUp = () => {
     const handleSignUp = useCallback(async () => {
         const data: RegisterUserInput = {
             username: '',
-            firstName,
-            lastName,
+            firstName: firstName.trim(),
+            lastName: lastName.trim(),
             password,
             rePassword: password,
         };

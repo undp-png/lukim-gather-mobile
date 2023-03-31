@@ -21,7 +21,7 @@ import {
     PhoneNumberConfirm,
     MutationPhoneNumberConfirmArgs,
     PhoneNumberConfirmVerifyMutation,
-    PhoneNumberConfirmMutationVariables,
+    PhoneNumberConfirmVerifyMutationVariables,
     PhoneNumberConfirmVerify,
 } from 'generated/types';
 
@@ -35,7 +35,7 @@ const VerifyPhone = () => {
 
     const [phone_confirm_verify, {loading: loading}] = useMutation<
         PhoneNumberConfirmVerifyMutation,
-        PhoneNumberConfirmMutationVariables
+        PhoneNumberConfirmVerifyMutationVariables
     >(PHONE_NUMBER_CONFIRM_VERIFY, {
         onCompleted: data => {
             const {token, refreshToken, user} =

@@ -6,6 +6,11 @@ export default StyleSheet.create({
     container: {
         height: '100%',
         backgroundColor: COLORS.white,
-        padding: 20,
+        paddingHorizontal: 20,
+    },
+    infoText: {
+        color: COLORS.inputText,
+        marginTop: 8,
+        fontFamily: 'Inter-Regular',
     },
 });

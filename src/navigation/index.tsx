@@ -8,10 +8,11 @@ import TabNavigator from './tab';
 
 import About from 'screens/About';
 import AccountSettings from 'screens/AccountSettings';
+import EmailSettings from 'screens/EmailSettings';
 import Language from 'screens/Language';
 import ChangePassword from 'screens/ChangePassword';
 import ChangePhone from 'screens/ChangePhone';
-import ChangePhoneVerify from 'screens/ChangePhoneVerify';
+import OTPVerify from 'screens/OTPVerify';
 import AccountDeletion from 'screens/AccountDeletion';
 import ForgotPassword from 'screens/ForgotPassword';
 import VerifyEmail from 'screens/VerifyEmail';
@@ -56,9 +57,12 @@ export type StackParamList = {
     Language: undefined;
     Auth: {screen: string};
     ChangePassword: undefined;
+    EmailSettings: undefined;
     ChangePhone: undefined;
-    ChangePhoneVerify: {
-        phone?: string;
+    OTPVerify: {
+        onSubmitPin: (pin: string) => void;
+        onResendPin: () => void;
+        target: string; // Email or Phone number
     };
     ChangeLocation: {
         onChange?: (value: any) => void;
@@ -155,6 +159,13 @@ const AppNavigator = () => {
                 }}
             />
             <Stack.Screen
+                name="EmailSettings"
+                component={EmailSettings}
+                options={{
+                    headerTitle: '',
+                }}
+            />
+            <Stack.Screen
                 name="Language"
                 component={Language}
                 options={{
@@ -168,7 +179,7 @@ const AppNavigator = () => {
                 component={ChangePassword}
                 options={{
                     headerLeft: () => <CloseButton />,
-                    headerTitle: _('Change Password'),
+                    headerTitle: _('Password'),
                     presentation: 'modal',
                 }}
             />
@@ -177,16 +188,16 @@ const AppNavigator = () => {
                 component={ChangePhone}
                 options={{
                     headerLeft: () => <CloseButton />,
-                    headerTitle: _('Change Phone Number'),
+                    headerTitle: _('Phone Number'),
                     presentation: 'modal',
                 }}
             />
             <Stack.Screen
-                name="ChangePhoneVerify"
-                component={ChangePhoneVerify}
+                name="OTPVerify"
+                component={OTPVerify}
                 options={{
                     headerLeft: () => <CloseButton />,
-                    headerTitle: _('Verify Phone Number'),
+                    headerTitle: '',
                     presentation: 'modal',
                 }}
             />
