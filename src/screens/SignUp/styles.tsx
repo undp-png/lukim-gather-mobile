@@ -20,6 +20,16 @@ export default StyleSheet.create({
         marginLeft: 6,
         flex: 1,
     },
+    title: {
+        marginTop: 24,
+        fontSize: 16,
+        fontFamily: 'Inter-Medium',
+        color: COLORS.inputText,
+    },
+    radioButton: {
+        marginTop: 8,
+        marginRight: 10,
+    },
     infoWrapper: {
         flexDirection: 'row',
         flexWrap: 'wrap',
