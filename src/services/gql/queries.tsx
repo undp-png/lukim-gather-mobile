@@ -1,5 +1,20 @@
 import gql from 'graphql-tag';
 
+export const GET_ME = gql`
+    query GetMe {
+        me {
+            id
+            firstName
+            lastName
+            email
+            organization
+            avatar
+            phoneNumber
+            hasPassword
+        }
+    }
+`;
+
 export const LOGIN = gql`
     mutation TokenAuth($username: String!, $password: String!) {
         tokenAuth(username: $username, password: $password) {
@@ -13,6 +28,7 @@ export const LOGIN = gql`
                 organization
                 avatar
                 phoneNumber
+                hasPassword
             }
         }
     }
@@ -349,6 +365,7 @@ export const PHONE_NUMBER_CONFIRM_VERIFY = gql`
                 email
                 organization
                 avatar
+                hasPassword
             }
         }
     }
@@ -397,6 +414,7 @@ export const UPDATE_USER = gql`
                 organization
                 avatar
                 phoneNumber
+                hasPassword
             }
         }
     }
@@ -592,6 +610,33 @@ export const DELETE_COMMENT = gql`
                 field
                 messages
             }
+        }
+    }
+`;
+
+export const EMAIL_CHANGE = gql`
+    mutation EmailChange($data: EmailChangeInput!) {
+        emailChange(data: $data) {
+            ok
+            errors
+        }
+    }
+`;
+
+export const EMAIL_CHANGE_VERIFY = gql`
+    mutation EmailChangeVerify($data: EmailChangePinVerifyInput!) {
+        emailChangeVerify(data: $data) {
+            ok
+            errors
+        }
+    }
+`;
+
+export const SET_PASSWORD = gql`
+    mutation SetPassword($data: SetPasswordInput!) {
+        setPassword(data: $data) {
+            ok
+            errors
         }
     }
 `;

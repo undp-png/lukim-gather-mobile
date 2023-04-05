@@ -1,6 +1,6 @@
 import React, {useCallback, useState, useMemo} from 'react';
 import {View, Image} from 'react-native';
-import {useNavigation} from '@react-navigation/native';
+import {useNavigation, useFocusEffect} from '@react-navigation/native';
 import {ScrollView, TouchableOpacity} from 'react-native-gesture-handler';
 import {Icon} from 'react-native-eva-icons';
 import {RootStateOrAny, useSelector} from 'react-redux';
@@ -12,6 +12,7 @@ import Text from 'components/Text';
 import MenuItem from 'components/MenuItem';
 import {ConfirmBox} from 'components/ConfirmationBox';
 import {_} from 'services/i18n';
+import useGetUser from 'hooks/useGetUser';
 
 import {dispatchLogout} from 'services/dispatch';
 
@@ -22,6 +23,12 @@ const Menu = () => {
         (state: RootStateOrAny) => state.auth,
     );
     const {selectedLanguage} = useI18nContext();
+
+    const getUserData = useGetUser();
+    const refreshUser = useCallback(() => {
+        getUserData();
+    }, [getUserData]);
+    useFocusEffect(refreshUser);
 
     const [openConfirmLogout, setOpenConfirmLogout] = useState(false);
     const navigation = useNavigation();
