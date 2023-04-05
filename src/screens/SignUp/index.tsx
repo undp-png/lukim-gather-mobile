@@ -1,17 +1,17 @@
 import React, {useCallback, useState} from 'react';
 import {useMutation} from '@apollo/client';
-import {TouchableOpacity, View, FlatList} from 'react-native';
+import {TouchableOpacity, View} from 'react-native';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import Toast from 'react-native-simple-toast';
 import {useNavigation} from '@react-navigation/native';
 import parsePhoneNumber from 'libphonenumber-js';
+import DropDownPicker from 'react-native-dropdown-picker';
 
 import Text from 'components/Text';
 import InputField from 'components/InputField';
 import Button from 'components/Button';
 import AuthTypeTab from 'components/AuthTypeTab';
 import {ModalLoader} from 'components/Loader';
-import RadioInput from 'components/RadioInput';
 
 import {_} from 'services/i18n';
 import {getErrorMessage} from 'utils/error';
@@ -21,14 +21,6 @@ import type {RegisterUserInput} from '@generated/types';
 
 import styles from './styles';
 
-const genderData = [
-    {id: 1, label: 'Male'},
-    {id: 2, label: 'Female'},
-    {id: 3, label: 'Others'},
-];
-
-const keyExtractor = (item: {label: string}) => item.label;
-
 const SignUp = () => {
     const navigation = useNavigation<any>();
     const [firstName, setFirstName] = useState<string>('');
@@ -37,7 +29,14 @@ const SignUp = () => {
     const [phone, setPhone] = useState<string>('');
     const [password, setPassword] = useState<string>('');
     const [selectedTab, setSelectedTab] = useState<string>('email');
-    const [selectedGender, setSelectedGender] = useState<string>('Male');
+    const [openGender, setOpenGender] = useState(false);
+    const [selectedGender, setSelectedGender] = useState<string | null>('MALE');
+    const [genderData, setGenderData] = useState([
+        {label: 'Male', value: 'MALE'},
+        {label: 'Female', value: 'FEMALE'},
+        {label: 'Other', value: 'OTHER'},
+        {label: 'Prefer not to say', value: 'PREFER_NOT_TO_SAY'},
+    ]);
 
     const [signup, {loading}] = useMutation(SIGNUP, {
         onCompleted: () => {
@@ -66,7 +65,7 @@ const SignUp = () => {
             username: '',
             firstName: firstName.trim(),
             lastName: lastName.trim(),
-            gender: selectedGender.toUpperCase(),
+            gender: selectedGender,
             password,
             rePassword: password,
         };
@@ -100,24 +99,6 @@ const SignUp = () => {
         email,
         phone,
     ]);
-
-    const handleSelectGender = useCallback((label: string) => {
-        setSelectedGender(label);
-    }, []);
-
-    const renderItem = useCallback(
-        ({item}) => {
-            return (
-                <RadioInput
-                    label={_(item.label)}
-                    onPress={handleSelectGender}
-                    selected={selectedGender === item.label}
-                    contentContainerStyle={styles.radioButton}
-                />
-            );
-        },
-        [handleSelectGender, selectedGender],
-    );
 
     const handleGoLogin = useCallback(() => {
         navigation.navigate('Login');
@@ -173,11 +154,15 @@ const SignUp = () => {
                 />
             </View>
             <Text style={styles.title} title={_('Gender')} />
-            <FlatList
-                data={genderData}
-                renderItem={renderItem}
-                keyExtractor={keyExtractor}
-                horizontal
+            <DropDownPicker
+                open={openGender}
+                value={selectedGender}
+                items={genderData}
+                setOpen={setOpenGender}
+                setValue={setSelectedGender}
+                setItems={setGenderData}
+                style={styles.selectInput}
+                textStyle={styles.selectLabel}
             />
             {selectedTab === 'email' && (
                 <InputField
