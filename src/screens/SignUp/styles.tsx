@@ -26,9 +26,16 @@ export default StyleSheet.create({
         fontFamily: 'Inter-Medium',
         color: COLORS.inputText,
     },
-    radioButton: {
+    selectInput: {
         marginTop: 8,
         marginRight: 10,
+        borderRadius: 8,
+        borderColor: COLORS.border,
+    },
+    selectLabel: {
+        fontSize: 16,
+        fontFamily: 'Inter-Regular',
+        color: COLORS.tertiary,
     },
     infoWrapper: {
         flexDirection: 'row',
