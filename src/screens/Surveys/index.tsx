@@ -21,6 +21,7 @@ import ExportActions from 'components/ExportActions';
 import useQuery from 'hooks/useQuery';
 
 import {jsonToCSV} from 'utils';
+import sentimentName from 'utils/sentimentName';
 import {_} from 'services/i18n';
 import {GET_HAPPENING_SURVEY} from 'services/gql/queries';
 import {HappeningSurveyType} from '@generated/types';
@@ -111,6 +112,10 @@ const Surveys = () => {
     }, [getPermissionAndroid]);
 
     const onClickExportCSV = useCallback(async () => {
+        const dt = selectedData.map((item: any) => ({
+            ...item,
+            sentiment: sentimentName[item.sentiment],
+        }));
         const config = [
             {title: 'id', dataKey: 'id'},
             {title: _('Title'), dataKey: 'title'},
@@ -121,7 +126,7 @@ const Surveys = () => {
             {title: _('Location'), dataKey: 'location.coordinates'},
             {title: _('Boundary'), dataKey: 'boundary.coordinates'},
         ];
-        const csv = jsonToCSV(selectedData, config);
+        const csv = jsonToCSV(dt, config);
         const fileName = `surveys_${Date.now()}.csv`;
         const path = `${RNFetchBlob.fs.dirs.DownloadDir}/${fileName}`;
         RNFetchBlob.fs.writeFile(path, csv, 'utf8').then(() => {

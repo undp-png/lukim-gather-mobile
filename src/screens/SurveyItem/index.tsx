@@ -58,6 +58,7 @@ import type {
 } from '@generated/types';
 
 import {getErrorMessage} from 'utils/error';
+import sentimentName from 'utils/sentimentName';
 
 import cs from '@rna/utils/cs';
 
@@ -322,6 +323,10 @@ const SurveyItem = () => {
     }, [getPermissionAndroid]);
 
     const onClickExportCSV = useCallback(async () => {
+        const dt = {
+            ...surveyData,
+            sentiment: sentimentName[surveyData.sentiment],
+        };
         const config = [
             {title: 'id', dataKey: 'id'},
             {title: _('Title'), dataKey: 'title'},
@@ -332,7 +337,7 @@ const SurveyItem = () => {
             {title: _('Location'), dataKey: 'location.coordinates'},
             {title: _('Boundary'), dataKey: 'boundary.coordinates'},
         ];
-        const csv = jsonToCSV([surveyData], config);
+        const csv = jsonToCSV([dt], config);
         const fileName = `surveys_${Date.now()}.csv`;
         const path = `${RNFetchBlob.fs.dirs.DownloadDir}/${fileName}`;
         RNFetchBlob.fs.writeFile(path, csv, 'utf8').then(() => {
