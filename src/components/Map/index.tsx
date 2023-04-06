@@ -20,6 +20,7 @@ import {MAPBOX_ACCESS_TOKEN} from '@env';
 import {checkLocation} from 'utils/location';
 import {jsonToCSV} from 'utils';
 import {_} from 'services/i18n';
+import sentimentName from 'utils/sentimentName';
 
 import type {StackNavigationProp} from '@react-navigation/stack';
 import type {StackParamList} from 'navigation';
@@ -311,6 +312,10 @@ const Map: React.FC<Props> = ({
     }, [getPermissionAndroid]);
 
     const onClickExportCSV = useCallback(async () => {
+        const dt = selectedData.map((item: any) => ({
+            ...item,
+            sentiment: sentimentName[item.sentiment],
+        }));
         const config = [
             {title: 'id', dataKey: 'id'},
             {title: _('Title'), dataKey: 'title'},
@@ -321,7 +326,7 @@ const Map: React.FC<Props> = ({
             {title: _('Location'), dataKey: 'location.coordinates'},
             {title: _('Boundary'), dataKey: 'boundary.coordinates'},
         ];
-        const csv = jsonToCSV(selectedData, config);
+        const csv = jsonToCSV(dt, config);
         const fileName = `surveys_${Date.now()}.csv`;
         const path = `${RNFetchBlob.fs.dirs.DownloadDir}/${fileName}`;
         RNFetchBlob.fs.writeFile(path, csv, 'utf8').then(() => {
