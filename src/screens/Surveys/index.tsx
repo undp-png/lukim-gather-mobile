@@ -1,4 +1,4 @@
-import React, {useRef, useCallback, useState, useMemo} from 'react';
+import React, {useRef, useCallback, useState, useMemo, useEffect} from 'react';
 import {
     RefreshControl,
     View,
@@ -6,14 +6,16 @@ import {
     FlatList,
     PermissionsAndroid,
     Platform,
+    TouchableOpacity,
 } from 'react-native';
 import {RootStateOrAny, useSelector} from 'react-redux';
-import {useFocusEffect} from '@react-navigation/native';
+import {useFocusEffect, useRoute} from '@react-navigation/native';
 import Toast from 'react-native-simple-toast';
 import ViewShot from 'react-native-view-shot';
 import CameraRoll from '@react-native-community/cameraroll';
 import RNFetchBlob from 'rn-fetch-blob';
 
+import Text from 'components/Text';
 import SurveyItem from 'components/SurveyItem';
 import EmptyListMessage from 'components/EmptyListMessage';
 import ExportActions from 'components/ExportActions';
@@ -26,6 +28,9 @@ import {_} from 'services/i18n';
 import {GET_HAPPENING_SURVEY} from 'services/gql/queries';
 import {HappeningSurveyType} from '@generated/types';
 
+import type {ProjectType} from '@generated/types';
+import type {LocalCategoryType} from 'services/data/surveyCategory';
+
 import styles from './styles';
 import HomeHeader from 'components/HomeHeader';
 
@@ -35,6 +40,8 @@ const keyExtractor: KeyExtractor = item => item.id.toString();
 const Surveys = () => {
     const viewShotRef = useRef<any>();
     const {user} = useSelector((state: RootStateOrAny) => state.auth);
+
+    const route = useRoute<any>();
 
     const {loading, data, refetch} = useQuery(GET_HAPPENING_SURVEY, {
         variables: {ordering: '-modified_at'},
@@ -53,16 +60,51 @@ const Surveys = () => {
     }, [refetch]);
     useFocusEffect(handleRefresh);
 
-    const selectedData = useMemo(
-        () =>
-            selectedTab === 'myentries'
-                ? data?.happeningSurveys.filter(
-                      (el: HappeningSurveyType) =>
-                          el.createdBy?.id && el.createdBy?.id === user?.id,
-                  )
-                : data?.happeningSurveys,
-        [data, selectedTab, user?.id],
-    );
+    const [categoryFilterId, setCategoryFilterId] = useState<
+        null | LocalCategoryType['id']
+    >(route?.params?.filters?.categoryFilterId || null);
+    const [projectFilterId, setProjectFilterId] = useState<
+        null | ProjectType['id']
+    >(route?.params?.filters?.projectFilterId || null);
+
+    useEffect(() => {
+        if (route?.params?.filters?.categoryFilterId !== undefined) {
+            setCategoryFilterId(route.params.filters.categoryFilterId);
+        }
+        if (route?.params?.filters?.projectFilterId !== undefined) {
+            setProjectFilterId(route.params.filters.projectFilterId);
+        }
+    }, [route?.params?.filters]);
+
+    const selectedData = useMemo(() => {
+        const filteredData = (data?.happeningSurveys || []).filter(
+            (el: HappeningSurveyType) => {
+                if (categoryFilterId) {
+                    return (
+                        el?.category?.id &&
+                        Number(el.category.id) === Number(categoryFilterId)
+                    );
+                }
+                if (projectFilterId) {
+                    return el?.project?.id && el.project.id === projectFilterId;
+                }
+                return true;
+            },
+        );
+
+        return selectedTab === 'myentries'
+            ? filteredData.filter(
+                  (el: HappeningSurveyType) =>
+                      el.createdBy?.id && el.createdBy?.id === user?.id,
+              )
+            : filteredData;
+    }, [
+        data?.happeningSurveys,
+        selectedTab,
+        user?.id,
+        categoryFilterId,
+        projectFilterId,
+    ]);
 
     const renderItem: ListRenderItem<HappeningSurveyType> = useCallback(
         ({item}: {item: HappeningSurveyType}) => <SurveyItem item={item} />,
@@ -146,16 +188,34 @@ const Surveys = () => {
         setIsOpenExport(false);
     }, [selectedData]);
 
+    const handleClearFilters = useCallback(() => {
+        setProjectFilterId(null);
+        setCategoryFilterId(null);
+    }, [setProjectFilterId, setCategoryFilterId]);
+
     return (
         <View style={styles.container}>
             <HomeHeader
                 selectedTab={selectedTab}
                 setSelectedTab={setSelectedTab}
                 onExportPress={toggleExportModal}
+                projectFilterId={projectFilterId}
+                setProjectFilterId={setProjectFilterId}
+                categoryFilterId={categoryFilterId}
+                // @ts-expect-error Unable to cast to type expected by dropdown component
+                setCategoryFilterId={setCategoryFilterId}
             />
+            {(projectFilterId || categoryFilterId) && (
+                <TouchableOpacity
+                    style={styles.clearLink}
+                    onPress={handleClearFilters}>
+                    <Text title="Clear filters" />
+                </TouchableOpacity>
+            )}
             <ViewShot ref={viewShotRef}>
                 <FlatList
                     data={selectedData || []}
+                    style={styles.surveyList}
                     renderItem={renderItem}
                     refreshControl={
                         <RefreshControl

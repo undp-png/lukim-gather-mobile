@@ -22,6 +22,7 @@ import {NotificationIcon} from 'components/HeaderButton';
 
 import COLORS from 'utils/colors';
 import {GET_NOTIFICATIONS_UNREAD_COUNT} from 'services/gql/queries';
+import type {FiltersProps} from 'components/Filters';
 
 import type {StackParamList} from './index';
 
@@ -34,8 +35,18 @@ export type TabParamList = {
 };
 
 export type HomeNavParamList = {
-    HomeScreen: undefined;
-    Surveys: undefined;
+    HomeScreen: {
+        filters: {
+            projectFilterId?: FiltersProps['activeProjectId'];
+            categoryFilterId?: FiltersProps['activeCategoryId'];
+        };
+    };
+    Surveys: {
+        filters: {
+            projectFilterId?: FiltersProps['activeProjectId'];
+            categoryFilterId?: FiltersProps['activeCategoryId'];
+        };
+    };
 };
 
 const Stack = createStackNavigator<HomeNavParamList>();

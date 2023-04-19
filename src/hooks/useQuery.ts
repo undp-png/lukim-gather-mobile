@@ -38,6 +38,7 @@ function useQuery<TData = any, TVariables = OperationVariables>(
                 setLoading(false);
             } catch (err) {
                 setError(err);
+                setLoading(false);
                 console.log(err);
             }
         },

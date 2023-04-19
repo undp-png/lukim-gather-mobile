@@ -2,7 +2,7 @@ import React, {useCallback, useEffect, useState, useRef, useMemo} from 'react';
 import {View, Image, Alert, PermissionsAndroid, Platform} from 'react-native';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import MapboxGL from '@react-native-mapbox-gl/maps';
-import {useNavigation} from '@react-navigation/native';
+import {useNavigation, useRoute} from '@react-navigation/native';
 import {useNetInfo} from '@react-native-community/netinfo';
 import Geolocation from 'react-native-geolocation-service';
 import ViewShot from 'react-native-view-shot';
@@ -25,6 +25,8 @@ import sentimentName from 'utils/sentimentName';
 import type {StackNavigationProp} from '@react-navigation/stack';
 import type {StackParamList} from 'navigation';
 import type {HappeningSurveyType} from '@generated/types';
+import type {ProjectType} from '@generated/types';
+import type {LocalCategoryType} from 'services/data/surveyCategory';
 
 import styleJSON from 'assets/map/style.json';
 
@@ -57,6 +59,7 @@ const Map: React.FC<Props> = ({
     onSurveyEntryPress,
 }) => {
     const netInfo = useNetInfo();
+    const route = useRoute<any>();
 
     const navigation = useNavigation<StackNavigationProp<StackParamList>>();
     const {user} = useSelector((state: RootStateOrAny) => state.auth);
@@ -69,18 +72,44 @@ const Map: React.FC<Props> = ({
         setIsOpenExport(!isOpenExport);
     }, [isOpenExport]);
 
+    const [categoryFilterId, setCategoryFilterId] = useState<
+        null | LocalCategoryType['id']
+    >(route?.params?.filters?.categoryFilterId || null);
+    const [projectFilterId, setProjectFilterId] = useState<
+        null | ProjectType['id']
+    >(route?.params?.filters?.projectFilterId || null);
+
+    useEffect(() => {
+        if (route?.params?.filters?.categoryFilterId !== undefined) {
+            setCategoryFilterId(route.params.filters.categoryFilterId);
+        }
+        if (route?.params?.filters?.projectFilterId !== undefined) {
+            setProjectFilterId(route.params.filters.projectFilterId);
+        }
+    }, [route?.params?.filters]);
+
     const [selectedTab, setSelectedTab] = useState('all');
 
-    const selectedData = useMemo(
-        () =>
-            selectedTab === 'myentries'
-                ? surveyData.filter(
-                      (el: HappeningSurveyType) =>
-                          el.createdBy?.id && el.createdBy?.id === user?.id,
-                  )
-                : surveyData,
-        [selectedTab, surveyData, user?.id],
-    );
+    const selectedData = useMemo(() => {
+        const filteredData = surveyData.filter((el: HappeningSurveyType) => {
+            if (categoryFilterId) {
+                return (
+                    el?.category?.id &&
+                    Number(el.category.id) === Number(categoryFilterId)
+                );
+            }
+            if (projectFilterId) {
+                return el?.project?.id && el.project.id === projectFilterId;
+            }
+            return true;
+        });
+        return selectedTab === 'myentries'
+            ? filteredData.filter(
+                  (el: HappeningSurveyType) =>
+                      el.createdBy?.id && el.createdBy?.id === user?.id,
+              )
+            : filteredData;
+    }, [selectedTab, surveyData, user?.id, categoryFilterId, projectFilterId]);
 
     const manageOffline = useCallback(
         async packName => {
@@ -354,6 +383,11 @@ const Map: React.FC<Props> = ({
                     setSelectedTab={setSelectedTab}
                     homeScreen
                     onExportPress={toggleExportModal}
+                    projectFilterId={projectFilterId}
+                    setProjectFilterId={setProjectFilterId}
+                    categoryFilterId={categoryFilterId}
+                    // @ts-expect-error Unable to cast to type expected by dropdown component
+                    setCategoryFilterId={setCategoryFilterId}
                 />
             )}
             <ViewShot ref={viewShotRef} style={styles.container}>
