@@ -396,6 +396,12 @@ export const GET_USER_PROJECTS = gql`
                 id
                 title
                 description
+                totalUsers
+                surveyCount
+                surveyLastModified
+                organization {
+                    title
+                }
             }
         }
     }
