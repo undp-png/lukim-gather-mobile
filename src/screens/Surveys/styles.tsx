@@ -38,6 +38,9 @@ export default StyleSheet.create({
     surveyList: {
         paddingHorizontal: 20,
     },
+    surveyListContentContainer: {
+        paddingBottom: 32,
+    },
     clearLink: {
         marginLeft: 'auto',
         marginRight: 20,

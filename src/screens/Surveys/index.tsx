@@ -79,6 +79,14 @@ const Surveys = () => {
     const selectedData = useMemo(() => {
         const filteredData = (data?.happeningSurveys || []).filter(
             (el: HappeningSurveyType) => {
+                if (categoryFilterId && projectFilterId) {
+                    return (
+                        el?.category?.id &&
+                        Number(el.category.id) === Number(categoryFilterId) &&
+                        el?.project?.id &&
+                        el.project.id === projectFilterId
+                    );
+                }
                 if (categoryFilterId) {
                     return (
                         el?.category?.id &&
@@ -216,6 +224,7 @@ const Surveys = () => {
                 <FlatList
                     data={selectedData || []}
                     style={styles.surveyList}
+                    contentContainerStyle={styles.surveyListContentContainer}
                     renderItem={renderItem}
                     refreshControl={
                         <RefreshControl
