@@ -107,4 +107,48 @@ export default StyleSheet.create({
         textShadowRadius: 10,
         elevation: 10,
     },
+    filterButton: {
+        position: 'absolute',
+        top: 104,
+        left: 15,
+        zIndex: 6,
+        backgroundColor: '#fff',
+        borderRadius: 255,
+        elevation: 10,
+        display: 'flex',
+        flexDirection: 'row',
+        alignItems: 'center',
+    },
+    clearButton: {
+        marginLeft: 4,
+        marginRight: 12,
+    },
+    clearText: {
+        color: COLORS.greyTextDark,
+        fontSize: 12,
+        fontFamily: 'Inter-Medium',
+    },
+    filterButtonLower: {
+        top: 158,
+    },
+    filterButtonTouchable: {
+        padding: 8,
+        borderRadius: 255,
+    },
+    filtersContainer: {
+        position: 'absolute',
+        top: 96,
+        right: 15,
+        left: 15,
+        zIndex: 6,
+        backgroundColor: 'transparent',
+        borderRadius: 8,
+    },
+    filtersContainerListView: {
+        marginBottom: 10,
+        right: 20,
+        left: 20,
+        paddingVertical: 6,
+        zIndex: 10,
+    },
 });

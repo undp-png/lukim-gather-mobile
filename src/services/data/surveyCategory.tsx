@@ -1,7 +1,7 @@
 export type LocalCategoryType = {
     id: number;
     name: string;
-    icon: string;
+    icon?: string;
 };
 
 export type SurveyCategoryTree = {

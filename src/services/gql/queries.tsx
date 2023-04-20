@@ -640,3 +640,13 @@ export const SET_PASSWORD = gql`
         }
     }
 `;
+
+export const GET_PROJECTS = gql`
+    {
+        projects {
+            id
+            title
+            description
+        }
+    }
+`;

@@ -7,9 +7,16 @@ export default StyleSheet.create({
         borderTopColor: COLORS.border,
         height: '100%',
         backgroundColor: '#E7ECF2',
-        paddingHorizontal: 20,
-        paddingTop: 110,
+        paddingTop: 168,
         paddingBottom: 80,
+    },
+    filtersContainer: {
+        position: 'absolute',
+        top: 96,
+        marginBottom: 10,
+        paddingHorizontal: 20,
+        paddingVertical: 6,
+        zIndex: 10,
     },
     menuBar: {
         marginLeft: 20,
@@ -27,5 +34,16 @@ export default StyleSheet.create({
         lineHeight: 16,
         fontFamily: 'Inter-Regular',
         color: COLORS.greyText,
+    },
+    surveyList: {
+        paddingHorizontal: 20,
+    },
+    clearLink: {
+        marginLeft: 'auto',
+        marginRight: 20,
+        fontFamily: 'Inter-Medium',
+        color: COLORS.primary,
+        marginTop: -8,
+        marginBottom: 12,
     },
 });
