@@ -17,4 +17,40 @@ export default StyleSheet.create({
     loader: {
         top: '10%',
     },
+    description: {
+        color: COLORS.greyText,
+        fontSize: 14,
+        lineHeight: 20,
+        fontFamily: 'Inter-Regular',
+        marginBottom: 12,
+    },
+    stats: {
+        marginBottom: 24,
+    },
+    statItem: {
+        display: 'flex',
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'flex-start',
+        marginBottom: 4,
+    },
+    statItemTitle: {
+        flex: 0.4,
+        color: COLORS.greyText,
+        fontSize: 14,
+        lineHeight: 20,
+        fontFamily: 'Inter-Medium',
+    },
+    statItemValue: {
+        flex: 0.6,
+        fontSize: 14,
+        lineHeight: 20,
+        fontFamily: 'Inter-SemiBold',
+    },
+    separator: {
+        flexShrink: 1,
+        width: 1,
+        backgroundColor: COLORS.border,
+        borderRadius: 12,
+    },
 });

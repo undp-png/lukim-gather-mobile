@@ -20,7 +20,13 @@ if (
     UIManager.setLayoutAnimationEnabledExperimental(true);
 }
 
-const Accordion = ({item}: {item: any}) => {
+const Accordion = ({
+    item,
+    renderContent,
+}: {
+    item: any;
+    renderContent?: (contentItem: any) => void;
+}) => {
     const [expanded, setExpanded] = useState(false);
 
     const toggleAccordion = useCallback(() => {
@@ -48,9 +54,12 @@ const Accordion = ({item}: {item: any}) => {
                     height={24}
                 />
             </TouchableOpacity>
-            {expanded && (
-                <Text style={styles.content}>{item?.description}</Text>
-            )}
+            {expanded &&
+                (renderContent ? (
+                    renderContent(item)
+                ) : (
+                    <Text style={styles.content}>{item?.description}</Text>
+                ))}
         </View>
     );
 };
