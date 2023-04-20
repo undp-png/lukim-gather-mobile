@@ -99,7 +99,7 @@ const SurveyItem = () => {
     );
 
     const [activeVersionId, setActiveVersionId] = useState<string | number>(
-        'current',
+        'latest',
     );
 
     const {
@@ -112,7 +112,7 @@ const SurveyItem = () => {
 
     const handleChangeVersion = useCallback(
         tabItem => {
-            if (tabItem.id !== 'current') {
+            if (tabItem.id !== 'latest') {
                 fetchHistoryItem({
                     variables: {
                         surveyId: route?.params?.item
@@ -135,7 +135,7 @@ const SurveyItem = () => {
             if (historyData.length > 1) {
                 return historyData.map((hd, idx) => {
                     if (idx === 0) {
-                        return {id: 'current', title: _('Current')};
+                        return {id: 'latest', title: _('Latest')};
                     }
                     const dateObj = new Date(
                         hd?.serializedData?.fields?.modifiedAt,
@@ -155,7 +155,7 @@ const SurveyItem = () => {
     const [isOpenExport, setIsOpenExport] = useState(false);
 
     const surveyData = useMemo(() => {
-        if (activeVersionId !== 'current') {
+        if (activeVersionId !== 'latest') {
             return {
                 ...(historyItemData?.happeningSurveysHistory?.[0]
                     ?.serializedData?.fields || {}),
@@ -547,7 +547,7 @@ const SurveyItem = () => {
                             </View>
                         </>
                     )}
-                    {activeVersionId === 'current' ? (
+                    {activeVersionId === 'latest' ? (
                         <View>
                             <Header title={_('Comments')} />
                             <View style={styles.content}>
