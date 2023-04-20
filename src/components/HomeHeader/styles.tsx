@@ -135,6 +135,12 @@ export default StyleSheet.create({
         padding: 8,
         borderRadius: 255,
     },
+    filterButtonTouchableActive: {
+        backgroundColor: COLORS.backgroundLight,
+        borderWidth: 1,
+        borderColor: COLORS.background,
+        elevation: 2,
+    },
     filtersContainer: {
         position: 'absolute',
         top: 96,

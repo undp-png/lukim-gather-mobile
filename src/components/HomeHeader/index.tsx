@@ -73,7 +73,6 @@ const HomeHeader: React.FC<Props> = props => {
     const handleClearFilters = useCallback(() => {
         setProjectFilterId(null);
         setCategoryFilterId(null);
-        setFilterActive(false);
     }, [setProjectFilterId, setCategoryFilterId]);
 
     return (
@@ -140,10 +139,15 @@ const HomeHeader: React.FC<Props> = props => {
                         isFilterActive,
                     ])}>
                     <TouchableOpacity
-                        style={styles.filterButtonTouchable}
+                        style={cs(styles.filterButtonTouchable, [
+                            styles.filterButtonTouchableActive,
+                            isFilterActive ||
+                                projectFilterId ||
+                                categoryFilterId,
+                        ])}
                         onPress={toggleFilterActive}>
                         <Icon
-                            name={isFilterActive ? 'funnel' : 'funnel-outline'}
+                            name="funnel-outline"
                             width={20}
                             height={20}
                             fill={COLORS.greyTextDark}

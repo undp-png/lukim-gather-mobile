@@ -92,6 +92,14 @@ const Map: React.FC<Props> = ({
 
     const selectedData = useMemo(() => {
         const filteredData = surveyData.filter((el: HappeningSurveyType) => {
+            if (categoryFilterId && projectFilterId) {
+                return (
+                    el?.category?.id &&
+                    Number(el.category.id) === Number(categoryFilterId) &&
+                    el?.project?.id &&
+                    el.project.id === projectFilterId
+                );
+            }
             if (categoryFilterId) {
                 return (
                     el?.category?.id &&
