@@ -314,6 +314,8 @@ export const UPLOAD_IMAGE = gql`
             ok
             result {
                 id
+                media
+                title
             }
         }
     }

@@ -47,6 +47,7 @@ import type {
     HappeningSurveyType,
     FormType,
     ProtectedAreaCategoryType,
+    ProjectType,
 } from '@generated/types';
 import COLORS from 'utils/colors';
 import {_} from 'services/i18n';
@@ -97,7 +98,11 @@ export type StackParamList = {
     SurveyItem: {item?: HappeningSurveyType};
     Forms: undefined;
     Projects: undefined;
-    WebViewForm: {form?: FormType; data?: FormDataType};
+    WebViewForm: {
+        form?: FormType;
+        data?: FormDataType;
+        projects?: ProjectType[];
+    };
     TermsAndCondition: undefined;
     PrivacyPolicy: undefined;
     Notifications: {

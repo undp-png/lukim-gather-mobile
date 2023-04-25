@@ -1,5 +1,5 @@
 import React, {useEffect, useState, useMemo, useCallback} from 'react';
-import {Platform} from 'react-native';
+import {Platform, View} from 'react-native';
 import {useRoute, useNavigation} from '@react-navigation/native';
 import {useDispatch, useSelector, RootStateOrAny} from 'react-redux';
 
@@ -9,6 +9,7 @@ import RNFS from 'react-native-fs';
 import Toast from 'react-native-simple-toast';
 import {useMutation} from '@apollo/client';
 import {XMLParser} from 'fast-xml-parser';
+import {ReactNativeFile} from 'apollo-upload-client';
 
 import {setFormData, setFormMedia, resetForm} from 'store/slices/form';
 
@@ -20,8 +21,13 @@ import {
     CreateWritableSurveyMutation,
     CreateWritableSurveyMutationVariables,
 } from '@generated/types';
-import {CREATE_WRITABLE_SURVEY} from 'services/gql/queries';
+import {CREATE_WRITABLE_SURVEY, UPLOAD_IMAGE} from 'services/gql/queries';
 import {getErrorMessage} from 'utils/error';
+import {b64toBlob} from 'utils/blob';
+
+import type {ProjectType} from '@generated/types';
+
+import styles from './styles.tsx';
 
 export type FormDataType = {
     data?: string;
@@ -32,40 +38,54 @@ interface RouteParams {
     params: {
         form: FormType;
         data?: FormDataType;
+        projects?: ProjectType[];
     };
     name: string;
     path?: string | undefined;
     key: string;
 }
 
+let QUEUE: Promise<any>[] = [];
+let FORMDATA = '';
+
 const WebViewForm: React.FC = () => {
     const {
-        params: {form: formObj, data: formData},
+        params: {form: formObj, data: formData, projects},
     } = useRoute<RouteParams>();
 
+    useEffect(() => {
+        QUEUE = [];
+    }, []);
+
     const dispatch = useDispatch();
-    const formState = useSelector((state: RootStateOrAny) => state.form);
 
     const navigation = useNavigation();
     const [uri, setUri] = useState<string | undefined>();
     const [processing, setProcessing] = useState<boolean>(false);
 
     const FORM_KEY = useMemo(() => `survey_data__${formObj.id}`, [formObj]);
-
     const initializeData = useMemo(() => {
         let model = formObj.xform.model;
-        const form = formObj.xform.form;
+        let form = formObj.xform.form;
 
         if (formData?.data?.length) {
             model = model.replace(/<data(.*?)<\/data>/, formData.data);
         }
+        const projectsXML = projects?.reduce(
+            (a, c) => `${a}<option value="${c.title}">${c.title}</option>`,
+            '',
+        );
+        form = form.replace(
+            /(<select name=.*project_name.*None<\/option>)(.*?)(<\/select>)/,
+            `$1${projectsXML}$3`,
+        );
 
         return `
             window._formStr = \`${form}\`;
             window._modelStr = \`${model}\`;
             true;
         `;
-    }, [formObj, formData]);
+    }, [formObj, formData, projects]);
 
     const [createWritableSurvey, {loading}] = useMutation<
         CreateWritableSurveyMutation,
@@ -120,9 +140,25 @@ const WebViewForm: React.FC = () => {
         return () => server && server.stop();
     }, []);
 
+    const [uploadMedia] = useMutation(UPLOAD_IMAGE, {
+        onCompleted: ({uploadMedia}) => {
+            const newAnswer = FORMDATA.replace(
+                uploadMedia.result.title,
+                uploadMedia.result.media,
+            );
+            setFormData({
+                key: FORM_KEY,
+                value: newAnswer,
+            });
+            FORMDATA = newAnswer;
+        },
+        onError: ({graphQLErrors}) => {
+            console.log(graphQLErrors);
+        },
+    });
+
     const handleSubmit = useCallback(async () => {
         setProcessing(true);
-        const answerData = formState[FORM_KEY];
         const parser = new XMLParser({
             attributeNamePrefix: '_',
         });
@@ -131,7 +167,7 @@ const WebViewForm: React.FC = () => {
             variables: {
                 input: {
                     title,
-                    answer: JSON.stringify(parser.parse(answerData.data)),
+                    answer: JSON.stringify(parser.parse(FORMDATA)),
                 },
             },
             optimisticResponse: {
@@ -144,24 +180,19 @@ const WebViewForm: React.FC = () => {
             },
             update: () => {
                 navigation.navigate('Forms');
-                dispatch(resetForm(FORM_KEY));
+                if (false) {
+                    dispatch(resetForm(FORM_KEY));
+                }
                 Toast.show(_('Survey form has been submitted!'), Toast.LONG, [
                     'RCTModalHostViewController',
                 ]);
             },
         });
         setProcessing(false);
-    }, [
-        createWritableSurvey,
-        navigation,
-        dispatch,
-        FORM_KEY,
-        formState,
-        formObj,
-    ]);
+    }, [createWritableSurvey, navigation, FORM_KEY, formObj, dispatch]);
 
     const handleMessage = useCallback(
-        ({nativeEvent}) => {
+        async ({nativeEvent}) => {
             const {data} = nativeEvent;
             if (data.startsWith('data://')) {
                 dispatch(
@@ -170,17 +201,38 @@ const WebViewForm: React.FC = () => {
                         value: data.substring(7),
                     }),
                 );
+                FORMDATA = data.substring(7);
             } else if (data.startsWith('media://')) {
                 if (data?.length > 8) {
                     dispatch(
                         setFormMedia({key: FORM_KEY, value: data.substring(8)}),
                     );
                 }
+            } else if (data.startsWith('data:image')) {
+                const imageParts = data.split(';');
+                const name = imageParts.pop() as string;
+                const imgBlob = await b64toBlob(imageParts.join(';'));
+                //imgBlob.name = name;
+                const file = new ReactNativeFile({
+                    uri: imgBlob,
+                    name,
+                    type: 'image/jpeg',
+                });
+                QUEUE.push(
+                    uploadMedia({
+                        variables: {
+                            media: file,
+                            title: name,
+                            type: 'image',
+                        },
+                    }),
+                );
             } else if (data === 'submit') {
+                await Promise.all(QUEUE);
                 handleSubmit();
             }
         },
-        [handleSubmit, FORM_KEY, dispatch],
+        [handleSubmit, FORM_KEY, dispatch, uploadMedia],
     );
 
     return (
@@ -196,9 +248,12 @@ const WebViewForm: React.FC = () => {
                     geolocationEnabled={true}
                 />
             )}
-            {(processing || !uri) && <Loader loading />}
+            {(processing || !uri) && (
+                <View style={styles.loading}>
+                    <Loader loading />
+                </View>
+            )}
         </>
     );
 };
-
 export default WebViewForm;

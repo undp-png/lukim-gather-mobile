@@ -9,7 +9,7 @@ import {ConfirmBox} from 'components/ConfirmationBox';
 
 import {_} from 'services/i18n';
 import useQuery from 'hooks/useQuery';
-import {GET_SURVEY_FORMS} from 'services/gql/queries';
+import {GET_SURVEY_FORMS, GET_USER_PROJECTS} from 'services/gql/queries';
 import {FormType} from '@generated/types';
 
 import type {StackNavigationProp} from '@react-navigation/stack';
@@ -19,15 +19,19 @@ import {resetForm} from 'store/slices/form';
 
 import styles from './styles';
 
+import type {ProjectType} from '@generated/types';
+
 type KeyExtractor = (item: FormType, index: number) => string;
 const keyExtractor: KeyExtractor = (item: FormType) => item.id.toString();
 
 interface FormMenuItemProps {
     item: FormType;
+    projects: ProjectType[];
 }
 
 const FormMenuItem: React.FC<FormMenuItemProps> = ({
     item,
+    projects,
 }: FormMenuItemProps) => {
     const navigation = useNavigation<StackNavigationProp<StackParamList>>();
     const dispatch = useDispatch();
@@ -48,16 +52,17 @@ const FormMenuItem: React.FC<FormMenuItemProps> = ({
     const goToForm = useCallback(() => {
         setResumeModalVisibility(false);
         dispatch(resetForm(FORM_KEY));
-        navigation.navigate('WebViewForm', {form: item});
-    }, [navigation, item, dispatch, FORM_KEY]);
+        navigation.navigate('WebViewForm', {form: item, projects: projects});
+    }, [navigation, item, dispatch, FORM_KEY, projects]);
 
     const goToFormWithData = useCallback(() => {
         setResumeModalVisibility(false);
         navigation.navigate('WebViewForm', {
             form: item,
             data: formState[FORM_KEY],
+            projects: projects,
         });
-    }, [item, navigation, formState, FORM_KEY]);
+    }, [item, navigation, formState, FORM_KEY, projects]);
 
     const handleNoResumePress = useCallback(() => {
         Alert.alert(
@@ -113,13 +118,21 @@ const FormMenuItem: React.FC<FormMenuItemProps> = ({
 const Forms = () => {
     const {loading: fetching, data = {}, refetch} = useQuery(GET_SURVEY_FORMS);
 
+    const res = useQuery<{
+        me: {projects: ProjectType[]};
+    }>(GET_USER_PROJECTS);
+
+    const projects = useMemo(() => {
+        return (res.data?.me?.projects || []) as ProjectType[];
+    }, [res.data]);
+
     useEffect(() => {
         refetch();
     }, [refetch]);
 
     const renderFormMenuItem = useCallback(
-        listProps => <FormMenuItem {...listProps} />,
-        [],
+        listProps => <FormMenuItem {...listProps} projects={projects} />,
+        [projects],
     );
 
     return (

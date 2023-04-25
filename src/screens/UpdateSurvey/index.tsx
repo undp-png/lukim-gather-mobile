@@ -59,7 +59,7 @@ import styles from './styles';
 
 const responseToRNF = (res: Scalars['Upload']) => {
     const image = {
-        name: res.name,
+        name: uuid.v4() + '.' + (res.path.split('.')?.pop() || ''),
         type: res.mime,
         uri: Platform.OS === 'ios' ? res.path.replace('file://', '') : res.path,
     };
