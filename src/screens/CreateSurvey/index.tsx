@@ -71,7 +71,7 @@ import styles from './styles';
 
 const responseToRNF = (res: ImageObj) => {
     const image = {
-        name: uuid.v4(),
+        name: uuid.v4() + '.' + (res.path.split('.')?.pop() || ''),
         type: res.mime,
         uri: Platform.OS === 'ios' ? res.path.replace('file://', '') : res.path,
     };
