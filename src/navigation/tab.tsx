@@ -1,4 +1,4 @@
-import React, {useCallback, useState} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import {RootStateOrAny, useSelector} from 'react-redux';
 import {useLazyQuery} from '@apollo/client';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
@@ -22,8 +22,8 @@ import {NotificationIcon} from 'components/HeaderButton';
 
 import COLORS from 'utils/colors';
 import {GET_NOTIFICATIONS_UNREAD_COUNT} from 'services/gql/queries';
-import type {FiltersProps} from 'components/Filters';
 
+import type {FiltersProps} from 'components/Filters';
 import type {StackParamList} from './index';
 
 const Tab = createBottomTabNavigator();
@@ -67,9 +67,9 @@ function HomeNavigator() {
 }
 
 export default function TabNavigator() {
-    const {isAuthenticated} = useSelector(
-        (state: RootStateOrAny) => state.auth,
-    );
+    const {
+        auth: {isAuthenticated},
+    } = useSelector((state: RootStateOrAny) => state);
     const navigation = useNavigation<StackNavigationProp<StackParamList>>();
     const [getUnreadCount] = useLazyQuery(GET_NOTIFICATIONS_UNREAD_COUNT, {
         fetchPolicy: 'network-only',

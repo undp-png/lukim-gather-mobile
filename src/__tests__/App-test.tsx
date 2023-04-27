@@ -226,6 +226,21 @@ jest.mock('rn-fetch-blob', () => {
     };
 });
 
+jest.mock('@react-native-firebase/messaging', () => () => ({
+    hasPermission: jest.fn(() => Promise.resolve(true)),
+    subscribeToTopic: jest.fn(),
+    unsubscribeFromTopic: jest.fn(),
+    requestPermission: jest.fn(() => Promise.resolve(true)),
+    getToken: jest.fn(() => Promise.resolve('mockToken')),
+    onTokenRefresh: jest.fn(callback =>
+        callback(Promise.resolve('mockRefreshToken')),
+    ),
+}));
+
+jest.mock('@notifee/react-native', () => {
+    return {};
+});
+
 it('renders correctly', () => {
     renderer.create(<App />);
 });

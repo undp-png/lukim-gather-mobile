@@ -8,6 +8,7 @@ import {
     setLogout,
 } from 'store/slices/auth';
 import {setLanguages} from 'store/slices/locale';
+import {setFcmToken} from 'store/slices/notification';
 import {setInfo} from 'store/slices/info';
 
 const {dispatch} = store;
@@ -33,4 +34,8 @@ export const dispatchLocale = code => {
 
 export const dispatchInfo = info => {
     dispatch(setInfo(info));
+};
+
+export const dispatchFcmToken = (fcmToken: string | null) => {
+    dispatch(setFcmToken(fcmToken));
 };

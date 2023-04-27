@@ -5,6 +5,7 @@ import {
     Platform,
     PermissionsAndroid,
     TouchableOpacity,
+    Linking,
 } from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
 import {useMutation} from '@apollo/client';
@@ -17,7 +18,7 @@ import {useNetInfo} from '@react-native-community/netinfo';
 import Toast from 'react-native-simple-toast';
 import {RootStateOrAny, useSelector} from 'react-redux';
 import ViewShot from 'react-native-view-shot';
-import CameraRoll from '@react-native-community/cameraroll';
+import {CameraRoll} from '@react-native-camera-roll/camera-roll';
 import RNFetchBlob from 'rn-fetch-blob';
 import {Icon} from 'react-native-eva-icons';
 import {differenceInDays, formatDistanceToNowStrict, format} from 'date-fns';
@@ -302,7 +303,7 @@ const SurveyItem = () => {
 
     const onClickExportImage = useCallback(async () => {
         try {
-            await viewShotRef.current.capture().then((uri: any) => {
+            await viewShotRef.current.capture().then(async (uri: any) => {
                 console.log(uri);
                 if (Platform.OS === 'android') {
                     const granted = getPermissionAndroid();
@@ -310,10 +311,11 @@ const SurveyItem = () => {
                         return;
                     }
                 }
-                CameraRoll.save(uri, {
+                const newURI = await CameraRoll.save(uri, {
                     type: 'photo',
                     album: 'Lukim Gather',
                 });
+                Linking.openURL(newURI);
                 Toast.show(_('Saved image in gallery!'));
                 return setIsOpenExport(false);
             });

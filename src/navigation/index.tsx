@@ -1,7 +1,9 @@
 import React from 'react';
 import {createStackNavigator} from '@react-navigation/stack';
 import {RootStateOrAny, useSelector} from 'react-redux';
+
 import useQuery from 'hooks/useQuery';
+import useFCM from 'hooks/useFCM';
 
 import AuthNavigator from './auth';
 import TabNavigator from './tab';
@@ -122,6 +124,7 @@ const AppNavigator = () => {
         (state: RootStateOrAny) => state.locale,
     );
     const {data} = useQuery(GET_LEGAL_DOCUMENT);
+    useFCM();
 
     dispatchInfo(data?.legalDocument);
 

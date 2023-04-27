@@ -6,12 +6,13 @@ import {
     FlatList,
     PermissionsAndroid,
     Platform,
+    Linking,
 } from 'react-native';
 import {RootStateOrAny, useSelector} from 'react-redux';
 import {useFocusEffect, useRoute} from '@react-navigation/native';
 import Toast from 'react-native-simple-toast';
 import ViewShot from 'react-native-view-shot';
-import CameraRoll from '@react-native-community/cameraroll';
+import {CameraRoll} from '@react-native-camera-roll/camera-roll';
 import RNFetchBlob from 'rn-fetch-blob';
 
 import SurveyItem from 'components/SurveyItem';
@@ -144,7 +145,7 @@ const Surveys = () => {
 
     const onClickExportImage = useCallback(async () => {
         try {
-            await viewShotRef.current.capture().then((uri: any) => {
+            await viewShotRef.current.capture().then(async (uri: any) => {
                 console.log(uri);
                 if (Platform.OS === 'android') {
                     const granted = getPermissionAndroid();
@@ -152,11 +153,12 @@ const Surveys = () => {
                         return;
                     }
                 }
-                CameraRoll.save(uri, {
+                const newURI = await CameraRoll.save(uri, {
                     type: 'photo',
                     album: 'Lukim Gather',
                 });
                 Toast.show(_('Saved image in gallery!'));
+                Linking.openURL(newURI);
                 return setIsOpenExport(false);
             });
         } catch (error) {

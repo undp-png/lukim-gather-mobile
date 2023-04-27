@@ -23,7 +23,7 @@ import {
 } from '@generated/types';
 import {CREATE_WRITABLE_SURVEY, UPLOAD_IMAGE} from 'services/gql/queries';
 import {getErrorMessage} from 'utils/error';
-import {b64toBlob} from 'utils/blob';
+import {b64toPath} from 'utils/blob';
 
 import type {ProjectType} from '@generated/types';
 
@@ -179,16 +179,14 @@ const WebViewForm: React.FC = () => {
                 },
             },
             update: () => {
+                setProcessing(false);
                 navigation.navigate('Forms');
-                if (false) {
-                    dispatch(resetForm(FORM_KEY));
-                }
+                dispatch(resetForm(FORM_KEY));
                 Toast.show(_('Survey form has been submitted!'), Toast.LONG, [
                     'RCTModalHostViewController',
                 ]);
             },
         });
-        setProcessing(false);
     }, [createWritableSurvey, navigation, FORM_KEY, formObj, dispatch]);
 
     const handleMessage = useCallback(
@@ -211,12 +209,15 @@ const WebViewForm: React.FC = () => {
             } else if (data.startsWith('data:image')) {
                 const imageParts = data.split(';');
                 const name = imageParts.pop() as string;
-                const imgBlob = await b64toBlob(imageParts.join(';'));
+                const imgBlob = await b64toPath(imageParts.join(';'));
                 //imgBlob.name = name;
                 const file = new ReactNativeFile({
                     uri: imgBlob,
                     name,
-                    type: 'image/jpeg',
+                    type: data.substring(
+                        data.indexOf(':') + 1,
+                        data.indexOf(';'),
+                    ),
                 });
                 QUEUE.push(
                     uploadMedia({
