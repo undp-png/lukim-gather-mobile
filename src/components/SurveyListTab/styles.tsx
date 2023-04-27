@@ -19,8 +19,7 @@ export default StyleSheet.create({
         backgroundColor: COLORS.white,
     },
     tabTitle: {
-        fontSize: 14,
-        lineHeight: 20,
+        fontSize: 12,
         fontFamily: 'Inter-Regular',
         color: COLORS.tertiary,
         textAlign: 'center',

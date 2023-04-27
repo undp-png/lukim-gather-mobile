@@ -104,6 +104,9 @@ const Filters: React.FC<FiltersProps> = ({
                         itemSeparator
                         itemSeparatorStyle={styles.itemSeparator}
                         placeholderStyle={styles.placeholder}
+                        labelProps={{
+                            numberOfLines: 1,
+                        }}
                     />
                     <DropdownPicker
                         open={categoryFilterOpen}
@@ -142,6 +145,9 @@ const Filters: React.FC<FiltersProps> = ({
                         itemSeparator
                         itemSeparatorStyle={styles.itemSeparator}
                         placeholderStyle={styles.placeholder}
+                        labelProps={{
+                            numberOfLines: 1,
+                        }}
                     />
                 </View>
             </View>
