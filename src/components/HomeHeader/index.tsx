@@ -28,6 +28,7 @@ interface Props {
     categoryFilterId: FiltersProps['activeCategoryId'];
     setProjectFilterId: FiltersProps['onProjectChange'];
     setCategoryFilterId: FiltersProps['onCategoryChange'];
+    onToggleFilters?: (isVisible: boolean) => void;
 }
 
 const HomeHeader: React.FC<Props> = props => {
@@ -40,7 +41,9 @@ const HomeHeader: React.FC<Props> = props => {
         setProjectFilterId,
         categoryFilterId,
         setCategoryFilterId,
+        onToggleFilters,
     } = props;
+
     const navigation =
         useNavigation<StackNavigationProp<StackParamList & HomeNavParamList>>();
     const onSearchPress = useCallback(
@@ -63,12 +66,12 @@ const HomeHeader: React.FC<Props> = props => {
     );
 
     const [isFilterActive, setFilterActive] = useState<boolean>(
-        Boolean(homeScreen && (projectFilterId || categoryFilterId)),
+        Boolean(projectFilterId || categoryFilterId),
     );
-    const toggleFilterActive = useCallback(
-        () => setFilterActive(fa => !fa),
-        [],
-    );
+    const toggleFilterActive = useCallback(() => {
+        setFilterActive(!isFilterActive);
+        onToggleFilters?.(!isFilterActive);
+    }, [onToggleFilters, isFilterActive]);
 
     const handleClearFilters = useCallback(() => {
         setProjectFilterId(null);
@@ -132,37 +135,43 @@ const HomeHeader: React.FC<Props> = props => {
                     </TouchableOpacity>
                 </View>
             </View>
-            {Boolean(homeScreen) && (
-                <View
-                    style={cs(styles.filterButton, [
-                        styles.filterButtonLower,
-                        isFilterActive,
-                    ])}>
-                    <TouchableOpacity
-                        style={cs(styles.filterButtonTouchable, [
-                            styles.filterButtonTouchableActive,
-                            isFilterActive ||
-                                projectFilterId ||
-                                categoryFilterId,
-                        ])}
-                        onPress={toggleFilterActive}>
+            <View
+                style={cs(
+                    styles.filterButton,
+                    [styles.filterButtonLower, isFilterActive],
+                    [styles.filterButtonListView, !homeScreen],
+                )}>
+                <TouchableOpacity
+                    style={cs(styles.filterButtonTouchable, [
+                        styles.filterButtonTouchableActive,
+                        isFilterActive || projectFilterId || categoryFilterId,
+                    ])}
+                    onPress={toggleFilterActive}>
+                    <View style={styles.filterButtonTouchableContent}>
                         <Icon
                             name="funnel-outline"
                             width={20}
                             height={20}
                             fill={COLORS.greyTextDark}
                         />
+                        {!homeScreen &&
+                            !(projectFilterId || categoryFilterId) && (
+                                <Text
+                                    style={styles.filterButtonTouchableText}
+                                    title={_('Filters')}
+                                />
+                            )}
+                    </View>
+                </TouchableOpacity>
+                {(projectFilterId || categoryFilterId) && (
+                    <TouchableOpacity
+                        style={styles.clearButton}
+                        onPress={handleClearFilters}>
+                        <Text title="Clear" style={styles.clearText} />
                     </TouchableOpacity>
-                    {(projectFilterId || categoryFilterId) && (
-                        <TouchableOpacity
-                            style={styles.clearButton}
-                            onPress={handleClearFilters}>
-                            <Text title="Clear" style={styles.clearText} />
-                        </TouchableOpacity>
-                    )}
-                </View>
-            )}
-            {(!homeScreen || isFilterActive) && (
+                )}
+            </View>
+            {isFilterActive && (
                 <View
                     style={cs(styles.filtersContainer, [
                         styles.filtersContainerListView,

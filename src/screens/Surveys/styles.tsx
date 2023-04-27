@@ -7,16 +7,11 @@ export default StyleSheet.create({
         borderTopColor: COLORS.border,
         height: '100%',
         backgroundColor: '#E7ECF2',
-        paddingTop: 168,
+        paddingTop: 154,
         paddingBottom: 80,
     },
-    filtersContainer: {
-        position: 'absolute',
-        top: 96,
-        marginBottom: 10,
-        paddingHorizontal: 20,
-        paddingVertical: 6,
-        zIndex: 10,
+    containerShifted: {
+        paddingTop: 210,
     },
     menuBar: {
         marginLeft: 20,
@@ -46,7 +41,6 @@ export default StyleSheet.create({
         marginRight: 20,
         fontFamily: 'Inter-Medium',
         color: COLORS.primary,
-        marginTop: -8,
         marginBottom: 12,
     },
 });

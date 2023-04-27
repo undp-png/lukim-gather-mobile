@@ -92,7 +92,7 @@ export default StyleSheet.create({
     },
     title: {
         marginLeft: 5,
-        fontSize: 14,
+        fontSize: 12,
         lineHeight: 16,
         fontFamily: 'Inter-SemiBold',
         color: '#fff',
@@ -131,9 +131,20 @@ export default StyleSheet.create({
     filterButtonLower: {
         top: 158,
     },
+    filterButtonListView: {
+        left: 20,
+    },
     filterButtonTouchable: {
         padding: 8,
         borderRadius: 255,
+    },
+    filterButtonTouchableContent: {
+        display: 'flex',
+        flexDirection: 'row',
+        alignItems: 'center',
+    },
+    filterButtonTouchableText: {
+        marginHorizontal: 6,
     },
     filterButtonTouchableActive: {
         backgroundColor: COLORS.backgroundLight,

@@ -52,6 +52,8 @@ const TabItem = ({
                     [styles.homeTabTitle, isHomeTab],
                 )}
                 title={title}
+                numberOfLines={1}
+                adjustsFontSizeToFit
             />
         </TouchableOpacity>
     );

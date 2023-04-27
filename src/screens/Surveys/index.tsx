@@ -6,7 +6,6 @@ import {
     FlatList,
     PermissionsAndroid,
     Platform,
-    TouchableOpacity,
 } from 'react-native';
 import {RootStateOrAny, useSelector} from 'react-redux';
 import {useFocusEffect, useRoute} from '@react-navigation/native';
@@ -15,13 +14,13 @@ import ViewShot from 'react-native-view-shot';
 import CameraRoll from '@react-native-community/cameraroll';
 import RNFetchBlob from 'rn-fetch-blob';
 
-import Text from 'components/Text';
 import SurveyItem from 'components/SurveyItem';
 import EmptyListMessage from 'components/EmptyListMessage';
 import ExportActions from 'components/ExportActions';
 
 import useQuery from 'hooks/useQuery';
 
+import cs from '@rna/utils/cs';
 import {jsonToCSV} from 'utils';
 import sentimentName from 'utils/sentimentName';
 import {_} from 'services/i18n';
@@ -75,6 +74,10 @@ const Surveys = () => {
             setProjectFilterId(route.params.filters.projectFilterId);
         }
     }, [route?.params?.filters]);
+
+    const [filtersShown, setFiltersShown] = useState<boolean>(
+        Boolean(categoryFilterId || projectFilterId),
+    );
 
     const selectedData = useMemo(() => {
         const filteredData = (data?.happeningSurveys || []).filter(
@@ -196,13 +199,14 @@ const Surveys = () => {
         setIsOpenExport(false);
     }, [selectedData]);
 
-    const handleClearFilters = useCallback(() => {
-        setProjectFilterId(null);
-        setCategoryFilterId(null);
-    }, [setProjectFilterId, setCategoryFilterId]);
+    const handleFiltersToggle = useCallback(setFiltersShown, [setFiltersShown]);
 
     return (
-        <View style={styles.container}>
+        <View
+            style={cs(styles.container, [
+                styles.containerShifted,
+                filtersShown,
+            ])}>
             <HomeHeader
                 selectedTab={selectedTab}
                 setSelectedTab={setSelectedTab}
@@ -212,14 +216,8 @@ const Surveys = () => {
                 categoryFilterId={categoryFilterId}
                 // @ts-expect-error Unable to cast to type expected by dropdown component
                 setCategoryFilterId={setCategoryFilterId}
+                onToggleFilters={handleFiltersToggle}
             />
-            {(projectFilterId || categoryFilterId) && (
-                <TouchableOpacity
-                    style={styles.clearLink}
-                    onPress={handleClearFilters}>
-                    <Text title="Clear filters" />
-                </TouchableOpacity>
-            )}
             <ViewShot ref={viewShotRef}>
                 <FlatList
                     data={selectedData || []}
