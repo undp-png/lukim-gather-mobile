@@ -25,9 +25,10 @@ module.exports = {
             '|react-native-dropdown-picker' +
             '|react-native-code-push' +
             '|react-native-view-shot' +
-            '|@react-native-community/cameraroll' +
+            '|@react-native-camera-roll/camera-roll' +
             '|rn-fetch-blob' +
             '|react-native-audio-recorder-player' +
+            '|@notifee/react-native' +
             ')/)',
     ],
     testPathIgnorePatterns: ['src/vendor', 'node_modules'],

@@ -658,3 +658,15 @@ export const GET_PROJECTS = gql`
         }
     }
 `;
+
+export const CREATE_GCM_TOKEN = gql`
+    mutation Mutation($input: GCMDeviceMutationInput!) {
+        createGcmDevice(input: $input) {
+            registrationId
+            errors {
+                field
+                messages
+            }
+        }
+    }
+`;

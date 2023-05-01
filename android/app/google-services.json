@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "1776896266",
+    "project_id": "lukim-gather",
+    "storage_bucket": "lukim-gather.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1776896266:android:4e384e2e9b1ac727fb92f3",
+        "android_client_info": {
+          "package_name": "org.lukimgather"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1776896266-tk74qob0hdpgv8k9i019etn2rl5gddf2.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB56DgK9KShZT2Rfl_KPbn9aFA6G5AvCbc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1776896266-tk74qob0hdpgv8k9i019etn2rl5gddf2.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,12 +1,19 @@
 import React, {useCallback, useEffect, useState, useRef, useMemo} from 'react';
-import {View, Image, Alert, PermissionsAndroid, Platform} from 'react-native';
+import {
+    View,
+    Image,
+    Alert,
+    PermissionsAndroid,
+    Platform,
+    Linking,
+} from 'react-native';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import MapboxGL from '@react-native-mapbox-gl/maps';
 import {useNavigation, useRoute} from '@react-navigation/native';
 import {useNetInfo} from '@react-native-community/netinfo';
 import Geolocation from 'react-native-geolocation-service';
 import ViewShot from 'react-native-view-shot';
-import CameraRoll from '@react-native-community/cameraroll';
+import {CameraRoll} from '@react-native-camera-roll/camera-roll';
 import Toast from 'react-native-simple-toast';
 import RNFetchBlob from 'rn-fetch-blob';
 import {RootStateOrAny, useSelector} from 'react-redux';
@@ -329,17 +336,18 @@ const Map: React.FC<Props> = ({
 
     const onClickExportImage = useCallback(async () => {
         try {
-            await viewShotRef.current.capture().then((uri: any) => {
+            await viewShotRef.current.capture().then(async (uri: any) => {
                 if (Platform.OS === 'android') {
                     const granted = getPermissionAndroid();
                     if (!granted) {
                         return;
                     }
                 }
-                CameraRoll.save(uri, {
+                const newURI = await CameraRoll.save(uri, {
                     type: 'photo',
                     album: 'Lukim Gather',
                 });
+                Linking.openURL(newURI);
                 Toast.show(_('Saved image in gallery!'));
                 return setIsOpenExport(false);
             });
