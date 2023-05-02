@@ -1,7 +1,6 @@
 import React, {useState, useCallback} from 'react';
 import {View} from 'react-native';
 import {useMutation} from '@apollo/client';
-import Toast from 'react-native-simple-toast';
 import {useNavigation} from '@react-navigation/native';
 import DropDownPicker from 'react-native-dropdown-picker';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
@@ -14,6 +13,7 @@ import Text from 'components/Text';
 import {_} from 'services/i18n';
 import {CREATE_FEEDBACK} from 'services/gql/queries';
 import {getErrorMessage} from 'utils/error';
+import Toast from 'utils/toast';
 import {
     CreateFeedbackMutation,
     CreateFeedbackMutationVariables,
@@ -40,16 +40,11 @@ const Feedbacks = () => {
         CreateFeedbackMutationVariables
     >(CREATE_FEEDBACK, {
         onCompleted: () => {
-            Toast.show(
-                'Feedback has been successfully submitted !!',
-                Toast.LONG,
-            );
+            Toast.show('Feedback has been successfully submitted!');
             navigation.navigate('Menu');
         },
         onError: err => {
-            Toast.show(getErrorMessage(err), Toast.LONG, [
-                'RCTModalHostViewController',
-            ]);
+            Toast.error(_('Error!'), getErrorMessage(err));
             console.log(err);
         },
     });

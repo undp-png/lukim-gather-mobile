@@ -12,7 +12,6 @@ import {ReactNativeFile} from 'apollo-upload-client';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import {Image as ImageObj} from 'react-native-image-crop-picker';
 import {Icon} from 'react-native-eva-icons';
-import Toast from 'react-native-simple-toast';
 import uuid from 'react-native-uuid';
 import Geolocation from 'react-native-geolocation-service';
 import {RNFetchBlobFile} from 'rn-fetch-blob';
@@ -50,6 +49,7 @@ import {
 } from 'services/gql/queries';
 import useQuery from 'hooks/useQuery';
 import {getErrorMessage} from 'utils/error';
+import Toast from 'utils/toast';
 
 import {
     HappeningSurveyType,
@@ -137,14 +137,12 @@ const CreateHappeningSurvey = () => {
         CreateHappeningSurveyMutationVariables
     >(CREATE_HAPPENING_SURVEY, {
         onCompleted: () => {
-            Toast.show('Survey Created Successfully !');
+            Toast.show('Survey created successfully!');
             navigation.navigate('Feed', {screen: 'Home'});
             setProcessing(loading);
         },
         onError: err => {
-            Toast.show(getErrorMessage(err), Toast.LONG, [
-                'RCTModalHostViewController',
-            ]);
+            Toast.error(_('Could not create survey!'), getErrorMessage(err));
             setProcessing(loading);
             console.log('happening survey', err);
         },
@@ -182,12 +180,11 @@ const CreateHappeningSurvey = () => {
 
     const handlePublish = useCallback(async () => {
         if (!isAuthenticated) {
-            return Toast.show(
+            return Toast.error(
+                _('Unauthorized!'),
                 _(
                     'You do not have permission to perform this action. Please login.',
                 ),
-                Toast.LONG,
-                ['RCTModalHostViewController'],
             );
         }
         setProcessing(true);
@@ -293,9 +290,7 @@ const CreateHappeningSurvey = () => {
                             happeningSurveys: mergedSurveys,
                         },
                     });
-                    Toast.show(_('Survey has been recorded'), Toast.LONG, [
-                        'RCTModalHostVIewController',
-                    ]);
+                    Toast.show(_('Survey has been recorded'));
                     navigation.navigate('Feed', {screen: 'Home'});
                 } catch (e) {
                     console.log('error on happening survey', e);
@@ -342,7 +337,7 @@ const CreateHappeningSurvey = () => {
 
     const handleConfirmToggle = useCallback(() => {
         if (!title) {
-            return Toast.show(_('Please enter a title for the survey'));
+            return Toast.error(_('Please enter a title for the survey'));
         }
         handlePublish();
     }, [title, handlePublish]);

@@ -10,7 +10,6 @@ import {useMutation} from '@apollo/client';
 import {ReactNativeFile} from 'apollo-upload-client';
 import {Icon} from 'react-native-eva-icons';
 import {format} from 'date-fns';
-import Toast from 'react-native-simple-toast';
 import uuid from 'react-native-uuid';
 
 import AudioPicker from 'components/AudioPicker';
@@ -35,6 +34,7 @@ import {_} from 'services/i18n';
 import SurveyCategoryData from 'services/data/surveyCategory';
 import COLORS from 'utils/colors';
 import {getErrorMessage} from 'utils/error';
+import Toast from 'utils/toast';
 import {
     GET_HAPPENING_SURVEY,
     UPDATE_HAPPENING_SURVEY,
@@ -131,13 +131,11 @@ const UpdateSurvey = () => {
         UpdateHappeningSurveyMutationVariables
     >(UPDATE_HAPPENING_SURVEY, {
         onCompleted: () => {
-            Toast.show('Survey updated successfully!');
+            Toast.show(_('Survey updated successfully!'));
             setProcessing(loading);
         },
         onError: err => {
-            Toast.show(getErrorMessage(err), Toast.LONG, [
-                'RCTModalHostViewController',
-            ]);
+            Toast.error(_('Could not update survey!'), getErrorMessage(err));
             setProcessing(loading);
             console.log(err);
         },

@@ -12,6 +12,7 @@ import {Provider} from 'react-redux';
 import {PersistGate} from 'redux-persist/integration/react';
 import SplashScreen from 'react-native-splash-screen';
 import codePush from 'react-native-code-push';
+import Toast from 'react-native-toast-message';
 
 import AppNavigator from 'navigation';
 
@@ -23,6 +24,7 @@ import LocalizeProvider from '@rna/components/I18n';
 import {getApolloClient} from 'services/gql/client';
 import {languages, translations} from 'services/i18n';
 import COLORS from 'utils/colors';
+import {toastConfig} from 'utils/toast';
 
 import 'services/bootstrap';
 
@@ -107,6 +109,11 @@ const App = () => {
                                     }}>
                                     <AppNavigator />
                                 </NavigationContainer>
+                                <Toast
+                                    config={toastConfig}
+                                    position="bottom"
+                                    visibilityTime={5000}
+                                />
                             </SyncLocaleStore>
                         </LocalizeProvider>
                     </PersistGate>

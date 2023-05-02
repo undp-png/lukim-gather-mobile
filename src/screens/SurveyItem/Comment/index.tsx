@@ -2,7 +2,6 @@ import {useMutation} from '@apollo/client';
 import React, {useCallback, useState} from 'react';
 import {View} from 'react-native';
 import {RootStateOrAny, useSelector} from 'react-redux';
-import Toast from 'react-native-simple-toast';
 
 import CommentActions from 'components/CommentActions';
 import CommentList, {NoCommentComponent} from 'components/CommentList';
@@ -19,6 +18,7 @@ import {
     UPDATE_COMMENT,
 } from 'services/gql/queries';
 import {getErrorMessage} from 'utils/error';
+import Toast from 'utils/toast';
 
 import type {
     CommentType,
@@ -58,13 +58,11 @@ const Comment: React.FC<Props> = ({surveyId, commentItem, refetch}) => {
         CreateCommentMutationVariables
     >(CREATE_COMMENT, {
         onCompleted: () => {
-            Toast.show('Comment created Successfully !');
+            Toast.show('Comment created successfully!');
             refetch();
         },
         onError: err => {
-            Toast.show(getErrorMessage(err), Toast.LONG, [
-                'RCTModalHostViewController',
-            ]);
+            Toast.error(_('Error!'), getErrorMessage(err));
         },
     });
 
@@ -73,13 +71,11 @@ const Comment: React.FC<Props> = ({surveyId, commentItem, refetch}) => {
         UpdateCommentMutationVariables
     >(UPDATE_COMMENT, {
         onCompleted: () => {
-            Toast.show(_('Comment edited Successfully !'));
+            Toast.show(_('Comment edited successfully!'));
             refetch();
         },
         onError: err => {
-            Toast.show(getErrorMessage(err), Toast.LONG, [
-                'RCTModalHostViewController',
-            ]);
+            Toast.error(_('Error!'), getErrorMessage(err));
         },
     });
 
@@ -91,9 +87,7 @@ const Comment: React.FC<Props> = ({surveyId, commentItem, refetch}) => {
             refetch();
         },
         onError: err => {
-            Toast.show(getErrorMessage(err), Toast.LONG, [
-                'RCTModalHostViewController',
-            ]);
+            Toast.error(_('Error!'), getErrorMessage(err));
         },
     });
 
@@ -105,9 +99,7 @@ const Comment: React.FC<Props> = ({surveyId, commentItem, refetch}) => {
             refetch();
         },
         onError: err => {
-            Toast.show(getErrorMessage(err), Toast.LONG, [
-                'RCTModalHostViewController',
-            ]);
+            Toast.error(_('Error!'), getErrorMessage(err));
         },
     });
 
@@ -116,20 +108,18 @@ const Comment: React.FC<Props> = ({surveyId, commentItem, refetch}) => {
         DeleteCommentMutationVariables
     >(DELETE_COMMENT, {
         onCompleted: () => {
-            Toast.show(_('Comment deleted Successfully !'));
+            Toast.show(_('Comment deleted successfully!'));
             refetch();
         },
         onError: err => {
-            Toast.show(getErrorMessage(err), Toast.LONG, [
-                'RCTModalHostViewController',
-            ]);
+            Toast.error(_('Error!'), getErrorMessage(err));
         },
     });
 
     const handleCommentPress = useCallback(
         message => {
             if (!isAuthenticated) {
-                return Toast.show(_('You are not logged in!'));
+                return Toast.error(_('You are not logged in!'));
             }
             createComment({
                 variables: {
@@ -149,7 +139,7 @@ const Comment: React.FC<Props> = ({surveyId, commentItem, refetch}) => {
     const handleLikePress = useCallback(
         comment => {
             if (!isAuthenticated) {
-                return Toast.show(_('You are not logged in!'));
+                return Toast.error(_('You are not logged in!'));
             }
             if (comment.hasLiked) {
                 dislikeComment({
@@ -171,7 +161,7 @@ const Comment: React.FC<Props> = ({surveyId, commentItem, refetch}) => {
     const handleReplyPress = useCallback(
         comment => {
             if (!isAuthenticated) {
-                return Toast.show(_('You are not logged in!'));
+                return Toast.error(_('You are not logged in!'));
             }
             setReply(comment);
         },
@@ -181,7 +171,7 @@ const Comment: React.FC<Props> = ({surveyId, commentItem, refetch}) => {
     const handleLongPress = useCallback(
         comment => {
             if (!isAuthenticated) {
-                return Toast.show(_('You are not logged in!'));
+                return Toast.error(_('You are not logged in!'));
             }
             if (user.id !== comment?.user?.id) {
                 return;

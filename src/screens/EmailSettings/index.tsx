@@ -4,7 +4,6 @@ import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import {useNavigation, CommonActions} from '@react-navigation/native';
 import {useMutation} from '@apollo/client';
 import {RootStateOrAny, useSelector} from 'react-redux';
-import Toast from 'react-native-simple-toast';
 
 import Text from 'components/Text';
 import {ModalLoader} from 'components/Loader';
@@ -19,6 +18,7 @@ import {
     SET_PASSWORD,
 } from 'services/gql/queries';
 import {dispatchLogout} from 'services/dispatch';
+import Toast from 'utils/toast';
 import useGetUser from 'hooks/useGetUser';
 
 import type {
@@ -57,13 +57,11 @@ const EmailSettings = () => {
                 ],
             }),
         );
-        Toast.show(
-            _(
-                'Your email has been successfully changed. You may login again with your new email, or your phone number!',
+        Toast.show(_('Email successfully changed!'), {
+            text2: _(
+                'You may login again with your new email, or your phone number!',
             ),
-            Toast.LONG,
-            ['RCTModalHostViewController'],
-        );
+        });
         dispatchLogout();
     }, [navigation]);
 
@@ -82,12 +80,11 @@ const EmailSettings = () => {
         },
         onError: err => {
             getUserData();
-            Toast.show(
+            Toast.error(
+                _('Error setting password'),
                 _(
                     'There was an error setting your password. You may still set your password from the Password Settings menu',
                 ),
-                Toast.LONG,
-                ['RCTModalHostViewController'],
             );
             navigation.dispatch(
                 CommonActions.reset({
@@ -110,11 +107,7 @@ const EmailSettings = () => {
                 if (user?.email) {
                     handleCompletion();
                 } else {
-                    Toast.show(
-                        _('Your email has been successfully changed!'),
-                        Toast.LONG,
-                        ['RCTModalHostViewController'],
-                    );
+                    Toast.show(_('Email successfully changed!'));
                     await setPasswordMutation({
                         variables: {
                             data: {
@@ -126,9 +119,7 @@ const EmailSettings = () => {
                 }
             },
             onError: err => {
-                Toast.show(getErrorMessage(err), Toast.LONG, [
-                    'RCTModalHostViewController',
-                ]);
+                Toast.error(_('Error!'), getErrorMessage(err));
                 console.log(err);
             },
         });
@@ -151,11 +142,11 @@ const EmailSettings = () => {
         MutationEmailChangeArgs
     >(EMAIL_CHANGE, {
         onCompleted: () => {
-            Toast.show(
-                _('Email confimation pin has been sent to your new email!'),
-                Toast.LONG,
-                ['RCTModalHostViewController'],
-            );
+            Toast.show(_('Success'), {
+                text2: _(
+                    'Email confimation pin has been sent to your new email!',
+                ),
+            });
             navigation.navigate('OTPVerify', {
                 onSubmitPin: handlePinSubmit,
                 onResendPin: handleVerifyEmail,
@@ -163,32 +154,27 @@ const EmailSettings = () => {
             });
         },
         onError: err => {
-            Toast.show(getErrorMessage(err), Toast.LONG, [
-                'RCTModalHostViewController',
-            ]);
+            Toast.error(_('Error!'), getErrorMessage(err));
             console.log(err);
         },
     });
 
     const handleVerifyEmail = useCallback(async () => {
         if (!newEmail || user?.email === newEmail) {
-            return Toast.show(_('No changes in email to save!'), Toast.LONG, [
-                'RCTModalHostViewCOntroller',
-            ]);
+            return Toast.error(
+                _('No changes to save'),
+                _('Please enter a new email address.'),
+            );
         }
         if (!user?.email) {
             if (/^\d+$/.test(newPassword)) {
-                return Toast.show(
+                return Toast.error(
                     _('Your password must not be entirely numeric!'),
-                    Toast.LONG,
-                    ['RCTModalHostViewController'],
                 );
             }
             if (newPassword.length < 8) {
-                return Toast.show(
+                return Toast.error(
                     _('Your password must contain at least 8 characters'),
-                    Toast.LONG,
-                    ['RCTModalHostViewController'],
                 );
             }
         }

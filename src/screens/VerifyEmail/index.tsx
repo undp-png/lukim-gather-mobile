@@ -3,7 +3,6 @@ import {Pressable} from 'react-native';
 import {useRoute, useNavigation} from '@react-navigation/native';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import {useMutation} from '@apollo/client';
-import Toast from 'react-native-simple-toast';
 
 import {ModalLoader} from 'components/Loader';
 import Text from 'components/Text';
@@ -13,6 +12,7 @@ import OtpInput from 'components/OtpInput';
 import {_} from 'services/i18n';
 import {PASSWORD_RESET, PASSWORD_RESET_VERIFY} from 'services/gql/queries';
 import {getErrorMessage} from 'utils/error';
+import Toast from 'utils/toast';
 import {
     PasswordResetMutation,
     PasswordResetMutationVariables,
@@ -33,16 +33,14 @@ const VerifyEmail = () => {
         PasswordResetVerifyMutationVariables
     >(PASSWORD_RESET_VERIFY, {
         onCompleted: res => {
-            Toast.show('Email verified successfully !!');
+            Toast.show(_('Email verified successfully!'));
             navigation.navigate('CreateNewPassword', {
                 username,
                 identifier: res?.passwordResetVerify?.result?.identifier,
             });
         },
         onError: err => {
-            Toast.show(getErrorMessage(err), Toast.LONG, [
-                'RCTModalHostViewController',
-            ]);
+            Toast.error(_('Error!'), getErrorMessage(err));
             console.log(err);
         },
     });
@@ -63,12 +61,10 @@ const VerifyEmail = () => {
         PasswordResetMutationVariables
     >(PASSWORD_RESET, {
         onCompleted: () => {
-            Toast.show('Code successfully sent !!');
+            Toast.show(_('Code successfully sent!'));
         },
         onError: err => {
-            Toast.show(getErrorMessage(err), Toast.LONG, [
-                'RCTModalHostViewController',
-            ]);
+            Toast.error(_('Error!'), getErrorMessage(err));
             console.log(err);
         },
     });

@@ -2,7 +2,6 @@ import React, {useCallback, useState} from 'react';
 import {useMutation} from '@apollo/client';
 import {TouchableOpacity, View} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
-import Toast from 'react-native-simple-toast';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import parsePhoneNumber from 'libphonenumber-js';
 
@@ -24,6 +23,7 @@ import type {StackParamList} from 'navigation';
 import type {AuthStackParamList} from 'navigation/auth';
 
 import {_} from 'services/i18n';
+import Toast from 'utils/toast';
 import {dispatchLogin} from 'services/dispatch';
 import {LOGIN, PHONE_NUMBER_CONFIRM} from 'services/gql/queries';
 import {getErrorMessage} from 'utils/error';
@@ -50,12 +50,10 @@ const Login = () => {
                 data.tokenAuth as CustomObtainJsonWebToken;
             dispatchLogin(token, refreshToken, user);
             navigation.navigate('Feed', {screen: 'Home'});
-            Toast.show(_('Successfully Logged In!'));
+            Toast.show(_('Successfully logged in!'));
         },
         onError: err => {
-            Toast.show(getErrorMessage(err), Toast.LONG, [
-                'RCTModalHostViewController',
-            ]);
+            Toast.error(_('Error!'), getErrorMessage(err));
             console.log(err);
         },
     });
@@ -67,13 +65,11 @@ const Login = () => {
         onCompleted: () => {
             const ph = parsePhoneNumber(phone, 'PG');
             const phoneNumber = ph?.formatInternational().replace(/\s/g, '');
-            Toast.show('Code successfully sent !!');
+            Toast.show(_('Code successfully sent!'));
             navigation.navigate('VerifyPhone', {phone: phoneNumber});
         },
         onError: err => {
-            Toast.show(getErrorMessage(err), Toast.LONG, [
-                'RCTModalHostViewController',
-            ]);
+            Toast.error(_('Phone number error'), getErrorMessage(err));
             console.log(err);
             if (getErrorMessage(err).includes('been sent')) {
                 const ph = parsePhoneNumber(phone, 'PG');
@@ -94,9 +90,7 @@ const Login = () => {
             const ph = parsePhoneNumber(phone, 'PG');
             const phoneNumber = ph?.formatInternational().replace(/\s/g, '');
             if (!ph?.isValid()) {
-                return Toast.show('Invalid Phone number.', Toast.LONG, [
-                    'RCTModalHostViewController',
-                ]);
+                return Toast.error('Invalid Phone number.');
             }
             await phone_confirm({
                 variables: {

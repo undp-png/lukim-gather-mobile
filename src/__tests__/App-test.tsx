@@ -144,13 +144,6 @@ jest.mock('redux-persist', () => {
     };
 });
 
-jest.mock('react-native-simple-toast', () => {
-    return {
-        show: jest.fn(),
-        showWithGravity: jest.fn(),
-    };
-});
-
 jest.mock('react-native-webview', () => {
     return {
         webview: jest.fn(),

@@ -4,7 +4,6 @@ import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import {useNavigation, CommonActions} from '@react-navigation/native';
 import {useMutation} from '@apollo/client';
 import {RootStateOrAny, useSelector} from 'react-redux';
-import Toast from 'react-native-simple-toast';
 
 import Text from 'components/Text';
 import {ModalLoader} from 'components/Loader';
@@ -16,6 +15,7 @@ import {
     PHONE_NUMBER_CHANGE,
     PHONE_NUMBER_CHANGE_VERIFY,
 } from 'services/gql/queries';
+import Toast from 'utils/toast';
 
 import {
     PhoneNumberChange,
@@ -57,18 +57,18 @@ const ChangePhone = () => {
                     }),
                 );
                 Toast.show(
+                    _('Phone number successfully changed!'),
                     _(
-                        'Your phone number has been successfully changed. You may login again with your new phone number, or your email!',
+                        'You may login again with your new phone number, or your email!',
                     ),
-                    Toast.LONG,
-                    ['RCTModalHostViewController'],
                 );
                 dispatchLogout();
             },
             onError: err => {
-                Toast.show(getErrorMessage(err), Toast.LONG, [
-                    'RCTModalHostViewController',
-                ]);
+                Toast.error(
+                    _('Error changing phone number!'),
+                    getErrorMessage(err),
+                );
                 console.log(err);
             },
         });
@@ -91,10 +91,9 @@ const ChangePhone = () => {
         MutationPhoneNumberChangeArgs
     >(PHONE_NUMBER_CHANGE, {
         onCompleted: () => {
-            Toast.show(
-                _('OTP has been sent to your phone number.'),
-                Toast.LONG,
-            );
+            Toast.show(_('Success!'), {
+                text2: _('OTP has been sent to your phone number.'),
+            });
             navigation.navigate('OTPVerify', {
                 onSubmitPin: handlePinSubmit,
                 onResendPin: handleVerifyPhone,
@@ -102,9 +101,7 @@ const ChangePhone = () => {
             });
         },
         onError: err => {
-            Toast.show(getErrorMessage(err), Toast.LONG, [
-                'RCTModalHostViewController',
-            ]);
+            Toast.error(_('Error while sending OTP!'), getErrorMessage(err));
             console.log(err);
         },
     });
@@ -114,9 +111,7 @@ const ChangePhone = () => {
             !newPhoneNumber ||
             (user?.phoneNumber && newPhoneNumber === user?.phoneNumber)
         ) {
-            return Toast.show(_('No changes to save!'), Toast.LONG, [
-                'RCTModalHostViewController',
-            ]);
+            return Toast.error(_('No changes to save!'));
         }
         await changePhone({
             variables: {

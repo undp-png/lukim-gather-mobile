@@ -2,7 +2,6 @@ import React, {useState, useCallback} from 'react';
 import {Pressable, View} from 'react-native';
 import {useRoute, useNavigation} from '@react-navigation/native';
 import {useMutation} from '@apollo/client';
-import Toast from 'react-native-simple-toast';
 
 import {ModalLoader} from 'components/Loader';
 import Text from 'components/Text';
@@ -12,6 +11,7 @@ import OtpInput from 'components/OtpInput';
 import {_} from 'services/i18n';
 import {EMAIL_CONFIRM, EMAIL_CONFIRM_VERIFY} from 'services/gql/queries';
 import {getErrorMessage} from 'utils/error';
+import Toast from 'utils/toast';
 import {
     EmailConfirmMutation,
     EmailConfirmMutationVariables,
@@ -32,13 +32,11 @@ const ConfirmEmail = () => {
         EmailConfirmVerifyMutationVariables
     >(EMAIL_CONFIRM_VERIFY, {
         onCompleted: () => {
-            Toast.show('Account activated successfully !!');
+            Toast.show('Account activated successfully!');
             navigation.navigate('Login');
         },
         onError: err => {
-            Toast.show(getErrorMessage(err), Toast.LONG, [
-                'RCTModalHostViewController',
-            ]);
+            Toast.error(_('Error!'), getErrorMessage(err));
             console.log(err);
         },
     });
@@ -59,12 +57,10 @@ const ConfirmEmail = () => {
         EmailConfirmMutationVariables
     >(EMAIL_CONFIRM, {
         onCompleted: () => {
-            Toast.show('Code successfully sent !!');
+            Toast.show('Code successfully sent!');
         },
         onError: err => {
-            Toast.show(getErrorMessage(err), Toast.LONG, [
-                'RCTModalHostViewController',
-            ]);
+            Toast.error(_('Error!'), getErrorMessage(err));
             console.log(err);
         },
     });

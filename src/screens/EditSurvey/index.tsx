@@ -10,7 +10,6 @@ import {useMutation} from '@apollo/client';
 import {ReactNativeFile} from 'apollo-upload-client';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import {Icon} from 'react-native-eva-icons';
-import Toast from 'react-native-simple-toast';
 import uuid from 'react-native-uuid';
 
 import AudioPicker from 'components/AudioPicker';
@@ -33,6 +32,7 @@ import SurveyCategory from 'services/data/surveyCategory';
 import {_} from 'services/i18n';
 import useCategoryIcon from 'hooks/useCategoryIcon';
 import {getErrorMessage} from 'utils/error';
+import Toast from 'utils/toast';
 import useQuery from 'hooks/useQuery';
 
 import {
@@ -140,13 +140,11 @@ const EditHappeningSurvey = () => {
         EditHappeningSurveyMutationVariables
     >(EDIT_HAPPENING_SURVEY, {
         onCompleted: () => {
-            Toast.show('Survey updated Successfully !');
+            Toast.show(_('Survey edited successfully!'));
             setProcessing(loading);
         },
         onError: err => {
-            Toast.show(getErrorMessage(err), Toast.LONG, [
-                'RCTModalHostViewController',
-            ]);
+            Toast.error(_('Could not edit survey!'), getErrorMessage(err));
             setProcessing(loading);
             console.log(err);
         },

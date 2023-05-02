@@ -29,6 +29,7 @@ module.exports = {
             '|rn-fetch-blob' +
             '|react-native-audio-recorder-player' +
             '|@notifee/react-native' +
+            '|react-native-toast-message' +
             ')/)',
     ],
     testPathIgnorePatterns: ['src/vendor', 'node_modules'],
