@@ -14,7 +14,6 @@ import {useNetInfo} from '@react-native-community/netinfo';
 import Geolocation from 'react-native-geolocation-service';
 import ViewShot from 'react-native-view-shot';
 import {CameraRoll} from '@react-native-camera-roll/camera-roll';
-import Toast from 'react-native-simple-toast';
 import RNFetchBlob from 'rn-fetch-blob';
 import {RootStateOrAny, useSelector} from 'react-redux';
 import turfCentroid from '@turf/centroid';
@@ -28,6 +27,7 @@ import {checkLocation} from 'utils/location';
 import {jsonToCSV} from 'utils';
 import {_} from 'services/i18n';
 import sentimentName from 'utils/sentimentName';
+import Toast from 'utils/toast';
 
 import type {StackNavigationProp} from '@react-navigation/stack';
 import type {StackParamList} from 'navigation';
@@ -328,7 +328,7 @@ const Map: React.FC<Props> = ({
             if (granted === PermissionsAndroid.RESULTS.GRANTED) {
                 return true;
             }
-            Toast.show(_('Permission required'));
+            Toast.error(_('Permission required'));
         } catch (err) {
             console.log('Error' + err);
         }

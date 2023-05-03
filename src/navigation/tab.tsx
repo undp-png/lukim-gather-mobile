@@ -1,4 +1,4 @@
-import React, {useCallback, useEffect, useState} from 'react';
+import React, {useCallback, useState} from 'react';
 import {RootStateOrAny, useSelector} from 'react-redux';
 import {useLazyQuery} from '@apollo/client';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';

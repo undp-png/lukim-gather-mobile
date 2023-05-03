@@ -1,12 +1,11 @@
 import React, {useEffect, useState, useMemo, useCallback} from 'react';
 import {Platform, View} from 'react-native';
 import {useRoute, useNavigation} from '@react-navigation/native';
-import {useDispatch, useSelector, RootStateOrAny} from 'react-redux';
+import {useDispatch} from 'react-redux';
 
 import {WebView} from 'react-native-webview';
 import StaticServer from 'react-native-static-server';
 import RNFS from 'react-native-fs';
-import Toast from 'react-native-simple-toast';
 import {useMutation} from '@apollo/client';
 import {XMLParser} from 'fast-xml-parser';
 import {ReactNativeFile} from 'apollo-upload-client';
@@ -24,10 +23,11 @@ import {
 import {CREATE_WRITABLE_SURVEY, UPLOAD_IMAGE} from 'services/gql/queries';
 import {getErrorMessage} from 'utils/error';
 import {b64toPath} from 'utils/blob';
+import Toast from 'utils/toast';
 
 import type {ProjectType} from '@generated/types';
 
-import styles from './styles.tsx';
+import styles from './styles';
 
 export type FormDataType = {
     data?: string;
@@ -92,15 +92,13 @@ const WebViewForm: React.FC = () => {
         CreateWritableSurveyMutationVariables
     >(CREATE_WRITABLE_SURVEY, {
         onCompleted: () => {
-            Toast.show(_('Survey has been created successfully!'), Toast.LONG, [
-                'RCTModalHostViewController',
-            ]);
+            Toast.show(_('Success'), {
+                text2: _('Survey has been created successfully!'),
+            });
             setProcessing(loading);
         },
         onError: err => {
-            Toast.show(getErrorMessage(err), Toast.LONG, [
-                'RCTModalHostViewController',
-            ]);
+            Toast.error(_('Error!'), getErrorMessage(err));
             setProcessing(loading);
             console.log('[Create Survey Error]: ', err);
         },
@@ -182,9 +180,7 @@ const WebViewForm: React.FC = () => {
                 setProcessing(false);
                 navigation.navigate('Forms');
                 dispatch(resetForm(FORM_KEY));
-                Toast.show(_('Survey form has been submitted!'), Toast.LONG, [
-                    'RCTModalHostViewController',
-                ]);
+                Toast.show(_('Survey form has been submitted!'));
             },
         });
     }, [createWritableSurvey, navigation, FORM_KEY, formObj, dispatch]);

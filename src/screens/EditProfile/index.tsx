@@ -5,7 +5,6 @@ import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import {useNavigation} from '@react-navigation/native';
 import {Icon} from 'react-native-eva-icons';
 import {useMutation} from '@apollo/client';
-import Toast from 'react-native-simple-toast';
 import {ReactNativeFile} from 'apollo-upload-client';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 
@@ -18,6 +17,7 @@ import {ImagePickerModal} from 'components/ImagePicker';
 import {_} from 'services/i18n';
 import {UPDATE_USER} from 'services/gql/queries';
 import {getErrorMessage} from 'utils/error';
+import Toast from 'utils/toast';
 
 import {setUser} from 'store/slices/auth';
 
@@ -48,14 +48,12 @@ const EditProfile = () => {
 
     const [updateUser, {loading}] = useMutation(UPDATE_USER, {
         onCompleted: res => {
-            Toast.show('Updated !!', Toast.LONG);
+            Toast.show(_('Updated!'));
             navigation.navigate('Menu');
             dispatch(setUser(res?.updateUser?.result));
         },
         onError: err => {
-            Toast.show(getErrorMessage(err), Toast.LONG, [
-                'RCTModalHostViewController',
-            ]);
+            Toast.error(_('Error!'), getErrorMessage(err));
             console.log(err);
         },
     });

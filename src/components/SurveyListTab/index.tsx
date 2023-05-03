@@ -2,12 +2,12 @@ import React, {useMemo, useCallback} from 'react';
 import {View, useWindowDimensions} from 'react-native';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import {RootStateOrAny, useSelector} from 'react-redux';
-import Toast from 'react-native-simple-toast';
 
 import Text from 'components/Text';
 
 import cs from '@rna/utils/cs';
 import {_} from 'services/i18n';
+import Toast from 'utils/toast';
 
 import styles from './styles';
 
@@ -79,7 +79,7 @@ const SurveyListTab: React.FC<ListProps> = props => {
     );
     const handleMyEntriesSelect = useCallback(() => {
         if (!isAuthenticated) {
-            return Toast.show(_('You are not logged in!'));
+            return Toast.error(_('You are not logged in!'));
         }
         setSelectedTab('myentries');
     }, [isAuthenticated, setSelectedTab]);

@@ -10,7 +10,6 @@ import {
 } from 'react-native';
 import {RootStateOrAny, useSelector} from 'react-redux';
 import {useFocusEffect, useRoute} from '@react-navigation/native';
-import Toast from 'react-native-simple-toast';
 import ViewShot from 'react-native-view-shot';
 import {CameraRoll} from '@react-native-camera-roll/camera-roll';
 import RNFetchBlob from 'rn-fetch-blob';
@@ -24,6 +23,7 @@ import useQuery from 'hooks/useQuery';
 import cs from '@rna/utils/cs';
 import {jsonToCSV} from 'utils';
 import sentimentName from 'utils/sentimentName';
+import Toast from 'utils/toast';
 import {_} from 'services/i18n';
 import {GET_HAPPENING_SURVEY} from 'services/gql/queries';
 import {HappeningSurveyType} from '@generated/types';
@@ -137,7 +137,7 @@ const Surveys = () => {
             if (granted === PermissionsAndroid.RESULTS.GRANTED) {
                 return true;
             }
-            Toast.show(_('Permission required'));
+            Toast.error(_('Permission required'));
         } catch (err) {
             console.log('Error' + err);
         }
@@ -197,7 +197,7 @@ const Surveys = () => {
                 RNFetchBlob.ios.previewDocument(path);
             }
         });
-        Toast.show('Saved CSV in Downloads folder!');
+        Toast.show(_('Saved CSV in Downloads folder!'));
         setIsOpenExport(false);
     }, [selectedData]);
 

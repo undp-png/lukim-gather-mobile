@@ -4,7 +4,6 @@ import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import {useNavigation} from '@react-navigation/native';
 import {useMutation} from '@apollo/client';
-import Toast from 'react-native-simple-toast';
 import {RootStateOrAny, useSelector} from 'react-redux';
 
 import {ModalLoader} from 'components/Loader';
@@ -15,6 +14,7 @@ import {_} from 'services/i18n';
 import {getErrorMessage} from 'utils/error';
 import {CHANGE_PASSWORD, SET_PASSWORD} from 'services/gql/queries';
 import useGetUser from 'hooks/useGetUser';
+import Toast from 'utils/toast';
 
 import styles from './styles';
 import {
@@ -42,16 +42,11 @@ const ChangePassword = () => {
         ChangePasswordMutationVariables
     >(CHANGE_PASSWORD, {
         onCompleted: () => {
-            Toast.show(
-                _('Password has been successfully changed!'),
-                Toast.LONG,
-            );
+            Toast.show(_('Password has been successfully changed!'));
             navigation.navigate('Menu');
         },
         onError: err => {
-            Toast.show(getErrorMessage(err), Toast.LONG, [
-                'RCTModalHostViewController',
-            ]);
+            Toast.error(_('Error changing password!'), getErrorMessage(err));
             console.log(err);
         },
     });
@@ -61,16 +56,11 @@ const ChangePassword = () => {
         MutationSetPasswordArgs
     >(SET_PASSWORD, {
         onCompleted: () => {
-            Toast.show(
-                _('Password has been successfully changed!'),
-                Toast.LONG,
-            );
+            Toast.show(_('Password has been successfully changed!'));
             navigation.navigate('Menu');
         },
         onError: err => {
-            Toast.show(getErrorMessage(err), Toast.LONG, [
-                'RCTModalHostViewController',
-            ]);
+            Toast.error(_('Error changing password!'), getErrorMessage(err));
             console.log(err);
         },
     });

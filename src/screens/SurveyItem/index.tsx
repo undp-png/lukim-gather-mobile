@@ -15,7 +15,6 @@ import {
     useFocusEffect,
 } from '@react-navigation/native';
 import {useNetInfo} from '@react-native-community/netinfo';
-import Toast from 'react-native-simple-toast';
 import {RootStateOrAny, useSelector} from 'react-redux';
 import ViewShot from 'react-native-view-shot';
 import {CameraRoll} from '@react-native-camera-roll/camera-roll';
@@ -46,6 +45,7 @@ import {
     GET_HAPPENING_SURVEY_HISTORY_ITEM,
 } from 'services/gql/queries';
 import {UPDATE_NUM_DAYS} from 'utils/config';
+import Toast from 'utils/toast';
 
 import useCategoryIcon from 'hooks/useCategoryIcon';
 import useQuery from 'hooks/useQuery';
@@ -207,12 +207,10 @@ const SurveyItem = () => {
         DeleteHappeningSurveyMutationVariables
     >(DELETE_HAPPENING_SURVEY, {
         onCompleted: () => {
-            Toast.show('Happening survey deleted successfully !');
+            Toast.show('Happening survey deleted successfully!');
         },
         onError: err => {
-            Toast.show(getErrorMessage(err), Toast.LONG, [
-                'RCTModalHostViewController',
-            ]);
+            Toast.error(_('Error!'), getErrorMessage(err));
             console.log('Delete happening survey', err);
         },
     });
@@ -295,7 +293,7 @@ const SurveyItem = () => {
             if (granted === PermissionsAndroid.RESULTS.GRANTED) {
                 return true;
             }
-            Toast.show(_('Permission required'));
+            Toast.error(_('Permission required'));
         } catch (err) {
             console.log('Error' + err);
         }

@@ -2,7 +2,6 @@ import React, {useCallback, useState} from 'react';
 import {useMutation} from '@apollo/client';
 import {TouchableOpacity, View} from 'react-native';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
-import Toast from 'react-native-simple-toast';
 import {useNavigation} from '@react-navigation/native';
 import parsePhoneNumber from 'libphonenumber-js';
 import DropDownPicker from 'react-native-dropdown-picker';
@@ -16,6 +15,7 @@ import {ModalLoader} from 'components/Loader';
 import {_} from 'services/i18n';
 import {getErrorMessage} from 'utils/error';
 import {SIGNUP} from 'services/gql/queries';
+import Toast from 'utils/toast';
 
 import type {RegisterUserInput} from '@generated/types';
 
@@ -41,7 +41,9 @@ const SignUp = () => {
     const [signup, {loading}] = useMutation(SIGNUP, {
         onCompleted: () => {
             if (selectedTab === 'email') {
-                Toast.show('Your account has been successfully created !!');
+                Toast.show(_('Success!'), {
+                    text2: _('Your account has been successfully created!'),
+                });
                 // navigation.navigate('ConfirmEmail', {email}); to confirm email
                 navigation.navigate('Login');
             } else {
@@ -53,9 +55,7 @@ const SignUp = () => {
             }
         },
         onError: err => {
-            Toast.show(getErrorMessage(err), Toast.LONG, [
-                'RCTModalHostViewController',
-            ]);
+            Toast.error(_('Error!'), getErrorMessage(err));
             console.log(err);
         },
     });
@@ -77,9 +77,7 @@ const SignUp = () => {
             const ph = parsePhoneNumber(phone, 'PG');
             const phoneNumber = ph?.formatInternational().replace(/\s/g, '');
             if (!ph?.isValid()) {
-                return Toast.show('Invalid Phone number.', Toast.LONG, [
-                    'RCTModalHostViewController',
-                ]);
+                return Toast.error('Invalid Phone number.');
             }
             data.username = phoneNumber as string;
             data.phoneNumber = phoneNumber as string;

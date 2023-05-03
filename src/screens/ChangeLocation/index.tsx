@@ -2,7 +2,6 @@ import React, {useState, useCallback, useEffect, useMemo} from 'react';
 import {FlatList, View} from 'react-native';
 import {useNavigation, useRoute} from '@react-navigation/native';
 import type {RouteProp} from '@react-navigation/native';
-import Toast from 'react-native-simple-toast';
 
 import InputField from 'components/InputField';
 import Map from 'components/DrawableMap';
@@ -10,6 +9,7 @@ import RadioInput from 'components/RadioInput';
 import {SaveButton} from 'components/HeaderButton';
 
 import {_} from 'services/i18n';
+import Toast from 'utils/toast';
 
 import {store} from 'store';
 import {setLocation} from 'store/slices/survey';
@@ -75,7 +75,8 @@ const ChangeLocation = () => {
                     selectedCoordinate[0],
                 ];
                 if (polygonValue.length < 4) {
-                    return Toast.show(
+                    return Toast.error(
+                        _('Invalid polygon'),
                         _('Please add at least 3 points for the polygon!'),
                     );
                 }

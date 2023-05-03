@@ -1,7 +1,6 @@
 import React, {useState, useEffect, useCallback} from 'react';
 import {useNavigation} from '@react-navigation/native';
 import {View} from 'react-native';
-import Toast from 'react-native-simple-toast';
 import {useMutation} from '@apollo/client';
 
 import {ModalLoader} from 'components/Loader';
@@ -12,6 +11,7 @@ import Text from 'components/Text';
 import {dispatchLogout} from 'services/dispatch';
 import {getErrorMessage} from 'utils/error';
 import {DELETE_ACCOUNT} from 'services/gql/queries';
+import Toast from 'utils/toast';
 
 import {
     DeleteAccountMutation,
@@ -29,20 +29,16 @@ export default () => {
         DeleteAccountMutationVariables
     >(DELETE_ACCOUNT, {
         onCompleted: () => {
-            Toast.show(
-                _(
+            Toast.show(_('Success!'), {
+                text2: _(
                     'Your account deletion request have been successfully submitted!',
                 ),
-                Toast.LONG,
-                ['RCTModalHostViewController'],
-            );
+            });
             dispatchLogout();
             navigation.goBack();
         },
         onError: err => {
-            Toast.show(getErrorMessage(err), Toast.LONG, [
-                'RCTModalHostViewController',
-            ]);
+            Toast.error(_('Error!'), getErrorMessage(err));
             console.log(err);
         },
     });

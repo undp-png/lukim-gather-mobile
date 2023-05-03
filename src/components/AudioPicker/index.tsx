@@ -24,12 +24,12 @@ import DocumentPicker, {
     types,
 } from 'react-native-document-picker';
 import {Icon} from 'react-native-eva-icons';
-import Toast from 'react-native-simple-toast';
 import RNFetchBlob, {RNFetchBlobFile} from 'rn-fetch-blob';
 
 import Button from 'components/Button';
 import Modal from 'components/Modal';
 import {_} from 'services/i18n';
+import Toast from 'utils/toast';
 
 import cs from '@rna/utils/cs';
 
@@ -105,7 +105,7 @@ const AudioRecorderModal: React.FC<AudioRecorderModalProps> = ({
             ) {
                 return true;
             } else {
-                Toast.show(_('Permission required'));
+                Toast.error(_('Permission required'));
                 return false;
             }
         } catch (err) {
@@ -415,7 +415,7 @@ const _AudioPicker: React.FC<AudioPickerProps> = ({
             ) {
                 return true;
             } else {
-                Toast.show(_('Permission required'));
+                Toast.error(_('Permission required'));
                 return false;
             }
         } catch (err) {

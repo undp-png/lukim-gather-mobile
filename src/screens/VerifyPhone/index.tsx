@@ -3,7 +3,6 @@ import {Pressable} from 'react-native';
 import {useRoute, useNavigation} from '@react-navigation/native';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import {useMutation} from '@apollo/client';
-import Toast from 'react-native-simple-toast';
 
 import {ModalLoader} from 'components/Loader';
 import Text from 'components/Text';
@@ -17,6 +16,7 @@ import {
     PHONE_NUMBER_CONFIRM_VERIFY,
 } from 'services/gql/queries';
 import {getErrorMessage} from 'utils/error';
+import Toast from 'utils/toast';
 import {
     PhoneNumberConfirm,
     MutationPhoneNumberConfirmArgs,
@@ -41,13 +41,11 @@ const VerifyPhone = () => {
             const {token, refreshToken, user} =
                 data.phoneNumberVerify as PhoneNumberConfirmVerify;
             dispatchLogin(token as string, refreshToken as string, user);
-            Toast.show('Sucessfully verified Phone!!');
+            Toast.show(_('Sucessfully verified phone!'));
             navigation.navigate('Feed', {screen: 'Home'});
         },
         onError: err => {
-            Toast.show(getErrorMessage(err), Toast.LONG, [
-                'RCTModalHostViewController',
-            ]);
+            Toast.error(_('Error!'), getErrorMessage(err));
             console.log(err);
         },
     });
@@ -68,12 +66,10 @@ const VerifyPhone = () => {
         MutationPhoneNumberConfirmArgs
     >(PHONE_NUMBER_CONFIRM, {
         onCompleted: () => {
-            Toast.show('Code successfully sent !!');
+            Toast.show(_('Code successfully sent!'));
         },
         onError: err => {
-            Toast.show(getErrorMessage(err), Toast.LONG, [
-                'RCTModalHostViewController',
-            ]);
+            Toast.error(_('Error!'), getErrorMessage(err));
             console.log(err);
         },
     });

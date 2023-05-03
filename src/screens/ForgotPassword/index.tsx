@@ -4,7 +4,6 @@ import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import {useNavigation} from '@react-navigation/native';
 import {RootStateOrAny, useSelector} from 'react-redux';
 import {useMutation} from '@apollo/client';
-import Toast from 'react-native-simple-toast';
 
 import {ModalLoader} from 'components/Loader';
 import InputField from 'components/InputField';
@@ -15,6 +14,7 @@ import {Localize} from '@rna/components/I18n';
 import {_} from 'services/i18n';
 import {PASSWORD_RESET} from 'services/gql/queries';
 import {getErrorMessage} from 'utils/error';
+import Toast from 'utils/toast';
 import {
     PasswordResetMutation,
     PasswordResetMutationVariables,
@@ -37,9 +37,7 @@ const ForgotPassword = () => {
             navigation.navigate('VerifyEmail', {email});
         },
         onError: err => {
-            Toast.show(getErrorMessage(err), Toast.LONG, [
-                'RCTModalHostViewController',
-            ]);
+            Toast.error(_('Error!'), getErrorMessage(err));
             console.log(err);
         },
     });
