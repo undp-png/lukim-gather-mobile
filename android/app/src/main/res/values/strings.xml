@@ -1,4 +1,4 @@
 <resources>
     <string name="app_name">Lukim Gather</string>
-     <string moduleConfig="true" name="CodePushDeploymentKey"></string>
+    <string moduleConfig="true" name="CodePushDeploymentKey">6VKvKnNGvT_YLPheaqzi26yZX1TK71C_it9Fm</string>
 </resources>
