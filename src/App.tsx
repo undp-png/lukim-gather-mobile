@@ -23,6 +23,7 @@ import LocalizeProvider from '@rna/components/I18n';
 
 import {getApolloClient} from 'services/gql/client';
 import {languages, translations} from 'services/i18n';
+import useInAppUpdate from 'hooks/useInAppUpdate';
 import COLORS from 'utils/colors';
 import {toastConfig} from 'utils/toast';
 
@@ -53,6 +54,7 @@ const App = () => {
     const [initialLang, setInitialLang] = useState('en');
     const [client, setClient] = useState<NormalizedCacheObject>(null);
     const {isInternetReachable} = useNetInfo();
+    useInAppUpdate();
 
     const initializeApolloClient = useCallback(async () => {
         const apolloClient = await getApolloClient(queueLink);
