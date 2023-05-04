@@ -19,6 +19,7 @@
         "@apollo/react-hooks": "^4.0.0",
         "@notifee/react-native": "^7.7.1",
         "@react-native-camera-roll/camera-roll": "^5.3.1",
+        "@react-native-clipboard/clipboard": "^1.11.2",
         "@react-native-community/hooks": "^2.8.1",
         "@react-native-community/netinfo": "^8.2.0",
         "@react-native-firebase/app": "^17.4.2",

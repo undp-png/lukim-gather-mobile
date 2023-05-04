@@ -10,6 +10,7 @@ import styles from './styles';
 const pdfIcon = require('assets/images/pdf.png');
 const pngIcon = require('assets/images/image.png');
 const csvIcon = require('assets/images/csv.png');
+const copyIcon = require('assets/images/copy.png');
 
 const ActionItem = ({
     onPress,
@@ -18,7 +19,7 @@ const ActionItem = ({
 }: {
     onPress?(): void;
     title: string;
-    icon: string;
+    icon?: string;
 }) => {
     return (
         <Pressable style={styles.option} onPress={onPress}>
@@ -33,12 +34,14 @@ interface Props {
     onBackdropPress(): void;
     onClickExportImage(): void;
     onClickExportCSV(): void;
+    onCopyLink?(): void;
 }
 const ExportActions: React.FC<Props> = ({
     isOpenExport,
     onBackdropPress,
     onClickExportImage,
     onClickExportCSV,
+    onCopyLink,
 }) => {
     return (
         <Modal
@@ -56,6 +59,13 @@ const ExportActions: React.FC<Props> = ({
                     onPress={onClickExportCSV}
                     icon={csvIcon}
                 />
+                {onCopyLink && (
+                    <ActionItem
+                        title={_('Copy link to survey')}
+                        onPress={onCopyLink}
+                        icon={copyIcon}
+                    />
+                )}
             </View>
         </Modal>
     );
