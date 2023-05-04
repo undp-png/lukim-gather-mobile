@@ -21,6 +21,7 @@ import {CameraRoll} from '@react-native-camera-roll/camera-roll';
 import RNFetchBlob from 'rn-fetch-blob';
 import {Icon} from 'react-native-eva-icons';
 import {differenceInDays, formatDistanceToNowStrict, format} from 'date-fns';
+import Clipboard from '@react-native-clipboard/clipboard';
 
 import Button from 'components/Button';
 import Text from 'components/Text';
@@ -46,6 +47,8 @@ import {
 } from 'services/gql/queries';
 import {UPDATE_NUM_DAYS} from 'utils/config';
 import Toast from 'utils/toast';
+
+import {WEBSITE_HOST_URL} from '@env';
 
 import useCategoryIcon from 'hooks/useCategoryIcon';
 import useQuery from 'hooks/useQuery';
@@ -357,6 +360,29 @@ const SurveyItem = () => {
         setIsOpenExport(false);
     }, [surveyData]);
 
+    const handleCopySurveyLink = useCallback(() => {
+        if (!surveyData?.id) {
+            return Toast.error(
+                _('Error!'),
+                _('An error occured getting the survey link!'),
+            );
+        }
+        try {
+            const hostUrl = WEBSITE_HOST_URL
+                ? WEBSITE_HOST_URL
+                : __DEV__
+                ? 'https://staging.lukimgather.org'
+                : 'https://lukimgather.org';
+            const surveyLink = `${hostUrl}/public/survey/${surveyData.id}/`;
+            Clipboard.setString(surveyLink);
+            Toast.show(_('Link copied to clipboard!'));
+            setIsOpenExport(false);
+        } catch (err) {
+            console.log(err);
+            Toast.error(_('Error!'), getErrorMessage(err), {position: 'top'});
+        }
+    }, [surveyData]);
+
     useEffect(() => {
         navigation.setOptions({
             headerRight: () => (
@@ -573,6 +599,7 @@ const SurveyItem = () => {
                         onBackdropPress={toggleExportModal}
                         onClickExportImage={onClickExportImage}
                         onClickExportCSV={onClickExportCSV}
+                        onCopyLink={handleCopySurveyLink}
                     />
                 </ViewShot>
             ) : (

@@ -11,6 +11,7 @@ declare module 'apollo-cache-inmemory' {
 
 declare module '@env' {
     export const BASE_URL: string;
+    export const WEBSITE_HOST_URL: string;
     export const MAPBOX_ACCESS_TOKEN: string;
     export const CODEPUSH_DEPLOYMENT_KEY_ANDROID: string;
     export const CODEPUSH_DEPLOYMENT_KEY_IOS: string;
