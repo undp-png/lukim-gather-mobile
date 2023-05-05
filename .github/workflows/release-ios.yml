@@ -9,7 +9,7 @@ on:
 
 jobs:
     build:
-        runs-on: macOS-11
+        runs-on: macOS-13
         environment: production
 
         steps:
@@ -25,6 +25,9 @@ jobs:
             - name: Get React Native Arsenal
               run: |
                   git clone https://gitlab.com/nepware-internals/react-native-arsenal.git src/vendor/react-native-arsenal
+
+            - name: Build Cache
+              uses: mikehardy/buildcache-action@v2
 
             - name: Cache Ruby gems
               uses: actions/cache@v3

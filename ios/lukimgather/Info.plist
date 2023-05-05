@@ -17,11 +17,15 @@
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
-	<string>1.0</string>
+	<string>$(MARKETING_VERSION)</string>
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleVersion</key>
-	<string>7</string>
+	<string>$(CURRENT_PROJECT_VERSION)</string>
+	<key>LSApplicationQueriesSchemes</key>
+	<array>
+		<string>itms-apps</string>
+	</array>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NSAppTransportSecurity</key>
@@ -37,24 +41,16 @@
 	</dict>
 	<key>NSCameraUsageDescription</key>
 	<string>Access to camera is required to let you take photos of the Entry or profile image.</string>
+	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+	<string>We don't send your location data to our server without your consent and use your location to show your position in the Map. The location data is only send to the server when you create any new Entry/Survey voluntarily.</string>
+	<key>NSLocationAlwaysUsageDescription</key>
+	<string>We don't send your location data to our server without your consent and use your location to show your position in the Map. The location data is only send to the server when you create any new Entry/Survey voluntarily.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>We don't send your location data to our server without your consent and use your location to show your position in the Map. The location data is only send to the server when you create any new Entry/Survey voluntarily.</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>Access to microphone is required for recording details about the Entry.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>Access to your Photo Gallery is required to upload photos of the Entry or to change profile image. You can delete the photos you uploaded anytime later.</string>
-	<key>UILaunchStoryboardName</key>
-	<string>LaunchScreen</string>
-	<key>UIRequiredDeviceCapabilities</key>
-	<array>
-		<string>armv7</string>
-	</array>
-	<key>UISupportedInterfaceOrientations</key>
-	<array>
-		<string>UIInterfaceOrientationPortrait</string>
-		<string>UIInterfaceOrientationLandscapeLeft</string>
-		<string>UIInterfaceOrientationLandscapeRight</string>
-	</array>
-	<key>UIViewControllerBasedStatusBarAppearance</key>
-	<false/>
 	<key>UIAppFonts</key>
 	<array>
 		<string>Inter-Medium.ttf</string>
@@ -74,9 +70,19 @@
 		<string>Zocial.ttf</string>
 		<string>Fontisto.ttf</string>
 	</array>
-	<key>LSApplicationQueriesSchemes</key>
+	<key>UILaunchStoryboardName</key>
+	<string>LaunchScreen</string>
+	<key>UIRequiredDeviceCapabilities</key>
 	<array>
-	  <string>itms-apps</string>
+		<string>armv7</string>
 	</array>
+	<key>UISupportedInterfaceOrientations</key>
+	<array>
+		<string>UIInterfaceOrientationPortrait</string>
+		<string>UIInterfaceOrientationLandscapeLeft</string>
+		<string>UIInterfaceOrientationLandscapeRight</string>
+	</array>
+	<key>UIViewControllerBasedStatusBarAppearance</key>
+	<false/>
 </dict>
 </plist>

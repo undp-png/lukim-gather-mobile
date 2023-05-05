@@ -2,9 +2,11 @@ require_relative '../node_modules/react-native/scripts/react_native_pods'
 require_relative '../node_modules/@react-native-community/cli-platform-ios/native_modules'
 
 platform :ios, '11.0'
+use_frameworks! :linkage => :static
+
+$RNFirebaseAsStaticFramework = true
 
 target 'lukimgather' do
-  use_modular_headers!
   config = use_native_modules!
 
   use_react_native!(
@@ -12,13 +14,10 @@ target 'lukimgather' do
     # to enable hermes on iOS, change `false` to `true` and then install pods
     :hermes_enabled => false
   )
-  permissions_path = '../node_modules/react-native-permissions/ios'
-  pod 'Permission-LocationWhenInUse', :path => "#{permissions_path}/LocationWhenInUse"
 
-  pod 'react-native-splash-screen', :path => '../node_modules/react-native-splash-screen'
-  # `SSZipArchive` already in use
-
-  pod 'RNAudioRecorderPlayer', :path => '../node_modules/react-native-audio-recorder-player'
+  pod 'DoubleConversion', :podspec => '../node_modules/react-native/third-party-podspecs/DoubleConversion.podspec', :modular_headers => false
+  pod 'glog', :podspec => '../node_modules/react-native/third-party-podspecs/glog.podspec', :modular_headers => false
+  pod 'RCT-Folly', :podspec => '../node_modules/react-native/third-party-podspecs/RCT-Folly.podspec', :modular_headers => false
 
   pre_install do |installer|
     $RNMBGL.pre_install(installer)
@@ -33,7 +32,7 @@ target 'lukimgather' do
   #
   # Note that if you have use_frameworks! enabled, Flipper will not work and
   # you should disable the next line.
-  use_flipper!()
+  # use_flipper!()
 
   post_install do |installer|
     react_native_post_install(installer)
