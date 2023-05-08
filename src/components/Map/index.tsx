@@ -17,6 +17,7 @@ import {CameraRoll} from '@react-native-camera-roll/camera-roll';
 import RNFetchBlob from 'rn-fetch-blob';
 import {RootStateOrAny, useSelector} from 'react-redux';
 import turfCentroid from '@turf/centroid';
+import {format} from 'date-fns';
 
 import HomeHeader from 'components/HomeHeader';
 import ExportActions from 'components/ExportActions';
@@ -360,16 +361,36 @@ const Map: React.FC<Props> = ({
         const dt = selectedData.map((item: any) => ({
             ...item,
             sentiment: sentimentName[item.sentiment],
+            location: item.location?.coordinates
+                ? `[${item.location.coordinates.toString?.() || ''}]`
+                : '',
+            boundary: item.boundary?.coordinates
+                ? `[${item.boundary.coordinates.toString?.() || ''}]`
+                : '',
+            createdAt: item.createdAt
+                ? format(new Date(item.createdAt), 'MMM dd, yyyy')
+                : '',
+            modifiedAt: item.modifiedAt
+                ? format(new Date(item.modifiedAt), 'MMM dd, yyyy')
+                : '',
+            attachment: item.attachment
+                ?.map((a: {media: string}) => a.media)
+                .join(', '),
         }));
         const config = [
-            {title: 'id', dataKey: 'id'},
+            {title: 'ID', dataKey: 'id'},
             {title: _('Title'), dataKey: 'title'},
             {title: _('Description'), dataKey: 'description'},
             {title: _('Category'), dataKey: 'category.title'},
+            {title: _('Project'), dataKey: 'project.title'},
+            {title: _('Location'), dataKey: 'location'},
+            {title: _('Boundary'), dataKey: 'boundary'},
             {title: _('Sentiment'), dataKey: 'sentiment'},
             {title: _('Improvement'), dataKey: 'improvement'},
-            {title: _('Location'), dataKey: 'location.coordinates'},
-            {title: _('Boundary'), dataKey: 'boundary.coordinates'},
+            {title: _('Created At'), dataKey: 'createdAt'},
+            {title: _('Modified At'), dataKey: 'modifiedAt'},
+            {title: _('Audio'), dataKey: 'audioFile'},
+            {title: _('Photos'), dataKey: 'attachment'},
         ];
         const csv = jsonToCSV(dt, config);
         const fileName = `surveys_${Date.now()}.csv`;

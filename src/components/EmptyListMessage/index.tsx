@@ -8,11 +8,11 @@ import {_} from 'services/i18n';
 
 import styles from './styles';
 
-const EmptyListMessage = () => {
+const EmptyListMessage: React.FC<{message?: string}> = ({message}) => {
     return (
         <View style={styles.emptyContainer}>
             <Icon name="file-text" height={50} width={50} fill={'#888C94'} />
-            <Text style={styles.text} title={_('No data Found')} />
+            <Text style={styles.text} title={message || _('No data Found')} />
         </View>
     );
 };

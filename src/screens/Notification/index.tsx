@@ -18,6 +18,7 @@ import {
 import {NotificationType} from '@generated/types';
 
 import cs from '@rna/utils/cs';
+import {_} from 'services/i18n';
 
 import COLORS from 'utils/colors';
 import styles from './styles';
@@ -101,9 +102,13 @@ const Notifications = () => {
     return (
         <View style={styles.container}>
             <FlatList
-                data={data?.notifications}
+                data={data?.notifications || []}
                 keyExtractor={keyExtractor}
-                ListEmptyComponent={loading ? null : EmptyListMessage}
+                ListEmptyComponent={
+                    loading ? null : (
+                        <EmptyListMessage message={_('No notifications!')} />
+                    )
+                }
                 refreshControl={
                     <RefreshControl
                         refreshing={loading}
