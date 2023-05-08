@@ -17,7 +17,7 @@ function useQuery<TData = any, TVariables = OperationVariables>(
     const client = useApolloClient();
 
     const [data, setData] = useState<TData | null>(null);
-    const [loading, setLoading] = useState(false);
+    const [loading, setLoading] = useState(controlled ? false : true);
     const [error, setError] = useState<any>(null);
 
     const fetchQuery = useCallback(
