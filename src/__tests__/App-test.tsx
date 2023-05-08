@@ -5,6 +5,8 @@
 import 'react-native';
 import React from 'react';
 import mockRNCNetInfo from '@react-native-community/netinfo/jest/netinfo-mock.js';
+import mockRNDeviceInfo from 'react-native-device-info/jest/react-native-device-info-mock.js';
+import mockRNClipboard from '@react-native-clipboard/clipboard/jest/clipboard-mock.js';
 
 import App from '../App';
 
@@ -233,6 +235,21 @@ jest.mock('@react-native-firebase/messaging', () => () => ({
 jest.mock('@notifee/react-native', () => {
     return {};
 });
+
+jest.mock('@react-native-clipboard/clipboard', () => mockRNClipboard);
+
+jest.mock('@react-native-camera-roll/camera-roll', () => ({
+    saveToCameraRoll: jest.fn(),
+    getPhotos: jest.fn(),
+}));
+
+jest.mock('react-native-siren', () => {
+    return {};
+});
+
+jest.mock('react-native-device-info', () => ({}));
+
+jest.mock('react-native/Libraries/EventEmitter/NativeEventEmitter');
 
 it('renders correctly', () => {
     renderer.create(<App />);

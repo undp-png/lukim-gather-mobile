@@ -40,7 +40,7 @@ if (HIDE_LOGBOX === 'yes') {
 }
 
 QueueLink.setFilter(['query']);
-const queueLink = new QueueLink();
+export const queueLink = new QueueLink();
 
 const codePushOptions = {
     checkFrequency: codePush.CheckFrequency.ON_APP_RESUME,

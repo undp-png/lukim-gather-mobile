@@ -25,12 +25,14 @@ const MenuItem = ({
     onPress,
     label,
     params,
+    hideForwardIcon = false,
 }: {
     title: string;
     linkTo?: any;
     onPress?(): void;
     label?: string;
     params?: object;
+    hideForwardIcon?: boolean;
 }) => {
     const navigation = useNavigation();
     const onPressMenu = useCallback(
@@ -44,7 +46,7 @@ const MenuItem = ({
             <Text style={styles.menuTitle} title={title} />
             <View style={styles.labelWrapper}>
                 <Text style={styles.label} title={label} />
-                <ForwardIcon />
+                {!hideForwardIcon && <ForwardIcon />}
             </View>
         </TouchableOpacity>
     );

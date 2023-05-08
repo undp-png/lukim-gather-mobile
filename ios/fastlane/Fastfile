@@ -42,4 +42,18 @@ platform :ios do
      fail_on_error: false,
    )
   end
+
+  desc "Build IPA file"
+  lane :build do
+   setup_ci
+   increment_build_number(xcodeproj: "lukimgather.xcodeproj")
+   sync_code_signing(
+     type: "appstore",
+     readonly: true,
+   )
+   build_app(
+     workspace: "lukimgather.xcworkspace",
+     scheme: "lukimgather",
+   )
+  end
 end

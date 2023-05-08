@@ -26,6 +26,7 @@ module.exports = {
             '|react-native-code-push' +
             '|react-native-view-shot' +
             '|@react-native-camera-roll/camera-roll' +
+            '|react-native-device-info' +
             '|rn-fetch-blob' +
             '|react-native-audio-recorder-player' +
             '|@notifee/react-native' +

@@ -9,12 +9,15 @@ on:
     push:
         branches:
             - 'develop'
+        tags:
+            - "v*"
     workflow_dispatch:
 
 jobs:
     build:
         runs-on: ubuntu-latest
-        environment: production
+        environment:
+            name: ${{ github.ref_type == 'tag' && 'production' || 'staging' }}
 
         steps:
             - name: Checkout Commit
@@ -22,9 +25,15 @@ jobs:
               with:
                   ref: ${{ github.event.pull_request.head.sha }}
 
-            - uses: oNaiPs/secrets-to-env-action@v1
+            - name: Export secrets
+              uses: oNaiPs/secrets-to-env-action@v1
               with:
                 secrets: ${{ toJSON(secrets) }}
+
+            - name: Export vars
+              uses: oNaiPs/secrets-to-env-action@v1
+              with:
+                secrets: ${{ toJSON(vars) }}
 
             - name: Decrypt secret files
               env:
@@ -42,14 +51,6 @@ jobs:
             - name: Gradle Wrapper Validation
               uses: gradle/wrapper-validation-action@v1
 
-            - name: Cache Ruby gems
-              uses: actions/cache@v3
-              with:
-                  path: android/vendor/bundle
-                  key: ${{ runner.os }}-gems-${{ hashFiles('**/Gemfile.lock') }}
-                  restore-keys: |
-                      ${{ runner.os }}-gems-
-
             - name: Set up JDK
               uses: actions/setup-java@v3
               with:
@@ -57,8 +58,14 @@ jobs:
                   java-version: '11'
                   cache: 'gradle'
 
+            - uses: ruby/setup-ruby@v1
+              with:
+                ruby-version: '3.0'
+                bundler-cache: true
+                working-directory: 'android'
+
             - name: Setup node
-              uses: actions/setup-node@v2
+              uses: actions/setup-node@v3
               with:
                   node-version-file: '.nvmrc'
                   cache: 'yarn'
@@ -70,12 +77,10 @@ jobs:
                   echo MAPBOX_DOWNLOADS_TOKEN=$MAPBOX_DOWNLOADS_TOKEN >> ./android/gradle.properties
 
             - name: Run Fastlane
-              uses: maierj/fastlane-action@v2.2.0
+              uses: maierj/fastlane-action@v3.0.0
               with:
-                  skip-tracking: true
-                  lane: 'build'
+                  lane: ${{ github.ref_type == 'tag' && 'beta' || 'build' }}
                   subdirectory: 'android'
-                  bundle-install-path: vendor/bundle
               env:
                   FASTLANE_HIDE_CHANGELOG: true
 
