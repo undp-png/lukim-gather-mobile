@@ -22,6 +22,7 @@ import RNFetchBlob from 'rn-fetch-blob';
 import {Icon} from 'react-native-eva-icons';
 import {differenceInDays, formatDistanceToNowStrict, format} from 'date-fns';
 import Clipboard from '@react-native-clipboard/clipboard';
+import {useLazyQuery} from '@apollo/client';
 
 import Button from 'components/Button';
 import Text from 'components/Text';
@@ -325,23 +326,132 @@ const SurveyItem = () => {
         }
     }, [getPermissionAndroid]);
 
+    const [getEntireHistoryData] = useLazyQuery<{
+        happeningSurveysHistory: HappeningSurveyHistoryType[];
+    }>(GET_HAPPENING_SURVEY_HISTORY_ITEM);
+
     const onClickExportCSV = useCallback(async () => {
-        const dt = {
-            ...surveyData,
-            sentiment: sentimentName[surveyData.sentiment],
-        };
+        const dt = [];
         const config = [
-            {title: 'id', dataKey: 'id'},
+            {title: 'ID', dataKey: 'id'},
             {title: _('Title'), dataKey: 'title'},
             {title: _('Description'), dataKey: 'description'},
             {title: _('Category'), dataKey: 'category.title'},
+            {title: _('Project'), dataKey: 'project.title'},
+            {title: _('Location'), dataKey: 'location'},
+            {title: _('Boundary'), dataKey: 'boundary'},
+            {title: _('Condition'), dataKey: 'improvement'},
             {title: _('Sentiment'), dataKey: 'sentiment'},
-            {title: _('Improvement'), dataKey: 'improvement'},
-            {title: _('Location'), dataKey: 'location.coordinates'},
-            {title: _('Boundary'), dataKey: 'boundary.coordinates'},
+            {title: _('Created At'), dataKey: 'createdAt'},
+            {title: _('Modified At'), dataKey: 'modifiedAt'},
+            {title: _('Audio'), dataKey: 'audioFile'},
+            {title: _('Photos'), dataKey: 'attachment'},
         ];
-        const csv = jsonToCSV([dt], config);
-        const fileName = `surveys_${Date.now()}.csv`;
+        if (versionsData.length > 1) {
+            try {
+                const res = await getEntireHistoryData({
+                    variables: {surveyId: surveyData?.id},
+                });
+                (res?.data?.happeningSurveysHistory || []).forEach(
+                    (surveyHistoryItem, idx) => {
+                        dt.push({
+                            ...(surveyHistoryItem?.serializedData?.fields ||
+                                {}),
+                            id: idx === 0 ? surveyData?.id : null,
+                            sentiment:
+                                sentimentName[
+                                    surveyHistoryItem?.serializedData?.fields
+                                        ?.sentiment as string
+                                ],
+                            createdAt: surveyHistoryItem?.serializedData?.fields
+                                ?.createdAt
+                                ? format(
+                                      new Date(
+                                          surveyHistoryItem?.serializedData?.fields?.createdAt,
+                                      ),
+                                      'MMM dd, yyyy',
+                                  )
+                                : '',
+                            modifiedAt: surveyHistoryItem?.serializedData
+                                ?.fields?.modifiedAt
+                                ? format(
+                                      new Date(
+                                          surveyHistoryItem?.serializedData?.fields?.modifiedAt,
+                                      ),
+                                      'MMM dd, yyyy',
+                                  )
+                                : '',
+                            location: surveyHistoryItem?.serializedData?.fields
+                                ?.location?.coordinates
+                                ? `[${
+                                      surveyHistoryItem.serializedData.fields.location.coordinates.toString?.() ||
+                                      ''
+                                  }]`
+                                : '',
+                            boundary: surveyHistoryItem?.serializedData?.fields
+                                ?.boundary?.coordinates
+                                ? `[${
+                                      surveyHistoryItem.serializedData.fields.boundary.coordinates.toString?.() ||
+                                      ''
+                                  }]`
+                                : '',
+                            attachment:
+                                surveyHistoryItem?.serializedData?.fields?.attachment
+                                    ?.map?.(a => a.media)
+                                    .join(', '),
+                        });
+                    },
+                );
+            } catch (err) {
+                Toast.error(
+                    _('Error exporting history!'),
+                    getErrorMessage(err),
+                );
+                dt.push({
+                    ...surveyData,
+                    sentiment: sentimentName[surveyData.sentiment],
+                    createdAt: surveyData.createdAt
+                        ? format(new Date(surveyData.createdAt), 'MMM dd, yyyy')
+                        : '',
+                    location: surveyData.location?.coordinates
+                        ? `[${
+                              surveyData.location.coordinates.toString?.() || ''
+                          }]`
+                        : '',
+                    boundary: surveyData.boundary?.coordinates
+                        ? `[${
+                              surveyData.boundary.coordinates.toString?.() || ''
+                          }]`
+                        : '',
+                    modifiedAt: null,
+                    attachment: surveyData.attachment
+                        ?.map?.((a: {media: string}) => a.media)
+                        .join(', '),
+                });
+            }
+        } else {
+            dt.push({
+                ...surveyData,
+                sentiment: sentimentName[surveyData.sentiment],
+                createdAt: surveyData.createdAt
+                    ? format(new Date(surveyData.createdAt), 'MMM dd, yyyy')
+                    : '',
+                location: surveyData.location?.coordinates
+                    ? `[${surveyData.location.coordinates.toString?.() || ''}]`
+                    : '',
+                boundary: surveyData.boundary?.coordinates
+                    ? `[${surveyData.boundary.coordinates.toString?.() || ''}]`
+                    : '',
+                modifiedAt: null,
+                attachment: surveyData.attachment
+                    ?.map?.((a: {media: string}) => a.media)
+                    .join(', '),
+            });
+        }
+        const csv = jsonToCSV(dt, config);
+        const fileName = `${
+            surveyData?.title || 'UntitledSurvey'
+        }_${Date.now()}.csv`;
         const path = `${RNFetchBlob.fs.dirs.DownloadDir}/${fileName}`;
         RNFetchBlob.fs.writeFile(path, csv, 'utf8').then(() => {
             if (Platform.OS === 'android') {
@@ -358,7 +468,7 @@ const SurveyItem = () => {
         });
         Toast.show('Saved CSV in Downloads folder!');
         setIsOpenExport(false);
-    }, [surveyData]);
+    }, [surveyData, getEntireHistoryData, versionsData]);
 
     const handleCopySurveyLink = useCallback(() => {
         if (!surveyData?.id) {
