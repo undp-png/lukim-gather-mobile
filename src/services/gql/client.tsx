@@ -19,6 +19,7 @@ import {
     MMKVStorageWrapper as MMKVQueueStorageWrapper,
 } from 'vendor/apollo-link-queue-persist';
 import {createUploadLink} from 'apollo-upload-client';
+import {ReactNativeFile} from 'apollo-upload-client';
 
 import {BASE_URL} from '@env';
 
@@ -31,6 +32,7 @@ import {REFRESH_TOKEN} from './queries';
 const {dispatch} = store;
 
 const noop = () => {};
+const identity = (arg: any) => arg;
 
 export const getApolloClient = async (queueLink: any) => {
     const cache = new InMemoryCache();
@@ -127,12 +129,31 @@ export const getApolloClient = async (queueLink: any) => {
         };
     });
 
+    const reactNativeFileLink = new ApolloLink((operation, forward) => {
+        const isMutation = operation.query.definitions.some(
+            e => (e as any).operation === 'mutation',
+        );
+        if (isMutation && operation.variables.input?.attachment?.length > 0) {
+            operation.variables.input.attachment =
+                operation.variables.input.attachment.map(
+                    (att: any) => new ReactNativeFile(att),
+                );
+        }
+        if (isMutation && operation.variables.input?.audioFile?.uri) {
+            operation.variables.input.audioFile = new ReactNativeFile(
+                operation.variables.input.audioFile,
+            );
+        }
+        return forward(operation);
+    });
+
     const link = ApolloLink.from([
         queueLink,
         errorLink,
         errorIgnoreLink,
         authLink,
         serializeLink,
+        reactNativeFileLink,
         httpLink,
     ]);
 
@@ -152,7 +173,7 @@ export const getApolloClient = async (queueLink: any) => {
         >,
         client,
         debug: __DEV__,
-        beforeRestore: noop,
+        beforeRestore: identity,
         onCompleted: noop,
         onError: console.log,
     });

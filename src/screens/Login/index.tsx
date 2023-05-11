@@ -49,7 +49,10 @@ const Login = () => {
             const {token, refreshToken, user} =
                 data.tokenAuth as CustomObtainJsonWebToken;
             dispatchLogin(token, refreshToken, user);
-            navigation.navigate('Feed', {screen: 'Home'});
+            navigation.navigate('Feed', {
+                screen: 'Home',
+                params: {screen: 'HomeScreen'},
+            });
             Toast.show(_('Successfully logged in!'));
         },
         onError: err => {

@@ -118,31 +118,31 @@ const EditProfile = () => {
         <View style={styles.container}>
             <ModalLoader loading={loading} />
             <KeyboardAwareScrollView showsVerticalScrollIndicator={false}>
-                <TouchableOpacity
-                    onPress={toggleImagePickerModal}
-                    style={styles.imageWrapper}>
-                    <View style={styles.overlay}>
-                        <Icon
-                            style={styles.camera}
-                            name="camera"
-                            height={22}
-                            width={22}
-                            fill={'#ffffff'}
+                <View style={styles.imageWrapper}>
+                    <TouchableOpacity onPress={toggleImagePickerModal}>
+                        <View style={styles.overlay}>
+                            <Icon
+                                style={styles.camera}
+                                name="camera"
+                                height={22}
+                                width={22}
+                                fill={'#ffffff'}
+                            />
+                        </View>
+                        <Image
+                            source={
+                                user.avatar || avatar
+                                    ? {uri: avatar?.uri || user.avatar}
+                                    : require('assets/images/user-placeholder.png')
+                            }
+                            style={styles.userImage}
                         />
-                    </View>
-                    <Image
-                        source={
-                            user.avatar || avatar
-                                ? {uri: avatar?.uri || user.avatar}
-                                : require('assets/images/user-placeholder.png')
-                        }
-                        style={styles.userImage}
-                    />
-                    <Text
-                        style={styles.changeTitle}
-                        title={_('Change photo')}
-                    />
-                </TouchableOpacity>
+                        <Text
+                            style={styles.changeTitle}
+                            title={_('Change photo')}
+                        />
+                    </TouchableOpacity>
+                </View>
                 <InputField
                     title={_('Name')}
                     value={fullName}

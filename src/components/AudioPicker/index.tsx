@@ -1,4 +1,3 @@
-import {ReactNativeFile} from 'apollo-upload-client';
 import React, {useCallback, useEffect, useState} from 'react';
 import {
     Image,
@@ -57,13 +56,13 @@ interface AudioRecorderModalProps {
     onBackdropPress: () => void;
 }
 
-const responseToRNF = (res: any) => {
+const responseToFile = (res: any) => {
     const audio = {
         name: res.name,
         type: res.mime,
         uri: Platform.OS === 'ios' ? res.path.replace('file://', '') : res.path,
     };
-    return new ReactNativeFile(audio);
+    return audio;
 };
 
 const dirs = RNFetchBlob.fs.dirs;
@@ -193,7 +192,7 @@ const AudioRecorderModal: React.FC<AudioRecorderModalProps> = ({
                 setIsRecording(false);
                 setStopRecording(false);
                 if (audioFile) {
-                    onChange?.(responseToRNF(audioFile));
+                    onChange?.(responseToFile(audioFile));
                 }
                 audioRecorderPlayer.removeRecordBackListener();
                 onBackdropPress();
@@ -314,7 +313,9 @@ export const Audio: React.FC<AudioProps> = ({
 
     const onStartPlay = useCallback(async () => {
         try {
-            await audioRecorderPlayer.startPlayer(audio?.uri || audio);
+            await audioRecorderPlayer.startPlayer(
+                audio?.uri || (audio as unknown as string),
+            );
             audioRecorderPlayer.setVolume(1.0);
             audioRecorderPlayer.addPlayBackListener((e: PlayBackType) => {
                 if (e.currentPosition === e.duration) {
@@ -466,7 +467,7 @@ const _AudioPicker: React.FC<AudioPickerProps> = ({
                 type: types.audio,
             });
             onChange?.(
-                responseToRNF({
+                responseToFile({
                     path: pickerResult.fileCopyUri,
                     mime: pickerResult.type,
                     name: pickerResult.name,

@@ -7,7 +7,6 @@ import {
     type RouteProp,
 } from '@react-navigation/native';
 import {useMutation} from '@apollo/client';
-import {ReactNativeFile} from 'apollo-upload-client';
 import {Icon} from 'react-native-eva-icons';
 import {format} from 'date-fns';
 import uuid from 'react-native-uuid';
@@ -57,13 +56,13 @@ import type {
 
 import styles from './styles';
 
-const responseToRNF = (res: Scalars['Upload']) => {
+const responseToFile = (res: Scalars['Upload']) => {
     const image = {
         name: uuid.v4() + '.' + (res.path.split('.')?.pop() || ''),
         type: res.mime,
         uri: Platform.OS === 'ios' ? res.path.replace('file://', '') : res.path,
     };
-    return new ReactNativeFile(image);
+    return image;
 };
 
 type UpdateSurveyRouteProp = RouteProp<StackParamList, 'UpdateSurvey'>;
@@ -145,7 +144,7 @@ const UpdateSurvey = () => {
         const surveyInput = {
             sentiment: activeSentiment,
             improvement: activeReview as InputMaybe<Improvement>,
-            attachment: newImages.map(responseToRNF),
+            attachment: newImages.map(responseToFile),
             audioFile: audio,
             description,
             modifiedAt: new Date().toISOString(),
@@ -175,14 +174,18 @@ const UpdateSurvey = () => {
                         attachment: [
                             ...newImages.map(img => ({
                                 media: img.path,
-                                id: img.name,
+                                id: img.name?.split?.('.').shift(),
                             })),
                             ...surveyItem.attachment,
                         ],
                         audioFile:
                             typeof audio === 'string'
                                 ? audio
-                                : (surveyInput?.audioFile as HappeningSurveyType['audioFile']),
+                                : ((
+                                      surveyInput?.audioFile as unknown as {
+                                          uri: string;
+                                      }
+                                  )?.uri as HappeningSurveyType['audioFile']),
                         improvement:
                             surveyInput.improvement as HappeningSurveyType['improvement'],
                         isOffline: true,
@@ -193,9 +196,12 @@ const UpdateSurvey = () => {
                 try {
                     const readData = (cache.readQuery({
                         query: GET_HAPPENING_SURVEY,
+                        variables: {
+                            ordering: '-modified_at',
+                        },
                     }) || []) as {happeningSurveys: HappeningSurveyType[]};
-                    const updatedHappeningSurveys =
-                        readData.happeningSurveys.map(hs => {
+                    const updatedHappeningSurveys = readData.happeningSurveys
+                        .map(hs => {
                             if (
                                 data?.updateHappeningSurvey?.result &&
                                 data?.updateHappeningSurvey?.result?.id ===
@@ -207,11 +213,19 @@ const UpdateSurvey = () => {
                                 };
                             }
                             return hs;
-                        });
+                        })
+                        .sort(
+                            (a, b) =>
+                                +new Date(b.modifiedAt) -
+                                +new Date(a.modifiedAt),
+                        );
                     await cache.writeQuery({
                         query: GET_HAPPENING_SURVEY,
                         data: {
                             happeningSurveys: updatedHappeningSurveys,
+                        },
+                        variables: {
+                            ordering: '-modified_at',
                         },
                     });
                     navigation.dispatch(
