@@ -7,7 +7,6 @@ import {
 } from '@react-navigation/native';
 import {RootStateOrAny, useSelector} from 'react-redux';
 import {useMutation} from '@apollo/client';
-import {ReactNativeFile} from 'apollo-upload-client';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import {Icon} from 'react-native-eva-icons';
 import uuid from 'react-native-uuid';
@@ -56,13 +55,13 @@ import type {
 
 import styles from './styles';
 
-const responseToRNF = (res: Scalars['Upload']) => {
+const responseToFile = (res: Scalars['Upload']) => {
     const image = {
         name: uuid.v4() + '.' + (res.path.split('.')?.pop() || ''),
         type: res.mime,
         uri: Platform.OS === 'ios' ? res.path.replace('file://', '') : res.path,
     };
-    return new ReactNativeFile(image);
+    return image;
 };
 
 type EditSurveyRouteProp = RouteProp<StackParamList, 'EditSurvey'>;
@@ -158,7 +157,7 @@ const EditHappeningSurvey = () => {
             improvement: activeReview as InputMaybe<Improvement>,
             isTest: isTest,
             isPublic: isPublic,
-            attachment: attachment.map(responseToRNF),
+            attachment: attachment.map(responseToFile),
             attachmentLink: imageLinks.map(img => img.id),
             modifiedAt: new Date().toISOString(),
         };
@@ -169,14 +168,12 @@ const EditHappeningSurvey = () => {
         if (coordinates) {
             surveyInput.location = coordinates.point
                 ? {
-                      __typename: 'GeometryObjectType',
                       type: 'Point',
                       coordinates: coordinates.point,
                   }
                 : null;
             surveyInput.boundary = coordinates.polygon
                 ? {
-                      __typename: 'GeometryObjectType',
                       type: 'MultiPolygon',
                       coordinates: [[coordinates.polygon]],
                   }
@@ -226,7 +223,7 @@ const EditHappeningSurvey = () => {
                                 if (img?.name) {
                                     return {
                                         media: img.path || img.uri,
-                                        id: img.name || i,
+                                        id: img.name?.split?.('.').shift() || i,
                                     };
                                 }
                                 return img;
@@ -234,7 +231,8 @@ const EditHappeningSurvey = () => {
                             audioFile:
                                 typeof audio === 'string'
                                     ? audio
-                                    : (surveyInput?.audioFile as HappeningSurveyType['audioFile']),
+                                    : (surveyInput?.audioFile
+                                          ?.uri as HappeningSurveyType['audioFile']),
                             category: {
                                 __typename: 'ProtectedAreaCategoryType',
                                 ...surveyCategory,
@@ -250,28 +248,39 @@ const EditHappeningSurvey = () => {
                         const readData: any =
                             cache.readQuery({
                                 query: GET_HAPPENING_SURVEY,
-                            }) || [];
-                        let updatedHappeningSurvey =
-                            readData.happeningSurveys.map(
-                                (obj: HappeningSurveyType) => {
-                                    if (
-                                        data?.editHappeningSurvey?.result
-                                            ?.id === obj.id
-                                    ) {
-                                        return {
-                                            ...obj,
-                                            ...data?.editHappeningSurvey
-                                                ?.result,
-                                        };
-                                    }
-                                    return obj;
+                                variables: {
+                                    ordering: '-modified_at',
                                 },
+                            }) || [];
+                        let updatedHappeningSurvey = readData.happeningSurveys
+                            .map((obj: HappeningSurveyType) => {
+                                if (
+                                    data?.editHappeningSurvey?.result?.id ===
+                                    obj.id
+                                ) {
+                                    return {
+                                        ...obj,
+                                        ...data?.editHappeningSurvey?.result,
+                                    };
+                                }
+                                return obj;
+                            })
+                            .sort(
+                                (
+                                    a: HappeningSurveyType,
+                                    b: HappeningSurveyType,
+                                ) =>
+                                    +new Date(b.modifiedAt) -
+                                    +new Date(a.modifiedAt),
                             );
 
                         await cache.writeQuery({
                             query: GET_HAPPENING_SURVEY,
                             data: {
                                 happeningSurveys: updatedHappeningSurvey,
+                            },
+                            variables: {
+                                ordering: '-modified_at',
                             },
                         });
                         navigation.navigate('Feed', {screen: 'Home'});

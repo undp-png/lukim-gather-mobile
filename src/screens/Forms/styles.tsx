@@ -11,4 +11,9 @@ export default StyleSheet.create({
         display: 'flex',
         padding: 20,
     },
+    emptyText: {
+        fontSize: 14,
+        textAlign: 'center',
+        fontFamily: 'Inter-Regular',
+    },
 });

@@ -45,7 +45,9 @@ const Surveys = () => {
     const route = useRoute<any>();
 
     const {loading, data, refetch} = useQuery(GET_HAPPENING_SURVEY, {
-        variables: {ordering: '-modified_at'},
+        variables: {
+            ordering: '-modified_at',
+        },
     });
 
     const [selectedTab, setSelectedTab] = useState('all');

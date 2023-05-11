@@ -8,13 +8,13 @@ import {
     type RouteProp,
 } from '@react-navigation/native';
 import {useMutation} from '@apollo/client';
-import {ReactNativeFile} from 'apollo-upload-client';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import {Image as ImageObj} from 'react-native-image-crop-picker';
 import {Icon} from 'react-native-eva-icons';
 import uuid from 'react-native-uuid';
 import Geolocation from 'react-native-geolocation-service';
 import {RNFetchBlobFile} from 'rn-fetch-blob';
+import {useNetInfo} from '@react-native-community/netinfo';
 
 import turfDistance from '@turf/distance';
 import turfCentroid from '@turf/centroid';
@@ -69,13 +69,13 @@ import {CLOSENESS_DISTANCE_THRESHOLD} from 'utils/config';
 
 import styles from './styles';
 
-const responseToRNF = (res: ImageObj) => {
+const responseToFile = (res: ImageObj) => {
     const image = {
         name: uuid.v4() + '.' + (res.path.split('.')?.pop() || ''),
         type: res.mime,
         uri: Platform.OS === 'ios' ? res.path.replace('file://', '') : res.path,
     };
-    return new ReactNativeFile(image);
+    return image;
 };
 
 type CreateSurveyRouteProp = RouteProp<StackParamList, 'CreateSurvey'>;
@@ -88,6 +88,7 @@ const CreateHappeningSurvey = () => {
 
     const {data} = useQuery<{happeningSurveys: HappeningSurveyType[]}>(
         GET_HAPPENING_SURVEY,
+        {variables: {ordering: '-modified_at'}},
     );
     const surveyData = useMemo(() => {
         return (data?.happeningSurveys || []) as HappeningSurveyType[];
@@ -178,6 +179,7 @@ const CreateHappeningSurvey = () => {
         }
     }, [location, locationDetail, initializeLocation]);
 
+    const {isInternetReachable} = useNetInfo();
     const handlePublish = useCallback(async () => {
         if (!isAuthenticated) {
             return Toast.error(
@@ -194,7 +196,7 @@ const CreateHappeningSurvey = () => {
             description: description,
             sentiment: activeFeel,
             improvement: activeReview as InputMaybe<Improvement>,
-            attachment: images.map(responseToRNF),
+            attachment: images.map(responseToFile),
             audioFile: audio,
             location: location.point
                 ? {type: 'Point', coordinates: location?.point}
@@ -246,16 +248,20 @@ const CreateHappeningSurvey = () => {
                             ? [
                                   ...surveyInput.attachment.map(file => ({
                                       media: file.uri,
-                                      id: file.name,
+                                      id: file.name?.split?.('.').shift() || '',
                                   })),
                               ]
                             : [],
                         audioFile:
-                            surveyInput.audioFile as HappeningSurveyType['audioFile'],
-                        createdBy: {
-                            id: user?.id || '',
-                            __typename: 'UserType',
-                        },
+                            (surveyInput.audioFile
+                                ?.uri as HappeningSurveyType['audioFile']) ||
+                            '',
+                        createdBy: isAnonymous
+                            ? undefined
+                            : {
+                                  id: user?.id || '',
+                                  __typename: 'UserType',
+                              },
                         createdAt: surveyInput.createdAt,
                         modifiedAt: surveyInput.createdAt,
                         isOffline: true,
@@ -266,9 +272,9 @@ const CreateHappeningSurvey = () => {
                 try {
                     const readData: any = cache.readQuery({
                         query: GET_HAPPENING_SURVEY,
+                        variables: {ordering: '-modified_at'},
                     }) || {happeningSurveys: []};
                     let mergedSurveys = [];
-
                     const addedSurvey = cacheData?.createHappeningSurvey
                         ? {
                               ...cacheData.createHappeningSurvey.result,
@@ -289,9 +295,14 @@ const CreateHappeningSurvey = () => {
                             ...readData,
                             happeningSurveys: mergedSurveys,
                         },
+                        variables: {
+                            ordering: '-modified_at',
+                        },
                     });
                     Toast.show(_('Survey has been recorded'));
-                    navigation.navigate('Feed', {screen: 'Home'});
+                    if (!isInternetReachable) {
+                        navigation.navigate('Feed', {screen: 'Home'});
+                    }
                 } catch (e) {
                     console.log('error on happening survey', e);
                 }
@@ -310,11 +321,12 @@ const CreateHappeningSurvey = () => {
         activeReview,
         location,
         isAnonymous,
-        navigation,
         user?.id,
         isPublic,
         isTest,
         isAuthenticated,
+        navigation,
+        isInternetReachable,
     ]);
 
     const handleImages = useCallback(

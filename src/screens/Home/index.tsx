@@ -8,7 +8,9 @@ import useQuery from 'hooks/useQuery';
 import Map from 'components/Map';
 
 const Home = () => {
-    const {data, refetch} = useQuery(GET_HAPPENING_SURVEY);
+    const {data, refetch} = useQuery(GET_HAPPENING_SURVEY, {
+        variables: {ordering: '-modified_at'},
+    });
 
     useFocusEffect(
         useCallback(() => {

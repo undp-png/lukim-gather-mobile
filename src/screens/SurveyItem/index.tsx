@@ -259,6 +259,9 @@ const SurveyItem = () => {
                     const readData: any =
                         cache.readQuery({
                             query: GET_HAPPENING_SURVEY,
+                            variables: {
+                                ordering: '-modified_at',
+                            },
                         }) || [];
                     let happeningSurveys = readData?.happeningSurveys.filter(
                         (obj: HappeningSurveyType) => {
@@ -270,6 +273,7 @@ const SurveyItem = () => {
                         data: {
                             happeningSurveys: happeningSurveys,
                         },
+                        variables: {ordering: '-modified_at'},
                     });
                     navigation.navigate('Feed', {screen: 'Home'});
                 } catch (e) {
@@ -580,7 +584,7 @@ const SurveyItem = () => {
                             </View>
                         )}
                     </View>
-                    {surveyData.project && (
+                    {Boolean(surveyData.project) && (
                         <ProjectInput
                             activeProject={surveyData.project}
                             style={styles.project}
@@ -624,7 +628,7 @@ const SurveyItem = () => {
                             </View>
                         </>
                     )}
-                    {surveyData?.improvement && (
+                    {Boolean(surveyData?.improvement) && (
                         <>
                             <Header title={_('Improvement')} />
                             <View style={styles.content}>
@@ -675,7 +679,7 @@ const SurveyItem = () => {
                             title={surveyData?.isTest ? _('Yes') : _('No')}
                         />
                     </View>
-                    {surveyData?.audioFile && (
+                    {Boolean(surveyData?.audioFile) && (
                         <>
                             <Header title={_('Audio')} />
                             <View style={styles.content}>

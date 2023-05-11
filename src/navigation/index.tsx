@@ -85,7 +85,7 @@ export type StackParamList = {
         surveyItem: HappeningSurveyType;
     };
     EditProfile: undefined;
-    Feed: {screen: string};
+    Feed: {screen: string; params?: {screen: string}};
     Feedback: undefined;
     Home: undefined;
     Settings: undefined;

@@ -38,7 +38,9 @@ const SearchSurvey = () => {
     const onClearSearch = useCallback(() => setSearchQuery(''), []);
     const handleSearchChange = useCallback(text => setSearchQuery(text), []);
 
-    const {loading, error, data} = useQuery(GET_HAPPENING_SURVEY);
+    const {loading, error, data} = useQuery(GET_HAPPENING_SURVEY, {
+        variables: {ordering: '-modified_at'},
+    });
 
     useEffect(() => {
         const inputWidth = {

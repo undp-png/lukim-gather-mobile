@@ -3,6 +3,7 @@ import {View, FlatList, Alert} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import {RootStateOrAny, useSelector, useDispatch} from 'react-redux';
 
+import Text from 'components/Text';
 import MenuItem from 'components/MenuItem';
 import {Loader} from 'components/Loader';
 import {ConfirmBox} from 'components/ConfirmationBox';
@@ -142,8 +143,16 @@ const Forms = () => {
                     data={data?.surveyForm ?? []}
                     renderItem={renderFormMenuItem}
                     keyExtractor={keyExtractor}
-                    ListEmptyComponent={<Loader loading={fetching} />}
+                    ListEmptyComponent={
+                        fetching ? null : (
+                            <Text
+                                style={styles.emptyText}
+                                title="No forms found!"
+                            />
+                        )
+                    }
                 />
+                {!data?.surveyForm?.length && fetching && <Loader loading />}
             </View>
         </View>
     );
