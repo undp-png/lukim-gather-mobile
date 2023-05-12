@@ -287,12 +287,14 @@ const Map: React.FC<Props> = ({
                         id="polyTitle"
                         style={mapStyles.polyTitle}
                         belowLayerID="singlePoint"
+                        filter={['all', showCluster]}
                     />
                     <MapboxGL.FillLayer
                         id="polygon"
                         sourceLayerID="surveyPolySource"
                         belowLayerID="polyTitle"
                         style={mapStyles.polygon}
+                        filter={['all', showCluster]}
                     />
                 </MapboxGL.ShapeSource>
                 <MapboxGL.ShapeSource
@@ -308,30 +310,38 @@ const Map: React.FC<Props> = ({
                     <MapboxGL.SymbolLayer
                         id="pointCount"
                         style={mapStyles.pointCount}
-                        filter={['has', 'point_count']}
+                        filter={['all', ['has', 'point_count'], showCluster]}
                     />
                     <MapboxGL.CircleLayer
                         id="circles"
                         style={mapStyles.clusterPoints}
-                        filter={['has', 'point_count']}
+                        filter={['all', ['has', 'point_count'], showCluster]}
                         belowLayerID="pointCount"
                     />
                     <MapboxGL.SymbolLayer
                         id="singlePoint"
                         style={mapStyles.singlePoint}
-                        filter={['!', ['has', 'point_count']]}
+                        filter={[
+                            'all',
+                            ['!', ['has', 'point_count']],
+                            showCluster,
+                        ]}
                         belowLayerID="circles"
                     />
                     <MapboxGL.SymbolLayer
                         id="iconBackground"
                         style={mapStyles.marker}
-                        filter={['!', ['has', 'point_count']]}
+                        filter={[
+                            'all',
+                            ['!', ['has', 'point_count']],
+                            showCluster,
+                        ]}
                         belowLayerID="singlePoint"
                     />
                 </MapboxGL.ShapeSource>
             </>
         );
-    }, [surveyData]);
+    }, [surveyData, showCluster]);
 
     const handleRemovePolygon = useCallback(() => {
         setPolygonPoint([]);
@@ -386,10 +396,10 @@ const Map: React.FC<Props> = ({
                         {...mapCameraProps}
                     />
                     {isOffline && <OfflineLayers />}
-                    <UserLocation visible={true} />
+                    {renderCluster()}
                     {showMarker && renderAnnotation()}
                     {pickLocation === 'Draw polygon' && renderPolygon()}
-                    {showCluster && renderCluster()}
+                    <UserLocation visible={true} />
                 </MapboxGL.MapView>
             </View>
             <View style={cs(styles.locationBar, locationBarStyle)}>
