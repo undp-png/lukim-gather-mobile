@@ -5,12 +5,19 @@ concurrency:
   cancel-in-progress: true
 
 on:
-    deployment
+    pull_request:
+    push:
+        branches:
+            - 'develop'
+        tags:
+            - "v*"
+    workflow_dispatch:
 
 jobs:
     build:
         runs-on: macOS-13
-        environment: production
+        environment:
+            name: ${{ github.ref_type == 'tag' && 'production' || 'staging' }}
 
         steps:
             - name: Checkout Commit
@@ -18,9 +25,15 @@ jobs:
               with:
                   ref: ${{ github.event.pull_request.head.sha }}
 
-            - uses: oNaiPs/secrets-to-env-action@v1
+            - name: Export secrets
+              uses: oNaiPs/secrets-to-env-action@v1
               with:
                 secrets: ${{ toJSON(secrets) }}
+
+            - name: Export vars
+              uses: oNaiPs/secrets-to-env-action@v1
+              with:
+                secrets: ${{ toJSON(vars) }}
 
             - name: Get React Native Arsenal
               run: |
@@ -28,14 +41,6 @@ jobs:
 
             - name: Build Cache
               uses: mikehardy/buildcache-action@v2
-
-            - name: Cache Ruby gems
-              uses: actions/cache@v3
-              with:
-                  path: ios/vendor/bundle
-                  key: ${{ runner.os }}-gems-${{ hashFiles('**/Gemfile.lock') }}
-                  restore-keys: |
-                      ${{ runner.os }}-gems-
 
             - name: Cache Pods
               uses: actions/cache@v3
@@ -48,8 +53,14 @@ jobs:
                 restore-keys: |
                   ${{ runner.os }}-pods-
 
+            - uses: ruby/setup-ruby@v1
+              with:
+                ruby-version: '3.0'
+                bundler-cache: true
+                working-directory: 'ios'
+
             - name: Setup node
-              uses: actions/setup-node@v2
+              uses: actions/setup-node@v3
               with:
                   node-version-file: '.nvmrc'
                   cache: 'yarn'
@@ -59,15 +70,18 @@ jobs:
               run: |
                   yarn install --non-interactive
 
-            - name: Install Pods
-              run: cd ios && pod install --repo-update && cd ..
-
             - name: Run Fastlane
-              uses: maierj/fastlane-action@v2.2.0
+              uses: maierj/fastlane-action@v3.0.0
               with:
-                  skip-tracking: true
-                  lane: 'beta'
+                  lane: ${{ github.ref_type == 'tag' && 'beta' || 'build' }}
                   subdirectory: 'ios'
-                  bundle-install-path: vendor/bundle
               env:
                   FASTLANE_HIDE_CHANGELOG: true
+
+            - name: Archive production artifacts
+              uses: actions/upload-artifact@v3
+              with:
+                  name: ipa
+                  path: |
+                    ios/*.ipa
+                  retention-days: 14

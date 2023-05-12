@@ -4,6 +4,7 @@ import {RootStateOrAny, useSelector} from 'react-redux';
 import {useNavigation} from '@react-navigation/native';
 
 import MenuItem from 'components/MenuItem';
+import {queueLink} from '../../App';
 
 import {languages, _} from 'services/i18n';
 
@@ -26,6 +27,8 @@ const Settings = () => {
         navigation.navigate('Language');
     }, [navigation]);
 
+    const queueLength = queueLink.length();
+
     return (
         <View style={styles.container}>
             <View style={styles.menuWrapper}>
@@ -39,8 +42,9 @@ const Settings = () => {
                 />
                 {isAuthenticated && (
                     <MenuItem
-                        title={_('Synchronization')}
-                        label={_('Automatic')}
+                        hideForwardIcon
+                        title={_('Data Synchronization')}
+                        label={queueLength > 0 ? '❌ Unsynced' : '✅ Synced'}
                     />
                 )}
             </View>
