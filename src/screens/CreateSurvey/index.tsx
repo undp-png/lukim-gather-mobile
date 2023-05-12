@@ -257,7 +257,7 @@ const CreateHappeningSurvey = () => {
                                 ?.uri as HappeningSurveyType['audioFile']) ||
                             '',
                         createdBy: isAnonymous
-                            ? undefined
+                            ? null
                             : {
                                   id: user?.id || '',
                                   __typename: 'UserType',

@@ -168,12 +168,14 @@ const EditHappeningSurvey = () => {
         if (coordinates) {
             surveyInput.location = coordinates.point
                 ? {
+                      __typename: 'GeometryObjectType',
                       type: 'Point',
                       coordinates: coordinates.point,
                   }
                 : null;
             surveyInput.boundary = coordinates.polygon
                 ? {
+                      __typename: 'GeometryObjectType',
                       type: 'MultiPolygon',
                       coordinates: [[coordinates.polygon]],
                   }

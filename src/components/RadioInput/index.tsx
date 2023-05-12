@@ -9,7 +9,7 @@ interface Props {
     label: string;
     selected: boolean;
     onPress(label: string): void;
-    contentContainerStyle: object;
+    contentContainerStyle?: object;
 }
 
 const RadioInput: React.FC<Props> = ({
