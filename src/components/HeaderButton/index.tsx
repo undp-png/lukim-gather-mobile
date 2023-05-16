@@ -23,11 +23,13 @@ export const BackButton = () => {
     );
 };
 
-export const CloseButton = () => {
+export const CloseButton = ({onClose}: {onClose?: () => void}) => {
     const navigation = useNavigation();
     const onBackPress = useCallback(() => navigation.goBack(), [navigation]);
     return (
-        <TouchableOpacity onPress={onBackPress} style={styles.headerIcon}>
+        <TouchableOpacity
+            onPress={onClose || onBackPress}
+            style={styles.headerIcon}>
             <Icon
                 name="close-outline"
                 height={30}

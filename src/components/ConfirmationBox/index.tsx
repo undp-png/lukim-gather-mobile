@@ -14,7 +14,8 @@ interface BoxProps {
     isOpen: boolean;
     headerText: string;
     descriptionText?: string;
-    onCancel(): void;
+    onCancel?(): void;
+    cancelText?: string;
     positiveText: string;
     onPositive(): void;
     negativeText?: string;
@@ -28,6 +29,7 @@ export const ConfirmBox: React.FC<BoxProps> = ({
     headerText,
     descriptionText,
     onCancel,
+    cancelText,
     positiveText,
     onPositive,
     vertical,
@@ -74,7 +76,7 @@ export const ConfirmBox: React.FC<BoxProps> = ({
                                     isLogoutBox && styles.logoutButton,
                                     styles.cancel,
                                 )}
-                                title={_('Cancel')}
+                                title={cancelText || _('Cancel')}
                                 onPress={onCancel}
                                 outline
                                 textStyle={

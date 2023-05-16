@@ -1,5 +1,5 @@
 import React, {useEffect, useState, useMemo, useCallback} from 'react';
-import {Platform, View} from 'react-native';
+import {Platform} from 'react-native';
 import {useRoute, useNavigation} from '@react-navigation/native';
 import {useDispatch} from 'react-redux';
 
@@ -8,11 +8,13 @@ import StaticServer from 'react-native-static-server';
 import RNFS from 'react-native-fs';
 import {useMutation} from '@apollo/client';
 import {XMLParser} from 'fast-xml-parser';
-import {ReactNativeFile} from 'apollo-upload-client';
+import {useNetInfo} from '@react-native-community/netinfo';
 
 import {setFormData, setFormMedia, resetForm} from 'store/slices/form';
 
-import {Loader} from 'components/Loader';
+import {ModalLoader} from 'components/Loader';
+import {ConfirmBox} from 'components/ConfirmationBox';
+import {CloseButton} from 'components/HeaderButton';
 import {_} from 'services/i18n';
 
 import {
@@ -26,8 +28,6 @@ import {b64toPath} from 'utils/blob';
 import Toast from 'utils/toast';
 
 import type {ProjectType} from '@generated/types';
-
-import styles from './styles';
 
 export type FormDataType = {
     data?: string;
@@ -45,7 +45,7 @@ interface RouteParams {
     key: string;
 }
 
-let QUEUE: Promise<any>[] = [];
+let QUEUE: {name: string; upload: Promise<any>}[] = [];
 let FORMDATA = '';
 
 const WebViewForm: React.FC = () => {
@@ -62,6 +62,8 @@ const WebViewForm: React.FC = () => {
     const navigation = useNavigation();
     const [uri, setUri] = useState<string | undefined>();
     const [processing, setProcessing] = useState<boolean>(false);
+
+    const {isInternetReachable} = useNetInfo();
 
     const FORM_KEY = useMemo(() => `survey_data__${formObj.id}`, [formObj]);
     const initializeData = useMemo(() => {
@@ -92,9 +94,6 @@ const WebViewForm: React.FC = () => {
         CreateWritableSurveyMutationVariables
     >(CREATE_WRITABLE_SURVEY, {
         onCompleted: () => {
-            Toast.show(_('Success'), {
-                text2: _('Survey has been created successfully!'),
-            });
             setProcessing(loading);
         },
         onError: err => {
@@ -139,19 +138,15 @@ const WebViewForm: React.FC = () => {
     }, []);
 
     const [uploadMedia] = useMutation(UPLOAD_IMAGE, {
-        onCompleted: ({uploadMedia}) => {
-            const newAnswer = FORMDATA.replace(
-                uploadMedia.result.title,
-                uploadMedia.result.media,
-            );
-            setFormData({
-                key: FORM_KEY,
-                value: newAnswer,
-            });
-            FORMDATA = newAnswer;
-        },
-        onError: ({graphQLErrors}) => {
+        onError: payload => {
+            const {graphQLErrors} = payload;
             console.log(graphQLErrors);
+            Toast.error(
+                _('Error!'),
+                _(
+                    'There was an error uploding some media files of the survey!',
+                ),
+            );
         },
     });
 
@@ -161,6 +156,15 @@ const WebViewForm: React.FC = () => {
             attributeNamePrefix: '_',
         });
         const title = formObj.title;
+        const optimisticResponse = {
+            createWritableSurvey: {
+                __typename:
+                    'WritableSurveyMutationPayload' as 'WritableSurveyMutationPayload',
+                errors: [],
+                id: Math.floor(Math.random() * 32), // This is not uuid. So uses random integer upto 31
+                title,
+            },
+        };
         await createWritableSurvey({
             variables: {
                 input: {
@@ -168,19 +172,17 @@ const WebViewForm: React.FC = () => {
                     answer: JSON.stringify(parser.parse(FORMDATA)),
                 },
             },
-            optimisticResponse: {
-                createWritableSurvey: {
-                    __typename: 'WritableSurveyMutationPayload',
-                    errors: [],
-                    id: Math.floor(Math.random() * 32), // This is not uuid. So uses random integer upto 31
-                    title,
-                },
+            optimisticResponse,
+            context: {
+                hasInvalidMedia: true,
+                serializationKey: 'customFormRequest',
+                formKey: FORM_KEY,
             },
             update: () => {
-                setProcessing(false);
-                navigation.navigate('Forms');
-                dispatch(resetForm(FORM_KEY));
                 Toast.show(_('Survey form has been submitted!'));
+                navigation.navigate('Forms');
+                setProcessing(false);
+                dispatch(resetForm(FORM_KEY));
             },
         });
     }, [createWritableSurvey, navigation, FORM_KEY, formObj, dispatch]);
@@ -207,30 +209,57 @@ const WebViewForm: React.FC = () => {
                 const name = imageParts.pop() as string;
                 const imgBlob = await b64toPath(imageParts.join(';'));
                 //imgBlob.name = name;
-                const file = new ReactNativeFile({
+                const file = {
                     uri: imgBlob,
                     name,
                     type: data.substring(
                         data.indexOf(':') + 1,
                         data.indexOf(';'),
                     ),
-                });
-                QUEUE.push(
-                    uploadMedia({
-                        variables: {
-                            media: file,
-                            title: name,
-                            type: 'image',
-                        },
-                    }),
-                );
+                };
+                if (!QUEUE.some(q => q.name === name)) {
+                    QUEUE.push({
+                        name,
+                        upload: uploadMedia({
+                            variables: {
+                                media: file,
+                                title: name,
+                                type: 'image',
+                            },
+                            context: {
+                                serializationKey: 'customFormRequest',
+                            },
+                        }),
+                    });
+                }
             } else if (data === 'submit') {
-                await Promise.all(QUEUE);
+                if (isInternetReachable) {
+                    setProcessing(true);
+                    await Promise.all(QUEUE.map(q => q.upload));
+                } else {
+                    Promise.all(QUEUE.map(q => q.upload));
+                }
                 handleSubmit();
             }
         },
-        [handleSubmit, FORM_KEY, dispatch, uploadMedia],
+        [handleSubmit, FORM_KEY, dispatch, uploadMedia, isInternetReachable],
     );
+
+    const [isCloseAlertVisible, setCloseAlertVisible] =
+        useState<boolean>(false);
+    const hideCloseAlert = useCallback(() => setCloseAlertVisible(false), []);
+    const showCloseAlert = useCallback(() => setCloseAlertVisible(true), []);
+
+    const handleGoBack = useCallback(() => {
+        hideCloseAlert();
+        navigation.goBack();
+    }, [hideCloseAlert, navigation]);
+
+    useEffect(() => {
+        navigation.setOptions({
+            headerLeft: () => <CloseButton onClose={showCloseAlert} />,
+        });
+    }, [showCloseAlert, navigation]);
 
     return (
         <>
@@ -245,11 +274,19 @@ const WebViewForm: React.FC = () => {
                     geolocationEnabled={true}
                 />
             )}
-            {(processing || !uri) && (
-                <View style={styles.loading}>
-                    <Loader loading />
-                </View>
-            )}
+            {(processing || !uri) && <ModalLoader loading />}
+            <ConfirmBox
+                isOpen={isCloseAlertVisible}
+                headerText={_('Close form?')}
+                descriptionText={_(
+                    "The answers you've given so far will be saved. However, if you have added any images while filling this form, they will be lost and you'll have to re-select them when you resume.",
+                )}
+                cancelText={_('Close form')}
+                onCancel={handleGoBack}
+                positiveText={_("Don't close")}
+                onPositive={hideCloseAlert}
+                isLogoutBox
+            />
         </>
     );
 };

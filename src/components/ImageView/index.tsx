@@ -2,6 +2,7 @@ import React, {useCallback, useState} from 'react';
 import {View, Image, Modal, TouchableOpacity} from 'react-native';
 import {FlatList, TouchableWithoutFeedback} from 'react-native-gesture-handler';
 import {Icon} from 'react-native-eva-icons';
+import {useNetInfo} from '@react-native-community/netinfo';
 
 import Text from 'components/Text';
 
@@ -25,6 +26,50 @@ const EmptyImageList = () => (
     <Text style={styles.text} title={_('No images uploaded')} />
 );
 
+const ImageItem: React.FC<{
+    item: GalleryType;
+    onPress: (item: GalleryType) => void;
+}> = ({item, onPress}) => {
+    const {isInternetReachable} = useNetInfo();
+
+    const handlePress = useCallback(() => {
+        onPress(item);
+    }, [onPress, item]);
+
+    const [error, setError] = useState<string | null>(null);
+
+    const handleImageError = useCallback(() => {
+        if (!isInternetReachable) {
+            setError(_('Cannot load image while offline!'));
+        } else {
+            setError(_('Error loading image!'));
+        }
+    }, [isInternetReachable]);
+
+    const handleImageLoad = useCallback(() => setError(null), []);
+
+    return (
+        <View style={styles.imageContainer}>
+            <TouchableWithoutFeedback onPress={handlePress}>
+                <Image
+                    source={
+                        {uri: item.media as string} ||
+                        require('assets/images/category-placeholder.png')
+                    }
+                    style={styles.images}
+                    onError={handleImageError}
+                    onLoad={handleImageLoad}
+                />
+                {Boolean(error) && (
+                    <View style={styles.errorTextContainer}>
+                        <Text title={error} style={styles.errorText} />
+                    </View>
+                )}
+            </TouchableWithoutFeedback>
+        </View>
+    );
+};
+
 const ImageView: React.FC<ImageProps> = ({images}) => {
     const [openGallery, setOpenGallery] = useState<boolean>(false);
     const [selectedImage, setSelectedImage] = useState<string>('');
@@ -38,17 +83,7 @@ const ImageView: React.FC<ImageProps> = ({images}) => {
     );
 
     const renderImage = useCallback(
-        ({item}) => (
-            <TouchableWithoutFeedback onPress={() => handleImage(item)}>
-                <Image
-                    source={
-                        {uri: item.media} ||
-                        require('assets/images/category-placeholder.png')
-                    }
-                    style={styles.images}
-                />
-            </TouchableWithoutFeedback>
-        ),
+        renderProps => <ImageItem {...renderProps} onPress={handleImage} />,
         [handleImage],
     );
 

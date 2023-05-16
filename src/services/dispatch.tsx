@@ -10,13 +10,14 @@ import {
 import {setLanguages} from 'store/slices/locale';
 import {setFcmToken} from 'store/slices/notification';
 import {setInfo} from 'store/slices/info';
+import {resetForm} from 'store/slices/form';
 
 const {dispatch} = store;
 
 export const dispatchLogin = async (
     accessToken: string,
     refreshToken: string,
-    user,
+    user: any,
 ) => {
     dispatch(setToken(accessToken));
     dispatch(setRefreshToken(refreshToken));
@@ -28,14 +29,18 @@ export const dispatchLogout = () => {
     dispatch(setLogout());
 };
 
-export const dispatchLocale = code => {
+export const dispatchLocale = (code: any) => {
     dispatch(setLanguages(code));
 };
 
-export const dispatchInfo = info => {
+export const dispatchInfo = (info: any) => {
     dispatch(setInfo(info));
 };
 
 export const dispatchFcmToken = (fcmToken: string | null) => {
-    dispatch(setFcmToken(fcmToken));
+    dispatch(setFcmToken(fcmToken as string));
+};
+
+export const dispatchResetForm = (formKey: string) => {
+    dispatch(resetForm(formKey));
 };
