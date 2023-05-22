@@ -1,6 +1,7 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {createStackNavigator} from '@react-navigation/stack';
 import {RootStateOrAny, useSelector} from 'react-redux';
+import {useNetInfo} from '@react-native-community/netinfo';
 
 import useQuery from 'hooks/useQuery';
 import useFCM from 'hooks/useFCM';
@@ -53,6 +54,7 @@ import type {
 } from '@generated/types';
 import COLORS from 'utils/colors';
 import {_} from 'services/i18n';
+import useGetUser from 'hooks/useGetUser';
 
 export type StackParamList = {
     About: undefined;
@@ -127,6 +129,14 @@ const AppNavigator = () => {
     useFCM();
 
     dispatchInfo(data?.legalDocument);
+
+    const getUserData = useGetUser();
+    const {isInternetReachable} = useNetInfo();
+    useEffect(() => {
+        if (isInternetReachable && isAuthenticated) {
+            getUserData();
+        }
+    }, [isInternetReachable, isAuthenticated, getUserData]);
 
     return (
         <Stack.Navigator
@@ -370,7 +380,6 @@ const AppNavigator = () => {
                 name="WebViewForm"
                 component={WebViewForm}
                 options={({route}) => ({
-                    headerLeft: () => <CloseButton />,
                     headerTitle: route.params?.form?.title || 'Form',
                     presentation: 'modal',
                     animationEnabled: false,

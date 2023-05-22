@@ -11,6 +11,17 @@ export const GET_ME = gql`
             avatar
             phoneNumber
             hasPassword
+            projects {
+                id
+                title
+                description
+                totalUsers
+                surveyCount
+                surveyLastModified
+                organization {
+                    title
+                }
+            }
         }
     }
 `;

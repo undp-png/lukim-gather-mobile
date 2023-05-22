@@ -23,6 +23,7 @@ import LocalizeProvider from '@rna/components/I18n';
 
 import {getApolloClient} from 'services/gql/client';
 import {languages, translations} from 'services/i18n';
+import {navigationRef} from 'services/navigation';
 import useInAppUpdate from 'hooks/useInAppUpdate';
 import COLORS from 'utils/colors';
 import {toastConfig} from 'utils/toast';
@@ -98,6 +99,7 @@ const App = () => {
                                     backgroundColor="transparent"
                                 />
                                 <NavigationContainer
+                                    ref={navigationRef}
                                     theme={{
                                         dark: false,
                                         colors: {

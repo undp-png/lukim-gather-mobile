@@ -82,7 +82,12 @@ export default class QueueLink extends ApolloLink {
 
     public open() {
         this.isOpen = true;
-        const opQueueCopy = [...this.opQueue];
+        const opQueueCopy = [...this.opQueue].sort(queueItemA => {
+            if (queueItemA.operation.operationName === 'UploadMedia') {
+                return -1;
+            }
+            return 0;
+        });
         this.opQueue = [];
         opQueueCopy.forEach(entry => {
             this.triggerListeners(entry, 'dequeue');

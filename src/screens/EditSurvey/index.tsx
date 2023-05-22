@@ -234,7 +234,8 @@ const EditHappeningSurvey = () => {
                                 typeof audio === 'string'
                                     ? audio
                                     : (surveyInput?.audioFile
-                                          ?.uri as HappeningSurveyType['audioFile']),
+                                          ?.uri as HappeningSurveyType['audioFile']) ||
+                                      null,
                             category: {
                                 __typename: 'ProtectedAreaCategoryType',
                                 ...surveyCategory,

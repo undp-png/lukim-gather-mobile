@@ -19,19 +19,20 @@ import {
     MMKVStorageWrapper as MMKVQueueStorageWrapper,
 } from 'vendor/apollo-link-queue-persist';
 import {createUploadLink} from 'apollo-upload-client';
-import {ReactNativeFile} from 'apollo-upload-client';
 
 import {BASE_URL} from '@env';
+import Toast from 'utils/toast';
+import {_} from 'services/i18n';
 
 import {store} from 'store';
 import {cacheStorage, queueStorage} from 'store/storage';
 import {setToken, setRefreshToken} from 'store/slices/auth';
 
+import MediaLink from './MediaLink';
 import {REFRESH_TOKEN} from './queries';
 
 const {dispatch} = store;
 
-const noop = () => {};
 const identity = (arg: any) => arg;
 
 export const getApolloClient = async (queueLink: any) => {
@@ -129,34 +130,6 @@ export const getApolloClient = async (queueLink: any) => {
         };
     });
 
-    const reactNativeFileLink = new ApolloLink((operation, forward) => {
-        const isMutation = operation.query.definitions.some(
-            e => (e as any).operation === 'mutation',
-        );
-        if (isMutation && operation.variables.input?.attachment?.length > 0) {
-            operation.variables.input.attachment =
-                operation.variables.input.attachment.map(
-                    (att: any) => new ReactNativeFile(att),
-                );
-        }
-        if (isMutation && operation.variables.input?.audioFile?.uri) {
-            operation.variables.input.audioFile = new ReactNativeFile(
-                operation.variables.input.audioFile,
-            );
-        }
-        return forward(operation);
-    });
-
-    const link = ApolloLink.from([
-        queueLink,
-        errorLink,
-        errorIgnoreLink,
-        authLink,
-        serializeLink,
-        reactNativeFileLink,
-        httpLink,
-    ]);
-
     await persistCache({
         cache: cache,
         storage: new MMKVCacheStorageWrapper(cacheStorage),
@@ -164,7 +137,20 @@ export const getApolloClient = async (queueLink: any) => {
         trigger: 'background',
     });
 
-    const client = new ApolloClient({cache, link});
+    const client = new ApolloClient({cache});
+
+    const mediaLink = new MediaLink(client);
+
+    const link = ApolloLink.from([
+        queueLink,
+        errorLink,
+        errorIgnoreLink,
+        authLink,
+        serializeLink,
+        mediaLink,
+        httpLink,
+    ]);
+    client.setLink(link);
 
     await persistQueue({
         queueLink,
@@ -174,9 +160,40 @@ export const getApolloClient = async (queueLink: any) => {
         client,
         debug: __DEV__,
         beforeRestore: identity,
-        onCompleted: noop,
+        onCompleted: showCompletedToast,
         onError: console.log,
     });
 
     return client;
 };
+
+function showCompletedToast(request: any, response: any) {
+    let messageDescription = '';
+    switch (request?.operationName) {
+        case 'CreateHappeningSurvey': {
+            if (response?.data?.createHappeningSurvey) {
+                messageDescription = _('Survey created successfully!');
+            }
+            break;
+        }
+        case 'EditHappeningSurvey': {
+            if (response?.data?.createHappeningSurvey) {
+                messageDescription = _('Survey edited successfully!');
+            }
+            break;
+        }
+        case 'DeleteHappeningSurvey': {
+            if (response?.data?.deleteHappeningSurvey) {
+                messageDescription = _('Survey deleted successfully!');
+            }
+            break;
+        }
+        default: {
+        }
+    }
+    Toast.show(_('Online synchronization successful!'), {
+        text2:
+            messageDescription ||
+            _('You may need to refresh some screens to get up-to-date data!'),
+    });
+}
