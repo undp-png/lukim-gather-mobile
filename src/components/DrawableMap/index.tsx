@@ -205,24 +205,27 @@ const Map: React.FC<Props> = ({
             },
         };
 
-        return (
-            <MapboxGL.ShapeSource
-                id="polygonSource"
-                shape={polygonGeoJSON as Feature<Geometry, GeoJsonProperties>}>
-                <MapboxGL.FillLayer
-                    id="polygonFill"
-                    style={mapStyles.polygonFill}
-                />
-                {polygonPoint &&
-                    polygonPoint.map((_, index) => (
+        if (polygonPoint.length > 0) {
+            return (
+                <MapboxGL.ShapeSource
+                    id="polygonSource"
+                    shape={
+                        polygonGeoJSON as Feature<Geometry, GeoJsonProperties>
+                    }>
+                    <MapboxGL.FillLayer
+                        id="polygonFill"
+                        style={mapStyles.polygonFill}
+                    />
+                    {polygonPoint.map((_, index) => (
                         <MapboxGL.CircleLayer
                             key={index}
                             id={'point-' + index}
                             style={mapStyles.pointCircle}
                         />
                     ))}
-            </MapboxGL.ShapeSource>
-        );
+                </MapboxGL.ShapeSource>
+            );
+        }
     }, [polygonPoint]);
 
     const renderCluster = useCallback(() => {
